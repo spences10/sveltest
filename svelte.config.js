@@ -9,9 +9,11 @@ const config = {
 
   kit: {
     adapter: adapter(),
-    test: {
-      globals: true,
-      environment: 'jsdom',
+    vite: {
+      test: {
+        globals: true,
+        environment: 'jsdom',
+      },
     },
   },
 }
