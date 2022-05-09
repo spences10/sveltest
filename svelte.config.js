@@ -9,6 +9,10 @@ const config = {
 
   kit: {
     adapter: adapter(),
+    test: {
+      globals: true,
+      environment: 'jsdom',
+    },
   },
 }
 
