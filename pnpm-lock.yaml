@@ -18,13 +18,13 @@ specifiers:
   svelte-preprocess: 4.10.6
   tslib: 2.4.0
   typescript: 4.6.4
-  vitest: 0.12.4
+  vitest: 0.12.6
   vitest-svelte-kit: 0.0.6
 
 devDependencies:
   '@playwright/test': 1.22.0
-  '@sveltejs/adapter-auto': 1.0.0-next.40
-  '@sveltejs/kit': 1.0.0-next.328_svelte@3.48.0
+  '@sveltejs/adapter-auto': 1.0.0-next.41
+  '@sveltejs/kit': 1.0.0-next.329_svelte@3.48.0
   '@testing-library/svelte': 3.1.1_svelte@3.48.0
   '@typescript-eslint/eslint-plugin': 5.23.0_17b6d2ce7129f0b36f2c30ae592c16e7
   '@typescript-eslint/parser': 5.23.0_eslint@8.15.0+typescript@4.6.4
@@ -39,7 +39,7 @@ devDependencies:
   svelte-preprocess: 4.10.6_svelte@3.48.0+typescript@4.6.4
   tslib: 2.4.0
   typescript: 4.6.4
-  vitest: 0.12.4_jsdom@19.0.0
+  vitest: 0.12.6_jsdom@19.0.0
   vitest-svelte-kit: 0.0.6
 
 packages:
@@ -145,11 +145,11 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /@sveltejs/adapter-auto/1.0.0-next.40:
-    resolution: {integrity: sha512-TT6YJUF3asJ/2RbviEpcDJQ/TixPcvmH0L2266fGNT7+KfAf9wbbVdegPWRODk2E2hTN0X+h5YS9l+lap+BK9w==}
+  /@sveltejs/adapter-auto/1.0.0-next.41:
+    resolution: {integrity: sha512-CbC2YIgsUaxyMyOiUNYyWeJOgoYGdXkEUXT4t+dLr1lDOtf0TL2ws1rdM5C7iKoCXtUFbf3J58f6JxZ85ggWVg==}
     dependencies:
       '@sveltejs/adapter-cloudflare': 1.0.0-next.19
-      '@sveltejs/adapter-netlify': 1.0.0-next.56
+      '@sveltejs/adapter-netlify': 1.0.0-next.57
       '@sveltejs/adapter-vercel': 1.0.0-next.50
     dev: true
 
@@ -160,8 +160,8 @@ packages:
       worktop: 0.8.0-next.13
     dev: true
 
-  /@sveltejs/adapter-netlify/1.0.0-next.56:
-    resolution: {integrity: sha512-fM3aBHsr7syCGfIJcuB1mEoZwynqyOxVijvmyrd9OWHi6MP3bXSP+GhKDMtDpQRwejJJiwuZNTx2PUbV3uirvA==}
+  /@sveltejs/adapter-netlify/1.0.0-next.57:
+    resolution: {integrity: sha512-rqvOr488+7NGkEHw/D6v1Y8Fg0MbiUP/YI1uSYjKy+tA8/4FOdBgU8Nk8daPTxWEU+CpsgzvA4X8IVonuML9SA==}
     dependencies:
       '@iarna/toml': 2.2.5
       esbuild: 0.14.38
@@ -174,8 +174,8 @@ packages:
       esbuild: 0.14.38
     dev: true
 
-  /@sveltejs/kit/1.0.0-next.328_svelte@3.48.0:
-    resolution: {integrity: sha512-L1RJ7wwLkOgo7aE+JiYppJEtVsSIpGPfgBZtjrS3J0avXVYUSTy+AfXbvjFJxTdk94uuCcTLUk/0vVODFm+Khg==}
+  /@sveltejs/kit/1.0.0-next.329_svelte@3.48.0:
+    resolution: {integrity: sha512-Zlz4A19zux1RvrH/0xfHmdIWgMH8byIusbqXBlQo0qu4IGj7ODWa9maP/fL4lz8ltlq3Q/fMzVa8XwydwvWlig==}
     engines: {node: '>=14.13'}
     hasBin: true
     peerDependencies:
@@ -2137,8 +2137,8 @@ packages:
     resolution: {integrity: sha512-bQ1GcCAk600YV1xOiJBhltGE/HO/j6FozNY2BFq2GP1mHh3pj0KrGZlyx0kVlXx+BSKDXQHuYZtwlHwNlvv0fQ==}
     dev: true
 
-  /vitest/0.12.4_jsdom@19.0.0:
-    resolution: {integrity: sha512-EDxdhlAt6vcu6y4VouAI60z78iCAVFnfBL4VlSQVQnGmOk5altOtIKvp3xfZ+cfo4iVHgqq1QNyf5qOFiL4leg==}
+  /vitest/0.12.6_jsdom@19.0.0:
+    resolution: {integrity: sha512-YWbCTv0XKBuBw5YtuW/iufuguoi8QhGpYyi2g57Oo7akpscMkkWTAaZGgY0ux1oJJtO/pc/8GFt0EF32WFBUUQ==}
     engines: {node: '>=v14.16.0'}
     hasBin: true
     peerDependencies:
