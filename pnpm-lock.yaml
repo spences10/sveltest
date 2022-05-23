@@ -18,12 +18,12 @@ specifiers:
   svelte-preprocess: 4.10.6
   tslib: 2.4.0
   typescript: 4.6.4
-  vitest: 0.12.6
+  vitest: 0.12.9
   vitest-svelte-kit: 0.0.6
 
 devDependencies:
   '@playwright/test': 1.22.2
-  '@sveltejs/adapter-auto': 1.0.0-next.43
+  '@sveltejs/adapter-auto': 1.0.0-next.44
   '@sveltejs/kit': 1.0.0-next.338_svelte@3.48.0
   '@testing-library/svelte': 3.1.1_svelte@3.48.0
   '@typescript-eslint/eslint-plugin': 5.25.0_83b4734ba99fefa06dfff9f51a4c4301
@@ -39,7 +39,7 @@ devDependencies:
   svelte-preprocess: 4.10.6_svelte@3.48.0+typescript@4.6.4
   tslib: 2.4.0
   typescript: 4.6.4
-  vitest: 0.12.6_jsdom@19.0.0
+  vitest: 0.12.9_jsdom@19.0.0
   vitest-svelte-kit: 0.0.6
 
 packages:
@@ -162,12 +162,12 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /@sveltejs/adapter-auto/1.0.0-next.43:
-    resolution: {integrity: sha512-ihlAdfMWmqNbo1zHIT77HG/fBZSrAD/VBFbUjm41+7jb3XUg87tQsMbsd/SQ360IAA2atbwKc/1wNKQLfpahDw==}
+  /@sveltejs/adapter-auto/1.0.0-next.44:
+    resolution: {integrity: sha512-uTZDLMImGKRZRh2r5mRwmCvKyzldTGxTa9Ec12yxhaYGSvpg/TlCiwGAnX9ZemzTJtSZUU8dW3tJLrN0YPw3bg==}
     dependencies:
       '@sveltejs/adapter-cloudflare': 1.0.0-next.19
       '@sveltejs/adapter-netlify': 1.0.0-next.58
-      '@sveltejs/adapter-vercel': 1.0.0-next.52
+      '@sveltejs/adapter-vercel': 1.0.0-next.53
     dev: true
 
   /@sveltejs/adapter-cloudflare/1.0.0-next.19:
@@ -185,8 +185,8 @@ packages:
       tiny-glob: 0.2.9
     dev: true
 
-  /@sveltejs/adapter-vercel/1.0.0-next.52:
-    resolution: {integrity: sha512-HEGmOX1HPGAotmosms0k88sTG9LnPMEQkpmWoyMdcffsPcT45SkJepXP/lvqNNlbUl9epZX95nqyZVie/mauRA==}
+  /@sveltejs/adapter-vercel/1.0.0-next.53:
+    resolution: {integrity: sha512-MmeQxvUYP9UeNuVPd50ZeskzvIqIasyo1Ooa0SUPqoQ41IH+dnkT0+oGJplpX7Ii3gmTbJgleYkV6X6huWQESg==}
     dependencies:
       esbuild: 0.14.38
     dev: true
@@ -596,7 +596,7 @@ packages:
     dev: true
 
   /check-error/1.0.2:
-    resolution: {integrity: sha1-V00xLt2Iu13YkS6Sht1sCu1KrII=}
+    resolution: {integrity: sha512-BrgHpW9NURQgzoNyjfq0Wu6VFO6D7IZEmJNdtgNqpzGG8RuNFHt2jQxWlAs4HMe119chBnv+34syEZtc6IhLtA==}
     dev: true
 
   /chokidar/3.5.3:
@@ -2121,30 +2121,6 @@ packages:
     resolution: {integrity: sha512-l8lCEmLcLYZh4nbunNZvQCJc5pv7+RCwa8q/LdUx8u7lsWvPDKmpodJAJNwkAhJC//dFY48KuIEmjtd4RViDrA==}
     dev: true
 
-  /vite/2.9.8:
-    resolution: {integrity: sha512-zsBGwn5UT3YS0NLSJ7hnR54+vUKfgzMUh/Z9CxF1YKEBVIe213+63jrFLmZphgGI5zXwQCSmqIdbPuE8NJywPw==}
-    engines: {node: '>=12.2.0'}
-    hasBin: true
-    peerDependencies:
-      less: '*'
-      sass: '*'
-      stylus: '*'
-    peerDependenciesMeta:
-      less:
-        optional: true
-      sass:
-        optional: true
-      stylus:
-        optional: true
-    dependencies:
-      esbuild: 0.14.38
-      postcss: 8.4.13
-      resolve: 1.22.0
-      rollup: 2.72.1
-    optionalDependencies:
-      fsevents: 2.3.2
-    dev: true
-
   /vite/2.9.9:
     resolution: {integrity: sha512-ffaam+NgHfbEmfw/Vuh6BHKKlI/XIAhxE5QSS7gFLIngxg171mg1P3a4LSRME0z2ZU1ScxoKzphkipcYwSD5Ew==}
     engines: {node: '>=12.2.0'}
@@ -2173,8 +2149,8 @@ packages:
     resolution: {integrity: sha512-bQ1GcCAk600YV1xOiJBhltGE/HO/j6FozNY2BFq2GP1mHh3pj0KrGZlyx0kVlXx+BSKDXQHuYZtwlHwNlvv0fQ==}
     dev: true
 
-  /vitest/0.12.6_jsdom@19.0.0:
-    resolution: {integrity: sha512-YWbCTv0XKBuBw5YtuW/iufuguoi8QhGpYyi2g57Oo7akpscMkkWTAaZGgY0ux1oJJtO/pc/8GFt0EF32WFBUUQ==}
+  /vitest/0.12.9_jsdom@19.0.0:
+    resolution: {integrity: sha512-1NtyUANS72Qw5PwYvoztk067NX4fSiis2xQxhByOWS33eL2er/yupHyLxlBCOkF2ANe0dLFRvT1GVb+nczL5aw==}
     engines: {node: '>=v14.16.0'}
     hasBin: true
     peerDependencies:
@@ -2195,15 +2171,17 @@ packages:
       '@types/chai': 4.3.1
       '@types/chai-subset': 1.3.3
       chai: 4.3.6
+      debug: 4.3.4
       jsdom: 19.0.0
       local-pkg: 0.4.1
       tinypool: 0.1.3
       tinyspy: 0.3.2
-      vite: 2.9.8
+      vite: 2.9.9
     transitivePeerDependencies:
       - less
       - sass
       - stylus
+      - supports-color
     dev: true
 
   /w3c-hr-time/1.0.2:
