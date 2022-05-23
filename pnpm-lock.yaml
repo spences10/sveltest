@@ -1,7 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
-  '@playwright/test': 1.22.0
+  '@playwright/test': 1.22.2
   '@sveltejs/adapter-auto': next
   '@sveltejs/kit': next
   '@testing-library/svelte': 3.1.1
@@ -22,9 +22,9 @@ specifiers:
   vitest-svelte-kit: 0.0.6
 
 devDependencies:
-  '@playwright/test': 1.22.0
+  '@playwright/test': 1.22.2
   '@sveltejs/adapter-auto': 1.0.0-next.43
-  '@sveltejs/kit': 1.0.0-next.334_svelte@3.48.0
+  '@sveltejs/kit': 1.0.0-next.338_svelte@3.48.0
   '@testing-library/svelte': 3.1.1_svelte@3.48.0
   '@typescript-eslint/eslint-plugin': 5.25.0_83b4734ba99fefa06dfff9f51a4c4301
   '@typescript-eslint/parser': 5.25.0_eslint@8.15.0+typescript@4.6.4
@@ -145,12 +145,13 @@ packages:
       fastq: 1.13.0
     dev: true
 
-  /@playwright/test/1.22.0:
-    resolution: {integrity: sha512-ExcAjiECo3uTG5Sl5H4a7rKp/5TEHTI87dv9NHYEoUFuOHPhSVxB7QsuM70ktO+wTTZ9KzhwzcegxAGRmUFKEA==}
+  /@playwright/test/1.22.2:
+    resolution: {integrity: sha512-cCl96BEBGPtptFz7C2FOSN3PrTnJ3rPpENe+gYCMx4GNNDlN4tmo2D89y13feGKTMMAIVrXfSQ/UmaQKLy1XLA==}
     engines: {node: '>=14'}
     hasBin: true
     dependencies:
-      playwright-core: 1.22.0
+      '@types/node': 17.0.31
+      playwright-core: 1.22.2
     dev: true
 
   /@rollup/pluginutils/4.2.1:
@@ -190,18 +191,18 @@ packages:
       esbuild: 0.14.38
     dev: true
 
-  /@sveltejs/kit/1.0.0-next.334_svelte@3.48.0:
-    resolution: {integrity: sha512-HPMF1oYBfyOG6wfU0Y6F4SID8jphue9yF+PXJqVTDBL5Z2WBG2ogum6MavE8aWhq+g2H6w5y0jNT8+8DO2KTCA==}
+  /@sveltejs/kit/1.0.0-next.338_svelte@3.48.0:
+    resolution: {integrity: sha512-tqzSHB9ONjmUS8qsYUkypI1eg+FuyKVN5t0wEfIufv7X6ECK1xIRwU1A0igmNLPhqhTqAt3QNmFn2An0/8LbnQ==}
     engines: {node: '>=16'}
     hasBin: true
     peerDependencies:
       svelte: ^3.44.0
     dependencies:
-      '@sveltejs/vite-plugin-svelte': 1.0.0-next.43_svelte@3.48.0+vite@2.9.8
+      '@sveltejs/vite-plugin-svelte': 1.0.0-next.44_svelte@3.48.0+vite@2.9.9
       chokidar: 3.5.3
       sade: 1.8.1
       svelte: 3.48.0
-      vite: 2.9.8
+      vite: 2.9.9
     transitivePeerDependencies:
       - diff-match-patch
       - less
@@ -210,8 +211,8 @@ packages:
       - supports-color
     dev: true
 
-  /@sveltejs/vite-plugin-svelte/1.0.0-next.43_svelte@3.48.0+vite@2.9.8:
-    resolution: {integrity: sha512-MzeczqGrnDmbAldw/LfXV/dhpLC2bdUzuMhcx0C2j79V2uNzQERHDinxXnG2AVTCTjSpbQxzQwMMmYflnI7W1g==}
+  /@sveltejs/vite-plugin-svelte/1.0.0-next.44_svelte@3.48.0+vite@2.9.9:
+    resolution: {integrity: sha512-n+sssEWbzykPS447FmnNyU5GxEhrBPDVd0lxNZnxRGz9P6651LjjwAnISKr3CKgT9v8IybP8VD0n2i5XzbqExg==}
     engines: {node: ^14.13.1 || >= 16}
     peerDependencies:
       diff-match-patch: ^1.0.5
@@ -228,7 +229,7 @@ packages:
       magic-string: 0.26.1
       svelte: 3.48.0
       svelte-hmr: 0.14.11_svelte@3.48.0
-      vite: 2.9.8
+      vite: 2.9.9
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -1665,8 +1666,8 @@ packages:
     engines: {node: '>=8.6'}
     dev: true
 
-  /playwright-core/1.22.0:
-    resolution: {integrity: sha512-XnDPiV4NCzTtXWxQdyJ6Wg8xhST3ciUjt5mITaxoqOoYggmRtofKm0PXLehfbetXh2ppPYj5U8UhtUpdIE4wag==}
+  /playwright-core/1.22.2:
+    resolution: {integrity: sha512-w/hc/Ld0RM4pmsNeE6aL/fPNWw8BWit2tg+TfqJ3+p59c6s3B6C8mXvXrIPmfQEobkcFDc+4KirNzOQ+uBSP1Q==}
     engines: {node: '>=14'}
     hasBin: true
     dev: true
@@ -2122,6 +2123,30 @@ packages:
 
   /vite/2.9.8:
     resolution: {integrity: sha512-zsBGwn5UT3YS0NLSJ7hnR54+vUKfgzMUh/Z9CxF1YKEBVIe213+63jrFLmZphgGI5zXwQCSmqIdbPuE8NJywPw==}
+    engines: {node: '>=12.2.0'}
+    hasBin: true
+    peerDependencies:
+      less: '*'
+      sass: '*'
+      stylus: '*'
+    peerDependenciesMeta:
+      less:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+    dependencies:
+      esbuild: 0.14.38
+      postcss: 8.4.13
+      resolve: 1.22.0
+      rollup: 2.72.1
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: true
+
+  /vite/2.9.9:
+    resolution: {integrity: sha512-ffaam+NgHfbEmfw/Vuh6BHKKlI/XIAhxE5QSS7gFLIngxg171mg1P3a4LSRME0z2ZU1ScxoKzphkipcYwSD5Ew==}
     engines: {node: '>=12.2.0'}
     hasBin: true
     peerDependencies:
