@@ -14,7 +14,7 @@ specifiers:
   prettier: 2.6.2
   prettier-plugin-svelte: 2.7.0
   svelte: 3.48.0
-  svelte-check: 2.7.1
+  svelte-check: 2.7.2
   svelte-preprocess: 4.10.6
   tslib: 2.4.0
   typescript: 4.7.2
@@ -24,7 +24,7 @@ specifiers:
 devDependencies:
   '@playwright/test': 1.22.2
   '@sveltejs/adapter-auto': 1.0.0-next.50
-  '@sveltejs/kit': 1.0.0-next.347_svelte@3.48.0
+  '@sveltejs/kit': 1.0.0-next.348_svelte@3.48.0
   '@testing-library/svelte': 3.1.2_svelte@3.48.0
   '@typescript-eslint/eslint-plugin': 5.27.0_1cb21ecc3f04eca4a509631d5e40e8fa
   '@typescript-eslint/parser': 5.27.0_eslint@8.16.0+typescript@4.7.2
@@ -35,7 +35,7 @@ devDependencies:
   prettier: 2.6.2
   prettier-plugin-svelte: 2.7.0_prettier@2.6.2+svelte@3.48.0
   svelte: 3.48.0
-  svelte-check: 2.7.1_svelte@3.48.0
+  svelte-check: 2.7.2_svelte@3.48.0
   svelte-preprocess: 4.10.6_svelte@3.48.0+typescript@4.7.2
   tslib: 2.4.0
   typescript: 4.7.2
@@ -217,8 +217,8 @@ packages:
       - supports-color
     dev: true
 
-  /@sveltejs/kit/1.0.0-next.347_svelte@3.48.0:
-    resolution: {integrity: sha512-kxan2F8g9nM/4QzLINsPiZdLZLx6X2Tjg+Ft8KR2QPhHKCEQ3jlosnGTzmznt572PTg89UhiUhQWKK4IDk2nSA==}
+  /@sveltejs/kit/1.0.0-next.348_svelte@3.48.0:
+    resolution: {integrity: sha512-K9dfgzIbotWmbcdCsQ6ROGs9R+bsGWwmSdN6l6km1QV5esQehqg1UYHGD9q0VJsg4rJg/zmKVBYo0oBquSHPZw==}
     engines: {node: '>=16.7'}
     hasBin: true
     peerDependencies:
@@ -1977,7 +1977,7 @@ packages:
     dev: true
 
   /once/1.4.0:
-    resolution: {integrity: sha1-WDsap3WWHUsROsF9nFC6753Xa9E=}
+    resolution: {integrity: sha512-lNaJgI+2Q5URQBkccEKHTQOPaXdUxnZZElQTZY0MFUAuaEqe1E+Nyvgdz/aIyNi6Z9MzO5dv1H8n58/GELp3+w==}
     dependencies:
       wrappy: 1.0.2
     dev: true
@@ -2035,7 +2035,7 @@ packages:
     dev: true
 
   /path-is-absolute/1.0.1:
-    resolution: {integrity: sha1-F0uSaHNVNP+8es5r9TpanhtcX18=}
+    resolution: {integrity: sha512-AVbw3UJ2e9bq64vSaS9Am0fje1Pa8pbGqTTsmXfaIiMpnr5DlDhfJOuLj9Sf95ZPVDAUerDfEk88MPmPe7UCQg==}
     engines: {node: '>=0.10.0'}
     dev: true
 
@@ -2439,8 +2439,8 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /svelte-check/2.7.1_svelte@3.48.0:
-    resolution: {integrity: sha512-vHVu2+SQ6ibt77iTQaq2oiOjBgGL48qqcg0ZdEOsP5pPOjgeyR9QbnaEdzdBs9nsVYBc/42haKtzb2uFqS8GVw==}
+  /svelte-check/2.7.2_svelte@3.48.0:
+    resolution: {integrity: sha512-TuVX4YtXHbRM8sVuK5Jk+mKWdm3f0d6hvAC6qCTp8yUszGZewpEBCo2V5fRWZCiz+0J4OCiDHOS+DFMxv39rJA==}
     hasBin: true
     peerDependencies:
       svelte: ^3.24.0
