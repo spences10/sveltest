@@ -14,7 +14,7 @@ specifiers:
   prettier: 2.7.1
   prettier-plugin-svelte: 2.7.0
   svelte: 3.49.0
-  svelte-check: 2.8.0
+  svelte-check: 2.9.0
   svelte-preprocess: 4.10.7
   tslib: 2.4.0
   typescript: 4.7.4
@@ -23,8 +23,8 @@ specifiers:
 
 devDependencies:
   '@playwright/test': 1.25.0
-  '@sveltejs/adapter-auto': 1.0.0-next.66
-  '@sveltejs/kit': 1.0.0-next.443_svelte@3.49.0
+  '@sveltejs/adapter-auto': 1.0.0-next.68
+  '@sveltejs/kit': 1.0.0-next.445_svelte@3.49.0
   '@testing-library/svelte': 3.1.3_svelte@3.49.0
   '@typescript-eslint/eslint-plugin': 5.33.0_a4e125d7788c58e531cf72d0435298a2
   '@typescript-eslint/parser': 5.33.0_eslint@8.23.0+typescript@4.7.4
@@ -35,7 +35,7 @@ devDependencies:
   prettier: 2.7.1
   prettier-plugin-svelte: 2.7.0_prettier@2.7.1+svelte@3.49.0
   svelte: 3.49.0
-  svelte-check: 2.8.0_svelte@3.49.0
+  svelte-check: 2.9.0_svelte@3.49.0
   svelte-preprocess: 4.10.7_svelte@3.49.0+typescript@4.7.4
   tslib: 2.4.0
   typescript: 4.7.4
@@ -197,12 +197,12 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /@sveltejs/adapter-auto/1.0.0-next.66:
-    resolution: {integrity: sha512-p78AQaSDHkLS5EFGqCF2xrLHMjKxx6wTLUvnP26cu2llh/VV4NihQ0rheVNgPWL+tGZpVznhrUG8fWmJxPciug==}
+  /@sveltejs/adapter-auto/1.0.0-next.68:
+    resolution: {integrity: sha512-UCapdMg/DfDBPvBHDjuqK1bNIAzOD0HM+tf90Q1zGNA2HeUSGyIc2Z4vaGXZ3Z+CBgQWaUhsglytr69KPM8hIA==}
     dependencies:
       '@sveltejs/adapter-cloudflare': 1.0.0-next.32
-      '@sveltejs/adapter-netlify': 1.0.0-next.72
-      '@sveltejs/adapter-vercel': 1.0.0-next.68
+      '@sveltejs/adapter-netlify': 1.0.0-next.74
+      '@sveltejs/adapter-vercel': 1.0.0-next.70
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -216,8 +216,8 @@ packages:
       worktop: 0.8.0-next.14
     dev: true
 
-  /@sveltejs/adapter-netlify/1.0.0-next.72:
-    resolution: {integrity: sha512-g570hYAMkgrJfo/TRg3DZFmlR7bNFHECFPOMgc8R+f28ROap/nXA8ICbiSBF7+zJ5JXvJbqHGjERSsyhEq+59g==}
+  /@sveltejs/adapter-netlify/1.0.0-next.74:
+    resolution: {integrity: sha512-pT8JmmFFS378HXYogxMpUTfA/nl/DI1+hNzmSybU2i8wJxqyt2Qi59YZmdu5ewRnUWrJRoZ+CmMplp7SbLOiLQ==}
     dependencies:
       '@iarna/toml': 2.2.5
       esbuild: 0.14.49
@@ -225,18 +225,18 @@ packages:
       tiny-glob: 0.2.9
     dev: true
 
-  /@sveltejs/adapter-vercel/1.0.0-next.68:
-    resolution: {integrity: sha512-ImM+fDwGkVaf920Wzh284nfAfu/WoPXCpMwog0kveIODVgCozbpJY55fO860LccqdS0YDyeFqOUrZJCqcYNx4w==}
+  /@sveltejs/adapter-vercel/1.0.0-next.70:
+    resolution: {integrity: sha512-0kwOpzrgpmHXnx+47fYzD5wrINjZvibL/ewq2dDYJiGxeAT/kNmszrIyoCDxm0oq7n1/+mLsyzX0V+lMs+leKg==}
     dependencies:
-      '@vercel/nft': 0.21.0
+      '@vercel/nft': 0.22.0
       esbuild: 0.14.49
     transitivePeerDependencies:
       - encoding
       - supports-color
     dev: true
 
-  /@sveltejs/kit/1.0.0-next.443_svelte@3.49.0:
-    resolution: {integrity: sha512-Stdjwj6iL/u40O/+20UKTWtCBYxYaKwX2nRV5devrGk5hvq6/FbAqw+azwoWKvNoz3PGtrSmHIyeLcAx8iKQcw==}
+  /@sveltejs/kit/1.0.0-next.445_svelte@3.49.0:
+    resolution: {integrity: sha512-E/d6lhJ+4cSGJmAk8JnlrBwJfa6xYeCZ1zBc8kTdrO/vNiFpMDRJM9pgT8DGlXYA7kI+OBud/p3Eipl5m5jntw==}
     engines: {node: '>=16.9'}
     hasBin: true
     requiresBuild: true
@@ -471,8 +471,8 @@ packages:
       eslint-visitor-keys: 3.3.0
     dev: true
 
-  /@vercel/nft/0.21.0:
-    resolution: {integrity: sha512-hFCAETfI5cG8l5iAiLhMC2bReC5K7SIybzrxGorv+eGspIbIFsVw7Vg85GovXm/LxA08pIDrAlrhR6GN36XB/Q==}
+  /@vercel/nft/0.22.0:
+    resolution: {integrity: sha512-hB80/093PPiCefN2gVbqv6J93MH+63Zr7uDCwkiS/U4W07DXkLoftbnkBmZoS0Q84LiTSl9DRVSHU4XYCX+sJA==}
     hasBin: true
     dependencies:
       '@mapbox/node-pre-gyp': 1.0.9
@@ -2315,8 +2315,8 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /svelte-check/2.8.0_svelte@3.49.0:
-    resolution: {integrity: sha512-HRL66BxffMAZusqe5I5k26mRWQ+BobGd9Rxm3onh7ZVu0nTk8YTKJ9vu3LVPjUGLU9IX7zS+jmwPVhJYdXJ8vg==}
+  /svelte-check/2.9.0_svelte@3.49.0:
+    resolution: {integrity: sha512-9AVrtP7WbfDgCdqTZNPdj5CCCy1OrYMxFVWAWzNw7fl93c9klFJFtqzVXa6fovfQ050CcpUyJE2dPFL9TFAREw==}
     hasBin: true
     peerDependencies:
       svelte: ^3.24.0
