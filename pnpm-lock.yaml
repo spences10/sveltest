@@ -16,7 +16,7 @@ specifiers:
   svelte: 3.55.1
   svelte-check: 3.0.3
   svelte-preprocess: 5.0.1
-  tslib: 2.4.1
+  tslib: 2.5.0
   typescript: 4.9.4
   vite: 4.0.4
   vitest: 0.28.1
@@ -37,7 +37,7 @@ devDependencies:
   svelte: 3.55.1
   svelte-check: 3.0.3_svelte@3.55.1
   svelte-preprocess: 5.0.1_atrrhq7vg4ekua4nnyrpuardle
-  tslib: 2.4.1
+  tslib: 2.5.0
   typescript: 4.9.4
   vite: 4.0.4
   vitest: 0.28.1_jsdom@21.1.0
@@ -2327,8 +2327,8 @@ packages:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
     dev: true
 
-  /tslib/2.4.1:
-    resolution: {integrity: sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==}
+  /tslib/2.5.0:
+    resolution: {integrity: sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==}
     dev: true
 
   /tsutils/3.21.0_typescript@4.9.4:
