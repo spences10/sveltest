@@ -24,7 +24,7 @@
     "eslint-config-prettier": "8.6.0",
     "eslint-plugin-svelte3": "4.0.0",
     "jsdom": "21.1.0",
-    "prettier": "2.8.3",
+    "prettier": "2.8.4",
     "prettier-plugin-svelte": "2.9.0",
     "svelte": "3.55.1",
     "svelte-check": "3.0.3",
