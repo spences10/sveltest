@@ -10,10 +10,10 @@ devDependencies:
     version: 1.44.1
   '@sveltejs/adapter-auto':
     specifier: ^3.0.0
-    version: 3.2.2(@sveltejs/kit@2.5.6)
+    version: 3.2.2(@sveltejs/kit@2.5.17)
   '@sveltejs/kit':
     specifier: ^2.0.0
-    version: 2.5.6(@sveltejs/vite-plugin-svelte@3.1.1)(svelte@4.2.12)(vite@5.3.1)
+    version: 2.5.17(@sveltejs/vite-plugin-svelte@3.1.1)(svelte@4.2.12)(vite@5.3.1)
   '@typescript-eslint/eslint-plugin':
     specifier: ^7.0.0
     version: 7.6.0(@typescript-eslint/parser@7.6.0)(eslint@9.5.0)(typescript@5.4.2)
@@ -544,17 +544,17 @@ packages:
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
     dev: true
 
-  /@sveltejs/adapter-auto@3.2.2(@sveltejs/kit@2.5.6):
+  /@sveltejs/adapter-auto@3.2.2(@sveltejs/kit@2.5.17):
     resolution: {integrity: sha512-Mso5xPCA8zgcKrv+QioVlqMZkyUQ5MjDJiEPuG/Z7cV/5tmwV7LmcVWk5tZ+H0NCOV1x12AsoSpt/CwFwuVXMA==}
     peerDependencies:
       '@sveltejs/kit': ^2.0.0
     dependencies:
-      '@sveltejs/kit': 2.5.6(@sveltejs/vite-plugin-svelte@3.1.1)(svelte@4.2.12)(vite@5.3.1)
+      '@sveltejs/kit': 2.5.17(@sveltejs/vite-plugin-svelte@3.1.1)(svelte@4.2.12)(vite@5.3.1)
       import-meta-resolve: 4.1.0
     dev: true
 
-  /@sveltejs/kit@2.5.6(@sveltejs/vite-plugin-svelte@3.1.1)(svelte@4.2.12)(vite@5.3.1):
-    resolution: {integrity: sha512-AYb02Jm5MfNqJHc8zrj7ScQAFAKmTUCkpkfoi8EVaZZDdnjkvI7L2GtnTDhpiXSAZRVitZX4qm59sMS1FgL+lQ==}
+  /@sveltejs/kit@2.5.17(@sveltejs/vite-plugin-svelte@3.1.1)(svelte@4.2.12)(vite@5.3.1):
+    resolution: {integrity: sha512-wiADwq7VreR3ctOyxilAZOfPz3Jiy2IIp2C8gfafhTdQaVuGIHllfqQm8dXZKADymKr3uShxzgLZFT+a+CM4kA==}
     engines: {node: '>=18.13'}
     hasBin: true
     requiresBuild: true
@@ -566,11 +566,11 @@ packages:
       '@sveltejs/vite-plugin-svelte': 3.1.1(svelte@4.2.12)(vite@5.3.1)
       '@types/cookie': 0.6.0
       cookie: 0.6.0
-      devalue: 4.3.2
+      devalue: 5.0.0
       esm-env: 1.0.0
-      import-meta-resolve: 4.0.0
+      import-meta-resolve: 4.1.0
       kleur: 4.1.5
-      magic-string: 0.30.9
+      magic-string: 0.30.10
       mrmime: 2.0.0
       sade: 1.8.1
       set-cookie-parser: 2.6.0
@@ -1129,8 +1129,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /devalue@4.3.2:
-    resolution: {integrity: sha512-KqFl6pOgOW+Y6wJgu80rHpo2/3H07vr8ntR9rkkFIRETewbf5GaYYcakYfiKz89K+sLsuPkQIZaXDMjUObZwWg==}
+  /devalue@5.0.0:
+    resolution: {integrity: sha512-gO+/OMXF7488D+u3ue+G7Y4AA3ZmUnB3eHJXmBTgNHvr4ZNzl36A0ZtG+XCRNYCkYx/bFmw4qtkoFLa+wSrwAA==}
     dev: true
 
   /diff-sequences@29.6.3:
@@ -1588,10 +1588,6 @@ packages:
       resolve-from: 4.0.0
     dev: true
 
-  /import-meta-resolve@4.0.0:
-    resolution: {integrity: sha512-okYUR7ZQPH+efeuMJGlq4f8ubUgO50kByRPyt/Cy1Io4PSRsPjxME+YlVaCOx+NIToW7hCsZNFJyTPFFKepRSA==}
-    dev: true
-
   /import-meta-resolve@4.1.0:
     resolution: {integrity: sha512-I6fiaX09Xivtk+THaMfAwnA3MVA5Big1WHF1Dfx9hFuvNIWpXnorlkzhcQf6ehrqQiiZECRt1poOAkPmer3ruw==}
     dev: true
@@ -1791,13 +1787,6 @@ packages:
 
   /magic-string@0.30.8:
     resolution: {integrity: sha512-ISQTe55T2ao7XtlAStud6qwYPZjE4GK1S/BeVPus4jrq6JuOnQ00YKQC581RWhR122W7msZV263KzVeLoqidyQ==}
-    engines: {node: '>=12'}
-    dependencies:
-      '@jridgewell/sourcemap-codec': 1.4.15
-    dev: true
-
-  /magic-string@0.30.9:
-    resolution: {integrity: sha512-S1+hd+dIrC8EZqKyT9DstTH/0Z+f76kmmvZnkfQVmOpDEF9iVgdYif3Q/pIWHmCoo59bQVGW0kVL3e2nl+9+Sw==}
     engines: {node: '>=12'}
     dependencies:
       '@jridgewell/sourcemap-codec': 1.4.15
@@ -2456,7 +2445,7 @@ packages:
     dependencies:
       '@types/pug': 2.0.10
       detect-indent: 6.1.0
-      magic-string: 0.30.9
+      magic-string: 0.30.10
       postcss: 8.4.38
       sorcery: 0.11.0
       strip-indent: 3.0.0
