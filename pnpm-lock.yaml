@@ -34,10 +34,10 @@ devDependencies:
     version: 24.1.0
   prettier:
     specifier: ^3.0.0
-    version: 3.3.2
+    version: 3.3.3
   prettier-plugin-svelte:
     specifier: ^3.0.0
-    version: 3.2.5(prettier@3.3.2)(svelte@4.2.18)
+    version: 3.2.5(prettier@3.3.3)(svelte@4.2.18)
   svelte:
     specifier: ^4.0.0
     version: 4.2.18
@@ -2018,18 +2018,18 @@ packages:
     engines: {node: '>= 0.8.0'}
     dev: true
 
-  /prettier-plugin-svelte@3.2.5(prettier@3.3.2)(svelte@4.2.18):
+  /prettier-plugin-svelte@3.2.5(prettier@3.3.3)(svelte@4.2.18):
     resolution: {integrity: sha512-vP/M/Goc8z4iVIvrwXwbrYVjJgA0Hf8PO1G4LBh/ocSt6vUP6sLvyu9F3ABEGr+dbKyxZjEKLkeFsWy/yYl0HQ==}
     peerDependencies:
       prettier: ^3.0.0
       svelte: ^3.2.0 || ^4.0.0-next.0 || ^5.0.0-next.0
     dependencies:
-      prettier: 3.3.2
+      prettier: 3.3.3
       svelte: 4.2.18
     dev: true
 
-  /prettier@3.3.2:
-    resolution: {integrity: sha512-rAVeHYMcv8ATV5d508CFdn+8/pHPpXeIid1DdrPwXnaAdH7cqjVbpJaT5eq4yRAFU/lsbwYwSF/n5iNrdJHPQA==}
+  /prettier@3.3.3:
+    resolution: {integrity: sha512-i2tDNA0O5IrMO757lfrdQZCc2jPNDVntV0m/+4whiDfWaTKfMNgR7Qz0NAeGz/nRqF4m5/6CLzbP4/liHt12Ew==}
     engines: {node: '>=14'}
     hasBin: true
     dev: true
