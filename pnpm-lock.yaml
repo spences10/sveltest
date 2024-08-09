@@ -10,10 +10,10 @@ devDependencies:
     version: 1.45.2
   '@sveltejs/adapter-auto':
     specifier: ^3.0.0
-    version: 3.2.3(@sveltejs/kit@2.5.19)
+    version: 3.2.3(@sveltejs/kit@2.5.21)
   '@sveltejs/kit':
     specifier: ^2.0.0
-    version: 2.5.19(@sveltejs/vite-plugin-svelte@3.1.1)(svelte@4.2.18)(vite@5.3.4)
+    version: 2.5.21(@sveltejs/vite-plugin-svelte@3.1.1)(svelte@4.2.18)(vite@5.3.4)
   '@typescript-eslint/eslint-plugin':
     specifier: ^7.0.0
     version: 7.16.1(@typescript-eslint/parser@7.16.1)(eslint@9.7.0)(typescript@5.5.3)
@@ -532,17 +532,17 @@ packages:
     dev: true
     optional: true
 
-  /@sveltejs/adapter-auto@3.2.3(@sveltejs/kit@2.5.19):
+  /@sveltejs/adapter-auto@3.2.3(@sveltejs/kit@2.5.21):
     resolution: {integrity: sha512-VbWzQdNuunHsqa/OqPLqdL3fpyz9tH1f5CawjeYpPcowMI7Ng727M1/Z20yK1L7vrF7L2sYDFeE8vELgUy1Ibg==}
     peerDependencies:
       '@sveltejs/kit': ^2.0.0
     dependencies:
-      '@sveltejs/kit': 2.5.19(@sveltejs/vite-plugin-svelte@3.1.1)(svelte@4.2.18)(vite@5.3.4)
+      '@sveltejs/kit': 2.5.21(@sveltejs/vite-plugin-svelte@3.1.1)(svelte@4.2.18)(vite@5.3.4)
       import-meta-resolve: 4.1.0
     dev: true
 
-  /@sveltejs/kit@2.5.19(@sveltejs/vite-plugin-svelte@3.1.1)(svelte@4.2.18)(vite@5.3.4):
-    resolution: {integrity: sha512-r/lah3nnYEZX1btlvpSy+Exkt1aWhmOP5pnCt+BBro+tZrh2Zci+26Xnm1fCBLLMeM5q7gHvWiS8c/UtrWjdvQ==}
+  /@sveltejs/kit@2.5.21(@sveltejs/vite-plugin-svelte@3.1.1)(svelte@4.2.18)(vite@5.3.4):
+    resolution: {integrity: sha512-zHkaVZB5WNKVtosPhpPHLLvCdhUs3j6rRhDjRcXz9Mi7ZOeMe+xpzFkm7vs7RYQKMWDPUIfDngFDM3iGPyntMw==}
     engines: {node: '>=18.13'}
     hasBin: true
     requiresBuild: true
@@ -561,7 +561,7 @@ packages:
       magic-string: 0.30.11
       mrmime: 2.0.0
       sade: 1.8.1
-      set-cookie-parser: 2.6.0
+      set-cookie-parser: 2.7.0
       sirv: 2.0.4
       svelte: 4.2.18
       tiny-glob: 0.2.9
@@ -2149,8 +2149,8 @@ packages:
     hasBin: true
     dev: true
 
-  /set-cookie-parser@2.6.0:
-    resolution: {integrity: sha512-RVnVQxTXuerk653XfuliOxBP81Sf0+qfQE73LIYKcyMYHG94AuH0kgrQpRDuTZnSmjpysHmzxJXKNfa6PjFhyQ==}
+  /set-cookie-parser@2.7.0:
+    resolution: {integrity: sha512-lXLOiqpkUumhRdFF3k1osNXCy9akgx/dyPZ5p8qAg9seJzXr5ZrlqZuWIMuY6ejOsVLE6flJ5/h3lsn57fQ/PQ==}
     dev: true
 
   /shebang-command@2.0.0:
