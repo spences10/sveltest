@@ -31,15 +31,15 @@
 				</label>
 			</div>
 			<div class="flex-1">
-				<a href="/" class="btn btn-ghost text-xl normal-case"
-					>Svelte Testing</a
-				>
+				<a href="/" class="btn btn-ghost text-xl normal-case">
+					Svelte Testing
+				</a>
 			</div>
 		</div>
 
 		<!-- Page content -->
 		<main class="p-4">
-			<slot />
+			{@render children?.()}
 		</main>
 	</div>
 
@@ -53,12 +53,6 @@
 					<li><a href="/" class="font-medium">Home</a></li>
 					<li>
 						<a href="/examples" class="font-medium">Examples</a>
-					</li>
-					<li>
-						<a href="/setup" class="font-medium">Setup Guide</a>
-					</li>
-					<li>
-						<a href="/resources" class="font-medium">Resources</a>
 					</li>
 				</ul>
 			</div>
