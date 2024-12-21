@@ -22,6 +22,8 @@
 		"@sveltejs/kit": "^2.13.0",
 		"@sveltejs/vite-plugin-svelte": "^4.0.0",
 		"@testing-library/svelte": "^5.2.6",
+		"@vitest/coverage-v8": "2.1.8",
+		"@vitest/ui": "2.1.8",
 		"autoprefixer": "^10.4.20",
 		"daisyui": "^4.12.22",
 		"eslint": "^9.17.0",
