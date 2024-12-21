@@ -49,9 +49,10 @@ describe('Todos Server', () => {
 				url: new URL('http://localhost/examples/todos'),
 			} as RequestEvent);
 
-			if ('error' in response) {
-				expect(response.error).toBe('Title is required');
-			}
+			expect(response).toEqual({
+				status: 400,
+				data: { error: 'Title is required' },
+			});
 		});
 	});
 });

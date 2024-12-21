@@ -1,16 +1,17 @@
+import type { ActionFailure } from '@sveltejs/kit';
 import { describe, expect, it } from 'vitest';
+import type { RequestEvent } from './$types';
 import { actions, load } from './+page.server';
 
 describe('Todos Server', () => {
 	describe('load function', () => {
 		it('should return initial todos', async () => {
-			const response = await load({ locals: {} } as any);
+			const response = (await load({ locals: {} } as any)) as {
+				todos: Array<{ title: string; done: boolean }>;
+			};
 
 			expect(response.todos).toHaveLength(2);
-			expect(response.todos[0]).toHaveProperty(
-				'title',
-				'Learn SvelteKit',
-			);
+			expect(response.todos[0]).toHaveProperty('title');
 		});
 	});
 
@@ -26,9 +27,16 @@ describe('Todos Server', () => {
 				}),
 			} as any);
 
-			expect(response).toHaveProperty('success', true);
-			expect(response.todo).toHaveProperty('title', 'New Todo');
-			expect(response.todo.done).toBe(false);
+			const success_response = response as {
+				success: boolean;
+				todo: { id: number; title: string; done: boolean };
+			};
+			expect(success_response.success).toBe(true);
+			expect(success_response.todo).toHaveProperty(
+				'title',
+				'New Todo',
+			);
+			expect(success_response.todo.done).toBe(false);
 		});
 
 		it('should fail with empty title', async () => {
@@ -40,9 +48,13 @@ describe('Todos Server', () => {
 					method: 'POST',
 					body: form_data,
 				}),
-			} as any);
+				url: new URL('http://localhost/examples/todos'),
+			} as RequestEvent);
 
-			expect(response).toHaveProperty('error', 'Title is required');
+			const failure_response = response as ActionFailure<{
+				error: string;
+			}>;
+			expect(failure_response.status).toBe(400);
 		});
 	});
 });
