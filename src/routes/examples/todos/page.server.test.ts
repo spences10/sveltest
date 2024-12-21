@@ -1,11 +1,11 @@
-import type { RequestEvent } from '@sveltejs/kit';
 import { describe, expect, it } from 'vitest';
+import type { RequestEvent } from './$types';
 import { actions, load } from './+page.server';
 
 describe('Todos Server', () => {
 	describe('load function', () => {
 		it('should return initial todos', async () => {
-			const response = (await load()) as {
+			const response = (await load({ locals: {} } as any)) as {
 				todos: Array<{ title: string; done: boolean }>;
 			};
 
@@ -27,9 +27,10 @@ describe('Todos Server', () => {
 					method: 'POST',
 					body: form_data,
 				}),
+				url: new URL('http://localhost/examples/todos'),
 			} as RequestEvent);
 
-			if (!('error' in response)) {
+			if (!('error' in response) && 'success' in response) {
 				expect(response.success).toBe(true);
 				expect(response.todo).toHaveProperty('title', 'New Todo');
 				expect(response.todo.done).toBe(false);
@@ -45,6 +46,7 @@ describe('Todos Server', () => {
 					method: 'POST',
 					body: form_data,
 				}),
+				url: new URL('http://localhost/examples/todos'),
 			} as RequestEvent);
 
 			if ('error' in response) {
