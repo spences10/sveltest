@@ -21,7 +21,6 @@ export default mergeConfig(
 					'**/*.config.{js,ts,cjs}',
 					'**/+page.svelte',
 					'.svelte-kit/**',
-					'posts/**',
 					'build/**',
 					'static/**',
 				],
