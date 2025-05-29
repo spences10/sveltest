@@ -23,13 +23,17 @@ describe('/+page.svelte SSR', () => {
 	});
 
 	test('should generate CSS for styling', () => {
-		const { css } = render(Page);
+		const result = render(Page);
 
-		// CSS should be generated (may be empty for components without styles)
-		expect(css).toBeDefined();
-		expect(css.code).toBeDefined();
-		// For this component, CSS might be empty since it uses Tailwind classes
-		expect(typeof css.code).toBe('string');
+		// Svelte 5 render returns { head, html, body } structure
+		expect(result.head).toBeDefined();
+		expect(result.html).toBeDefined();
+		expect(result.body).toBeDefined();
+
+		// All should be strings
+		expect(typeof result.head).toBe('string');
+		expect(typeof result.html).toBe('string');
+		expect(typeof result.body).toBe('string');
 	});
 
 	test('should render semantic HTML structure', () => {

@@ -13,6 +13,9 @@
 		"format": "prettier --write .",
 		"lint": "prettier --check . && eslint .",
 		"test:unit": "vitest",
+		"test:server": "vitest --project=server",
+		"test:client": "vitest --project=client",
+		"test:ssr": "vitest --project=ssr",
 		"test": "npm run test:unit -- --run && npm run test:e2e",
 		"test:e2e": "playwright test"
 	},

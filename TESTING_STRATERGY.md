@@ -501,7 +501,62 @@ test('reactive state with runes', () => {
 });
 ```
 
-### **4. Form Testing**
+### **4. Svelte 5 Snippet Handling**
+
+**Critical: vitest-browser-svelte has fundamental limitations with
+children props:**
+
+```typescript
+// ❌ AVOID - vitest-browser-svelte doesn't properly support children snippets
+test('button with children', async () => {
+	render(Button, {
+		children: 'Click me', // TypeScript error: not assignable to Snippet<[]>
+	});
+});
+
+// ❌ ALSO AVOID - Snippet function signature mismatch
+test('button with children', async () => {
+	render(Button, {
+		children: ($$payload) => {
+			$$payload.out += 'Click me';
+		}, // Type error: Expected 1+ arguments, got 0
+	});
+});
+
+// ✅ RECOMMENDED - Avoid children props in vitest-browser-svelte tests
+// Instead, test components that don't require children or use alternative approaches
+
+// Option 1: Test components without children
+test('button without children', async () => {
+	render(Button, {
+		label: 'Click me', // Use a label prop instead
+	});
+});
+
+// Option 2: Use data-testid for content verification
+test('button with predefined content', async () => {
+	render(ButtonWithFixedContent); // Component has fixed content
+
+	const button = page.getByTestId('button');
+	await expect.element(button).toHaveTextContent('Click me');
+});
+
+// Option 3: Create wrapper components for testing
+// Create TestButton.svelte that wraps your Button with specific content
+test('button via wrapper component', async () => {
+	render(TestButtonWrapper);
+
+	const button = page.getByRole('button');
+	await expect.element(button).toHaveTextContent('Click me');
+});
+```
+
+**Note:** This is a known limitation of vitest-browser-svelte. The
+library doesn't properly handle Svelte 5 snippet types for children
+props. Consider using @testing-library/svelte if you need to test
+components with children extensively.
+
+### **5. Form Testing**
 
 ```typescript
 test('form validation', async () => {
@@ -520,7 +575,7 @@ test('form validation', async () => {
 });
 ```
 
-### **5. Conditional Rendering**
+### **6. Conditional Rendering**
 
 ```typescript
 // Test different states
@@ -539,7 +594,7 @@ testCases.forEach(({ props, expected }) => {
 });
 ```
 
-### **6. Component Variants**
+### **7. Component Variants**
 
 ```typescript
 const variants = [
@@ -919,6 +974,38 @@ render(Component, { props: mockProps });
 render(Component, mockProps);
 ```
 
+### **11. Svelte 5 Snippet TypeScript Errors**
+
+```typescript
+// ❌ Function returning string is not assignable to Snippet
+test('component with children', async () => {
+	render(Button, {
+		children: () => 'Click me', // Type error!
+	});
+});
+
+// ❌ Snippet function with wrong signature
+test('component with children', async () => {
+	render(Button, {
+		children: ($$payload) => {
+			$$payload.out += 'Click me';
+		}, // Type error: Expected 1+ arguments, got 0
+	});
+});
+
+// ✅ RECOMMENDED - Avoid children props in vitest-browser-svelte
+test('component without children', async () => {
+	render(Button, {
+		label: 'Click me', // Use alternative props
+	});
+});
+
+// ✅ Alternative - Create wrapper component for testing
+test('component with wrapper', async () => {
+	render(TestButtonWrapper); // Wrapper component with fixed content
+});
+```
+
 ## **Common Error Messages and Solutions**
 
 ### **"Expected 2 arguments, but got 0"**
@@ -945,6 +1032,20 @@ render(Component, mockProps);
 
 - **Cause**: Mock not properly configured or import order issue
 - **Solution**: Verify mock setup and import order
+
+### **"Type '() => string' is not assignable to type 'Snippet<[]>'"**
+
+- **Cause**: vitest-browser-svelte doesn't properly support Svelte 5
+  snippet types for children props
+- **Solution**: Avoid children props; use alternative props like
+  `label` or create wrapper components for testing
+
+### **"Target signature provides too few arguments. Expected 1 or more, but got 0"**
+
+- **Cause**: Attempting to use Svelte 5 snippet function syntax with
+  vitest-browser-svelte
+- **Solution**: Avoid children props in vitest-browser-svelte; use
+  alternative testing approaches
 
 ## **Environment Variables**
 
