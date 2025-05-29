@@ -25,9 +25,11 @@ describe('/+page.svelte SSR', () => {
 	test('should generate CSS for styling', () => {
 		const { css } = render(Page);
 
-		// CSS should be generated (even if empty for this component)
+		// CSS should be generated (may be empty for components without styles)
 		expect(css).toBeDefined();
 		expect(css.code).toBeDefined();
+		// For this component, CSS might be empty since it uses Tailwind classes
+		expect(typeof css.code).toBe('string');
 	});
 
 	test('should render semantic HTML structure', () => {
