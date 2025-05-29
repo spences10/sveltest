@@ -37,10 +37,10 @@ All subsequent commits will document the migration process."
 
 ```bash
 # Install vitest-browser-svelte and related packages
-npm install --save-dev @vitest/browser vitest-browser-svelte playwright
+pnpm add -D @vitest/browser vitest-browser-svelte playwright
 
 # Commit dependency changes
-git add package.json package-lock.json
+git add package.json pnpm-lock.yaml
 git commit -m "feat: install vitest-browser-svelte dependencies
 
 Added packages:
