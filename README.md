@@ -343,3 +343,68 @@ git log --graph --oneline migrate-to-vitest-browser-svelte
 
 See `TESTING_STRATEGY.md` for comprehensive testing patterns and best
 practices with vitest-browser-svelte.
+
+### Current Migration Status
+
+#### ✅ Successfully Migrated Components
+
+- **Modal Component**: All tests passing
+  - Fixed backdrop click using coordinate-based clicking
+  - Fixed keyboard escape using `userEvent.keyboard('{Escape}')`
+  - Proper vitest-browser-svelte locator patterns implemented
+
+#### ❌ Components Still Under Migration
+
+- **Login Form Component**: 6/21 tests failing
+  - **Issue**: `aria-invalid` attributes not updating despite user
+    input
+  - **Issue**: Password visibility toggle not changing input type
+  - **Issue**: Form submission events not firing (`onsubmit` callbacks
+    return null)
+  - **Issue**: Validation state not reflecting user interactions
+  - **Root Cause**: Event triggering and state management issues with
+    vitest-browser-svelte
+
+### Key Lessons Learned
+
+1. **Modal Testing Success Pattern**:
+
+   ```typescript
+   // ✅ Use coordinate-based clicking for backdrop
+   await page
+   	.locator('.modal-container')
+   	.click({ position: { x: 10, y: 10 } });
+
+   // ✅ Use userEvent.keyboard for escape key
+   await userEvent.keyboard('{Escape}');
+   ```
+
+2. **Form Testing Challenges**:
+
+   ```typescript
+   // ❌ Still problematic - events not triggering validation
+   await userEvent.type(email_input, 'invalid-email');
+   await submit_button.click();
+   // aria-invalid stays 'false' instead of 'true'
+   ```
+
+3. **Event Handler Issues**:
+   - `onsubmit` callbacks not firing in test environment
+   - State updates not reflecting in DOM attributes
+   - Component internal validation logic not triggered by test
+     interactions
+
+### Next Steps for Login Form Migration
+
+The login form tests reveal fundamental issues with how
+vitest-browser-svelte handles:
+
+- Svelte 5 state management and reactivity
+- Form validation event chains
+- Component event dispatching
+
+Future investigation needed:
+
+- Examine actual component implementation
+- Test with simpler validation patterns
+- Consider vitest-browser-svelte limitations with complex form state
