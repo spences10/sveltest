@@ -48,17 +48,21 @@
 
 	// Derived error messages
 	const email_error = $derived(() => {
-		return (submit_attempted || email_touched) &&
-			!email_validation.is_valid
-			? email_validation.error_message
-			: '';
+		if (submit_attempted || email_touched) {
+			return !email_validation.is_valid
+				? email_validation.error_message
+				: '';
+		}
+		return '';
 	});
 
 	const password_error = $derived(() => {
-		return (submit_attempted || password_touched) &&
-			!password_validation.is_valid
-			? password_validation.error_message
-			: '';
+		if (submit_attempted || password_touched) {
+			return !password_validation.is_valid
+				? password_validation.error_message
+				: '';
+		}
+		return '';
 	});
 
 	const can_submit = $derived(() => {
@@ -131,7 +135,6 @@
 <form
 	class={form_classes}
 	data-testid="login-form"
-	role="form"
 	onsubmit={(e) => {
 		e.preventDefault();
 		handle_submit();

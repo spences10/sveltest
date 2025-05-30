@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
-
 	interface Props {
 		is_open?: boolean;
 		title?: string;
@@ -9,6 +7,10 @@
 		close_on_escape?: boolean;
 		show_close_button?: boolean;
 		content_text?: string; // Workaround for snippet limitation
+		onclose?: () => void;
+		onopen?: () => void;
+		onbackdrop_click?: (event: MouseEvent) => void;
+		onescape_key?: (event: KeyboardEvent) => void;
 	}
 
 	let {
@@ -19,17 +21,14 @@
 		close_on_escape = true,
 		show_close_button = true,
 		content_text = '',
+		onclose,
+		onopen,
+		onbackdrop_click,
+		onescape_key,
 		...rest_props
 	}: Props = $props();
 
-	const dispatch = createEventDispatcher<{
-		close: void;
-		open: void;
-		backdrop_click: MouseEvent;
-		escape_key: KeyboardEvent;
-	}>();
-
-	let modal_element: HTMLDivElement;
+	let modal_element = $state<HTMLDivElement>();
 	let previous_focus: HTMLElement | null = null;
 
 	// Handle escape key
@@ -37,7 +36,7 @@
 		if (event.key === 'Escape' && close_on_escape && is_open) {
 			event.preventDefault();
 			close_modal();
-			dispatch('escape_key', event);
+			onescape_key?.(event);
 		}
 	}
 
@@ -48,13 +47,13 @@
 			close_on_backdrop_click
 		) {
 			close_modal();
-			dispatch('backdrop_click', event);
+			onbackdrop_click?.(event);
 		}
 	}
 
 	// Close modal function
 	function close_modal() {
-		dispatch('close');
+		onclose?.();
 	}
 
 	// Focus management
@@ -63,7 +62,7 @@
 			previous_focus = document.activeElement as HTMLElement;
 			// Focus the modal container
 			modal_element?.focus();
-			dispatch('open');
+			onopen?.();
 		} else if (previous_focus) {
 			previous_focus.focus();
 			previous_focus = null;
@@ -135,6 +134,12 @@
 		class={container_classes}
 		data-testid="modal-container"
 		onclick={handle_backdrop_click}
+		role="presentation"
+		onkeydown={(e) => {
+			if (e.key === 'Enter' || e.key === ' ') {
+				handle_backdrop_click(e as any);
+			}
+		}}
 	>
 		<div class={wrapper_classes}>
 			<!-- Modal content -->

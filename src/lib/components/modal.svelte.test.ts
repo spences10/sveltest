@@ -151,6 +151,7 @@ describe('Modal Component', () => {
 	describe('User Interactions', () => {
 		test('should handle close button click', async () => {
 			let is_closed = false;
+
 			render(Modal, {
 				is_open: true,
 				title: 'Test Modal',
@@ -160,9 +161,7 @@ describe('Modal Component', () => {
 				},
 			});
 
-			const close_button = page.getByRole('button', {
-				name: 'Close',
-			});
+			const close_button = page.getByTestId('modal-close-button');
 			await close_button.click();
 
 			expect(is_closed).toBe(true);
@@ -170,6 +169,7 @@ describe('Modal Component', () => {
 
 		test('should handle backdrop click when close_on_backdrop_click is true', async () => {
 			let is_closed = false;
+
 			render(Modal, {
 				is_open: true,
 				title: 'Test Modal',
@@ -179,14 +179,16 @@ describe('Modal Component', () => {
 				},
 			});
 
-			const backdrop = page.getByTestId('modal-backdrop');
-			await backdrop.click();
+			// Click on the modal container (backdrop area) instead of backdrop div
+			const modal_container = page.getByTestId('modal-container');
+			await modal_container.click();
 
 			expect(is_closed).toBe(true);
 		});
 
 		test('should handle escape key when close_on_escape is true', async () => {
 			let is_closed = false;
+
 			render(Modal, {
 				is_open: true,
 				title: 'Test Modal',
@@ -196,9 +198,8 @@ describe('Modal Component', () => {
 				},
 			});
 
-			// Use keyboard interaction through the modal element
-			const modal = page.getByTestId('modal');
-			await modal.press('Escape');
+			// Use keyboard interaction on the page instead of modal element
+			await page.keyboard.press('Escape');
 
 			expect(is_closed).toBe(true);
 		});

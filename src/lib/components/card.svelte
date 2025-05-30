@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
-
 	interface Props {
 		variant?: 'default' | 'elevated' | 'outlined' | 'filled';
 		padding?: 'none' | 'sm' | 'md' | 'lg';
@@ -13,6 +11,9 @@
 		footer_text?: string; // Workaround for snippet limitation
 		image_src?: string;
 		image_alt?: string;
+		onclick?: (event: MouseEvent) => void;
+		onfocus?: (event: FocusEvent) => void;
+		onblur?: (event: FocusEvent) => void;
 	}
 
 	let {
@@ -27,14 +28,11 @@
 		footer_text = '',
 		image_src = '',
 		image_alt = '',
+		onclick,
+		onfocus,
+		onblur,
 		...rest_props
 	}: Props = $props();
-
-	const dispatch = createEventDispatcher<{
-		click: MouseEvent;
-		focus: FocusEvent;
-		blur: FocusEvent;
-	}>();
 
 	function handle_click(event: MouseEvent) {
 		if (disabled) {
@@ -42,19 +40,19 @@
 			return;
 		}
 		if (clickable) {
-			dispatch('click', event);
+			onclick?.(event);
 		}
 	}
 
 	function handle_focus(event: FocusEvent) {
 		if (clickable && !disabled) {
-			dispatch('focus', event);
+			onfocus?.(event);
 		}
 	}
 
 	function handle_blur(event: FocusEvent) {
 		if (clickable && !disabled) {
-			dispatch('blur', event);
+			onblur?.(event);
 		}
 	}
 
