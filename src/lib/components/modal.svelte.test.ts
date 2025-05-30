@@ -1,4 +1,4 @@
-import { page } from '@vitest/browser/context';
+import { page, userEvent } from '@vitest/browser/context';
 import { describe, expect, test } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import Modal from './modal.svelte';
@@ -179,9 +179,10 @@ describe('Modal Component', () => {
 				},
 			});
 
-			// Click on the modal container (backdrop area) instead of backdrop div
+			// Click on the modal container at coordinates outside the modal content
+			// The container has the click handler, so we click at the top-left corner
 			const modal_container = page.getByTestId('modal-container');
-			await modal_container.click();
+			await modal_container.click({ position: { x: 10, y: 10 } });
 
 			expect(is_closed).toBe(true);
 		});
@@ -198,8 +199,8 @@ describe('Modal Component', () => {
 				},
 			});
 
-			// Use keyboard interaction on the page instead of modal element
-			await page.keyboard.press('Escape');
+			// Use userEvent.keyboard instead of page.keyboard.press
+			await userEvent.keyboard('{Escape}');
 
 			expect(is_closed).toBe(true);
 		});
