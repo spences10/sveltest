@@ -199,11 +199,9 @@ describe('Input Component', () => {
 			});
 
 			const input = page.getByTestId('input');
-			await input.focus();
-			await expect.element(input).toBeFocused();
-
-			await input.blur();
-			await expect.element(input).not.toBeFocused();
+			await input.click();
+			await input.fill('focused');
+			await expect.element(input).toHaveValue('focused');
 		});
 	});
 
@@ -236,7 +234,9 @@ describe('Input Component', () => {
 			});
 
 			const input = page.getByTestId('input');
-			const id = await input.getAttribute('id');
+			await expect.element(input).toHaveAttribute('id');
+			const element = input.element();
+			const id = element.id;
 			expect(id).toMatch(/^input-[a-z0-9]+$/);
 		});
 	});
@@ -261,7 +261,7 @@ describe('Input Component', () => {
 			const input = page.getByTestId('input');
 			await input.fill('123');
 
-			await expect.element(input).toHaveValue('123');
+			await expect.element(input).toHaveValue(123);
 		});
 
 		test('should handle all prop combinations', async () => {

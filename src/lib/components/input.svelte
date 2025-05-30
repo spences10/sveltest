@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
-
 	interface Props {
 		type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
 		value?: string | number;
@@ -28,6 +26,10 @@
 		maxlength?: number;
 		minlength?: number;
 		pattern?: string;
+		oninput?: (event: Event) => void;
+		onchange?: (event: Event) => void;
+		onfocus?: (event: FocusEvent) => void;
+		onblur?: (event: FocusEvent) => void;
 	}
 
 	let {
@@ -47,15 +49,12 @@
 		maxlength,
 		minlength,
 		pattern,
+		oninput,
+		onchange,
+		onfocus,
+		onblur,
 		...rest_props
 	}: Props = $props();
-
-	const dispatch = createEventDispatcher<{
-		input: Event;
-		change: Event;
-		focus: FocusEvent;
-		blur: FocusEvent;
-	}>();
 
 	function handle_input(event: Event) {
 		const target = event.target as HTMLInputElement;
@@ -64,19 +63,19 @@
 		} else {
 			value = target.value;
 		}
-		dispatch('input', event);
+		oninput?.(event);
 	}
 
 	function handle_change(event: Event) {
-		dispatch('change', event);
+		onchange?.(event);
 	}
 
 	function handle_focus(event: FocusEvent) {
-		dispatch('focus', event);
+		onfocus?.(event);
 	}
 
 	function handle_blur(event: FocusEvent) {
-		dispatch('blur', event);
+		onblur?.(event);
 	}
 
 	// CSS classes

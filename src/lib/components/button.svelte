@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
-
 	interface Props {
 		variant?: 'primary' | 'secondary' | 'danger';
 		size?: 'sm' | 'md' | 'lg';
@@ -8,6 +6,7 @@
 		loading?: boolean;
 		type?: 'button' | 'submit' | 'reset';
 		label?: string;
+		onclick?: (event: MouseEvent) => void;
 	}
 
 	let {
@@ -17,19 +16,16 @@
 		loading = false,
 		type = 'button',
 		label = '',
+		onclick,
 		...rest_props
 	}: Props = $props();
-
-	const dispatch = createEventDispatcher<{
-		click: MouseEvent;
-	}>();
 
 	function handle_click(event: MouseEvent) {
 		if (disabled || loading) {
 			event.preventDefault();
 			return;
 		}
-		dispatch('click', event);
+		onclick?.(event);
 	}
 
 	// Derived CSS classes
@@ -61,12 +57,15 @@
 	]
 		.filter(Boolean)
 		.join(' ');
+
+	// Compute the actual disabled state
+	const is_disabled = disabled || loading;
 </script>
 
 <button
 	{type}
 	class={computed_classes}
-	{disabled}
+	disabled={is_disabled}
 	data-testid="button"
 	onclick={handle_click}
 	{...rest_props}

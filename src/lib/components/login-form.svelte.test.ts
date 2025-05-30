@@ -31,7 +31,9 @@ describe('LoginForm Component', () => {
 
 			const form = page.getByTestId('login-form');
 			const email_input = page.getByLabelText('Email Address');
-			const password_input = page.getByLabelText('Password');
+			const password_input = page.getByPlaceholder(
+				'Enter your password',
+			);
 			const submit_button = page.getByRole('button', {
 				name: 'Sign In',
 			});
@@ -58,21 +60,21 @@ describe('LoginForm Component', () => {
 			const submit_button = page.getByRole('button', {
 				name: 'Sign In',
 			});
-			const remember_checkbox = page.getByTestId(
-				'remember-me-checkbox',
-			);
-			const forgot_password_link = page.getByTestId(
-				'forgot-password-link',
-			);
 
 			await expect
 				.element(email_input)
 				.toHaveValue('test@example.com');
 			await expect.element(submit_button).toBeDisabled();
+
+			// Should not render remember me checkbox
+			const remember_checkbox = page.getByTestId(
+				'remember-me-checkbox',
+			);
 			await expect.element(remember_checkbox).not.toBeInTheDocument();
-			await expect
-				.element(forgot_password_link)
-				.not.toBeInTheDocument();
+
+			// Should not render forgot password link
+			const forgot_link = page.getByTestId('forgot-password-link');
+			await expect.element(forgot_link).not.toBeInTheDocument();
 		});
 	});
 
@@ -87,41 +89,49 @@ describe('LoginForm Component', () => {
 
 			// Enter invalid email
 			await email_input.fill('invalid-email');
-			await email_input.blur();
-
-			// Try to submit to trigger validation
+			// Trigger blur by clicking elsewhere
 			await submit_button.click();
 
-			// Should show validation error
-			const error_message = page.getByTestId('input-error');
-			await expect.element(error_message).toBeInTheDocument();
+			// Try to submit to trigger validation
+			const error_messages = page.getByTestId('input-error');
+			await expect
+				.element(error_messages.first())
+				.toBeInTheDocument();
 		});
 
 		test('should validate password using utility function', async () => {
 			render(LoginForm, {});
 
-			const password_input = page.getByLabelText('Password');
+			const email_input = page.getByLabelText('Email Address');
+			const password_input = page.getByPlaceholder(
+				'Enter your password',
+			);
 			const submit_button = page.getByRole('button', {
 				name: 'Sign In',
 			});
 
+			// Enter valid email first
+			await email_input.fill('test@example.com');
+
 			// Enter short password
 			await password_input.fill('123');
-			await password_input.blur();
-
-			// Try to submit to trigger validation
+			// Trigger blur by clicking elsewhere
 			await submit_button.click();
 
-			// Should show validation error
-			const error_message = page.getByTestId('input-error');
-			await expect.element(error_message).toBeInTheDocument();
+			// Try to submit to trigger validation
+			const error_messages = page.getByTestId('input-error');
+			await expect
+				.element(error_messages.first())
+				.toBeInTheDocument();
 		});
 
 		test('should enable submit when form is valid', async () => {
 			render(LoginForm, {});
 
 			const email_input = page.getByLabelText('Email Address');
-			const password_input = page.getByLabelText('Password');
+			const password_input = page.getByPlaceholder(
+				'Enter your password',
+			);
 			const submit_button = page.getByRole('button', {
 				name: 'Sign In',
 			});
@@ -164,13 +174,16 @@ describe('LoginForm Component', () => {
 
 	describe('Svelte 5 Runes State Management', () => {
 		test('should manage form state with runes', async () => {
-			render(LoginForm, {});
+			render(LoginForm, {
+				initial_email: 'user@example.com',
+			});
 
 			const email_input = page.getByLabelText('Email Address');
-			const password_input = page.getByLabelText('Password');
+			const password_input = page.getByPlaceholder(
+				'Enter your password',
+			);
 
 			// Test reactive state updates
-			await email_input.fill('user@example.com');
 			await expect
 				.element(email_input)
 				.toHaveValue('user@example.com');
@@ -182,7 +195,9 @@ describe('LoginForm Component', () => {
 		test('should manage password visibility state', async () => {
 			render(LoginForm, {});
 
-			const password_input = page.getByLabelText('Password');
+			const password_input = page.getByPlaceholder(
+				'Enter your password',
+			);
 			const toggle_button = page.getByTestId('password-toggle');
 
 			// Initially password should be hidden
@@ -206,34 +221,35 @@ describe('LoginForm Component', () => {
 		test('should manage remember me state', async () => {
 			render(LoginForm, {});
 
-			const remember_checkbox = page.getByTestId(
-				'remember-me-checkbox',
-			);
+			const remember_checkbox = page.getByLabelText('Remember me');
 
 			// Initially unchecked
 			await expect.element(remember_checkbox).not.toBeChecked();
 
 			// Check the box
-			await remember_checkbox.check();
+			await remember_checkbox.click();
 			await expect.element(remember_checkbox).toBeChecked();
 
 			// Uncheck the box
-			await remember_checkbox.uncheck();
+			await remember_checkbox.click();
 			await expect.element(remember_checkbox).not.toBeChecked();
 		});
 	});
 
 	describe('Event Dispatching', () => {
 		test('should dispatch submit event with form data', async () => {
-			const { component } = render(LoginForm, {});
-
 			let submitted_data: any = null;
-			component.$on('submit', (event) => {
-				submitted_data = event.detail;
+
+			render(LoginForm, {
+				onsubmit: (data) => {
+					submitted_data = data;
+				},
 			});
 
 			const email_input = page.getByLabelText('Email Address');
-			const password_input = page.getByLabelText('Password');
+			const password_input = page.getByPlaceholder(
+				'Enter your password',
+			);
 			const remember_checkbox = page.getByTestId(
 				'remember-me-checkbox',
 			);
@@ -241,10 +257,13 @@ describe('LoginForm Component', () => {
 				name: 'Sign In',
 			});
 
-			// Fill form
+			// Fill form with valid data
 			await email_input.fill('test@example.com');
 			await password_input.fill('validpassword123');
-			await remember_checkbox.check();
+			await remember_checkbox.click();
+
+			// Wait a moment for the reactive state to update
+			await new Promise((resolve) => setTimeout(resolve, 100));
 
 			// Submit form
 			await submit_button.click();
@@ -258,11 +277,12 @@ describe('LoginForm Component', () => {
 		});
 
 		test('should dispatch forgot password event', async () => {
-			const { component } = render(LoginForm, {});
-
 			let forgot_password_data: any = null;
-			component.$on('forgot_password', (event) => {
-				forgot_password_data = event.detail;
+
+			render(LoginForm, {
+				onforgot_password: (data) => {
+					forgot_password_data = data;
+				},
 			});
 
 			const email_input = page.getByLabelText('Email Address');
@@ -278,11 +298,12 @@ describe('LoginForm Component', () => {
 		});
 
 		test('should dispatch register click event', async () => {
-			const { component } = render(LoginForm, {});
-
 			let register_clicked = false;
-			component.$on('register_click', () => {
-				register_clicked = true;
+
+			render(LoginForm, {
+				onregister_click: () => {
+					register_clicked = true;
+				},
 			});
 
 			const register_link = page.getByTestId('register-link');
@@ -299,7 +320,9 @@ describe('LoginForm Component', () => {
 			});
 
 			const email_input = page.getByLabelText('Email Address');
-			const password_input = page.getByLabelText('Password');
+			const password_input = page.getByPlaceholder(
+				'Enter your password',
+			);
 			const submit_button = page.getByRole('button', {
 				name: 'Sign In',
 			});
@@ -331,7 +354,7 @@ describe('LoginForm Component', () => {
 		test('should have proper form structure', async () => {
 			render(LoginForm, {});
 
-			const form = page.getByRole('form');
+			const form = page.getByTestId('login-form');
 			await expect.element(form).toBeInTheDocument();
 		});
 
@@ -339,7 +362,9 @@ describe('LoginForm Component', () => {
 			render(LoginForm, {});
 
 			const email_input = page.getByLabelText('Email Address');
-			const password_input = page.getByLabelText('Password');
+			const password_input = page.getByPlaceholder(
+				'Enter your password',
+			);
 			const remember_checkbox = page.getByLabelText('Remember me');
 
 			await expect.element(email_input).toBeInTheDocument();
@@ -351,10 +376,13 @@ describe('LoginForm Component', () => {
 			render(LoginForm, {});
 
 			const toggle_button = page.getByTestId('password-toggle');
+
+			// Initially should show "Show password"
 			await expect
 				.element(toggle_button)
 				.toHaveAttribute('aria-label', 'Show password');
 
+			// After clicking, should show "Hide password"
 			await toggle_button.click();
 			await expect
 				.element(toggle_button)

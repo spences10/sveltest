@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
 	import {
 		validate_email,
 		validate_password,
@@ -12,6 +11,13 @@
 		remember_me_enabled?: boolean;
 		forgot_password_enabled?: boolean;
 		initial_email?: string;
+		onsubmit?: (data: {
+			email: string;
+			password: string;
+			remember_me: boolean;
+		}) => void;
+		onforgot_password?: (data: { email: string }) => void;
+		onregister_click?: () => void;
 	}
 
 	let {
@@ -19,14 +25,11 @@
 		remember_me_enabled = true,
 		forgot_password_enabled = true,
 		initial_email = '',
+		onsubmit,
+		onforgot_password,
+		onregister_click,
 		...rest_props
 	}: Props = $props();
-
-	const dispatch = createEventDispatcher<{
-		submit: { email: string; password: string; remember_me: boolean };
-		forgot_password: { email: string };
-		register_click: void;
-	}>();
 
 	// Form state using Svelte 5 runes
 	let email = $state(initial_email);
@@ -71,7 +74,7 @@
 		submit_attempted = true;
 
 		if (can_submit()) {
-			dispatch('submit', {
+			onsubmit?.({
 				email,
 				password,
 				remember_me,
@@ -81,12 +84,12 @@
 
 	// Handle forgot password
 	function handle_forgot_password() {
-		dispatch('forgot_password', { email });
+		onforgot_password?.({ email });
 	}
 
 	// Handle register click
 	function handle_register_click() {
-		dispatch('register_click');
+		onregister_click?.();
 	}
 
 	// Handle input changes
@@ -128,6 +131,7 @@
 <form
 	class={form_classes}
 	data-testid="login-form"
+	role="form"
 	onsubmit={(e) => {
 		e.preventDefault();
 		handle_submit();
