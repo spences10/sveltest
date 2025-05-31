@@ -91,7 +91,7 @@ describe('+layout.svelte SSR', () => {
 
 			// Test sidebar structure
 			expect(body).toContain('class="drawer-overlay"');
-			expect(body).toContain('class="min-h-screen w-80 bg-base-200"');
+			expect(body).toContain('class="bg-base-200 min-h-screen w-80"');
 			expect(body).toContain('class="menu menu-vertical"');
 		});
 
@@ -249,7 +249,7 @@ describe('+layout.svelte SSR', () => {
 			);
 			const hasMain = body.includes('<main class="p-4">');
 			const hasSidebar = body.includes(
-				'class="min-h-screen w-80 bg-base-200"',
+				'class="bg-base-200 min-h-screen w-80"',
 			);
 
 			expect(hasDrawer).toBe(true);

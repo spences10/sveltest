@@ -1,17 +1,19 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+// Mock the environment variable
+vi.mock('$env/static/private', () => ({
+	API_SECRET: 'test_secret_123',
+}));
+
+import { API_SECRET } from '$env/static/private';
 import { GET } from './+server';
 
 describe('Secure Data Endpoint', () => {
-	beforeEach(() => {
-		// Note: API_SECRET is imported statically, so we test with the actual value
-		// In a real environment, this would be set via .env files
-	});
-
 	describe('Authentication Success Cases', () => {
 		it('should return data with valid auth token', async () => {
 			const mock_request = new Request('http://localhost', {
 				headers: {
-					authorization: 'Bearer test_secret_123',
+					authorization: `Bearer ${API_SECRET}`,
 				},
 			});
 
@@ -30,7 +32,7 @@ describe('Secure Data Endpoint', () => {
 		it('should return correct content-type header', async () => {
 			const mock_request = new Request('http://localhost', {
 				headers: {
-					authorization: 'Bearer test_secret_123',
+					authorization: `Bearer ${API_SECRET}`,
 				},
 			});
 
@@ -44,7 +46,7 @@ describe('Secure Data Endpoint', () => {
 		it('should handle case-sensitive authorization header', async () => {
 			const mock_request = new Request('http://localhost', {
 				headers: {
-					authorization: 'Bearer test_secret_123', // lowercase 'authorization'
+					authorization: `Bearer ${API_SECRET}`,
 				},
 			});
 
@@ -63,7 +65,6 @@ describe('Secure Data Endpoint', () => {
 
 			try {
 				await GET({ request: mock_request } as any);
-				// If we reach here, test should fail
 				expect(true).toBe(false);
 			} catch (e: any) {
 				expect(e.status).toBe(401);
@@ -76,7 +77,6 @@ describe('Secure Data Endpoint', () => {
 
 			try {
 				await GET({ request: mock_request } as any);
-				// If we reach here, test should fail
 				expect(true).toBe(false);
 			} catch (e: any) {
 				expect(e.status).toBe(401);
@@ -88,10 +88,10 @@ describe('Secure Data Endpoint', () => {
 			const malformed_tokens = [
 				'Bearer', // Missing token
 				'Bearer ', // Empty token
-				'bearer test_secret_123', // Wrong case
-				'Basic test_secret_123', // Wrong auth type
-				'test_secret_123', // Missing Bearer prefix
-				'Bearer  test_secret_123', // Extra spaces
+				`bearer ${API_SECRET}`, // Case mismatch
+				`Basic ${API_SECRET}`, // Wrong auth type
+				API_SECRET, // No Bearer prefix
+				`Bearer  ${API_SECRET}`, // Extra spaces
 			];
 
 			for (const token of malformed_tokens) {
@@ -101,7 +101,7 @@ describe('Secure Data Endpoint', () => {
 
 				try {
 					await GET({ request: mock_request } as any);
-					expect(true).toBe(false); // Should not reach here
+					expect(true).toBe(false);
 				} catch (e: any) {
 					expect(e.status).toBe(401);
 					expect(e.body.message).toBe('Unauthorized');
@@ -140,10 +140,9 @@ describe('Secure Data Endpoint', () => {
 
 	describe('Security Edge Cases', () => {
 		it('should handle exact token match requirement', async () => {
-			// Test that the current implementation requires exact match
 			const mock_request = new Request('http://localhost', {
 				headers: {
-					authorization: 'Bearer test_secret_123',
+					authorization: `Bearer ${API_SECRET}`,
 				},
 			});
 
@@ -152,9 +151,8 @@ describe('Secure Data Endpoint', () => {
 		});
 
 		it('should reject tokens with modifications', async () => {
-			// Test clearly invalid tokens
 			const mock_request_extra = new Request('http://localhost', {
-				headers: { authorization: 'Bearer test_secret_123_extra' },
+				headers: { authorization: `Bearer ${API_SECRET}_extra` },
 			});
 			try {
 				await GET({ request: mock_request_extra } as any);
@@ -164,7 +162,9 @@ describe('Secure Data Endpoint', () => {
 			}
 
 			const mock_request_short = new Request('http://localhost', {
-				headers: { authorization: 'Bearer test_secret_12' },
+				headers: {
+					authorization: `Bearer ${API_SECRET.slice(0, -1)}`,
+				},
 			});
 			try {
 				await GET({ request: mock_request_short } as any);
@@ -175,9 +175,8 @@ describe('Secure Data Endpoint', () => {
 		});
 
 		it('should handle leading spaces in Bearer token', async () => {
-			// Test that leading spaces in the token part are handled
 			const mock_request = new Request('http://localhost', {
-				headers: { authorization: 'Bearer  test_secret_123' }, // Extra space before token
+				headers: { authorization: `Bearer  ${API_SECRET}` },
 			});
 
 			try {
@@ -188,11 +187,9 @@ describe('Secure Data Endpoint', () => {
 			}
 		});
 
-		it('should reject Unicode characters in headers (HTTP limitation)', async () => {
-			// This test documents the HTTP header limitation
+		it('should reject Unicode characters in headers', async () => {
 			const unicode_secret = 'test_🔐_secret';
 
-			// This should throw due to HTTP header ByteString limitation
 			expect(() => {
 				new Request('http://localhost', {
 					headers: {
@@ -205,7 +202,7 @@ describe('Secure Data Endpoint', () => {
 		it('should be case-sensitive for token comparison', async () => {
 			const mock_request = new Request('http://localhost', {
 				headers: {
-					authorization: 'Bearer TEST_SECRET_123', // Different case
+					authorization: `Bearer ${API_SECRET.toUpperCase()}`,
 				},
 			});
 
@@ -218,7 +215,6 @@ describe('Secure Data Endpoint', () => {
 		});
 
 		it('should handle timing attack prevention', async () => {
-			// Test that invalid tokens take similar time as valid ones
 			const start_time = performance.now();
 
 			try {
@@ -233,16 +229,14 @@ describe('Secure Data Endpoint', () => {
 			const end_time = performance.now();
 			const execution_time = end_time - start_time;
 
-			// Should complete quickly (not hang or take excessive time)
-			expect(execution_time).toBeLessThan(100); // 100ms threshold
+			expect(execution_time).toBeLessThan(100);
 		});
 	});
 
 	describe('Environment Configuration', () => {
 		it('should work with the configured API_SECRET', async () => {
-			// Test that the implementation works with the actual configured secret
 			const mock_request = new Request('http://localhost', {
-				headers: { authorization: 'Bearer test_secret_123' },
+				headers: { authorization: `Bearer ${API_SECRET}` },
 			});
 
 			const response = await GET({ request: mock_request } as any);
@@ -250,14 +244,13 @@ describe('Secure Data Endpoint', () => {
 		});
 
 		it('should reject when API_SECRET does not match', async () => {
-			// Test various wrong secrets to ensure security
 			const wrong_secrets = [
 				'',
 				'wrong_secret',
-				'test_secret_124',
-				'test_secret_12',
-				'TEST_SECRET_123',
-				'test secret 123',
+				`${API_SECRET}4`,
+				API_SECRET.slice(0, -1),
+				API_SECRET.toUpperCase(),
+				`${API_SECRET.replace('_', ' ')}`,
 			];
 
 			for (const secret of wrong_secrets) {
@@ -291,7 +284,7 @@ describe('Secure Data Endpoint', () => {
 		it('should handle requests with additional headers', async () => {
 			const mock_request = new Request('http://localhost', {
 				headers: {
-					authorization: 'Bearer test_secret_123',
+					authorization: `Bearer ${API_SECRET}`,
 					'user-agent': 'Test Client/1.0',
 					accept: 'application/json',
 					'x-custom-header': 'custom-value',
@@ -303,10 +296,9 @@ describe('Secure Data Endpoint', () => {
 		});
 
 		it('should handle different HTTP methods (GET only)', async () => {
-			// This endpoint only supports GET, but test the function directly
 			const mock_request = new Request('http://localhost', {
 				method: 'GET',
-				headers: { authorization: 'Bearer test_secret_123' },
+				headers: { authorization: `Bearer ${API_SECRET}` },
 			});
 
 			const response = await GET({ request: mock_request } as any);
@@ -317,7 +309,7 @@ describe('Secure Data Endpoint', () => {
 			const mock_request = new Request(
 				'http://localhost?param=value&test=123',
 				{
-					headers: { authorization: 'Bearer test_secret_123' },
+					headers: { authorization: `Bearer ${API_SECRET}` },
 				},
 			);
 
@@ -329,25 +321,40 @@ describe('Secure Data Endpoint', () => {
 			const mock_request = new Request(
 				'https://example.com/api/secure-data',
 				{
-					headers: { authorization: 'Bearer test_secret_123' },
+					headers: { authorization: `Bearer ${API_SECRET}` },
 				},
 			);
 
 			const response = await GET({ request: mock_request } as any);
 			expect(response.status).toBe(200);
 		});
+
+		it.skip('should handle POST requests (method not allowed)', async () => {
+			// Test that POST returns 405 Method Not Allowed
+		});
+
+		it.skip('should handle PUT requests (method not allowed)', async () => {
+			// Test that PUT returns 405 Method Not Allowed
+		});
+
+		it.skip('should handle DELETE requests (method not allowed)', async () => {
+			// Test that DELETE returns 405 Method Not Allowed
+		});
+
+		it.skip('should handle PATCH requests (method not allowed)', async () => {
+			// Test that PATCH returns 405 Method Not Allowed
+		});
 	});
 
 	describe('Response Validation', () => {
 		it('should return consistent response structure', async () => {
 			const mock_request = new Request('http://localhost', {
-				headers: { authorization: 'Bearer test_secret_123' },
+				headers: { authorization: `Bearer ${API_SECRET}` },
 			});
 
 			const response = await GET({ request: mock_request } as any);
 			const data = await response.json();
 
-			// Verify response structure
 			expect(data).toHaveProperty('message');
 			expect(data).toHaveProperty('data');
 			expect(data.data).toHaveProperty('items');
@@ -357,7 +364,7 @@ describe('Secure Data Endpoint', () => {
 
 		it('should return immutable data structure', async () => {
 			const mock_request = new Request('http://localhost', {
-				headers: { authorization: 'Bearer test_secret_123' },
+				headers: { authorization: `Bearer ${API_SECRET}` },
 			});
 
 			const response1 = await GET({ request: mock_request } as any);
@@ -366,7 +373,6 @@ describe('Secure Data Endpoint', () => {
 			const response2 = await GET({ request: mock_request } as any);
 			const data2 = await response2.json();
 
-			// Data should be identical across calls
 			expect(data1).toEqual(data2);
 		});
 
@@ -379,69 +385,122 @@ describe('Secure Data Endpoint', () => {
 				await GET({ request: mock_request } as any);
 				expect(true).toBe(false);
 			} catch (e: any) {
-				// Error should not contain the actual secret or token details
 				expect(e.body.message).toBe('Unauthorized');
-				expect(e.body.message).not.toContain('test_secret_123');
+				expect(e.body.message).not.toContain(API_SECRET);
 				expect(e.body.message).not.toContain('wrong_token');
 			}
+		});
+
+		it.skip('should include security headers in response', async () => {
+			// Test for X-Content-Type-Options, X-Frame-Options, etc.
+		});
+
+		it.skip('should handle response compression', async () => {
+			// Test gzip/deflate compression
+		});
+
+		it.skip('should include cache control headers', async () => {
+			// Test appropriate cache headers for secure data
 		});
 	});
 
 	describe('Performance & Reliability', () => {
 		it.skip('should handle concurrent requests efficiently', async () => {
 			// Test multiple simultaneous requests
-			// Test request queuing and processing
-			// Test memory usage under load
 		});
 
 		it.skip('should implement rate limiting', async () => {
 			// Test request rate limiting
-			// Test rate limit headers
-			// Test rate limit bypass scenarios
 		});
 
 		it.skip('should handle request timeouts', async () => {
-			// Test long-running request handling
 			// Test timeout configuration
-			// Test graceful timeout responses
 		});
 
 		it.skip('should log security events', async () => {
-			// Test failed authentication logging
-			// Test successful access logging
-			// Test suspicious activity detection
+			// Test authentication logging
 		});
 
-		it.skip('should handle database connection failures', async () => {
-			// Test database unavailability
-			// Test connection retry logic
-			// Test fallback responses
+		it.skip('should handle memory pressure gracefully', async () => {
+			// Test behavior under high memory usage
+		});
+
+		it.skip('should validate request size limits', async () => {
+			// Test large request handling
 		});
 	});
 
 	describe('Integration Scenarios', () => {
 		it.skip('should work with API versioning', async () => {
 			// Test API version headers
-			// Test backward compatibility
-			// Test version-specific responses
 		});
 
 		it.skip('should integrate with monitoring systems', async () => {
 			// Test metrics collection
-			// Test health check endpoints
-			// Test error reporting
 		});
 
 		it.skip('should handle CORS preflight requests', async () => {
-			// Test OPTIONS requests
-			// Test CORS headers
-			// Test cross-origin scenarios
+			// Test OPTIONS requests and CORS headers
 		});
 
 		it.skip('should work with load balancers', async () => {
-			// Test sticky sessions
-			// Test health checks
-			// Test failover scenarios
+			// Test health checks and failover
+		});
+
+		it.skip('should integrate with authentication middleware', async () => {
+			// Test middleware integration
+		});
+
+		it.skip('should work with reverse proxy configurations', async () => {
+			// Test proxy headers and forwarding
+		});
+	});
+
+	describe('Error Handling', () => {
+		it.skip('should handle malformed JSON in request body', async () => {
+			// Test invalid JSON handling
+		});
+
+		it.skip('should handle network interruptions gracefully', async () => {
+			// Test connection drops
+		});
+
+		it.skip('should provide meaningful error messages', async () => {
+			// Test error message quality
+		});
+
+		it.skip('should handle database connection failures', async () => {
+			// Test database unavailability
+		});
+
+		it.skip('should handle service dependencies being down', async () => {
+			// Test external service failures
+		});
+	});
+
+	describe('Security Compliance', () => {
+		it.skip('should comply with OWASP security guidelines', async () => {
+			// Test OWASP compliance
+		});
+
+		it.skip('should handle SQL injection attempts', async () => {
+			// Test SQL injection protection
+		});
+
+		it.skip('should handle XSS attempts', async () => {
+			// Test XSS protection
+		});
+
+		it.skip('should handle CSRF protection', async () => {
+			// Test CSRF token validation
+		});
+
+		it.skip('should implement proper session management', async () => {
+			// Test session handling
+		});
+
+		it.skip('should audit trail for security events', async () => {
+			// Test security event logging
 		});
 	});
 });
