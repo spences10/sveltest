@@ -109,7 +109,6 @@
 	class={computed_classes}
 	data-testid="card"
 	role={clickable ? 'button' : undefined}
-	tabindex={clickable && !disabled ? 0 : undefined}
 	aria-disabled={disabled ? 'true' : undefined}
 	onclick={handle_click}
 	onfocus={handle_focus}

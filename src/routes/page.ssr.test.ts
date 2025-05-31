@@ -4,7 +4,7 @@ import Page from './+page.svelte';
 
 describe('/+page.svelte SSR', () => {
 	test('should render HTML correctly on server', () => {
-		const { body, head, css } = render(Page);
+		const { body, head } = render(Page);
 
 		// Test that main content is rendered
 		expect(body).toContain('Svelte Testing Examples');
