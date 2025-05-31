@@ -1,0 +1,146 @@
+---
+name: CI/CD
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 0 * * *' # Run at 12 AM UTC daily
+
+env:
+  CI: true
+
+jobs:
+  test:
+    name: Tests & Coverage
+    runs-on: ubuntu-22.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.52.0-noble
+      options: --user 1001
+    timeout-minutes: 10
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key:
+            ${{ runner.os }}-pnpm-store-${{
+            hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify Playwright versions match
+        run: |
+          # Extract Playwright version from package.json
+          PACKAGE_VERSION=$(node -p "require('./package.json').devDependencies.playwright.replace(/[\^~]/, '')")
+
+          # Extract version from container image (from this workflow file)
+          CONTAINER_VERSION=$(grep -o 'playwright:v[0-9.]*' .github/workflows/ci.yaml | sed 's/playwright:v//')
+
+          echo "📦 Package.json Playwright version: $PACKAGE_VERSION"
+          echo "🐳 Container image Playwright version: $CONTAINER_VERSION"
+
+          if [ "$PACKAGE_VERSION" != "$CONTAINER_VERSION" ]; then
+            echo "❌ ERROR: Playwright versions don't match!"
+            echo "   Package.json: $PACKAGE_VERSION"
+            echo "   Container: $CONTAINER_VERSION"
+            echo "   Please update either:"
+            echo "   - package.json devDependencies.playwright to ^$CONTAINER_VERSION"
+            echo "   - Container image to mcr.microsoft.com/playwright:v$PACKAGE_VERSION-noble"
+            exit 1
+          else
+            echo "✅ Playwright versions match: $PACKAGE_VERSION"
+          fi
+
+      - name: Run linting
+        run: pnpm lint
+
+      - name: Run type checking
+        run: pnpm check
+
+      - name: Svelte Check
+        uses: ghostdevv/svelte-check-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build application
+        run: pnpm build
+
+      - name: Run unit tests
+        run: pnpm test:unit --run --coverage
+
+      - name: Run E2E tests
+        run: pnpm test:e2e
+
+      - name: Comment PR with test results
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            let comment = '## 🧪 Test Results\n\n';
+
+            // Add test status
+            const testStatus = '${{ job.status }}' === 'success' ? '✅ All tests passed!' : '❌ Some tests failed';
+            comment += `${testStatus}\n\n`;
+
+            // Add links to artifacts
+            comment += '### 📊 Reports\n';
+            comment += '- [View CI Run Details](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\n';
+
+            // Find existing comment
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existingComment = comments.find(comment => 
+              comment.body.includes('## 🧪 Test Results')
+            );
+
+            if (existingComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existingComment.id,
+                body: comment
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: comment
+              });
+            }

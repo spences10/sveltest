@@ -17,7 +17,8 @@
 		"test:client": "vitest --project=client",
 		"test:ssr": "vitest --project=ssr",
 		"test": "npm run test:unit -- --run && npm run test:e2e",
-		"test:e2e": "playwright test"
+		"test:e2e": "playwright test",
+		"coverage": "vitest --run --coverage"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.9",

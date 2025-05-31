@@ -222,6 +222,26 @@ export default defineConfig({
 });
 ```
 
+## 🚀 CI/CD
+
+This project includes automated CI/CD with GitHub Actions that:
+
+- **Runs in Playwright Docker container** (v1.52.0) for consistent
+  browser testing
+- **Automatically verifies Playwright version sync** between
+  package.json and container
+- **Executes comprehensive test suite** including unit tests, E2E
+  tests, and type checking
+- **Performs code quality checks** with linting and Svelte-specific
+  validation
+- **Triggers on PRs and pushes** to main branch with daily scheduled
+  runs
+
+The workflow uses the official Microsoft Playwright container to
+ensure consistent browser environments and includes intelligent
+version checking to prevent mismatches between your local Playwright
+version and the CI environment.
+
 ## 🚀 Migration from @testing-library/svelte
 
 If you're migrating from `@testing-library/svelte`, see our
