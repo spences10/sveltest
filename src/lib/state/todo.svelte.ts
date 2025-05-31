@@ -13,7 +13,7 @@ export interface TodoFilter {
 	search: string;
 }
 
-class TodoStore {
+class TodoState {
 	private _todos = $state<Todo[]>([]);
 	private _filter = $state<TodoFilter>({ status: 'all', search: '' });
 	private _isLoading = $state(false);
@@ -211,4 +211,4 @@ class TodoStore {
 }
 
 // Export singleton instance
-export const todoStore = new TodoStore();
+export const todo_state = new TodoState();

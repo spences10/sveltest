@@ -9,7 +9,7 @@
 		Trash,
 		XCircle,
 	} from '$lib/icons';
-	import { todoStore } from '$lib/state/todo.svelte.js';
+	import { todo_state } from '$lib/state/todo.svelte.js';
 
 	interface Props {
 		title?: string;
@@ -33,7 +33,7 @@
 
 	// Sync local filter state with store
 	$effect(() => {
-		todoStore.set_filter({
+		todo_state.set_filter({
 			status: filterStatus,
 			search: searchText,
 		});
@@ -41,7 +41,7 @@
 
 	function handle_add_todo() {
 		if (newTodoText.trim()) {
-			todoStore.add_todo(newTodoText);
+			todo_state.add_todo(newTodoText);
 			newTodoText = '';
 		}
 	}
@@ -59,7 +59,7 @@
 
 	function save_edit() {
 		if (editingId && editingText.trim()) {
-			todoStore.update_todo(editingId, editingText);
+			todo_state.update_todo(editingId, editingText);
 		}
 		cancel_edit();
 	}
@@ -107,7 +107,7 @@
 					</div>
 					<div class="stat-title">Total Tasks</div>
 					<div class="stat-value text-primary">
-						{todoStore.stats.total}
+						{todo_state.stats.total}
 					</div>
 				</div>
 
@@ -117,7 +117,7 @@
 					</div>
 					<div class="stat-title">Completed</div>
 					<div class="stat-value text-success">
-						{todoStore.stats.completed}
+						{todo_state.stats.completed}
 					</div>
 				</div>
 
@@ -127,19 +127,19 @@
 					</div>
 					<div class="stat-title">Active</div>
 					<div class="stat-value text-warning">
-						{todoStore.stats.active}
+						{todo_state.stats.active}
 					</div>
 				</div>
 
 				<div class="stat">
 					<div class="stat-title">Progress</div>
 					<div class="stat-value">
-						{todoStore.stats.completionRate}%
+						{todo_state.stats.completionRate}%
 					</div>
 					<div class="stat-desc">
 						<progress
 							class="progress progress-success w-20"
-							value={todoStore.stats.completionRate}
+							value={todo_state.stats.completionRate}
 							max="100"
 						></progress>
 					</div>
@@ -231,9 +231,9 @@
 				<div class="flex flex-wrap gap-2">
 					<div class="tooltip" data-tip="Toggle all tasks">
 						<button
-							onclick={() => todoStore.toggle_all()}
+							onclick={() => todo_state.toggle_all()}
 							class="btn btn-sm btn-outline"
-							disabled={todoStore.todos.length === 0}
+							disabled={todo_state.todos.length === 0}
 							data-testid="toggle-all-button"
 						>
 							<Check class_names="w-4 h-4" />
@@ -243,9 +243,9 @@
 
 					<div class="tooltip" data-tip="Clear completed tasks">
 						<button
-							onclick={() => todoStore.clear_completed()}
+							onclick={() => todo_state.clear_completed()}
 							class="btn btn-sm btn-outline btn-error"
-							disabled={todoStore.stats.completed === 0}
+							disabled={todo_state.stats.completed === 0}
 							data-testid="clear-completed-button"
 						>
 							<Trash class_names="w-4 h-4" />
@@ -256,9 +256,9 @@
 					{#if enableSampleData}
 						<div class="tooltip" data-tip="Load sample data">
 							<button
-								onclick={() => todoStore.load_sample_data()}
+								onclick={() => todo_state.load_sample_data()}
 								class="btn btn-sm btn-outline btn-info"
-								disabled={todoStore.todos.length > 0}
+								disabled={todo_state.todos.length > 0}
 								data-testid="load-sample-button"
 							>
 								<BarChart class_names="w-4 h-4" />
@@ -269,9 +269,9 @@
 
 					<div class="tooltip" data-tip="Reset all tasks">
 						<button
-							onclick={() => todoStore.reset()}
+							onclick={() => todo_state.reset()}
 							class="btn btn-sm btn-outline btn-warning"
-							disabled={todoStore.todos.length === 0}
+							disabled={todo_state.todos.length === 0}
 							data-testid="reset-button"
 						>
 							<XCircle class_names="w-4 h-4" />
@@ -290,13 +290,13 @@
 				<CheckCircle class_names="w-5 h-5" />
 				Your Tasks
 				<div class="badge badge-neutral">
-					{todoStore.filtered_todos.length}
+					{todo_state.filtered_todos.length}
 				</div>
 			</h3>
 
-			{#if todoStore.filtered_todos.length === 0}
+			{#if todo_state.filtered_todos.length === 0}
 				<div class="alert">
-					{#if todoStore.todos.length === 0}
+					{#if todo_state.todos.length === 0}
 						<div class="w-full text-center">
 							<div class="mb-4 text-6xl">📝</div>
 							<h4
@@ -310,7 +310,7 @@
 							{#if enableSampleData}
 								<button
 									class="btn btn-primary btn-sm"
-									onclick={() => todoStore.load_sample_data()}
+									onclick={() => todo_state.load_sample_data()}
 									data-testid="load-sample-empty-btn"
 								>
 									<Plus class_names="w-4 h-4" />
@@ -334,7 +334,7 @@
 				</div>
 			{:else}
 				<div class="space-y-2">
-					{#each todoStore.filtered_todos as todo (todo.id)}
+					{#each todo_state.filtered_todos as todo (todo.id)}
 						<div
 							class="card card-compact bg-base-50 hover:bg-base-100 border-base-300 border transition-all duration-200"
 							data-testid="todo-item"
@@ -353,7 +353,7 @@
 											type="checkbox"
 											class="checkbox checkbox-primary"
 											checked={todo.completed}
-											onchange={() => todoStore.toggle_todo(todo.id)}
+											onchange={() => todo_state.toggle_todo(todo.id)}
 											data-testid="todo-checkbox"
 										/>
 									</div>
@@ -408,7 +408,7 @@
 									<div class="tooltip" data-tip="Delete task">
 										<button
 											class="btn btn-ghost btn-sm btn-square text-error hover:bg-error hover:text-error-content"
-											onclick={() => todoStore.delete_todo(todo.id)}
+											onclick={() => todo_state.delete_todo(todo.id)}
 											data-testid="delete-todo-button"
 										>
 											<Trash class_names="w-4 h-4" />
