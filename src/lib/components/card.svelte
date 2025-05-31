@@ -105,10 +105,12 @@
 	const image_classes = 'w-full h-48 object-cover mb-4';
 </script>
 
+<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 <div
 	class={computed_classes}
 	data-testid="card"
 	role={clickable ? 'button' : undefined}
+	tabindex={clickable && !disabled ? 0 : undefined}
 	aria-disabled={disabled ? 'true' : undefined}
 	onclick={handle_click}
 	onfocus={handle_focus}
