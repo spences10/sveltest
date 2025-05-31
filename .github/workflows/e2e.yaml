@@ -1,5 +1,5 @@
 ---
-name: CI/CD
+name: E2E Tests
 
 on:
   pull_request:
@@ -11,13 +11,13 @@ env:
   CI: true
 
 jobs:
-  test:
-    name: Unit Tests & Coverage
+  e2e:
+    name: End-to-End Tests
     runs-on: ubuntu-24.04
     container:
       image: mcr.microsoft.com/playwright:v1.52.0-noble
       options: --user 1001
-    timeout-minutes: 10
+    timeout-minutes: 15
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
@@ -60,7 +60,7 @@ jobs:
           PACKAGE_VERSION=$(node -p "require('./package.json').devDependencies.playwright.replace(/[\^~]/, '')")
 
           # Extract version from container image (from this workflow file)
-          CONTAINER_VERSION=$(grep -o 'playwright:v[0-9.]*' .github/workflows/ci.yaml | sed 's/playwright:v//')
+          CONTAINER_VERSION=$(grep -o 'playwright:v[0-9.]*' .github/workflows/e2e.yaml | sed 's/playwright:v//')
 
           echo "📦 Package.json Playwright version: $PACKAGE_VERSION"
           echo "🐳 Container image Playwright version: $CONTAINER_VERSION"
@@ -82,7 +82,7 @@ jobs:
         env:
           API_SECRET: ${{ secrets.API_SECRET }}
 
-      - name: Run unit tests
-        run: pnpm test:unit --run --coverage
-
- 
+      - name: Run E2E tests
+        run: pnpm test:e2e
+        env:
+          API_SECRET: ${{ secrets.API_SECRET }}
