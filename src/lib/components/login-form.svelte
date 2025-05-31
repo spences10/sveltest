@@ -38,46 +38,49 @@
 	let show_password = $state(false);
 	let submit_attempted = $state(false);
 
-	// Validation state
+	// Track when fields have been touched
 	let email_touched = $state(false);
 	let password_touched = $state(false);
 
-	// Derived validation results
+	// Validation results - these are reactive
 	const email_validation = $derived(validate_email(email));
 	const password_validation = $derived(validate_password(password));
 
-	// Derived error messages
-	const email_error = $derived(() => {
-		if (submit_attempted || email_touched) {
-			return !email_validation.is_valid
-				? email_validation.error_message
-				: '';
-		}
-		return '';
-	});
+	// Show errors only after field is touched or submit attempted
+	const show_email_error = $derived(
+		submit_attempted || email_touched,
+	);
+	const show_password_error = $derived(
+		submit_attempted || password_touched,
+	);
 
-	const password_error = $derived(() => {
-		if (submit_attempted || password_touched) {
-			return !password_validation.is_valid
-				? password_validation.error_message
-				: '';
-		}
-		return '';
-	});
+	// Error messages
+	const email_error = $derived(
+		show_email_error && !email_validation.is_valid
+			? email_validation.error_message
+			: '',
+	);
+	const password_error = $derived(
+		show_password_error && !password_validation.is_valid
+			? password_validation.error_message
+			: '',
+	);
 
-	const can_submit = $derived(() => {
-		return (
-			email_validation.is_valid &&
-			password_validation.is_valid &&
-			!loading
-		);
-	});
+	// Form is valid when both fields are valid
+	const form_is_valid = $derived(
+		email_validation.is_valid && password_validation.is_valid,
+	);
+
+	// Can submit when form is valid and not loading
+	const can_submit = $derived(form_is_valid && !loading);
 
 	// Handle form submission
 	function handle_submit() {
 		submit_attempted = true;
+		email_touched = true;
+		password_touched = true;
 
-		if (can_submit()) {
+		if (form_is_valid) {
 			onsubmit?.({
 				email,
 				password,
@@ -96,16 +99,20 @@
 		onregister_click?.();
 	}
 
-	// Handle input changes
-	function handle_email_input(event: Event) {
-		const target = event.target as HTMLInputElement;
-		email = target.value;
+	// Mark fields as touched on input
+	function handle_email_input() {
 		email_touched = true;
 	}
 
-	function handle_password_input(event: Event) {
-		const target = event.target as HTMLInputElement;
-		password = target.value;
+	function handle_password_input() {
+		password_touched = true;
+	}
+
+	function handle_email_blur() {
+		email_touched = true;
+	}
+
+	function handle_password_blur() {
 		password_touched = true;
 	}
 
@@ -146,11 +153,12 @@
 		type="email"
 		label="Email Address"
 		placeholder="Enter your email"
-		value={email}
-		error={email_error()}
+		bind:value={email}
+		error={email_error}
 		required
 		disabled={loading}
 		oninput={handle_email_input}
+		onblur={handle_email_blur}
 	/>
 
 	<!-- Password Input -->
@@ -159,11 +167,12 @@
 			type={show_password ? 'text' : 'password'}
 			label="Password"
 			placeholder="Enter your password"
-			value={password}
-			error={password_error()}
+			bind:value={password}
+			error={password_error}
 			required
 			disabled={loading}
 			oninput={handle_password_input}
+			onblur={handle_password_blur}
 		/>
 		<button
 			type="button"
