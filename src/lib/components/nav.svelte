@@ -12,7 +12,7 @@
 		Settings,
 	} from '$lib/icons';
 
-	const mainLinks = [
+	const main_links = [
 		{ href: '/', title: 'Home', icon: Home, color: 'primary' },
 		{
 			href: '/examples',
@@ -28,7 +28,7 @@
 		},
 	];
 
-	const testingLinks = [
+	const testing_links = [
 		{
 			href: '/examples/unit',
 			title: 'Unit Tests',
@@ -43,7 +43,7 @@
 		},
 	];
 
-	const settingsLinks = [
+	const settings_links = [
 		{ href: '/docs', title: 'Documentation', icon: Document },
 		{ href: '/settings', title: 'Settings', icon: Settings },
 	];
@@ -78,7 +78,7 @@
 	<div class="navbar-center hidden lg:flex">
 		<ul class="menu menu-horizontal gap-1 px-1">
 			<!-- Main Navigation Links -->
-			{#each mainLinks as link}
+			{#each main_links as link}
 				<li>
 					<a
 						href={link.href}
@@ -103,7 +103,7 @@
 					<ul
 						class="bg-base-100/95 rounded-box border-base-300/50 z-50 w-48 border p-2 shadow-xl backdrop-blur-sm"
 					>
-						{#each testingLinks as link}
+						{#each testing_links as link}
 							<li>
 								<a
 									href={link.href}
@@ -140,10 +140,7 @@
 
 		<!-- Mobile Menu Dropdown -->
 		<div class="dropdown dropdown-end lg:hidden">
-			<div
-				role="button"
-				class="btn btn-ghost btn-circle"
-			>
+			<div role="button" class="btn btn-ghost btn-circle">
 				<Menu class_names="h-5 w-5" />
 			</div>
 			<ul
@@ -153,7 +150,7 @@
 				<li class="menu-title">
 					<span>Navigation</span>
 				</li>
-				{#each mainLinks as link}
+				{#each main_links as link}
 					<li>
 						<a
 							href={link.href}
@@ -170,7 +167,7 @@
 				<li class="menu-title">
 					<span>Testing</span>
 				</li>
-				{#each testingLinks as link}
+				{#each testing_links as link}
 					<li>
 						<a
 							href={link.href}
@@ -205,16 +202,13 @@
 
 		<!-- Settings Dropdown -->
 		<div class="dropdown dropdown-end">
-			<div
-				role="button"
-				class="btn btn-ghost btn-circle"
-			>
+			<div role="button" class="btn btn-ghost btn-circle">
 				<MoreVertical class_names="h-5 w-5" />
 			</div>
 			<ul
 				class="dropdown-content menu bg-base-100/95 rounded-box border-base-300/50 z-50 w-52 border p-2 shadow-xl backdrop-blur-sm"
 			>
-				{#each settingsLinks as link}
+				{#each settings_links as link}
 					<li>
 						<a href={link.href} class="gap-2">
 							<link.icon class_names="h-4 w-4" />
@@ -232,7 +226,7 @@
 	<div
 		class="dock bg-primary rounded-box mx-auto mb-4 max-w-[95vw] shadow-xl"
 	>
-		{#each mainLinks as link}
+		{#each main_links as link}
 			<button class={is_active(link.href) ? 'dock-active' : ''}>
 				<a
 					href={link.href}
@@ -252,8 +246,10 @@
 					<span class="text-xs">Testing</span>
 				</div>
 			</button>
-			<ul class="dropdown-content menu bg-base-100 rounded-box z-50 mb-2 w-48 p-2 shadow-xl">
-				{#each testingLinks as link}
+			<ul
+				class="dropdown-content menu bg-base-100 rounded-box z-50 mb-2 w-48 p-2 shadow-xl"
+			>
+				{#each testing_links as link}
 					<li>
 						<a href={link.href} class="gap-2">
 							<link.icon class_names="h-4 w-4" />
