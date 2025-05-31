@@ -52,7 +52,7 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
       - name: Verify Playwright versions match
         run: |
@@ -79,6 +79,8 @@ jobs:
 
       - name: Build application
         run: pnpm build
+        env:
+          API_SECRET: ${{ secrets.API_SECRET }}
 
       - name: Run unit tests
         run: pnpm test:unit --run --coverage
