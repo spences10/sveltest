@@ -1,5 +1,14 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import {
+		ArrowLeft,
+		ArrowLongRight,
+		CheckCircle,
+		Document,
+		Plus,
+		Server,
+		XCircle,
+	} from '$lib/icons';
 
 	let { data, form } = $props();
 </script>
@@ -14,20 +23,7 @@
 				<div
 					class="from-success to-success/70 flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br"
 				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="text-success-content h-4 w-4"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-						/>
-					</svg>
+					<Document class_names="text-success-content h-4 w-4" />
 				</div>
 				<span
 					class="text-base-content/70 text-sm font-medium tracking-wider uppercase"
@@ -61,20 +57,7 @@
 					<div
 						class="from-success/20 to-success/10 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br"
 					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							class="text-success h-8 w-8"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
-							/>
-						</svg>
+						<CheckCircle class_names="text-success h-8 w-8" />
 					</div>
 					<div>
 						<h2 class="text-3xl font-bold">Todo Manager</h2>
@@ -112,40 +95,14 @@
 								<div
 									class="text-base-content/40 absolute top-1/2 left-4 -translate-y-1/2"
 								>
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5"
-										fill="none"
-										viewBox="0 0 24 24"
-										stroke="currentColor"
-									>
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-										/>
-									</svg>
+									<Document class_names="h-5 w-5" />
 								</div>
 							</div>
 							<button
 								type="submit"
 								class="btn btn-success btn-lg gap-2 px-6 shadow-lg transition-all duration-200 hover:shadow-xl"
 							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="h-5 w-5"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-									/>
-								</svg>
+								<Plus class_names="h-5 w-5" />
 								Add
 							</button>
 						</div>
@@ -155,19 +112,7 @@
 				<!-- Error Display -->
 				{#if form?.error}
 					<div class="alert alert-error mb-6 shadow-lg">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							class="h-6 w-6 shrink-0 stroke-current"
-							fill="none"
-							viewBox="0 0 24 24"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-							/>
-						</svg>
+						<XCircle class_names="h-6 w-6 shrink-0 stroke-current" />
 						<span class="font-medium">{form.error}</span>
 					</div>
 				{/if}
@@ -186,20 +131,7 @@
 							<div
 								class="from-success/20 to-success/10 mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br"
 							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="text-success h-10 w-10"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
-									/>
-								</svg>
+								<CheckCircle class_names="text-success h-10 w-10" />
 							</div>
 							<h4 class="mb-2 text-lg font-medium">No todos yet</h4>
 							<p class="text-base-content/60">
@@ -250,20 +182,7 @@
 						<div
 							class="bg-primary/20 flex h-10 w-10 items-center justify-center rounded-xl"
 						>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="text-primary h-5 w-5"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke="currentColor"
-							>
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
-									d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-								/>
-							</svg>
+							<Document class_names="text-primary h-5 w-5" />
 						</div>
 						<h3 class="text-xl font-bold">Form Testing</h3>
 					</div>
@@ -300,20 +219,7 @@
 						<div
 							class="bg-secondary/20 flex h-10 w-10 items-center justify-center rounded-xl"
 						>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="text-secondary h-5 w-5"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke="currentColor"
-							>
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
-									d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"
-								/>
-							</svg>
+							<Server class_names="text-secondary h-5 w-5" />
 						</div>
 						<h3 class="text-xl font-bold">Server Actions</h3>
 					</div>
@@ -338,37 +244,11 @@
 		<div class="text-center">
 			<div class="flex flex-col justify-center gap-4 sm:flex-row">
 				<a href="/examples" class="btn btn-outline btn-lg gap-2">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="h-5 w-5"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M10 19l-7-7m0 0l7-7m-7 7h18"
-						/>
-					</svg>
+					<ArrowLeft class_names="h-5 w-5" />
 					Back to Examples
 				</a>
 				<a href="/todos" class="btn btn-primary btn-lg gap-2">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="h-5 w-5"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M13 7l5 5m0 0l-5 5m5-5H6"
-						/>
-					</svg>
+					<ArrowLongRight class_names="h-5 w-5" />
 					Full Todo App
 				</a>
 			</div>

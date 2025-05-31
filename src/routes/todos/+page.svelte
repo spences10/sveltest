@@ -1,5 +1,18 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import {
+		BarChart,
+		Check,
+		CheckCircle,
+		Clipboard,
+		Clock,
+		Document,
+		Filter,
+		Heart,
+		LightningBolt,
+		Plus,
+		Trash,
+	} from '$lib/icons';
 	import type { PageData } from './$types';
 
 	interface Props {
@@ -8,6 +21,14 @@
 
 	let { data }: Props = $props();
 </script>
+
+<svelte:head>
+	<title>Todo Manager - TestSuite Pro</title>
+	<meta
+		name="description"
+		content="Interactive todo management with comprehensive testing examples"
+	/>
+</svelte:head>
 
 <!-- Modern gradient background with glass morphism -->
 <div
@@ -60,20 +81,7 @@
 							<div
 								class="bg-primary/20 flex h-10 w-10 items-center justify-center rounded-full"
 							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="text-primary h-5 w-5"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-									/>
-								</svg>
+								<Plus class_names="text-primary h-5 w-5" />
 							</div>
 							<h2 class="text-2xl font-bold">Create New Task</h2>
 						</div>
@@ -105,20 +113,7 @@
 									<div
 										class="text-base-content/40 absolute top-1/2 left-4 -translate-y-1/2"
 									>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											class="h-5 w-5"
-											fill="none"
-											viewBox="0 0 24 24"
-											stroke="currentColor"
-										>
-											<path
-												stroke-linecap="round"
-												stroke-linejoin="round"
-												stroke-width="2"
-												d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-											/>
-										</svg>
+										<Document class_names="h-5 w-5" />
 									</div>
 								</div>
 							</div>
@@ -128,20 +123,7 @@
 									type="submit"
 									class="btn btn-primary btn-lg gap-2 px-8 shadow-lg transition-all duration-200 hover:shadow-xl"
 								>
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5"
-										fill="none"
-										viewBox="0 0 24 24"
-										stroke="currentColor"
-									>
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-										/>
-									</svg>
+									<Plus class_names="h-5 w-5" />
 									Add Task
 								</button>
 							</div>
@@ -162,20 +144,7 @@
 							<div
 								class="bg-info/20 flex h-8 w-8 items-center justify-center rounded-lg"
 							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="text-info h-4 w-4"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-									/>
-								</svg>
+								<BarChart class_names="text-info h-4 w-4" />
 							</div>
 							Analytics
 						</h3>
@@ -255,62 +224,39 @@
 							<div
 								class="bg-secondary/20 flex h-8 w-8 items-center justify-center rounded-lg"
 							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="text-secondary h-4 w-4"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M13 10V3L4 14h7v7l9-11h-7z"
-									/>
-								</svg>
+								<LightningBolt class_names="text-secondary h-4 w-4" />
 							</div>
 							Quick Actions
 						</h3>
-						<div class="space-y-2">
-							<button
-								class="btn btn-ghost btn-sm w-full justify-start gap-2 text-left"
+
+						<div class="space-y-3">
+							<form
+								method="POST"
+								action="?/clear_completed"
+								use:enhance
 							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="h-4 w-4"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
+								<button
+									type="submit"
+									class="btn btn-success btn-sm w-full gap-2"
+									disabled={data.todos.filter((t) => t.done)
+										.length === 0}
 								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M5 13l4 4L19 7"
-									/>
-								</svg>
-								Mark All Complete
-							</button>
-							<button
-								class="btn btn-ghost btn-sm w-full justify-start gap-2 text-left"
-							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="h-4 w-4"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
+									<Check class_names="h-4 w-4" />
+									Clear Completed ({data.todos.filter((t) => t.done)
+										.length})
+								</button>
+							</form>
+
+							<form method="POST" action="?/delete_all" use:enhance>
+								<button
+									type="submit"
+									class="btn btn-error btn-sm w-full gap-2"
+									disabled={data.todos.length === 0}
 								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-									/>
-								</svg>
-								Clear Completed
-							</button>
+									<Trash class_names="h-4 w-4" />
+									Delete All ({data.todos.length})
+								</button>
+							</form>
 						</div>
 					</div>
 				</div>
@@ -328,20 +274,7 @@
 							<div
 								class="bg-accent/20 flex h-10 w-10 items-center justify-center rounded-full"
 							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="text-accent h-5 w-5"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-									/>
-								</svg>
+								<Clipboard class_names="text-accent h-5 w-5" />
 							</div>
 							<h2 class="text-3xl font-bold">Task Overview</h2>
 						</div>
@@ -354,20 +287,11 @@
 										role="button"
 										class="btn btn-ghost btn-sm gap-2"
 									>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											class="h-4 w-4"
-											fill="none"
-											viewBox="0 0 24 24"
-											stroke="currentColor"
+										<div
+											class="bg-info/20 flex h-8 w-8 items-center justify-center rounded-lg"
 										>
-											<path
-												stroke-linecap="round"
-												stroke-linejoin="round"
-												stroke-width="2"
-												d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"
-											/>
-										</svg>
+											<Filter class_names="text-info h-4 w-4" />
+										</div>
 										Filter
 									</div>
 									<ul
@@ -404,220 +328,95 @@
 							</p>
 							<div class="flex justify-center gap-2">
 								<div class="badge badge-primary badge-lg gap-2">
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										class="h-3 w-3"
-										fill="none"
-										viewBox="0 0 24 24"
-										stroke="currentColor"
-									>
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="M13 10V3L4 14h7v7l9-11h-7z"
-										/>
-									</svg>
+									<LightningBolt class_names="h-3 w-3" />
 									Fast
 								</div>
 								<div class="badge badge-secondary badge-lg gap-2">
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										class="h-3 w-3"
-										fill="none"
-										viewBox="0 0 24 24"
-										stroke="currentColor"
-									>
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-										/>
-									</svg>
+									<CheckCircle class_names="h-3 w-3" />
 									Reliable
 								</div>
 								<div class="badge badge-accent badge-lg gap-2">
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										class="h-3 w-3"
-										fill="none"
-										viewBox="0 0 24 24"
-										stroke="currentColor"
-									>
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-										/>
-									</svg>
+									<Heart class_names="h-3 w-3" />
 									Intuitive
 								</div>
 							</div>
 						</div>
 					{:else}
 						<div class="space-y-3">
-							{#each data.todos as todo, index (todo.id)}
-								<div class="group relative">
-									<div
-										class="card from-base-200/50 to-base-200/30 hover:from-base-200/80 hover:to-base-200/60 border-base-300/30 hover:border-base-300/60 border bg-gradient-to-r transition-all duration-300 hover:shadow-lg"
-									>
-										<div class="card-body p-6">
-											<div class="flex items-center justify-between">
-												<div class="flex flex-1 items-center gap-4">
-													<div class="relative">
-														<input
-															type="checkbox"
-															class="checkbox checkbox-primary checkbox-lg transition-all duration-200 hover:scale-110"
-															checked={todo.done}
-															onchange={() => {
-																console.log('Toggle todo:', todo.id);
-															}}
-														/>
-														{#if todo.done}
-															<div
-																class="pointer-events-none absolute inset-0 flex items-center justify-center"
-															>
-																<svg
-																	xmlns="http://www.w3.org/2000/svg"
-																	class="text-primary-content h-4 w-4"
-																	fill="none"
-																	viewBox="0 0 24 24"
-																	stroke="currentColor"
-																>
-																	<path
-																		stroke-linecap="round"
-																		stroke-linejoin="round"
-																		stroke-width="3"
-																		d="M5 13l4 4L19 7"
-																	/>
-																</svg>
-															</div>
-														{/if}
-													</div>
+							{#each data.todos as todo (todo.id)}
+								<div
+									class="group border-base-300/50 bg-base-50/50 hover:border-base-300 hover:bg-base-100/80 relative rounded-xl border p-4 transition-all duration-200 hover:shadow-md"
+								>
+									<div class="flex items-center gap-4">
+										<!-- Toggle Form -->
+										<form
+											method="POST"
+											action="?/toggle_todo"
+											use:enhance
+											class="flex-shrink-0"
+										>
+											<input
+												type="hidden"
+												name="id"
+												value={todo.id}
+											/>
+											<button
+												type="submit"
+												class="btn btn-circle btn-sm {todo.done
+													? 'btn-success'
+													: 'btn-outline'} transition-all duration-200"
+												aria-label={todo.done
+													? 'Mark as incomplete'
+													: 'Mark as complete'}
+											>
+												{#if todo.done}
+													<Check class_names="h-4 w-4" />
+												{:else}
+													<div class="h-4 w-4"></div>
+												{/if}
+											</button>
+										</form>
 
-													<div class="min-w-0 flex-1">
-														<div class="flex items-center gap-3">
-															<span
-																class="text-lg font-medium {todo.done
-																	? 'text-base-content/50 line-through'
-																	: 'text-base-content'} transition-all duration-200"
-															>
-																{todo.title}
-															</span>
-
-															<div class="flex gap-2">
-																{#if todo.done}
-																	<div
-																		class="badge badge-success badge-sm gap-1 font-medium"
-																	>
-																		<svg
-																			xmlns="http://www.w3.org/2000/svg"
-																			class="h-3 w-3"
-																			fill="none"
-																			viewBox="0 0 24 24"
-																			stroke="currentColor"
-																		>
-																			<path
-																				stroke-linecap="round"
-																				stroke-linejoin="round"
-																				stroke-width="2"
-																				d="M5 13l4 4L19 7"
-																			/>
-																		</svg>
-																		Done
-																	</div>
-																{:else}
-																	<div
-																		class="badge badge-warning badge-sm gap-1 font-medium"
-																	>
-																		<svg
-																			xmlns="http://www.w3.org/2000/svg"
-																			class="h-3 w-3"
-																			fill="none"
-																			viewBox="0 0 24 24"
-																			stroke="currentColor"
-																		>
-																			<path
-																				stroke-linecap="round"
-																				stroke-linejoin="round"
-																				stroke-width="2"
-																				d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-																			/>
-																		</svg>
-																		Pending
-																	</div>
-																{/if}
-
-																<div
-																	class="badge badge-ghost badge-sm"
-																>
-																	#{index + 1}
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-
-												<div
-													class="flex gap-1 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-												>
-													<div
-														class="tooltip tooltip-top"
-														data-tip="Edit task"
-													>
-														<button
-															class="btn btn-ghost btn-sm btn-square hover:btn-info transition-all duration-200"
-															onclick={() => {
-																console.log('Edit todo:', todo.id);
-															}}
-														>
-															<svg
-																xmlns="http://www.w3.org/2000/svg"
-																class="h-4 w-4"
-																fill="none"
-																viewBox="0 0 24 24"
-																stroke="currentColor"
-															>
-																<path
-																	stroke-linecap="round"
-																	stroke-linejoin="round"
-																	stroke-width="2"
-																	d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-																/>
-															</svg>
-														</button>
-													</div>
-
-													<div
-														class="tooltip tooltip-top"
-														data-tip="Delete task"
-													>
-														<button
-															class="btn btn-ghost btn-sm btn-square hover:btn-error transition-all duration-200"
-															onclick={() => {
-																console.log('Delete todo:', todo.id);
-															}}
-														>
-															<svg
-																xmlns="http://www.w3.org/2000/svg"
-																class="h-4 w-4"
-																fill="none"
-																viewBox="0 0 24 24"
-																stroke="currentColor"
-															>
-																<path
-																	stroke-linecap="round"
-																	stroke-linejoin="round"
-																	stroke-width="2"
-																	d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-																/>
-															</svg>
-														</button>
-													</div>
-												</div>
+										<!-- Todo Content -->
+										<div class="min-w-0 flex-1">
+											<p
+												class="text-base-content transition-all duration-200 {todo.done
+													? 'line-through opacity-60'
+													: ''}"
+											>
+												{todo.title}
+											</p>
+											<div
+												class="text-base-content/50 mt-1 flex items-center gap-2 text-xs"
+											>
+												<Clock class_names="h-3 w-3" />
+												<span> Created recently </span>
 											</div>
+										</div>
+
+										<!-- Actions -->
+										<div
+											class="flex items-center gap-2 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+										>
+											<form
+												method="POST"
+												action="?/delete_todo"
+												use:enhance
+												class="inline"
+											>
+												<input
+													type="hidden"
+													name="id"
+													value={todo.id}
+												/>
+												<button
+													type="submit"
+													class="btn btn-circle btn-sm btn-ghost text-error hover:bg-error/10"
+													aria-label="Delete todo"
+												>
+													<Trash class_names="h-4 w-4" />
+												</button>
+											</form>
 										</div>
 									</div>
 								</div>

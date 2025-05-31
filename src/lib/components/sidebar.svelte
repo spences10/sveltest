@@ -1,5 +1,14 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import {
+		ArrowRight,
+		BarChart,
+		Calculator,
+		CheckCircle,
+		Clipboard,
+		Document,
+		Home,
+	} from '$lib/icons';
 
 	let is_hovered = $state(false);
 
@@ -28,20 +37,7 @@
 			<div
 				class="from-primary to-secondary flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br shadow-lg"
 			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					class="text-primary-content h-6 w-6"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke="currentColor"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-					/>
-				</svg>
+				<CheckCircle class_names="text-primary-content h-6 w-6" />
 			</div>
 			<div
 				class="transition-all duration-300 {is_hovered
@@ -95,20 +91,7 @@
 									? 'bg-primary/20'
 									: ''}"
 							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="text-primary h-4 w-4"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-									/>
-								</svg>
+								<Home class_names="text-primary h-4 w-4" />
 							</div>
 							<span
 								class="whitespace-nowrap transition-all duration-300 {is_hovered
@@ -143,20 +126,7 @@
 									? 'bg-secondary/20'
 									: ''}"
 							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="text-secondary h-4 w-4"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-									/>
-								</svg>
+								<BarChart class_names="text-secondary h-4 w-4" />
 							</div>
 							<span
 								class="whitespace-nowrap transition-all duration-300 {is_hovered
@@ -190,20 +160,7 @@
 									? 'bg-accent/20'
 									: ''}"
 							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="text-accent h-4 w-4"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
-									/>
-								</svg>
+								<Clipboard class_names="text-accent h-4 w-4" />
 							</div>
 							<span
 								class="whitespace-nowrap transition-all duration-300 {is_hovered
@@ -253,20 +210,7 @@
 									? 'bg-info/20'
 									: ''}"
 							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="text-info h-4 w-4"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-									/>
-								</svg>
+								<Calculator class_names="text-info h-4 w-4" />
 							</div>
 							<span
 								class="whitespace-nowrap transition-all duration-300 {is_hovered
@@ -300,20 +244,7 @@
 									? 'bg-success/20'
 									: ''}"
 							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="text-success h-4 w-4"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-									/>
-								</svg>
+								<Document class_names="text-success h-4 w-4" />
 							</div>
 							<span
 								class="whitespace-nowrap transition-all duration-300 {is_hovered
@@ -370,20 +301,7 @@
 					<div
 						class="bg-base-200/50 flex h-8 w-8 items-center justify-center rounded-lg"
 					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							class="text-base-content/40 h-4 w-4"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M9 5l7 7-7 7"
-							/>
-						</svg>
+						<ArrowRight class_names="text-base-content/40 h-4 w-4" />
 					</div>
 				</div>
 			{/if}
