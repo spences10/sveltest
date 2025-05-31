@@ -22,7 +22,7 @@ export function create_form_state(
 	>,
 ) {
 	// Initialize form state with runes
-	let form_state = $state<FormState>({});
+	const form_state = $state<FormState>({});
 
 	// Initialize fields
 	for (const [field_name, config] of Object.entries(initial_fields)) {
