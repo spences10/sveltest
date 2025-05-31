@@ -89,9 +89,11 @@ describe('+layout.svelte SSR', () => {
 				props: { children: mock_children },
 			});
 
-			// Test sidebar structure
+			// Test sidebar structure - check for individual classes, not exact order
 			expect(body).toContain('class="drawer-overlay"');
-			expect(body).toContain('class="bg-base-200 min-h-screen w-80"');
+			expect(body).toContain('bg-base-200');
+			expect(body).toContain('min-h-screen');
+			expect(body).toContain('w-80');
 			expect(body).toContain('class="menu menu-vertical"');
 		});
 
@@ -248,9 +250,11 @@ describe('+layout.svelte SSR', () => {
 				'class="navbar bg-base-100 lg:hidden"',
 			);
 			const hasMain = body.includes('<main class="p-4">');
-			const hasSidebar = body.includes(
-				'class="bg-base-200 min-h-screen w-80"',
-			);
+			// Check for individual sidebar classes instead of exact order
+			const hasSidebar =
+				body.includes('bg-base-200') &&
+				body.includes('min-h-screen') &&
+				body.includes('w-80');
 
 			expect(hasDrawer).toBe(true);
 			expect(hasNavbar).toBe(true);
