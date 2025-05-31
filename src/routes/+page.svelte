@@ -1,7 +1,7 @@
 <script lang="ts">
 </script>
 
-<div class="min-h-screen bg-base-200">
+<div class="bg-base-200 min-h-screen">
 	<!-- Hero section -->
 	<div class="hero bg-base-100 py-16">
 		<div class="hero-content text-center">

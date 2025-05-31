@@ -46,7 +46,7 @@
 	<!-- Sidebar -->
 	<div class="drawer-side">
 		<label for="my-drawer" class="drawer-overlay"></label>
-		<aside class="min-h-screen w-80 bg-base-200">
+		<aside class="bg-base-200 min-h-screen w-80">
 			<div class="p-4">
 				<h1 class="mb-4 text-2xl font-bold">Svelte Testing</h1>
 				<ul class="menu menu-vertical">
