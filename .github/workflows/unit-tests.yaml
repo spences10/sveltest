@@ -60,7 +60,7 @@ jobs:
           PACKAGE_VERSION=$(node -p "require('./package.json').devDependencies.playwright.replace(/[\^~]/, '')")
 
           # Extract version from container image (from this workflow file)
-          CONTAINER_VERSION=$(grep -o 'playwright:v[0-9.]*' .github/workflows/ci.yaml | sed 's/playwright:v//')
+          CONTAINER_VERSION=$(grep -o 'playwright:v[0-9.]*' .github/workflows/unit-tests.yaml | sed 's/playwright:v//')
 
           echo "📦 Package.json Playwright version: $PACKAGE_VERSION"
           echo "🐳 Container image Playwright version: $CONTAINER_VERSION"
