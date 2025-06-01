@@ -40,7 +40,7 @@
 					</div>
 
 					<h1
-						class="from-primary via-primary/80 to-primary/60 mb-6 bg-gradient-to-r bg-clip-text text-6xl font-black text-transparent"
+						class="from-primary via-primary/80 to-primary/60 mb-6 bg-gradient-to-r bg-clip-text text-6xl leading-normal font-black text-transparent"
 					>
 						Todo Manager
 					</h1>

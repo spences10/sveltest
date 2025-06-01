@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { calculator_state } from '$lib/state/calculator.svelte.js';
+	import { calculator_state } from '$lib/state/calculator.svelte.ts';
 </script>
 
 <div class="space-y-6">

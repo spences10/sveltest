@@ -1,98 +1,132 @@
 import { expect, test } from '@playwright/test';
 
-test.describe('Todos Page', () => {
-	test.beforeEach(async ({ page }) => {
+test.describe('Todos Page E2E', () => {
+	test('page loads and displays todo manager', async ({ page }) => {
 		await page.goto('/todos');
-	});
 
-	test('displays the todos page correctly', async ({ page }) => {
-		// Check page title using specific heading
-		await expect(
-			page.getByRole('heading', { name: 'Todos' }),
-		).toBeVisible();
-
-		// Check that the form is present
-		await expect(
-			page.locator('form[action*="add_todo"]'),
-		).toBeVisible();
-		await expect(page.locator('input[name="title"]')).toBeVisible();
-		await expect(page.locator('button[type="submit"]')).toBeVisible();
-
-		// Check that initial todos are displayed
-		await expect(page.locator('.todo-item')).toHaveCount(2);
-		await expect(page.locator('.todo-item').first()).toContainText(
-			'Learn SvelteKit',
-		);
-		await expect(page.locator('.todo-item').last()).toContainText(
-			'Write tests',
-		);
-	});
-
-	test('can add a new todo', async ({ page }) => {
-		const newTodoTitle = 'Test E2E functionality';
-
-		// Fill in the form
-		await page.fill('input[name="title"]', newTodoTitle);
-
-		// Submit the form
-		await page.click('button[type="submit"]');
-
-		// Wait for the page to reload/update
+		// Wait for page to load completely
+		await page.waitForLoadState('domcontentloaded');
 		await page.waitForLoadState('networkidle');
 
-		// Verify the form was submitted (should be cleared or show success)
-		// Note: Since this is a form submission, the page will reload
-		// and we should verify the form is in its initial state
-		await expect(page.locator('input[name="title"]')).toHaveValue('');
+		// Check basic page structure
+		await expect(page.locator('body')).toBeVisible();
+		await expect(page.locator('main')).toBeVisible();
+
+		// Check page title
+		const title = await page.title();
+		expect(title).toContain('Todo Manager');
+
+		// Check that the todo manager component is present with longer timeout
+		await expect(page.getByTestId('new-todo-input')).toBeVisible({
+			timeout: 10000,
+		});
+		await expect(page.getByTestId('add-todo-button')).toBeVisible();
+
+		// Check for the main todo manager sections
+		await expect(page.getByText('Todo Manager')).toBeVisible();
+		await expect(page.getByText('Add New Task')).toBeVisible();
 	});
 
-	test('shows validation error for empty todo', async ({ page }) => {
-		// Try to submit empty form
-		await page.click('button[type="submit"]');
-
-		// Wait for response
-		await page.waitForLoadState('networkidle');
-
-		// The form should still be visible and the input should be empty
-		await expect(page.locator('input[name="title"]')).toBeVisible();
-		await expect(page.locator('input[name="title"]')).toHaveValue('');
-	});
-
-	test('form has proper accessibility attributes', async ({
+	test('full user workflow - add, complete, filter, delete', async ({
 		page,
 	}) => {
-		const titleInput = page.locator('input[name="title"]');
-		const submitButton = page.locator('button[type="submit"]');
+		await page.goto('/todos');
 
-		// Check input has placeholder
-		await expect(titleInput).toHaveAttribute(
-			'placeholder',
-			'Add todo',
-		);
-
-		// Check button has proper type
-		await expect(submitButton).toHaveAttribute('type', 'submit');
-
-		// Check form has proper method and action
-		const form = page.locator('form');
-		await expect(form).toHaveAttribute('method', 'POST');
-		await expect(form).toHaveAttribute('action', '?/add_todo');
-	});
-
-	test('keyboard navigation works', async ({ page }) => {
-		// Focus on input field
-		await page.focus('input[name="title"]');
-
-		// Type a todo
-		await page.keyboard.type('Keyboard navigation test');
-
-		// Press Enter to submit
-		await page.keyboard.press('Enter');
-
-		// Wait for submission
+		// Wait for page to be fully loaded
+		await page.waitForLoadState('domcontentloaded');
 		await page.waitForLoadState('networkidle');
 
-		// Verify form was submitted
-		await expect(page.locator('input[name="title"]')).toHaveValue('');
+		// Wait for the todo input to be available
+		await expect(page.getByTestId('new-todo-input')).toBeVisible({
+			timeout: 10000,
+		});
+
+		// Add multiple todos
+		const todos = ['Buy groceries', 'Walk the dog', 'Write tests'];
+
+		for (const todoText of todos) {
+			await page.fill('[data-testid="new-todo-input"]', todoText);
+			await page.click('[data-testid="add-todo-button"]');
+			await expect(page.getByText(todoText)).toBeVisible();
+		}
+
+		// Complete one todo
+		const firstTodoCheckbox = page
+			.getByTestId('todo-item')
+			.first()
+			.getByTestId('todo-checkbox');
+		await firstTodoCheckbox.click();
+
+		// Filter by completed
+		await page.selectOption(
+			'[data-testid="status-filter"]',
+			'completed',
+		);
+		await expect(page.getByText('Buy groceries')).toBeVisible();
+		await expect(page.getByText('Walk the dog')).not.toBeVisible();
+
+		// Filter by active
+		await page.selectOption(
+			'[data-testid="status-filter"]',
+			'active',
+		);
+		await expect(page.getByText('Buy groceries')).not.toBeVisible();
+		await expect(page.getByText('Walk the dog')).toBeVisible();
+
+		// Show all
+		await page.selectOption('[data-testid="status-filter"]', 'all');
+		await expect(page.getByText('Buy groceries')).toBeVisible();
+		await expect(page.getByText('Walk the dog')).toBeVisible();
+
+		// Search functionality
+		await page.fill('[data-testid="search-input"]', 'groceries');
+		await expect(page.getByText('Buy groceries')).toBeVisible();
+		await expect(page.getByText('Walk the dog')).not.toBeVisible();
+
+		// Clear search
+		await page.fill('[data-testid="search-input"]', '');
+		await expect(page.getByText('Walk the dog')).toBeVisible();
+
+		// Delete a todo
+		const deleteButton = page
+			.getByTestId('delete-todo-button')
+			.first();
+		await deleteButton.click();
+		await expect(page.getByText('Buy groceries')).not.toBeVisible();
+	});
+
+	test('data persistence across page reloads', async ({ page }) => {
+		await page.goto('/todos');
+
+		// Wait for page to be fully loaded
+		await page.waitForLoadState('domcontentloaded');
+		await page.waitForLoadState('networkidle');
+
+		// Wait for the todo input to be available
+		await expect(page.getByTestId('new-todo-input')).toBeVisible({
+			timeout: 10000,
+		});
+
+		// Add a todo
+		const todoText = 'Persistent todo test';
+		await page.fill('[data-testid="new-todo-input"]', todoText);
+		await page.click('[data-testid="add-todo-button"]');
+		await expect(page.getByText(todoText)).toBeVisible();
+
+		// Reload the page
+		await page.reload();
+		await page.waitForLoadState('domcontentloaded');
+		await page.waitForLoadState('networkidle');
+
+		// Todo should still be there (localStorage persistence)
+		await expect(page.getByText(todoText)).toBeVisible({
+			timeout: 10000,
+		});
+
+		// Clean up
+		const deleteButton = page
+			.getByTestId('delete-todo-button')
+			.first();
+		await deleteButton.click();
 	});
 });

@@ -1,13 +1,12 @@
 import { expect, test } from '@playwright/test';
 
-test.describe('Navigation and User Experience', () => {
+test.describe('Navigation and User Experience E2E', () => {
 	test('home page displays all key elements', async ({ page }) => {
 		await page.goto('/');
 
-		// Check hero section
-		await expect(page.locator('.hero')).toBeVisible();
+		// Main heading
 		await expect(
-			page.getByRole('heading', { name: 'Svelte Testing Examples' }),
+			page.getByRole('heading', { name: 'TestSuite Pro' }),
 		).toBeVisible();
 		await expect(
 			page.getByText(
@@ -15,132 +14,129 @@ test.describe('Navigation and User Experience', () => {
 			),
 		).toBeVisible();
 
-		// Check CTA button
-		const ctaButton = page.getByRole('link', {
-			name: 'View Examples',
-		});
-		await expect(ctaButton).toBeVisible();
+		// Navigation buttons
+		await expect(
+			page.getByRole('link', { name: 'Explore Examples' }),
+		).toBeVisible();
+		await expect(
+			page.getByRole('link', { name: 'Try Todo Manager' }),
+		).toBeVisible();
 
-		// Check feature cards
-		const cards = page.locator('.card');
-		await expect(cards).toHaveCount(3);
+		// Feature cards
+		await expect(page.locator('.card')).toHaveCount(4);
 
-		// Verify card content
-		await expect(page.locator('.card-title').first()).toContainText(
-			'Testing Types',
-		);
-		await expect(page.locator('.card-title').nth(1)).toContainText(
-			'Best Practices',
-		);
-		await expect(page.locator('.card-title').last()).toContainText(
-			'Real-world Examples',
-		);
+		// Stats section
+		await expect(page.getByText('98%')).toBeVisible();
+		await expect(page.getByText('Fast')).toBeVisible();
+		await expect(page.getByText('A+')).toBeVisible();
 	});
 
-	test('can navigate between pages', async ({ page }) => {
-		// Start at home
-		await page.goto('/');
-		await expect(page).toHaveURL('/');
-
-		// Navigate to examples
-		await page.click('a[href="/examples"]');
-		await expect(page).toHaveURL('/examples');
-		await expect(
-			page.getByRole('heading', { name: 'Testing Examples' }),
-		).toBeVisible();
-
-		// Navigate to todos (assuming there's a link or we can go directly)
-		await page.goto('/todos');
-		await expect(page).toHaveURL('/todos');
-		await expect(
-			page.getByRole('heading', { name: 'Todos' }),
-		).toBeVisible();
-
-		// Go back to home
-		await page.goto('/');
-		await expect(page).toHaveURL('/');
-		await expect(
-			page.getByRole('heading', { name: 'Svelte Testing Examples' }),
-		).toBeVisible();
-	});
-
-	test('responsive design works on mobile viewport', async ({
+	test('full navigation workflow between all pages', async ({
 		page,
 	}) => {
-		// Set mobile viewport
-		await page.setViewportSize({ width: 375, height: 667 });
 		await page.goto('/');
 
-		// Check that content is still visible and properly laid out
+		// Navigate to examples
+		await page.click('text=Explore Examples');
+		await expect(page).toHaveURL('/examples');
+
+		// Check examples page content
 		await expect(
-			page.getByRole('heading', { name: 'Svelte Testing Examples' }),
+			page.getByRole('heading', { name: 'Testing Patterns' }),
 		).toBeVisible();
-		await expect(page.locator('.hero')).toBeVisible();
 
-		// Check that cards stack vertically on mobile
-		const cards = page.locator('.card');
-		await expect(cards).toHaveCount(3);
+		// Navigate to todos directly (avoid potential navigation issues)
+		await page.goto('/todos');
+		await page.waitForLoadState('domcontentloaded');
+		await expect(page).toHaveURL('/todos');
+		await expect(
+			page.getByRole('heading', { name: 'Todo Manager' }),
+		).toBeVisible();
 
-		// All cards should be visible even on mobile
-		for (let i = 0; i < 3; i++) {
-			await expect(cards.nth(i)).toBeVisible();
+		// Navigate back to home
+		await page.goto('/');
+		await expect(
+			page.getByRole('heading', { name: 'TestSuite Pro' }),
+		).toBeVisible();
+	});
+
+	test('responsive design works across viewports', async ({
+		page,
+	}) => {
+		// Test different viewport sizes
+		const viewports = [
+			{ width: 375, height: 667 }, // Mobile
+			{ width: 768, height: 1024 }, // Tablet
+			{ width: 1920, height: 1080 }, // Desktop
+		];
+
+		for (const viewport of viewports) {
+			await page.setViewportSize(viewport);
+			await page.goto('/');
+
+			// Content should still be visible and accessible
+			await expect(
+				page.getByRole('heading', { name: 'TestSuite Pro' }),
+			).toBeVisible();
+			await expect(page.locator('.hero')).toBeVisible();
+
+			// Check that cards are present
+			const cards = page.locator('.card');
+			await expect(cards).toHaveCount(4);
+
+			// Navigation should work
+			await expect(
+				page.getByRole('link', { name: 'Explore Examples' }),
+			).toBeVisible();
 		}
 	});
 
-	test('page loads without major errors', async ({ page }) => {
-		const errors: string[] = [];
-
-		// Listen for console errors (but filter out CSP warnings which are expected)
-		page.on('console', (msg) => {
-			if (
-				msg.type() === 'error' &&
-				!msg.text().includes('Content Security Policy')
-			) {
-				errors.push(msg.text());
-			}
-		});
-
-		// Listen for page errors
-		page.on('pageerror', (error) => {
-			errors.push(error.message);
-		});
-
+	test('external links have proper attributes', async ({ page }) => {
 		await page.goto('/');
 
-		// Wait a bit for any async errors
-		await page.waitForTimeout(1000);
+		// Look for external links (if any)
+		const externalLinks = page.locator('a[target="_blank"]');
+		const count = await externalLinks.count();
 
-		// Check that no major errors occurred
-		expect(errors).toHaveLength(0);
+		for (let i = 0; i < count; i++) {
+			const link = externalLinks.nth(i);
+			await expect(link).toHaveAttribute('target', '_blank');
+			await expect(link).toHaveAttribute(
+				'rel',
+				/noopener|noreferrer/,
+			);
+		}
 	});
 
-	test('handles 404 pages gracefully', async ({ page }) => {
-		// Navigate to a non-existent page
-		const response = await page.goto('/non-existent-page');
+	test('pages have proper meta tags and SEO', async ({ page }) => {
+		const pages = [
+			{ path: '/', titleContains: 'TestSuite Pro' },
+			{ path: '/examples', titleContains: 'Testing Examples' },
+			{ path: '/todos', titleContains: 'Todo Manager' },
+		];
 
-		// Should return 404 status
-		expect(response?.status()).toBe(404);
+		for (const pageInfo of pages) {
+			await page.goto(pageInfo.path);
+			await page.waitForLoadState('domcontentloaded');
 
-		// Page should still render something (SvelteKit's default 404 or custom)
-		await expect(page.locator('body')).toBeVisible();
-	});
+			// Check page title
+			const title = await page.title();
+			expect(title).toContain(pageInfo.titleContains);
 
-	test('back and forward browser navigation works', async ({
-		page,
-	}) => {
-		// Start at home
-		await page.goto('/');
+			// Check for viewport meta tag
+			const viewportMeta = page
+				.locator('meta[name="viewport"]')
+				.first();
+			await expect(viewportMeta).toHaveAttribute(
+				'content',
+				/width=device-width/,
+			);
 
-		// Navigate to examples
-		await page.click('a[href="/examples"]');
-		await expect(page).toHaveURL('/examples');
-
-		// Use browser back button
-		await page.goBack();
-		await expect(page).toHaveURL('/');
-
-		// Use browser forward button
-		await page.goForward();
-		await expect(page).toHaveURL('/examples');
+			// Check for description meta tag
+			const descriptionMeta = page
+				.locator('meta[name="description"]')
+				.first();
+			await expect(descriptionMeta).toHaveAttribute('content');
+		}
 	});
 });

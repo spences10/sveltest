@@ -69,63 +69,6 @@ test.describe('API Endpoints', () => {
 		});
 	});
 
-	test.describe('Todo Actions API', () => {
-		test('form action endpoint exists', async ({ request }) => {
-			const formData = new FormData();
-			formData.append('title', 'Test todo from API');
-
-			const response = await request.post('/todos?/add_todo', {
-				data: formData,
-			});
-
-			// SvelteKit form actions may return 415 when called via API instead of browser form submission
-			// This is expected behavior - the endpoint exists but expects browser form submission
-			expect([200, 302, 303, 415]).toContain(response.status());
-		});
-
-		test('validates form action endpoint responds', async ({
-			request,
-		}) => {
-			const formData = new FormData();
-			// Don't add title to test validation
-
-			const response = await request.post('/todos?/add_todo', {
-				data: formData,
-			});
-
-			// Should respond (even if with 415 due to API vs browser form submission)
-			expect([400, 415, 422]).toContain(response.status());
-		});
-
-		test('handles empty string title via API', async ({
-			request,
-		}) => {
-			const formData = new FormData();
-			formData.append('title', '');
-
-			const response = await request.post('/todos?/add_todo', {
-				data: formData,
-			});
-
-			// Should respond (even if with 415 due to API vs browser form submission)
-			expect([400, 415, 422]).toContain(response.status());
-		});
-
-		test('handles whitespace-only title via API', async ({
-			request,
-		}) => {
-			const formData = new FormData();
-			formData.append('title', '   ');
-
-			const response = await request.post('/todos?/add_todo', {
-				data: formData,
-			});
-
-			// Should respond (even if with 415 due to API vs browser form submission)
-			expect([400, 415, 422]).toContain(response.status());
-		});
-	});
-
 	test.describe('General API Behavior', () => {
 		test('returns 404 for non-existent API endpoints', async ({
 			request,

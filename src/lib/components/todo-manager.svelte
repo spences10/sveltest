@@ -9,7 +9,7 @@
 		Trash,
 		XCircle,
 	} from '$lib/icons';
-	import { todo_state } from '$lib/state/todo.svelte.js';
+	import { todo_state } from '$lib/state/todo.svelte.ts';
 
 	interface Props {
 		title?: string;
@@ -167,6 +167,7 @@
 						<input
 							bind:value={newTodoText}
 							id="new-todo"
+							name="title"
 							type="text"
 							placeholder="Enter a new task..."
 							class="input input-bordered join-item flex-1"

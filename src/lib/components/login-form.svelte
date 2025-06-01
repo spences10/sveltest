@@ -3,7 +3,7 @@
 	import {
 		validate_email,
 		validate_password,
-	} from '../utils/validation.js';
+	} from '../utils/validation.ts';
 	import Button from './button.svelte';
 	import Input from './input.svelte';
 

@@ -10,6 +10,19 @@
 	} from '$lib/icons';
 </script>
 
+<svelte:head>
+	<title>TestSuite Pro - Comprehensive Testing Suite for Svelte</title
+	>
+	<meta
+		name="description"
+		content="A comprehensive collection of testing patterns and examples for modern Svelte applications"
+	/>
+	<meta
+		name="viewport"
+		content="width=device-width, initial-scale=1"
+	/>
+</svelte:head>
+
 <!-- Hero section with enhanced design -->
 <div class="relative overflow-hidden">
 	<!-- Background decorative elements -->
@@ -259,9 +272,9 @@
 				class="card from-primary/10 via-secondary/5 to-accent/10 border-primary/20 mx-auto max-w-4xl border bg-gradient-to-br shadow-2xl backdrop-blur-sm"
 			>
 				<div class="card-body p-12">
-					<h3 class="mb-4 text-3xl font-bold">
+					<h2 class="mb-4 text-3xl font-bold">
 						Ready to Start Testing?
-					</h3>
+					</h2>
 					<p
 						class="text-base-content/70 mx-auto mb-8 max-w-2xl text-lg"
 					>
