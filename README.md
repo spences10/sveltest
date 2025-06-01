@@ -26,6 +26,29 @@ applications. This project demonstrates:
 - **SSR testing** for server-side rendering validation
 - **Full-stack integration patterns** for modern web applications
 
+## 🔄 Client-Server Alignment Strategy
+
+**The Problem**: Server unit tests with heavy mocking can pass while
+production breaks due to client-server mismatches. Forms send data in
+one format, servers expect another, and mocked tests miss the
+disconnect.
+
+**Our Solution**: This project demonstrates a multi-layer testing
+approach with minimal mocking:
+
+- **Shared validation logic** between client and server prevents
+  contract mismatches
+- **Real FormData/Request objects** in server tests (only external
+  services like databases are mocked)
+- **TypeScript contracts** ensure data structures align between client
+  and server
+- **E2E tests** provide the final safety net to catch any integration
+  gaps
+
+This methodology gives you **fast unit test feedback** while
+maintaining **confidence that client and server actually work
+together** in production.
+
 ## 🚀 Features Demonstrated
 
 ### Component Testing (Client-Side)
@@ -37,14 +60,17 @@ applications. This project demonstrates:
 - **Card Component**: Slot testing, conditional rendering, click
   handlers
 - **LoginForm Component**: Complex form interactions, async operations
+- **TodoManager Component**: State management, CRUD operations, list
+  interactions
+- **Calculator Component**: Interactive calculations, input validation
+- **Nav Component**: Navigation, responsive design, accessibility
 
 ### Server-Side Testing
 
 - **API Routes**: Authentication, authorization, error handling
 - **Server Hooks**: Security headers, middleware, request processing
 - **Form Actions**: CRUD operations, validation, user feedback
-- **Utility Functions**: Validation logic, formatting, performance
-  utilities
+- **Utility Functions**: Validation logic, data processing
 
 ### SSR Testing
 
@@ -75,7 +101,7 @@ pnpm install
 pnpm dev
 
 # Run tests
-pnpm test
+pnpm test:unit
 
 # Run specific test suites
 pnpm test:client    # Component tests in browser
@@ -143,6 +169,7 @@ src/
 │   ├── components/           # Reusable components with tests
 │   │   ├── button.svelte
 │   │   ├── button.svelte.test.ts
+│   │   ├── button.ssr.test.ts
 │   │   ├── input.svelte
 │   │   ├── input.svelte.test.ts
 │   │   ├── modal.svelte
@@ -150,21 +177,39 @@ src/
 │   │   ├── card.svelte
 │   │   ├── card.svelte.test.ts
 │   │   ├── login-form.svelte
-│   │   └── login-form.svelte.test.ts
-│   └── utils/               # Utility functions with tests
-│       ├── validation.ts
-│       ├── validation.test.ts
-│       ├── formatting.ts
-│       └── formatting.test.ts
+│   │   ├── login-form.svelte.test.ts
+│   │   ├── todo-manager.svelte
+│   │   ├── todo-manager.svelte.test.ts
+│   │   ├── todo-manager.ssr.test.ts
+│   │   ├── calculator.svelte
+│   │   ├── calculator.svelte.test.ts
+│   │   ├── calculator.ssr.test.ts
+│   │   ├── nav.svelte
+│   │   ├── nav.svelte.test.ts
+│   │   └── nav.ssr.test.ts
+│   ├── utils/               # Utility functions with tests
+│   │   ├── validation.ts
+│   │   └── validation.test.ts
+│   ├── state/               # State management
+│   └── icons/               # Icon components
 ├── routes/
 │   ├── api/
-│   │   └── secure-data/
-│   │       ├── +server.ts
-│   │       └── +server.test.ts
+│   │   ├── secure-data/
+│   │   │   ├── +server.ts
+│   │   │   └── server.test.ts
+│   │   ├── health/
+│   │   └── csp-report/
+│   │       └── server.test.ts
+│   ├── components/          # Component showcase pages
+│   ├── docs/                # Documentation pages
+│   ├── examples/            # Example pages
+│   ├── todos/               # Todo application
+│   │   └── page.server.test.ts
 │   ├── +layout.svelte
-│   ├── +layout.ssr.test.ts
+│   ├── layout.ssr.test.ts
 │   ├── +page.svelte
-│   └── +page.ssr.test.ts
+│   ├── page.svelte.test.ts
+│   └── page.ssr.test.ts
 ├── hooks.server.ts
 └── hooks.server.test.ts
 ```
@@ -186,10 +231,10 @@ src/
 
 ## 📊 Test Coverage
 
-- **252 total test cases** across client, server, and SSR
-- **93% success rate** on client-side functionality
-- **100% coverage** on server-side and SSR functionality
-- **1,800+ lines** of comprehensive test code
+- **30+ test files** across client, server, and SSR
+- **Comprehensive component coverage** for all UI components
+- **Full server-side testing** for API routes and hooks
+- **SSR validation** for critical rendering paths
 
 ## 🔧 Configuration
 
