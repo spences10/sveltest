@@ -188,20 +188,21 @@ test.describe('Performance Tests', () => {
 });`;
 
 	const accessibility_example = `import { expect, test } from '@playwright/test';
-import { injectAxe, checkA11y } from 'axe-playwright';
+// Note: axe-playwright would need to be installed separately
+// import { injectAxe, checkA11y } from 'axe-playwright';
 
 test.describe('Accessibility Tests', () => {
   test('passes automated accessibility checks', async ({ page }) => {
     await page.goto('/');
     
     // Inject axe-core for accessibility testing
-    await injectAxe(page);
+    // await injectAxe(page);
     
     // Run accessibility checks
-    await checkA11y(page, null, {
-      detailedReport: true,
-      detailedReportOptions: { html: true },
-    });
+    // await checkA11y(page, null, {
+    //   detailedReport: true,
+    //   detailedReportOptions: { html: true },
+    // });
   });
   
   test('supports keyboard navigation', async ({ page }) => {
