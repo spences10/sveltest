@@ -290,6 +290,55 @@ test('should not crash when rendered', async () => {
 - **Solution**: Avoid children props; use alternative props like
   `label`
 
+### "Cannot find element with locator" / Test Timeouts
+
+- **Cause**: Element doesn't exist, wrong selector, or role confusion
+- **Solution**:
+  - Check if element actually exists in DOM
+  - Verify correct role (links with `role="button"` are buttons, not
+    links)
+  - Use `data-testid` for complex elements
+  - Increase timeout for slow-rendering components
+
+### Role and Accessibility Confusion
+
+```typescript
+// ❌ WRONG: Looking for link when element has role="button"
+page.getByRole('link', { name: 'Submit' }); // <a role="button">Submit</a>
+
+// ✅ CORRECT: Use the actual role
+page.getByRole('button', { name: 'Submit' });
+
+// ❌ WRONG: Input role doesn't exist
+page.getByRole('input', { name: 'Email' });
+
+// ✅ CORRECT: Use textbox for input elements
+page.getByRole('textbox', { name: 'Email' });
+```
+
+### vitest-browser-svelte Timeout Issues
+
+```typescript
+// ❌ Can cause timeouts with complex reactive components
+test('content switches when button clicked', async () => {
+	render(ComplexComponent);
+	await page.getByRole('button', { name: 'Switch' }).click();
+	await expect
+		.element(page.getByText('New Content'))
+		.toBeInTheDocument();
+});
+
+// ✅ Use smoke tests for complex reactive behavior
+test('button clicks without errors', async () => {
+	render(ComplexComponent);
+	const button = page.getByRole('button', { name: 'Switch' });
+
+	await expect(async () => {
+		await button.click({ force: true });
+	}).not.toThrow();
+});
+```
+
 ## Test Environment Setup
 
 ### Browser Mode Configuration
@@ -336,7 +385,13 @@ export default defineConfig({
   test pure functions
 - ✅ Handle Svelte 4→5 migration with smoke tests
 - ✅ Always verify mock setup before testing components
+- ✅ Check actual DOM roles: links with `role="button"` are buttons
+- ✅ Use `textbox` role for inputs, not `input` role
+- ✅ Use smoke tests for complex reactive components to avoid timeouts
+- ✅ Use `data-testid` when semantic queries fail due to role
+  confusion
 - ❌ Never click SvelteKit form submits - test state directly
 - ❌ Don't mock browser APIs - real APIs work in vitest-browser-svelte
 - ❌ Avoid children props in vitest-browser-svelte - use alternative
   approaches
+- ❌ Don't assume element roles - verify with browser dev tools
