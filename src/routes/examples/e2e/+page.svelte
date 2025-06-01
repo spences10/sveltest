@@ -1,4 +1,5 @@
 <script lang="ts">
+	import CodeBlock from '$lib/components/code-block.svelte';
 	import {
 		ArrowLongRight,
 		Calculator,
@@ -66,8 +67,9 @@
 		},
 	];
 
-	// Code examples
-	const user_journey_example = `import { expect, test } from '@playwright/test';
+	// Code examples configuration
+	const code_examples = {
+		user_journey: `import { expect, test } from '@playwright/test';
 
 test.describe('Todo Management User Journey', () => {
   test('complete todo workflow', async ({ page }) => {
@@ -99,9 +101,8 @@ test.describe('Todo Management User Journey', () => {
       page.getByText('Buy groceries')
     ).not.toBeVisible();
   });
-});`;
-
-	const cross_browser_example = `import { test, devices } from '@playwright/test';
+});`,
+		cross_browser: `import { test, devices } from '@playwright/test';
 
 // Test across multiple browsers and devices
 const browsers = [
@@ -139,9 +140,8 @@ browsers.forEach(({ name, ...device }) => {
       }
     });
   });
-});`;
-
-	const performance_example = `import { expect, test } from '@playwright/test';
+});`,
+		performance: `import { expect, test } from '@playwright/test';
 
 test.describe('Performance Tests', () => {
   test('meets Core Web Vitals thresholds', async ({ page }) => {
@@ -185,9 +185,8 @@ test.describe('Performance Tests', () => {
     
     expect(loadTime).toBeLessThan(3000);
   });
-});`;
-
-	const accessibility_example = `import { expect, test } from '@playwright/test';
+});`,
+		accessibility: `import { expect, test } from '@playwright/test';
 // Note: axe-playwright would need to be installed separately
 // import { injectAxe, checkA11y } from 'axe-playwright';
 
@@ -237,7 +236,19 @@ test.describe('Accessibility Tests', () => {
     const firstHeading = headings.first();
     await expect(firstHeading).toHaveText(/TestSuite Pro/);
   });
-});`;
+});`,
+		quick_start: `# Install dependencies
+pnpm install
+
+# Run E2E tests
+pnpm test:e2e
+
+# Run tests in headed mode
+pnpm test:e2e --headed
+
+# Run specific test file
+pnpm test:e2e homepage.spec.ts`,
+	};
 
 	// Best practices
 	const best_practices = [
@@ -324,6 +335,24 @@ test.describe('Accessibility Tests', () => {
 	];
 
 	let active_category = $state('user-journeys');
+
+	// Map category IDs to code example keys
+	const category_to_code_map: Record<
+		string,
+		keyof typeof code_examples
+	> = {
+		'user-journeys': 'user_journey',
+		'cross-browser': 'cross_browser',
+		performance: 'performance',
+		accessibility: 'accessibility',
+	};
+
+	// Get the current code example based on active category
+	const current_code_example = $derived(
+		code_examples[
+			category_to_code_map[active_category] || 'user_journey'
+		],
+	);
 </script>
 
 <svelte:head>
@@ -432,9 +461,11 @@ test.describe('Accessibility Tests', () => {
 					<div class="card-body p-6">
 						<h3 class="mb-4 text-xl font-bold">Code Example</h3>
 						<div class="bg-base-200 rounded-lg p-4">
-							<pre class="overflow-x-auto text-sm"><code
-									>{#if active_category === 'user-journeys'}{user_journey_example}{:else if active_category === 'cross-browser'}{cross_browser_example}{:else if active_category === 'performance'}{performance_example}{:else if active_category === 'accessibility'}{accessibility_example}{/if}</code
-								></pre>
+							<CodeBlock
+								code={current_code_example}
+								lang="typescript"
+								theme="night-owl"
+							/>
 						</div>
 					</div>
 				</div>
@@ -666,19 +697,11 @@ test.describe('Accessibility Tests', () => {
 							simple commands
 						</p>
 						<div class="bg-base-200 mb-6 rounded-lg p-4">
-							<pre class="text-sm"><code
-									># Install dependencies
-pnpm install
-
-# Run E2E tests
-pnpm test:e2e
-
-# Run tests in headed mode
-pnpm test:e2e --headed
-
-# Run specific test file
-pnpm test:e2e homepage.spec.ts</code
-								></pre>
+							<CodeBlock
+								code={code_examples.quick_start}
+								lang="bash"
+								theme="night-owl"
+							/>
 						</div>
 					</div>
 				</div>
