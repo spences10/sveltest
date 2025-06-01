@@ -1,5 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { handle } from './hooks.server';
+import { csp_directives } from './csp-directives';
+import {
+	handle,
+	handle_errors,
+	handle_security_headers,
+} from './hooks.server';
 
 describe('Server Hooks', () => {
 	let mock_event: any;
@@ -25,9 +30,47 @@ describe('Server Hooks', () => {
 		};
 	});
 
-	describe('Security Headers', () => {
+	describe('CSP Directives Configuration', () => {
+		it('should have proper CSP directives structure', () => {
+			expect(csp_directives).toBeDefined();
+			expect(csp_directives['default-src']).toContain("'self'");
+			expect(csp_directives['img-src']).toContain('data:');
+			expect(csp_directives['script-src']).toContain(
+				"'unsafe-inline'",
+			);
+			expect(csp_directives['style-src']).toContain(
+				"'unsafe-inline'",
+			);
+			expect(csp_directives['report-uri']).toContain(
+				'/api/csp-report',
+			);
+		});
+
+		it('should generate correct CSP directive string', async () => {
+			const response = await handle_security_headers({
+				event: mock_event,
+				resolve: mock_resolve,
+			});
+
+			const csp_header = response.headers.get(
+				'Content-Security-Policy',
+			);
+			expect(csp_header).toContain("default-src 'self'");
+			expect(csp_header).toContain("img-src 'self' data:");
+			expect(csp_header).toContain(
+				"script-src 'self' 'unsafe-inline'",
+			);
+			expect(csp_header).toContain(
+				"style-src 'self' 'unsafe-inline'",
+			);
+			expect(csp_header).toContain('upgrade-insecure-requests');
+			expect(csp_header).toContain('report-uri /api/csp-report');
+		});
+	});
+
+	describe('Security Headers Handler', () => {
 		it('should apply all required security headers', async () => {
-			const response = await handle({
+			const response = await handle_security_headers({
 				event: mock_event,
 				resolve: mock_resolve,
 			});
@@ -42,12 +85,12 @@ describe('Server Hooks', () => {
 			expect(response.headers.get('Referrer-Policy')).toBe(
 				'strict-origin-when-cross-origin',
 			);
-			expect(response.headers.get('Content-Security-Policy')).toBe(
-				"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
-			);
 			expect(response.headers.get('Permissions-Policy')).toBe(
 				'camera=(), microphone=(), geolocation=()',
 			);
+			expect(
+				response.headers.get('Content-Security-Policy'),
+			).toBeTruthy();
 		});
 
 		it('should preserve existing response headers', async () => {
@@ -62,7 +105,7 @@ describe('Server Hooks', () => {
 
 			mock_resolve.mockResolvedValue(existing_response);
 
-			const response = await handle({
+			const response = await handle_security_headers({
 				event: mock_event,
 				resolve: mock_resolve,
 			});
@@ -89,7 +132,7 @@ describe('Server Hooks', () => {
 
 			mock_resolve.mockResolvedValue(custom_response);
 
-			const response = await handle({
+			const response = await handle_security_headers({
 				event: mock_event,
 				resolve: mock_resolve,
 			});
@@ -99,6 +142,69 @@ describe('Server Hooks', () => {
 			expect(response.statusText).toBe('Created');
 			expect(await response.text()).toBe('custom body content');
 		});
+	});
+
+	describe('Error Handler', () => {
+		it('should pass through successful requests', async () => {
+			const response = await handle_errors({
+				event: mock_event,
+				resolve: mock_resolve,
+			});
+
+			expect(response).toBe(mock_response);
+			expect(mock_resolve).toHaveBeenCalledWith(mock_event);
+		});
+
+		it('should handle and re-throw errors', async () => {
+			const test_error = new Error('Test error');
+			mock_resolve.mockRejectedValue(test_error);
+
+			// Mock console.error to avoid noise in test output
+			const console_error_spy = vi
+				.spyOn(console, 'error')
+				.mockImplementation(() => {});
+
+			await expect(
+				handle_errors({
+					event: mock_event,
+					resolve: mock_resolve,
+				}),
+			).rejects.toThrow('Test error');
+
+			expect(console_error_spy).toHaveBeenCalledWith(
+				'Request handler error:',
+				expect.objectContaining({
+					message: 'Test error',
+					path: '/test',
+					method: 'GET',
+				}),
+			);
+
+			console_error_spy.mockRestore();
+		});
+	});
+
+	describe('Combined Handle Function', () => {
+		it('should apply security headers and error handling in sequence', async () => {
+			const response = await handle({
+				event: mock_event,
+				resolve: mock_resolve,
+			});
+
+			// Verify security headers are applied
+			expect(response.headers.get('X-Frame-Options')).toBe(
+				'SAMEORIGIN',
+			);
+			expect(
+				response.headers.get('Content-Security-Policy'),
+			).toBeTruthy();
+
+			// Verify resolve was called (sequence adds additional parameters)
+			expect(mock_resolve).toHaveBeenCalledWith(
+				mock_event,
+				expect.any(Object),
+			);
+		});
 
 		it('should call resolve with the correct event', async () => {
 			await handle({
@@ -106,40 +212,12 @@ describe('Server Hooks', () => {
 				resolve: mock_resolve,
 			});
 
-			// Verify resolve was called with the event
-			expect(mock_resolve).toHaveBeenCalledWith(mock_event);
+			// Verify resolve was called with the event (sequence adds additional parameters)
+			expect(mock_resolve).toHaveBeenCalledWith(
+				mock_event,
+				expect.any(Object),
+			);
 			expect(mock_resolve).toHaveBeenCalledTimes(1);
-		});
-
-		it.skip('should handle CSP violations and reporting', async () => {
-			// Test CSP violation reporting endpoint
-			// Test CSP nonce generation for inline scripts
-			// Test CSP policy customization per route
-		});
-
-		it.skip('should validate X-Frame-Options for iframe protection', async () => {
-			// Test iframe embedding prevention
-			// Test SAMEORIGIN vs DENY policies
-			// Test frame-ancestors CSP directive
-		});
-
-		it.skip('should enforce X-Content-Type-Options', async () => {
-			// Test MIME type sniffing prevention
-			// Test file upload content type validation
-			// Test script execution prevention
-		});
-
-		it.skip('should configure Referrer-Policy correctly', async () => {
-			// Test referrer information leakage prevention
-			// Test cross-origin referrer policies
-			// Test same-origin vs cross-origin behavior
-		});
-
-		it.skip('should set Permissions-Policy restrictions', async () => {
-			// Test camera access blocking
-			// Test microphone access blocking
-			// Test geolocation access blocking
-			// Test other sensitive API restrictions
 		});
 	});
 
@@ -208,18 +286,6 @@ describe('Server Hooks', () => {
 	});
 
 	describe('Error Handling', () => {
-		it.skip('should handle resolve function errors', async () => {
-			// Test upstream error handling
-			// Test error response formatting
-			// Test error logging
-		});
-
-		it.skip('should handle malformed requests', async () => {
-			// Test invalid URL handling
-			// Test malformed header handling
-			// Test request validation errors
-		});
-
 		it.skip('should handle server errors gracefully', async () => {
 			// Test 500 error responses
 			// Test error page rendering
