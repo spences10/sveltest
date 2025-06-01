@@ -2,7 +2,7 @@ import {
 	validate_field,
 	type ValidationResult,
 	type ValidationRule,
-} from './validation.js';
+} from '../utils/validation.ts';
 
 export interface FormField {
 	value: string;

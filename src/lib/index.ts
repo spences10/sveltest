@@ -7,5 +7,5 @@ export { default as LoginForm } from './components/login-form.svelte';
 export { default as Modal } from './components/modal.svelte';
 
 // Utility exports
-export * from './utils/form-state.svelte.js';
-export * from './utils/validation.js';
+export * from './state/form-state.svelte.ts';
+export * from './utils/validation.ts';

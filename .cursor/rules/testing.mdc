@@ -143,7 +143,69 @@ test('reactive state with runes', () => {
 
 	expect(untrack(() => doubled)).toBe(10);
 });
+
+// ✅ Access $derived functions returned by getters correctly
+test('derived state from object getters', () => {
+	const state_object = {
+		get derived_value() {
+			return $derived(() => some_calculation);
+		},
+	};
+
+	// Get the $derived function first, then use untrack
+	const derived_fn = state_object.derived_value;
+	expect(untrack(() => derived_fn())).toBe(expected_value);
+});
 ```
+
+### CRITICAL: Form Validation State Testing Pattern
+
+When testing form validation with Svelte 5 runes, understand the
+**initialization vs validation** pattern:
+
+```typescript
+// ✅ CORRECT: Test form validation state lifecycle
+test('should track form validity through validation lifecycle', () => {
+	const form = create_form_state({
+		email: {
+			value: '',
+			validation_rules: { required: true },
+		},
+	});
+
+	// Initially valid (fields not validated yet - common pattern)
+	const is_form_valid = form.is_form_valid;
+	expect(untrack(() => is_form_valid())).toBe(true);
+
+	// Trigger validation - now should be invalid
+	form.validate_all_fields();
+	flushSync();
+	expect(untrack(() => is_form_valid())).toBe(false);
+
+	// Fix the field - should become valid
+	form.update_field('email', 'valid@example.com');
+	flushSync();
+	expect(untrack(() => is_form_valid())).toBe(true);
+});
+
+// ❌ WRONG: Expecting immediate validation without triggering it
+test('should be invalid initially', () => {
+	const form = create_form_state({
+		email: { value: '', validation_rules: { required: true } },
+	});
+
+	// This will fail - forms are typically valid until validated
+	expect(untrack(() => form.is_form_valid())).toBe(false);
+});
+```
+
+**Key Pattern**: Most form libraries follow the "valid until proven
+invalid" pattern:
+
+- Fields start as valid (not validated yet)
+- Validation runs when fields are touched/updated or explicitly
+  triggered
+- Test the full lifecycle: initial → validate → fix → validate again
 
 ## Comprehensive Component Test Structure
 
@@ -448,6 +510,10 @@ export default defineConfig({
 - ✅ Use smoke tests for complex reactive components to avoid timeouts
 - ✅ Use `data-testid` when semantic queries fail due to role
   confusion
+- ✅ Test form validation lifecycle: initial (valid) → validate → fix
+  → validate again
+- ✅ Access $derived from getters:
+  `const derived_fn = obj.getter; untrack(() => derived_fn())`
 - ❌ Never click SvelteKit form submits - test state directly
 - ❌ Don't mock browser APIs - real APIs work in vitest-browser-svelte
 - ❌ Avoid children props in vitest-browser-svelte - use alternative
@@ -455,3 +521,5 @@ export default defineConfig({
 - ❌ Don't assume element roles - verify with browser dev tools
 - ❌ Don't ignore strict mode violations - use `.first()` instead of
   hoping it works
+- ❌ Don't expect forms to be invalid initially - test the validation
+  lifecycle
