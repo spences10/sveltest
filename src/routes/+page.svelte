@@ -1,6 +1,7 @@
 <script lang="ts">
 	import {
 		BarChart,
+		BookOpen,
 		Calculator,
 		CheckCircle,
 		Clipboard,
@@ -288,6 +289,13 @@
 						>
 							<LightningBolt class_names="h-5 w-5" />
 							Get Started
+						</a>
+						<a
+							href="/docs"
+							class="btn btn-secondary btn-lg gap-2 px-8"
+						>
+							<BookOpen class_names="h-5 w-5" />
+							Documentation
 						</a>
 						<a
 							href="/todos"

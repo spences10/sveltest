@@ -51,7 +51,6 @@
 
 	const settings_links = [
 		{ href: '/docs', title: 'Documentation', icon: Document },
-		{ href: '/settings', title: 'Settings', icon: Settings },
 	];
 
 	const is_active = (path: string) => {

@@ -113,11 +113,9 @@ describe('Nav Component SSR', () => {
 		test('should render settings links', () => {
 			const { body } = render(Nav);
 
-			// Test settings dropdown links
+			// Test settings dropdown links (now only contains documentation)
 			expect(body).toContain('href="/docs"');
-			expect(body).toContain('href="/settings"');
 			expect(body).toContain('Documentation');
-			expect(body).toContain('Settings');
 		});
 	});
 
@@ -151,18 +149,17 @@ describe('Nav Component SSR', () => {
 			const { body } = render(Nav);
 
 			// Test that all important links are present for SEO
-			const importantLinks = [
+			const important_links = [
 				'href="/"',
 				'href="/components"',
 				'href="/examples"',
 				'href="/todos"',
 				'href="/docs"',
-				'href="/settings"',
 				'href="/examples/unit"',
 				'href="/examples/todos"',
 			];
 
-			importantLinks.forEach((link) => {
+			important_links.forEach((link) => {
 				expect(body).toContain(link);
 			});
 		});
@@ -285,7 +282,7 @@ describe('Nav Component SSR', () => {
 	describe('Error Handling', () => {
 		test('should handle missing page context gracefully', () => {
 			// Test with undefined page context
-			vi.mocked(vi.doMock)('$app/state', () => ({
+			vi.doMock('$app/state', () => ({
 				page: undefined,
 			}));
 
@@ -296,7 +293,7 @@ describe('Nav Component SSR', () => {
 
 		test('should handle missing URL context gracefully', () => {
 			// Test with page but no URL
-			vi.mocked(vi.doMock)('$app/state', () => ({
+			vi.doMock('$app/state', () => ({
 				page: {
 					url: undefined,
 				},
