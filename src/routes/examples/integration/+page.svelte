@@ -242,8 +242,7 @@ test('multi-step form workflow', async () => {
 								<div
 									class="from-{category.color}/20 to-{category.color}/10 mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br transition-transform duration-300 group-hover:scale-110"
 								>
-									<svelte:component
-										this={category.icon}
+									<category.icon
 										class_names="text-{category.color} h-6 w-6"
 									/>
 								</div>
@@ -289,10 +288,7 @@ test('multi-step form workflow', async () => {
 							: 'btn-ghost'} transition-all duration-200"
 						onclick={() => (active_category = category.id)}
 					>
-						<svelte:component
-							this={category.icon}
-							class_names="h-4 w-4"
-						/>
+						<category.icon class_names="h-4 w-4" />
 						{category.title}
 					</button>
 				{/each}
@@ -458,10 +454,7 @@ test('multi-step form workflow', async () => {
 							<div
 								class="from-primary/20 to-primary/10 mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br"
 							>
-								<svelte:component
-									this={practice.icon}
-									class_names="text-primary h-6 w-6"
-								/>
+								<practice.icon class_names="text-primary h-6 w-6" />
 							</div>
 							<h3 class="mb-2 text-lg font-bold">
 								{practice.title}
