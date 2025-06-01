@@ -1,4 +1,5 @@
 <script lang="ts">
+	import CalculatorComponent from '$lib/components/calculator.svelte';
 	import {
 		ArrowLongRight,
 		BarChart,
@@ -10,7 +11,6 @@
 		LightningBolt,
 		Settings,
 	} from '$lib/icons';
-	import CalculatorComponent from '$lib/components/calculator.svelte';
 </script>
 
 <svelte:head>
@@ -34,7 +34,7 @@
 				>
 			</div>
 			<h1
-				class="from-info via-primary to-secondary mb-4 bg-gradient-to-r bg-clip-text text-6xl font-black text-transparent"
+				class="from-info via-primary to-secondary mb-4 bg-gradient-to-r bg-clip-text text-6xl leading-normal font-black text-transparent"
 			>
 				Unit Testing Examples
 			</h1>
