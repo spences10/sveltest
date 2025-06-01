@@ -42,16 +42,16 @@ describe('Input Component', () => {
 			await expect.element(input).toHaveAttribute('required');
 			await expect.element(label).toHaveTextContent('Email Address');
 			await expect.element(required_indicator).toBeInTheDocument();
-			await expect.element(input).toHaveClass('px-4'); // lg size
-			await expect.element(input).toHaveClass('ring-green-300'); // success variant
+			await expect.element(input).toHaveClass('input-lg'); // DaisyUI lg size
+			await expect.element(input).toHaveClass('input-success'); // DaisyUI success variant
 		});
 	});
 
 	describe('CSS Classes and Styling', () => {
 		const sizes = [
-			{ size: 'sm', expected_class: 'px-2.5' },
-			{ size: 'md', expected_class: 'px-3' },
-			{ size: 'lg', expected_class: 'px-4' },
+			{ size: 'sm', expected_class: 'input-sm' },
+			{ size: 'md', expected_class: 'input-md' },
+			{ size: 'lg', expected_class: 'input-lg' },
 		] as const;
 
 		sizes.forEach(({ size, expected_class }) => {
@@ -67,9 +67,9 @@ describe('Input Component', () => {
 		});
 
 		const variants = [
-			{ variant: 'default', expected_class: 'ring-gray-300' },
-			{ variant: 'success', expected_class: 'ring-green-300' },
-			{ variant: 'error', expected_class: 'ring-red-300' },
+			{ variant: 'default', expected_class: 'input' },
+			{ variant: 'success', expected_class: 'input-success' },
+			{ variant: 'error', expected_class: 'input-error' },
 		] as const;
 
 		variants.forEach(({ variant, expected_class }) => {
@@ -125,7 +125,7 @@ describe('Input Component', () => {
 			await expect
 				.element(input)
 				.toHaveAttribute('aria-invalid', 'true');
-			await expect.element(input).toHaveClass('ring-red-300'); // error styling
+			await expect.element(input).toHaveClass('input-error'); // DaisyUI error styling
 		});
 
 		test('should not show error message when no error', async () => {
@@ -165,8 +165,8 @@ describe('Input Component', () => {
 
 			const input = page.getByTestId('input');
 			await expect.element(input).toBeDisabled();
-			await expect.element(input).toHaveClass('bg-gray-50');
-			await expect.element(input).toHaveClass('cursor-not-allowed');
+			// DaisyUI handles disabled styling automatically
+			await expect.element(input).toHaveClass('input');
 		});
 
 		test('should apply readonly styles when readonly', async () => {
@@ -177,7 +177,8 @@ describe('Input Component', () => {
 
 			const input = page.getByTestId('input');
 			await expect.element(input).toHaveAttribute('readonly');
-			await expect.element(input).toHaveClass('bg-gray-50');
+			// DaisyUI handles readonly styling automatically
+			await expect.element(input).toHaveClass('input');
 		});
 	});
 
@@ -291,7 +292,7 @@ describe('Input Component', () => {
 			await expect.element(input).toHaveAttribute('required');
 			await expect.element(error_message).toBeInTheDocument();
 			await expect.element(required_indicator).toBeInTheDocument();
-			await expect.element(input).toHaveClass('px-2.5'); // sm size
+			await expect.element(input).toHaveClass('input-sm'); // DaisyUI sm size
 		});
 	});
 });

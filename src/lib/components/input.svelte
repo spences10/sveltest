@@ -8,8 +8,16 @@
 		disabled?: boolean;
 		required?: boolean;
 		readonly?: boolean;
-		size?: 'sm' | 'md' | 'lg';
-		variant?: 'default' | 'success' | 'error';
+		size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+		variant?:
+			| 'default'
+			| 'success'
+			| 'error'
+			| 'primary'
+			| 'secondary'
+			| 'accent'
+			| 'info'
+			| 'warning';
 		id?: string;
 		name?: string;
 		autocomplete?:
@@ -78,42 +86,39 @@
 		onblur?.(event);
 	}
 
-	// CSS classes
-	const base_classes =
-		'block w-full rounded-md border-0 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-inset transition-colors';
+	// DaisyUI classes
+	const base_classes = 'input w-full max-w-full';
 
 	const size_classes = {
-		sm: 'px-2.5 py-1.5 text-sm',
-		md: 'px-3 py-2 text-base',
-		lg: 'px-4 py-3 text-lg',
+		xs: 'input-xs',
+		sm: 'input-sm',
+		md: 'input-md',
+		lg: 'input-lg',
+		xl: 'input-xl',
 	};
 
 	const variant_classes = {
-		default:
-			'ring-gray-300 placeholder:text-gray-400 focus:ring-blue-600',
-		success:
-			'ring-green-300 placeholder:text-gray-400 focus:ring-green-600',
-		error:
-			'ring-red-300 placeholder:text-gray-400 focus:ring-red-600',
+		default: '',
+		primary: 'input-primary',
+		secondary: 'input-secondary',
+		accent: 'input-accent',
+		info: 'input-info',
+		success: 'input-success',
+		warning: 'input-warning',
+		error: 'input-error',
 	};
-
-	const disabled_classes =
-		'bg-gray-50 text-gray-500 cursor-not-allowed';
-	const readonly_classes = 'bg-gray-50';
 
 	const computed_input_classes = [
 		base_classes,
 		size_classes[size],
 		variant_classes[error ? 'error' : variant],
-		disabled && disabled_classes,
-		readonly && readonly_classes,
 	]
 		.filter(Boolean)
 		.join(' ');
 
-	const label_classes =
-		'block text-sm font-medium leading-6 text-gray-900 mb-2';
-	const error_classes = 'mt-2 text-sm text-red-600';
+	const label_classes = 'label';
+	const label_text_classes = 'label-text';
+	const error_classes = 'label-text-alt text-error';
 
 	// Generate unique ID if not provided
 	const input_id =
@@ -121,17 +126,15 @@
 </script>
 
 {#if label}
-	<label
-		for={input_id}
-		class={label_classes}
-		data-testid="input-label"
-	>
-		{label}
-		{#if required}
-			<span class="text-red-500" data-testid="required-indicator"
-				>*</span
-			>
-		{/if}
+	<label class={label_classes} for={input_id}>
+		<span class={label_text_classes} data-testid="input-label">
+			{label}
+			{#if required}
+				<span class="text-error" data-testid="required-indicator"
+					>*</span
+				>
+			{/if}
+		</span>
 	</label>
 {/if}
 
@@ -159,11 +162,13 @@
 />
 
 {#if error}
-	<p
-		id="{input_id}-error"
-		class={error_classes}
-		data-testid="input-error"
-	>
-		{error}
-	</p>
+	<div class={label_classes}>
+		<span
+			id="{input_id}-error"
+			class={error_classes}
+			data-testid="input-error"
+		>
+			{error}
+		</span>
+	</div>
 {/if}

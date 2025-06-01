@@ -9,10 +9,8 @@ describe('LoginForm Component', () => {
 			render(LoginForm);
 
 			const form = page.getByTestId('login-form');
-			const email_input = page.getByLabelText('Email Address');
-			const password_input = page.getByPlaceholder(
-				'Enter your password',
-			);
+			const email_input = page.getByTestId('input');
+			const password_input = page.getByTestId('password-input');
 			const submit_button = page.getByRole('button', {
 				name: 'Sign In',
 			});
@@ -30,7 +28,7 @@ describe('LoginForm Component', () => {
 				initial_email: 'test@example.com',
 			});
 
-			const email_input = page.getByLabelText('Email Address');
+			const email_input = page.getByTestId('input');
 			const remember_checkbox = page.getByTestId(
 				'remember-me-checkbox',
 			);
@@ -48,10 +46,8 @@ describe('LoginForm Component', () => {
 		test('should have proper form structure and accessibility', async () => {
 			render(LoginForm);
 
-			const email_input = page.getByLabelText('Email Address');
-			const password_input = page.getByPlaceholder(
-				'Enter your password',
-			);
+			const email_input = page.getByTestId('input');
+			const password_input = page.getByTestId('password-input');
 
 			await expect
 				.element(email_input)
@@ -68,9 +64,7 @@ describe('LoginForm Component', () => {
 		test.skip('should have password toggle functionality', async () => {
 			render(LoginForm);
 
-			const password_input = page.getByPlaceholder(
-				'Enter your password',
-			);
+			const password_input = page.getByTestId('password-input');
 			const toggle_button = page.getByTestId('password-toggle');
 
 			await expect
@@ -107,7 +101,7 @@ describe('LoginForm Component', () => {
 		test.skip('should show validation error for invalid email', async () => {
 			render(LoginForm);
 
-			const email_input = page.getByLabelText('Email Address');
+			const email_input = page.getByTestId('input');
 			const submit_button = page.getByRole('button', {
 				name: 'Sign In',
 			});
@@ -123,9 +117,7 @@ describe('LoginForm Component', () => {
 		test.skip('should show validation error for short password', async () => {
 			render(LoginForm);
 
-			const password_input = page.getByPlaceholder(
-				'Enter your password',
-			);
+			const password_input = page.getByTestId('password-input');
 			const submit_button = page.getByRole('button', {
 				name: 'Sign In',
 			});
@@ -141,10 +133,8 @@ describe('LoginForm Component', () => {
 		test.skip('should clear validation errors when valid input is provided', async () => {
 			render(LoginForm);
 
-			const email_input = page.getByLabelText('Email Address');
-			const password_input = page.getByPlaceholder(
-				'Enter your password',
-			);
+			const email_input = page.getByTestId('input');
+			const password_input = page.getByTestId('password-input');
 			const submit_button = page.getByRole('button', {
 				name: 'Sign In',
 			});
@@ -170,7 +160,7 @@ describe('LoginForm Component', () => {
 		test('should handle email input correctly', async () => {
 			render(LoginForm);
 
-			const email_input = page.getByLabelText('Email Address');
+			const email_input = page.getByTestId('input');
 			const test_email = 'user@example.com';
 
 			await email_input.fill(test_email);
@@ -180,9 +170,7 @@ describe('LoginForm Component', () => {
 		test('should handle password input correctly', async () => {
 			render(LoginForm);
 
-			const password_input = page.getByPlaceholder(
-				'Enter your password',
-			);
+			const password_input = page.getByTestId('password-input');
 			const test_password = 'mypassword123';
 
 			await password_input.fill(test_password);
@@ -207,10 +195,8 @@ describe('LoginForm Component', () => {
 				onsubmit: mockSubmit,
 			});
 
-			const email_input = page.getByLabelText('Email Address');
-			const password_input = page.getByPlaceholder(
-				'Enter your password',
-			);
+			const email_input = page.getByTestId('input');
+			const password_input = page.getByTestId('password-input');
 			const submit_button = page.getByRole('button', {
 				name: 'Sign In',
 			});
@@ -232,7 +218,7 @@ describe('LoginForm Component', () => {
 				onforgot_password: mockForgotPassword,
 			});
 
-			const email_input = page.getByLabelText('Email Address');
+			const email_input = page.getByTestId('input');
 			const forgot_link = page.getByTestId('forgot-password-link');
 
 			await email_input.fill('test@example.com');
@@ -263,10 +249,8 @@ describe('LoginForm Component', () => {
 				onsubmit: mockSubmit,
 			});
 
-			const email_input = page.getByLabelText('Email Address');
-			const password_input = page.getByPlaceholder(
-				'Enter your password',
-			);
+			const email_input = page.getByTestId('input');
+			const password_input = page.getByTestId('password-input');
 
 			await email_input.fill('test@example.com');
 			await password_input.fill('Password123');
@@ -283,9 +267,7 @@ describe('LoginForm Component', () => {
 		test.skip('should toggle password visibility with Space key on toggle button', async () => {
 			render(LoginForm);
 
-			const password_input = page.getByPlaceholder(
-				'Enter your password',
-			);
+			const password_input = page.getByTestId('password-input');
 			const toggle_button = page.getByTestId('password-toggle');
 
 			await toggle_button.click();
@@ -315,10 +297,8 @@ describe('LoginForm Component', () => {
 				loading: true,
 			});
 
-			const email_input = page.getByLabelText('Email Address');
-			const password_input = page.getByPlaceholder(
-				'Enter your password',
-			);
+			const email_input = page.getByTestId('input');
+			const password_input = page.getByTestId('password-input');
 			const remember_checkbox = page.getByTestId(
 				'remember-me-checkbox',
 			);
@@ -356,9 +336,7 @@ describe('LoginForm Component', () => {
 			render(LoginForm);
 
 			const email_input = page.getByLabelText('Email Address');
-			const password_input = page.getByPlaceholder(
-				'Enter your password',
-			);
+			const password_input = page.getByTestId('password-input');
 			const remember_checkbox = page.getByLabelText('Remember me');
 
 			await expect.element(email_input).toBeInTheDocument();

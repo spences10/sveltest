@@ -293,10 +293,11 @@
 							<!-- Props Configuration -->
 							<div class="space-y-3">
 								<div>
-									<label class="label">
+									<label class="label" for="modal-size-select">
 										<span class="label-text">Size</span>
 									</label>
 									<select
+										id="modal-size-select"
 										class="select select-bordered w-full"
 										bind:value={modal_size}
 									>
@@ -307,20 +308,22 @@
 									</select>
 								</div>
 								<div>
-									<label class="label">
+									<label class="label" for="modal-title-input">
 										<span class="label-text">Title</span>
 									</label>
 									<input
+										id="modal-title-input"
 										type="text"
 										class="input input-bordered w-full"
 										bind:value={modal_title}
 									/>
 								</div>
 								<div>
-									<label class="label">
+									<label class="label" for="modal-content-textarea">
 										<span class="label-text">Content</span>
 									</label>
 									<textarea
+										id="modal-content-textarea"
 										class="textarea textarea-bordered w-full"
 										bind:value={modal_content}
 									></textarea>
@@ -414,10 +417,11 @@
 							<!-- Props Configuration -->
 							<div class="space-y-3">
 								<div>
-									<label class="label">
+									<label class="label" for="card-variant-select">
 										<span class="label-text">Variant</span>
 									</label>
 									<select
+										id="card-variant-select"
 										class="select select-bordered w-full"
 										bind:value={card_variant}
 									>
@@ -438,20 +442,22 @@
 									</label>
 								</div>
 								<div>
-									<label class="label">
+									<label class="label" for="card-title-input">
 										<span class="label-text">Title</span>
 									</label>
 									<input
+										id="card-title-input"
 										type="text"
 										class="input input-bordered w-full"
 										bind:value={card_title}
 									/>
 								</div>
 								<div>
-									<label class="label">
+									<label class="label" for="card-subtitle-input">
 										<span class="label-text">Subtitle</span>
 									</label>
 									<input
+										id="card-subtitle-input"
 										type="text"
 										class="input input-bordered w-full"
 										bind:value={card_subtitle}
@@ -533,40 +539,43 @@
 				<div class="space-y-4">
 					<h3 class="text-xl font-semibold">Live Demo</h3>
 					<div class="bg-base-200/30 rounded-xl p-6">
-						<div class="space-y-4">
-							<LoginForm
-								loading={login_loading}
-								remember_me_enabled={login_remember_enabled}
-								forgot_password_enabled={login_forgot_enabled}
-								onsubmit={handle_login_submit}
-								onforgot_password={handle_forgot_password}
-								onregister_click={handle_register_click}
-							/>
+						<LoginForm
+							loading={login_loading}
+							remember_me_enabled={login_remember_enabled}
+							forgot_password_enabled={login_forgot_enabled}
+							onsubmit={handle_login_submit}
+							onforgot_password={handle_forgot_password}
+							onregister_click={handle_register_click}
+						/>
+					</div>
 
-							<!-- Props Configuration -->
-							<div class="space-y-3">
-								<div class="form-control">
-									<label class="label cursor-pointer">
-										<span class="label-text">Remember Me Option</span>
-										<input
-											type="checkbox"
-											class="checkbox"
-											bind:checked={login_remember_enabled}
-										/>
-									</label>
-								</div>
-								<div class="form-control">
-									<label class="label cursor-pointer">
-										<span class="label-text"
-											>Forgot Password Link</span
-										>
-										<input
-											type="checkbox"
-											class="checkbox"
-											bind:checked={login_forgot_enabled}
-										/>
-									</label>
-								</div>
+					<!-- Props Configuration -->
+					<div class="space-y-3">
+						<h4 class="text-lg font-medium">Demo Configuration</h4>
+						<div class="bg-base-300/20 space-y-3 rounded-lg p-4">
+							<div class="form-control">
+								<label class="label cursor-pointer">
+									<span class="label-text"
+										>Enable Remember Me Option</span
+									>
+									<input
+										type="checkbox"
+										class="checkbox"
+										bind:checked={login_remember_enabled}
+									/>
+								</label>
+							</div>
+							<div class="form-control">
+								<label class="label cursor-pointer">
+									<span class="label-text"
+										>Enable Forgot Password Link</span
+									>
+									<input
+										type="checkbox"
+										class="checkbox"
+										bind:checked={login_forgot_enabled}
+									/>
+								</label>
 							</div>
 						</div>
 					</div>

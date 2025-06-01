@@ -122,22 +122,16 @@
 		show_password = !show_password;
 	}
 
-	// CSS classes
+	// DaisyUI CSS classes
 	const form_classes = 'space-y-6 w-full max-w-md mx-auto';
 	const remember_me_classes = 'flex items-center justify-between';
-	const checkbox_wrapper_classes = 'flex items-center';
-	const checkbox_classes =
-		'h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded';
-	const checkbox_label_classes = 'ml-2 block text-sm text-gray-900';
-	const forgot_password_classes =
-		'text-sm text-blue-600 hover:text-blue-500 cursor-pointer';
+	const checkbox_wrapper_classes = 'form-control';
+	const checkbox_label_classes = 'label cursor-pointer';
+	const checkbox_classes = 'checkbox';
+	const forgot_password_classes = 'link link-primary text-sm';
 	const submit_button_classes = 'w-full';
-	const register_link_classes = 'text-center text-sm text-gray-600';
-	const register_button_classes =
-		'text-blue-600 hover:text-blue-500 cursor-pointer font-medium';
-	const password_toggle_classes =
-		'absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer';
-	const password_wrapper_classes = 'relative';
+	const register_link_classes = 'text-center text-sm';
+	const register_button_classes = 'link link-primary font-medium';
 </script>
 
 <form
@@ -150,60 +144,78 @@
 	{...rest_props}
 >
 	<!-- Email Input -->
-	<Input
-		type="email"
-		label="Email Address"
-		placeholder="Enter your email"
-		bind:value={email}
-		error={email_error}
-		required
-		disabled={loading}
-		oninput={handle_email_input}
-		onblur={handle_email_blur}
-	/>
-
-	<!-- Password Input -->
-	<div class={password_wrapper_classes}>
+	<div class="form-control">
 		<Input
-			type={show_password ? 'text' : 'password'}
-			label="Password"
-			placeholder="Enter your password"
-			bind:value={password}
-			error={password_error}
+			type="email"
+			label="Email Address"
+			placeholder="Enter your email"
+			bind:value={email}
+			error={email_error}
 			required
 			disabled={loading}
-			oninput={handle_password_input}
-			onblur={handle_password_blur}
+			oninput={handle_email_input}
+			onblur={handle_email_blur}
 		/>
-		<button
-			type="button"
-			class={password_toggle_classes}
-			onclick={toggle_password_visibility}
-			data-testid="password-toggle"
-			aria-label={show_password ? 'Hide password' : 'Show password'}
+	</div>
+
+	<!-- Password Input with DaisyUI pattern -->
+	<div class="form-control">
+		<div class="label">
+			<span class="label-text">
+				Password
+				<span class="text-error">*</span>
+			</span>
+		</div>
+		<label
+			class="input input-bordered flex w-full items-center gap-2"
 		>
-			{#if show_password}
-				<EyeOff class_names="h-4 w-4" />
-			{:else}
-				<Eye class_names="h-4 w-4" />
-			{/if}
-		</button>
+			<input
+				type={show_password ? 'text' : 'password'}
+				class="grow"
+				placeholder="Enter your password"
+				bind:value={password}
+				required
+				disabled={loading}
+				oninput={handle_password_input}
+				onblur={handle_password_blur}
+				data-testid="password-input"
+			/>
+			<button
+				type="button"
+				class="btn btn-ghost btn-sm p-1"
+				onclick={toggle_password_visibility}
+				data-testid="password-toggle"
+				aria-label={show_password ? 'Hide password' : 'Show password'}
+			>
+				{#if show_password}
+					<EyeOff class_names="h-4 w-4" />
+				{:else}
+					<Eye class_names="h-4 w-4" />
+				{/if}
+			</button>
+		</label>
+		{#if password_error}
+			<div class="label">
+				<span class="label-text-alt text-error">
+					{password_error}
+				</span>
+			</div>
+		{/if}
 	</div>
 
 	<!-- Remember Me and Forgot Password -->
 	<div class={remember_me_classes}>
 		{#if remember_me_enabled}
 			<div class={checkbox_wrapper_classes}>
-				<input
-					type="checkbox"
-					id="remember-me"
-					class={checkbox_classes}
-					bind:checked={remember_me}
-					disabled={loading}
-					data-testid="remember-me-checkbox"
-				/>
-				<label for="remember-me" class={checkbox_label_classes}>
-					Remember me
+				<label class={checkbox_label_classes}>
+					<input
+						type="checkbox"
+						class={checkbox_classes}
+						bind:checked={remember_me}
+						disabled={loading}
+						data-testid="remember-me-checkbox"
+					/>
+					<span class="label-text">Remember me</span>
 				</label>
 			</div>
 		{/if}
@@ -236,7 +248,7 @@
 
 	<!-- Register Link -->
 	<div class={register_link_classes}>
-		Don't have an account?
+		<span class="text-base-content">Don't have an account?</span>
 		<button
 			type="button"
 			class={register_button_classes}

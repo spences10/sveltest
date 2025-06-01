@@ -233,15 +233,19 @@ describe('Components Page', () => {
 				.element(page.getByRole('button', { name: 'Sign In' }))
 				.toBeInTheDocument();
 
-			// Check configuration controls exist - use simpler approach
+			// Check configuration controls exist - use the actual text from the page
 			await expect
 				.element(
-					page.getByText('Remember Me Option', { exact: true }),
+					page.getByText('Enable Remember Me Option', {
+						exact: true,
+					}),
 				)
 				.toBeInTheDocument();
 			await expect
 				.element(
-					page.getByText('Forgot Password Link', { exact: true }),
+					page.getByText('Enable Forgot Password Link', {
+						exact: true,
+					}),
 				)
 				.toBeInTheDocument();
 		});
