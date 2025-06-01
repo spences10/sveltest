@@ -1,4 +1,5 @@
 <script lang="ts">
+	import CodeBlock from '$lib/components/code-block.svelte';
 	import {
 		ArrowLongRight,
 		BarChart,
@@ -66,8 +67,9 @@
 		},
 	];
 
-	// Code examples
-	const component_integration_example = `import { render } from 'vitest-browser-svelte';
+	// Code examples configuration
+	const code_examples = {
+		component_integration: `import { render } from 'vitest-browser-svelte';
 import { page } from '@vitest/browser/context';
 import { expect, test } from 'vitest';
 import LoginForm from './login-form.svelte';
@@ -87,9 +89,8 @@ test('login form integration workflow', async () => {
   
   // Verify integration behavior
   await expect.element(page.getByText('Signing in...')).toBeInTheDocument();
-});`;
-
-	const api_integration_example = `import { expect, test } from 'vitest';
+});`,
+		api_integration: `import { expect, test } from 'vitest';
 import { POST } from './+page.server.ts';
 
 test('form action integration', async () => {
@@ -107,9 +108,8 @@ test('form action integration', async () => {
   
   expect(result.success).toBe(true);
   expect(result.user).toHaveProperty('email');
-});`;
-
-	const state_integration_example = `import { render } from 'vitest-browser-svelte';
+});`,
+		state_management: `import { render } from 'vitest-browser-svelte';
 import { page } from '@vitest/browser/context';
 import { expect, test } from 'vitest';
 import TodoApp from './todo-app.svelte';
@@ -133,9 +133,8 @@ test('state management integration', async () => {
   await expect.element(
     page.getByText('Integration test todo')
   ).toBeInTheDocument();
-});`;
-
-	const form_workflow_example = `import { render } from 'vitest-browser-svelte';
+});`,
+		form_workflows: `import { render } from 'vitest-browser-svelte';
 import { page } from '@vitest/browser/context';
 import { expect, test } from 'vitest';
 import MultiStepForm from './multi-step-form.svelte';
@@ -163,7 +162,8 @@ test('multi-step form workflow', async () => {
   
   await expect.element(page.getByText('John Doe')).toBeInTheDocument();
   await expect.element(page.getByText('john@example.com')).toBeInTheDocument();
-});`;
+});`,
+	};
 
 	// Best practices
 	const best_practices = [
@@ -194,6 +194,24 @@ test('multi-step form workflow', async () => {
 	];
 
 	let active_category = $state('component-integration');
+
+	// Map category IDs to code example keys
+	const category_to_code_map: Record<
+		string,
+		keyof typeof code_examples
+	> = {
+		'component-integration': 'component_integration',
+		'api-integration': 'api_integration',
+		'state-management': 'state_management',
+		'form-workflows': 'form_workflows',
+	};
+
+	// Get the current code example based on active category
+	const current_code_example = $derived(
+		code_examples[
+			category_to_code_map[active_category] || 'component_integration'
+		],
+	);
 </script>
 
 <svelte:head>
@@ -302,9 +320,11 @@ test('multi-step form workflow', async () => {
 					<div class="card-body p-6">
 						<h3 class="mb-4 text-xl font-bold">Code Example</h3>
 						<div class="bg-base-200 rounded-lg p-4">
-							<pre class="overflow-x-auto text-sm"><code
-									>{#if active_category === 'component-integration'}{component_integration_example}{:else if active_category === 'api-integration'}{api_integration_example}{:else if active_category === 'state-management'}{state_integration_example}{:else if active_category === 'form-workflows'}{form_workflow_example}{/if}</code
-								></pre>
+							<CodeBlock
+								code={current_code_example}
+								lang="typescript"
+								theme="night-owl"
+							/>
 						</div>
 					</div>
 				</div>

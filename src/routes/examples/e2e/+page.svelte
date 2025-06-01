@@ -460,7 +460,7 @@ pnpm test:e2e homepage.spec.ts`,
 				>
 					<div class="card-body p-6">
 						<h3 class="mb-4 text-xl font-bold">Code Example</h3>
-						<div class="bg-base-200 rounded-lg p-4">
+						<div class="bg-base-200 rounded-lg">
 							<CodeBlock
 								code={current_code_example}
 								lang="typescript"
@@ -696,7 +696,7 @@ pnpm test:e2e homepage.spec.ts`,
 							Get started with E2E testing in this project with these
 							simple commands
 						</p>
-						<div class="bg-base-200 mb-6 rounded-lg p-4">
+						<div class="bg-base-200 rounded-lg">
 							<CodeBlock
 								code={code_examples.quick_start}
 								lang="bash"
