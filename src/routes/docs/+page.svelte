@@ -1,4 +1,5 @@
 <script lang="ts">
+	import CodeBlock from '$lib/components/code-block.svelte';
 	import {
 		ArrowRight,
 		BookOpen,
@@ -382,11 +383,12 @@ vi.mock('$lib/heavy-computation', () => ({
 					<p class="text-base-content/70 mb-4 text-sm">
 						{example.description}
 					</p>
-					<div class="bg-base-200 rounded-lg p-4">
-						<pre class="overflow-x-auto text-xs"><code
-								>{example.code}</code
-							></pre>
-					</div>
+					<CodeBlock
+						code={example.code}
+						lang="typescript"
+						theme="night-owl"
+						show_line_numbers={true}
+					/>
 				</div>
 			{/each}
 		</div>
@@ -466,9 +468,12 @@ vi.mock('$lib/heavy-computation', () => ({
 							need for comprehensive testing:
 						</p>
 
-						<div class="bg-base-200 my-4 rounded-lg p-4">
-							<pre><code>{installation_commands}</code></pre>
-						</div>
+						<CodeBlock
+							code={installation_commands}
+							lang="bash"
+							theme="night-owl"
+							show_line_numbers={false}
+						/>
 
 						<h4>Project Structure</h4>
 						<p>Tests are co-located with their source files:</p>
@@ -489,9 +494,12 @@ vi.mock('$lib/heavy-computation', () => ({
 							Create a simple component test to verify your setup:
 						</p>
 
-						<div class="bg-base-200 my-4 rounded-lg p-4">
-							<pre><code>{first_test_example}</code></pre>
-						</div>
+						<CodeBlock
+							code={first_test_example}
+							lang="typescript"
+							theme="night-owl"
+							show_line_numbers={true}
+						/>
 					</div>
 				</div>
 			{:else if active_section === 'testing-patterns'}
@@ -504,23 +512,32 @@ vi.mock('$lib/heavy-computation', () => ({
 							Test Svelte components in a real browser environment:
 						</p>
 
-						<div class="bg-base-200 my-4 rounded-lg p-4">
-							<pre><code>{component_testing_example}</code></pre>
-						</div>
+						<CodeBlock
+							code={component_testing_example}
+							lang="typescript"
+							theme="night-owl"
+							show_line_numbers={true}
+						/>
 
 						<h4>Form Testing</h4>
 						<p>Test form interactions and validation:</p>
 
-						<div class="bg-base-200 my-4 rounded-lg p-4">
-							<pre><code>{form_testing_example}</code></pre>
-						</div>
+						<CodeBlock
+							code={form_testing_example}
+							lang="typescript"
+							theme="night-owl"
+							show_line_numbers={true}
+						/>
 
 						<h4>State Management</h4>
 						<p>Test reactive state and component updates:</p>
 
-						<div class="bg-base-200 my-4 rounded-lg p-4">
-							<pre><code>{state_testing_example}</code></pre>
-						</div>
+						<CodeBlock
+							code={state_testing_example}
+							lang="typescript"
+							theme="night-owl"
+							show_line_numbers={true}
+						/>
 					</div>
 				</div>
 			{:else if active_section === 'api-reference'}
@@ -529,9 +546,12 @@ vi.mock('$lib/heavy-computation', () => ({
 
 					<div class="prose prose-lg max-w-none">
 						<h4>Essential Imports</h4>
-						<div class="bg-base-200 my-4 rounded-lg p-4">
-							<pre><code>{essential_imports}</code></pre>
-						</div>
+						<CodeBlock
+							code={essential_imports}
+							lang="typescript"
+							theme="night-owl"
+							show_line_numbers={true}
+						/>
 
 						<h4>Locator Methods</h4>
 						<p>
@@ -556,14 +576,20 @@ vi.mock('$lib/heavy-computation', () => ({
 
 						<h4>Assertions</h4>
 						<p>Always await element assertions:</p>
-						<div class="bg-base-200 my-4 rounded-lg p-4">
-							<pre><code>{assertions_example}</code></pre>
-						</div>
+						<CodeBlock
+							code={assertions_example}
+							lang="typescript"
+							theme="night-owl"
+							show_line_numbers={true}
+						/>
 
 						<h4>User Interactions</h4>
-						<div class="bg-base-200 my-4 rounded-lg p-4">
-							<pre><code>{user_interactions_example}</code></pre>
-						</div>
+						<CodeBlock
+							code={user_interactions_example}
+							lang="typescript"
+							theme="night-owl"
+							show_line_numbers={true}
+						/>
 					</div>
 				</div>
 			{:else if active_section === 'migration-guide'}
@@ -637,9 +663,12 @@ vi.mock('$lib/heavy-computation', () => ({
 
 						<h4>From Cypress</h4>
 						<p>Component testing patterns translate well:</p>
-						<div class="bg-base-200 my-4 rounded-lg p-4">
-							<pre><code>{cypress_migration_example}</code></pre>
-						</div>
+						<CodeBlock
+							code={cypress_migration_example}
+							lang="typescript"
+							theme="night-owl"
+							show_line_numbers={true}
+						/>
 					</div>
 				</div>
 			{:else if active_section === 'troubleshooting'}
@@ -711,9 +740,12 @@ vi.mock('$lib/heavy-computation', () => ({
 						</ul>
 
 						<h4>Debugging</h4>
-						<div class="bg-base-200 my-4 rounded-lg p-4">
-							<pre><code>{debugging_example}</code></pre>
-						</div>
+						<CodeBlock
+							code={debugging_example}
+							lang="typescript"
+							theme="night-owl"
+							show_line_numbers={true}
+						/>
 					</div>
 				</div>
 			{:else if active_section === 'best-practices'}
@@ -742,9 +774,12 @@ vi.mock('$lib/heavy-computation', () => ({
 							Always test with semantic queries to ensure
 							accessibility:
 						</p>
-						<div class="bg-base-200 my-4 rounded-lg p-4">
-							<pre><code>{accessibility_example}</code></pre>
-						</div>
+						<CodeBlock
+							code={accessibility_example}
+							lang="typescript"
+							theme="night-owl"
+							show_line_numbers={true}
+						/>
 
 						<h4>Mocking Strategy</h4>
 						<ul>
@@ -755,9 +790,12 @@ vi.mock('$lib/heavy-computation', () => ({
 						</ul>
 
 						<h4>Performance Optimization</h4>
-						<div class="bg-base-200 my-4 rounded-lg p-4">
-							<pre><code>{performance_example}</code></pre>
-						</div>
+						<CodeBlock
+							code={performance_example}
+							lang="typescript"
+							theme="night-owl"
+							show_line_numbers={true}
+						/>
 
 						<h4>Coverage Goals</h4>
 						<ul>

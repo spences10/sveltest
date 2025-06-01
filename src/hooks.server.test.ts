@@ -58,7 +58,7 @@ describe('Server Hooks', () => {
 			expect(csp_header).toContain("default-src 'self'");
 			expect(csp_header).toContain("img-src 'self' data:");
 			expect(csp_header).toContain(
-				"script-src 'self' 'unsafe-inline'",
+				"script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval'",
 			);
 			expect(csp_header).toContain(
 				"style-src 'self' 'unsafe-inline'",

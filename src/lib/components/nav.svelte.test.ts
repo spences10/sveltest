@@ -214,24 +214,28 @@ describe('Nav Component', () => {
 		test('should handle mobile menu button click', async () => {
 			render(Nav);
 
-			const mobileMenuButton = page.getByRole('button', {
+			const mobile_menu_button = page.getByRole('button', {
 				name: /Open mobile menu/i,
 			});
 
+			// Smoke test - just verify the button exists and clicking doesn't throw
+			// The button may be hidden by CSS (lg:hidden) but should still be in DOM
+			await expect.element(mobile_menu_button).toBeInTheDocument();
+
 			await expect(async () => {
-				await mobileMenuButton.click({ force: true });
+				await mobile_menu_button.click({ force: true });
 			}).not.toThrow();
 		});
 
 		test('should handle settings menu button click', async () => {
 			render(Nav);
 
-			const settingsButton = page.getByRole('button', {
+			const settings_button = page.getByRole('button', {
 				name: /Open settings menu/i,
 			});
 
 			await expect(async () => {
-				await settingsButton.click({ force: true });
+				await settings_button.click({ force: true });
 			}).not.toThrow();
 		});
 

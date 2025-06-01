@@ -170,7 +170,7 @@
 				<span class="text-primary text-sm font-medium">Features</span>
 			</div>
 			<h2
-				class="from-base-content to-base-content/70 mb-4 bg-gradient-to-r bg-clip-text text-5xl font-black text-transparent"
+				class="from-base-content to-base-content/70 mb-4 bg-gradient-to-r bg-clip-text text-5xl leading-normal font-black text-transparent"
 			>
 				Everything You Need
 			</h2>
