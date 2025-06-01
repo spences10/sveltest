@@ -387,7 +387,6 @@ vi.mock('$lib/heavy-computation', () => ({
 						code={example.code}
 						lang="typescript"
 						theme="night-owl"
-						show_line_numbers={true}
 					/>
 				</div>
 			{/each}
@@ -472,7 +471,6 @@ vi.mock('$lib/heavy-computation', () => ({
 							code={installation_commands}
 							lang="bash"
 							theme="night-owl"
-							show_line_numbers={false}
 						/>
 
 						<h4>Project Structure</h4>
@@ -498,7 +496,6 @@ vi.mock('$lib/heavy-computation', () => ({
 							code={first_test_example}
 							lang="typescript"
 							theme="night-owl"
-							show_line_numbers={true}
 						/>
 					</div>
 				</div>
@@ -516,7 +513,6 @@ vi.mock('$lib/heavy-computation', () => ({
 							code={component_testing_example}
 							lang="typescript"
 							theme="night-owl"
-							show_line_numbers={true}
 						/>
 
 						<h4>Form Testing</h4>
@@ -526,7 +522,6 @@ vi.mock('$lib/heavy-computation', () => ({
 							code={form_testing_example}
 							lang="typescript"
 							theme="night-owl"
-							show_line_numbers={true}
 						/>
 
 						<h4>State Management</h4>
@@ -536,7 +531,6 @@ vi.mock('$lib/heavy-computation', () => ({
 							code={state_testing_example}
 							lang="typescript"
 							theme="night-owl"
-							show_line_numbers={true}
 						/>
 					</div>
 				</div>
@@ -550,7 +544,6 @@ vi.mock('$lib/heavy-computation', () => ({
 							code={essential_imports}
 							lang="typescript"
 							theme="night-owl"
-							show_line_numbers={true}
 						/>
 
 						<h4>Locator Methods</h4>
@@ -580,7 +573,6 @@ vi.mock('$lib/heavy-computation', () => ({
 							code={assertions_example}
 							lang="typescript"
 							theme="night-owl"
-							show_line_numbers={true}
 						/>
 
 						<h4>User Interactions</h4>
@@ -588,7 +580,6 @@ vi.mock('$lib/heavy-computation', () => ({
 							code={user_interactions_example}
 							lang="typescript"
 							theme="night-owl"
-							show_line_numbers={true}
 						/>
 					</div>
 				</div>
@@ -667,7 +658,6 @@ vi.mock('$lib/heavy-computation', () => ({
 							code={cypress_migration_example}
 							lang="typescript"
 							theme="night-owl"
-							show_line_numbers={true}
 						/>
 					</div>
 				</div>
@@ -744,7 +734,6 @@ vi.mock('$lib/heavy-computation', () => ({
 							code={debugging_example}
 							lang="typescript"
 							theme="night-owl"
-							show_line_numbers={true}
 						/>
 					</div>
 				</div>
@@ -778,7 +767,6 @@ vi.mock('$lib/heavy-computation', () => ({
 							code={accessibility_example}
 							lang="typescript"
 							theme="night-owl"
-							show_line_numbers={true}
 						/>
 
 						<h4>Mocking Strategy</h4>
@@ -794,7 +782,6 @@ vi.mock('$lib/heavy-computation', () => ({
 							code={performance_example}
 							lang="typescript"
 							theme="night-owl"
-							show_line_numbers={true}
 						/>
 
 						<h4>Coverage Goals</h4>
