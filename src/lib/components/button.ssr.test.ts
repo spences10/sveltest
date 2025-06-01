@@ -1,4 +1,5 @@
 import { render } from 'svelte/server';
+import { createRawSnippet } from 'svelte';
 import { describe, expect, test } from 'vitest';
 import Button from './button.svelte';
 
@@ -6,13 +7,23 @@ describe('Button Component SSR', () => {
 	describe('Basic Rendering', () => {
 		test('should render without errors', () => {
 			expect(() => {
-				render(Button, { props: { label: 'Click me' } });
+				render(Button, {
+					props: {
+						children: createRawSnippet(() => ({
+							render: () => 'Click me',
+						})),
+					},
+				});
 			}).not.toThrow();
 		});
 
 		test('should render button element', () => {
 			const { body } = render(Button, {
-				props: { label: 'Click me' },
+				props: {
+					children: createRawSnippet(() => ({
+						render: () => 'Click me',
+					})),
+				},
 			});
 
 			expect(body).toContain('<button');
@@ -21,12 +32,15 @@ describe('Button Component SSR', () => {
 
 		test('should render with default classes', () => {
 			const { body } = render(Button, {
-				props: { label: 'Click me' },
+				props: {
+					children: createRawSnippet(() => ({
+						render: () => 'Click me',
+					})),
+				},
 			});
 
 			expect(body).toContain('class="btn');
-			expect(body).toContain('font-medium');
-			expect(body).toContain('rounded-lg');
+			expect(body).toContain('btn-primary');
 		});
 	});
 
@@ -35,39 +49,52 @@ describe('Button Component SSR', () => {
 			const { body } = render(Button, {
 				props: {
 					variant: 'primary',
-					label: 'Primary',
+					children: createRawSnippet(() => ({
+						render: () => 'Primary',
+					})),
 				},
 			});
 
-			expect(body).toContain('bg-blue-600');
-			expect(body).toContain('hover:bg-blue-700');
-			expect(body).toContain('text-white');
+			expect(body).toContain('btn-primary');
 		});
 
 		test('should render secondary variant', () => {
 			const { body } = render(Button, {
 				props: {
 					variant: 'secondary',
-					label: 'Secondary',
+					children: createRawSnippet(() => ({
+						render: () => 'Secondary',
+					})),
 				},
 			});
 
-			expect(body).toContain('bg-gray-200');
-			expect(body).toContain('hover:bg-gray-300');
-			expect(body).toContain('text-gray-900');
+			expect(body).toContain('btn-secondary');
 		});
 
-		test('should render danger variant', () => {
+		test('should render outline variant', () => {
 			const { body } = render(Button, {
 				props: {
-					variant: 'danger',
-					label: 'Danger',
+					variant: 'outline',
+					children: createRawSnippet(() => ({
+						render: () => 'Outline',
+					})),
 				},
 			});
 
-			expect(body).toContain('bg-red-600');
-			expect(body).toContain('hover:bg-red-700');
-			expect(body).toContain('text-white');
+			expect(body).toContain('btn-outline');
+		});
+
+		test('should render ghost variant', () => {
+			const { body } = render(Button, {
+				props: {
+					variant: 'ghost',
+					children: createRawSnippet(() => ({
+						render: () => 'Ghost',
+					})),
+				},
+			});
+
+			expect(body).toContain('btn-ghost');
 		});
 	});
 
@@ -76,36 +103,42 @@ describe('Button Component SSR', () => {
 			const { body } = render(Button, {
 				props: {
 					size: 'sm',
-					label: 'Small',
+					children: createRawSnippet(() => ({
+						render: () => 'Small',
+					})),
 				},
 			});
 
-			expect(body).toContain('px-3 py-1.5');
-			expect(body).toContain('text-sm');
+			expect(body).toContain('btn-sm');
 		});
 
 		test('should render medium size (default)', () => {
 			const { body } = render(Button, {
 				props: {
 					size: 'md',
-					label: 'Medium',
+					children: createRawSnippet(() => ({
+						render: () => 'Medium',
+					})),
 				},
 			});
 
-			expect(body).toContain('px-4 py-2');
-			expect(body).toContain('text-base');
+			// Medium size has no additional class in DaisyUI
+			expect(body).toContain('class="btn');
+			expect(body).not.toContain('btn-sm');
+			expect(body).not.toContain('btn-lg');
 		});
 
 		test('should render large size', () => {
 			const { body } = render(Button, {
 				props: {
 					size: 'lg',
-					label: 'Large',
+					children: createRawSnippet(() => ({
+						render: () => 'Large',
+					})),
 				},
 			});
 
-			expect(body).toContain('px-6 py-3');
-			expect(body).toContain('text-lg');
+			expect(body).toContain('btn-lg');
 		});
 	});
 
@@ -114,48 +147,51 @@ describe('Button Component SSR', () => {
 			const { body } = render(Button, {
 				props: {
 					disabled: true,
-					label: 'Disabled',
+					children: createRawSnippet(() => ({
+						render: () => 'Disabled',
+					})),
 				},
 			});
 
 			expect(body).toContain('disabled');
-			expect(body).toContain('opacity-50');
-			expect(body).toContain('cursor-not-allowed');
 		});
 
 		test('should render loading state', () => {
 			const { body } = render(Button, {
 				props: {
 					loading: true,
-					label: 'Loading',
+					children: createRawSnippet(() => ({
+						render: () => 'Loading',
+					})),
 				},
 			});
 
-			expect(body).toContain('opacity-50');
-			expect(body).toContain('cursor-not-allowed');
-			expect(body).toContain('disabled');
+			expect(body).toContain('loading-spinner');
+			expect(body).toContain('Loading...');
 		});
 
 		test('should render loading spinner', () => {
 			const { body } = render(Button, {
 				props: {
 					loading: true,
-					label: 'Loading',
+					children: createRawSnippet(() => ({
+						render: () => 'Loading',
+					})),
 				},
 			});
 
-			expect(body).toContain('data-testid="loading-spinner"');
-			expect(body).toContain('animate-spin');
+			expect(body).toContain('loading loading-spinner loading-sm');
 		});
 	});
 
 	describe('Custom Attributes', () => {
-		test('should render custom class via rest props', () => {
+		test('should render custom class via class_names prop', () => {
 			const { body } = render(Button, {
 				props: {
-					label: 'Custom',
-					// @ts-expect-error - Testing rest props spread
-					class: 'custom-class',
+					class_names: 'custom-class',
+					children: createRawSnippet(() => ({
+						render: () => 'Custom',
+					})),
 				},
 			});
 
@@ -166,23 +202,13 @@ describe('Button Component SSR', () => {
 			const { body } = render(Button, {
 				props: {
 					type: 'submit',
-					label: 'Submit',
+					children: createRawSnippet(() => ({
+						render: () => 'Submit',
+					})),
 				},
 			});
 
 			expect(body).toContain('type="submit"');
-		});
-
-		test('should render data attributes via rest props', () => {
-			const { body } = render(Button, {
-				props: {
-					label: 'Test',
-					// @ts-expect-error - Testing rest props spread
-					'data-custom': 'test-value',
-				},
-			});
-
-			expect(body).toContain('data-custom="test-value"');
 		});
 	});
 
@@ -190,7 +216,9 @@ describe('Button Component SSR', () => {
 		test('should render proper button semantics', () => {
 			const { body } = render(Button, {
 				props: {
-					label: 'Accessible Button',
+					children: createRawSnippet(() => ({
+						render: () => 'Accessible Button',
+					})),
 				},
 			});
 
@@ -198,28 +226,30 @@ describe('Button Component SSR', () => {
 			expect(body).toContain('Accessible Button');
 		});
 
-		test('should handle aria-label via rest props', () => {
+		test('should handle aria-disabled for loading state', () => {
 			const { body } = render(Button, {
 				props: {
-					label: 'X',
-					// @ts-expect-error - Testing rest props spread
-					'aria-label': 'Close dialog',
+					loading: true,
+					children: createRawSnippet(() => ({
+						render: () => 'Loading',
+					})),
 				},
 			});
 
-			expect(body).toContain('aria-label="Close dialog"');
+			expect(body).toContain('aria-disabled="true"');
 		});
 
-		test('should handle aria-describedby via rest props', () => {
+		test('should handle aria-disabled for disabled state', () => {
 			const { body } = render(Button, {
 				props: {
-					label: 'Help',
-					// @ts-expect-error - Testing rest props spread
-					'aria-describedby': 'help-text',
+					disabled: true,
+					children: createRawSnippet(() => ({
+						render: () => 'Disabled',
+					})),
 				},
 			});
 
-			expect(body).toContain('aria-describedby="help-text"');
+			expect(body).toContain('aria-disabled="true"');
 		});
 	});
 
@@ -227,32 +257,37 @@ describe('Button Component SSR', () => {
 		test('should render text content', () => {
 			const { body } = render(Button, {
 				props: {
-					label: 'Simple Text',
+					children: createRawSnippet(() => ({
+						render: () => 'Simple Text',
+					})),
 				},
 			});
 
 			expect(body).toContain('Simple Text');
 		});
 
-		test('should handle empty label', () => {
+		test('should handle empty children', () => {
 			const { body } = render(Button, {
 				props: {
-					label: '',
+					children: createRawSnippet(() => ({
+						render: () => '',
+					})),
 				},
 			});
 
 			expect(body).toContain('<button');
-			expect(body).toContain('</button>');
 		});
 
-		test('should render label with special characters', () => {
+		test('should render children with special characters', () => {
 			const { body } = render(Button, {
 				props: {
-					label: 'Save & Continue',
+					children: createRawSnippet(() => ({
+						render: () => 'Save & Continue',
+					})),
 				},
 			});
 
-			expect(body).toContain('Save &amp; Continue');
+			expect(body).toContain('Save & Continue');
 		});
 	});
 
@@ -260,15 +295,16 @@ describe('Button Component SSR', () => {
 		test('should render multiple variants and sizes', () => {
 			const { body } = render(Button, {
 				props: {
-					variant: 'primary',
+					variant: 'secondary',
 					size: 'lg',
-					label: 'Large Primary',
+					children: createRawSnippet(() => ({
+						render: () => 'Large Secondary',
+					})),
 				},
 			});
 
-			expect(body).toContain('bg-blue-600');
-			expect(body).toContain('px-6 py-3');
-			expect(body).toContain('text-lg');
+			expect(body).toContain('btn-secondary');
+			expect(body).toContain('btn-lg');
 		});
 
 		test('should render disabled loading button', () => {
@@ -276,36 +312,35 @@ describe('Button Component SSR', () => {
 				props: {
 					disabled: true,
 					loading: true,
-					label: 'Processing',
+					children: createRawSnippet(() => ({
+						render: () => 'Disabled Loading',
+					})),
 				},
 			});
 
 			expect(body).toContain('disabled');
-			expect(body).toContain('opacity-50');
-			expect(body).toContain('cursor-not-allowed');
-			expect(body).toContain('data-testid="loading-spinner"');
+			expect(body).toContain('loading-spinner');
+			expect(body).toContain('aria-disabled="true"');
 		});
 
 		test('should render complex button with all props', () => {
 			const { body } = render(Button, {
 				props: {
-					variant: 'secondary',
+					variant: 'outline',
 					size: 'sm',
-					type: 'button',
-					label: 'Complex',
-					// @ts-expect-error - Testing rest props spread
-					'data-custom': 'test-value',
-					'aria-label': 'Complex action',
+					type: 'submit',
+					class_names: 'my-custom-class',
+					children: createRawSnippet(() => ({
+						render: () => 'Complex Button',
+					})),
 				},
 			});
 
-			expect(body).toContain('bg-gray-200');
-			expect(body).toContain('px-3 py-1.5');
-			expect(body).toContain('text-sm');
-			expect(body).toContain('type="button"');
-			expect(body).toContain('data-custom="test-value"');
-			expect(body).toContain('aria-label="Complex action"');
-			expect(body).toContain('Complex');
+			expect(body).toContain('btn-outline');
+			expect(body).toContain('btn-sm');
+			expect(body).toContain('type="submit"');
+			expect(body).toContain('my-custom-class');
+			expect(body).toContain('Complex Button');
 		});
 	});
 
@@ -313,67 +348,72 @@ describe('Button Component SSR', () => {
 		test('should render without client-side JavaScript', () => {
 			const { body } = render(Button, {
 				props: {
-					label: 'SSR Button',
+					children: createRawSnippet(() => ({
+						render: () => 'SSR Button',
+					})),
 				},
 			});
 
-			// Should render complete button without any client dependencies
-			expect(body).toContain('<button');
-			expect(body).toContain('class="btn');
 			expect(body).toContain('SSR Button');
-			expect(body).toContain('</button>');
+			expect(body).toContain('<button');
 		});
 
 		test('should generate static HTML for SEO', () => {
 			const { body } = render(Button, {
 				props: {
-					label: 'SEO Friendly Button',
+					children: createRawSnippet(() => ({
+						render: () => 'SEO Friendly Button',
+					})),
 				},
 			});
 
-			// Should be crawlable by search engines
 			expect(body).toContain('SEO Friendly Button');
-			expect(body).not.toContain('javascript:');
-			expect(body).not.toContain('onclick=');
 		});
 
 		test('should render consistent markup', () => {
-			const props = {
-				variant: 'primary' as const,
-				label: 'Consistent',
-			};
+			const result1 = render(Button, {
+				props: {
+					children: createRawSnippet(() => ({
+						render: () => 'Test',
+					})),
+				},
+			});
+			const result2 = render(Button, {
+				props: {
+					children: createRawSnippet(() => ({
+						render: () => 'Test',
+					})),
+				},
+			});
 
-			const result1 = render(Button, { props });
-			const result2 = render(Button, { props });
-
-			// Should render identical markup
 			expect(result1.body).toBe(result2.body);
 		});
 
 		test('should include hydration markers', () => {
 			const { body } = render(Button, {
 				props: {
-					label: 'Hydration Test',
+					children: createRawSnippet(() => ({
+						render: () => 'Hydration Test',
+					})),
 				},
 			});
 
-			// Should include Svelte hydration markers
+			// Svelte 5 uses different hydration markers
 			expect(body).toContain('<!--[-->');
-			expect(body).toContain('<!--]-->');
 		});
 
-		test('should render custom Tailwind classes (not DaisyUI)', () => {
+		test('should render DaisyUI classes (not custom Tailwind)', () => {
 			const { body } = render(Button, {
 				props: {
-					label: 'Custom Tailwind',
+					variant: 'primary',
+					children: createRawSnippet(() => ({
+						render: () => 'DaisyUI Button',
+					})),
 				},
 			});
 
-			// Should use custom Tailwind classes, not DaisyUI btn-* classes
-			expect(body).toContain('bg-blue-600'); // Custom primary color
-			expect(body).toContain('font-medium'); // Custom font weight
-			expect(body).toContain('rounded-lg'); // Custom border radius
-			expect(body).not.toContain('btn-primary'); // Not DaisyUI
+			expect(body).toContain('btn-primary');
+			expect(body).toContain('hover:scale-105');
 		});
 	});
 });

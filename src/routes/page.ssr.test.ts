@@ -7,19 +7,23 @@ describe('/+page.svelte SSR', () => {
 		const { body, head } = render(Page);
 
 		// Test that main content is rendered
-		expect(body).toContain('Svelte Testing Examples');
-		expect(body).toContain(
-			'A comprehensive collection of testing patterns',
-		);
+		expect(body).toContain('TestSuite Pro');
+		expect(body).toContain('A comprehensive collection of testing patterns and');
+		expect(body).toContain('examples');
 
-		// Test that navigation link is present
+		// Test that navigation links are present
 		expect(body).toContain('href="/examples"');
-		expect(body).toContain('View Examples');
+		expect(body).toContain('Explore Examples');
+		expect(body).toContain('href="/todos"');
+		expect(body).toContain('Try Todo Manager');
 
-		// Test that feature cards are rendered
-		expect(body).toContain('Testing Types');
-		expect(body).toContain('Best Practices');
-		expect(body).toContain('Real-world Examples');
+		// Test that feature stats are rendered
+		expect(body).toContain('Test Coverage');
+		expect(body).toContain('Performance');
+		expect(body).toContain('Developer Experience');
+		
+		// Test badge content
+		expect(body).toContain('Professional Testing Suite');
 	});
 
 	test('should generate CSS for styling', () => {
@@ -41,12 +45,31 @@ describe('/+page.svelte SSR', () => {
 
 		// Test semantic HTML elements
 		expect(body).toContain('<h1');
-		expect(body).toContain('<h2');
-		expect(body).toContain('<p>');
+		expect(body).toContain('<p ');
 		expect(body).toContain('<a');
+		expect(body).toContain('<div');
 
-		// Test accessibility attributes
+		// Test accessibility and styling attributes
 		expect(body).toContain('class=');
+	});
+
+	test('should render hero section with gradient background', () => {
+		const { body } = render(Page);
+
+		// Test hero section structure
+		expect(body).toContain('hero');
+		expect(body).toContain('bg-gradient-to-br');
+		expect(body).toContain('min-h-screen');
+	});
+
+	test('should render stats section', () => {
+		const { body } = render(Page);
+
+		// Test stats content
+		expect(body).toContain('98%');
+		expect(body).toContain('Fast');
+		expect(body).toContain('A+');
+		expect(body).toContain('stat');
 	});
 
 	test('should render without props (static page)', () => {

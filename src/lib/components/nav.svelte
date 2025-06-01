@@ -48,10 +48,13 @@
 		{ href: '/settings', title: 'Settings', icon: Settings },
 	];
 
-	const is_active = (path: string) =>
-		path === '/'
+	const is_active = (path: string) => {
+		// Handle SSR case where page might not be available
+		if (!page?.url?.pathname) return false;
+		return path === '/'
 			? page.url.pathname === '/'
 			: page.url.pathname.startsWith(path);
+	};
 </script>
 
 <!-- Desktop Navigation -->
