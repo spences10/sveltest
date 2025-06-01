@@ -27,17 +27,20 @@
 	let editingId = $state<string | null>(null);
 	let editingText = $state('');
 
-	// Local state for filters that sync with store
-	let filterStatus = $state<'all' | 'active' | 'completed'>('all');
-	let searchText = $state('');
+	// Get initial filter values from store
+	let filterStatus = $state<'all' | 'active' | 'completed'>(
+		todo_state.filter.status,
+	);
+	let searchText = $state(todo_state.filter.search);
 
-	// Sync local filter state with store
-	$effect(() => {
-		todo_state.set_filter({
-			status: filterStatus,
-			search: searchText,
-		});
-	});
+	// Handle filter changes directly instead of using $effect
+	function handle_status_filter_change() {
+		todo_state.set_filter({ status: filterStatus });
+	}
+
+	function handle_search_change() {
+		todo_state.set_filter({ search: searchText });
+	}
 
 	function handle_add_todo() {
 		if (newTodoText.trim()) {
@@ -200,6 +203,7 @@
 							class="select select-bordered w-full"
 							bind:value={filterStatus}
 							data-testid="status-filter"
+							onchange={handle_status_filter_change}
 						>
 							<option value="all">All Tasks</option>
 							<option value="active">Active</option>
@@ -223,6 +227,7 @@
 								class="grow"
 								placeholder="Search..."
 								data-testid="search-input"
+								oninput={handle_search_change}
 							/>
 						</label>
 					</div>

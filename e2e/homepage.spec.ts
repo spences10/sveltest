@@ -8,37 +8,94 @@ test.describe('Homepage', () => {
 	test('should display main heading and navigation', async ({
 		page,
 	}) => {
-		// Check main heading exists (use role to be specific)
-		await expect(
-			page.getByRole('heading', { name: 'TestSuite Pro' }),
-		).toBeVisible();
+		await test.step('Check main heading', async () => {
+			// Be specific about which heading we want - the main title
+			await expect(
+				page.getByRole('heading', { name: 'TestSuite Pro' }),
+			).toBeVisible();
+		});
 
-		// Check navigation buttons exist
-		await expect(
-			page.getByRole('link', { name: 'Explore Examples' }),
-		).toBeVisible();
-		await expect(
-			page.getByRole('link', { name: 'Try Todo Manager' }),
-		).toBeVisible();
+		await test.step('Check navigation elements', async () => {
+			// Check for main navigation links
+			await expect(
+				page.getByRole('link', { name: 'Explore Examples' }),
+			).toBeVisible();
+			await expect(
+				page.getByRole('link', { name: 'Try Todo Manager' }),
+			).toBeVisible();
+		});
+
+		await test.step('Verify page structure', async () => {
+			// Check for main content area - use first() to avoid strict mode violation
+			await expect(page.locator('main, .hero').first()).toBeVisible();
+		});
 	});
 
 	test('should navigate to examples page', async ({ page }) => {
-		await page
-			.getByRole('link', { name: 'Explore Examples' })
-			.click();
-		await expect(page).toHaveURL('/examples');
+		await test.step('Click examples link', async () => {
+			await page
+				.getByRole('link', { name: 'Explore Examples' })
+				.click();
+		});
+
+		await test.step('Verify navigation to examples page', async () => {
+			await expect(page).toHaveURL('/examples');
+			// Be specific about the examples page main heading
+			await expect(
+				page.getByRole('heading', { name: 'Testing Patterns' }),
+			).toBeVisible();
+		});
 	});
 
 	test('should navigate to todos page', async ({ page }) => {
-		await page
-			.getByRole('link', { name: 'Try Todo Manager' })
-			.click();
-		await expect(page).toHaveURL('/todos');
+		await test.step('Click todos link', async () => {
+			await page
+				.getByRole('link', { name: 'Try Todo Manager' })
+				.click();
+		});
+
+		await test.step('Verify navigation to todos page', async () => {
+			await expect(page).toHaveURL('/todos');
+			// Be specific about the todos page main heading
+			await expect(
+				page.getByRole('heading', { name: 'Todo Manager' }),
+			).toBeVisible();
+		});
 	});
 
-	test('should have correct page title', async ({ page }) => {
-		await expect(page).toHaveTitle(
-			'TestSuite Pro - Comprehensive Testing Suite for Svelte',
-		);
+	test('should have correct page title and meta information', async ({
+		page,
+	}) => {
+		await test.step('Check page title', async () => {
+			await expect(page).toHaveTitle(/TestSuite Pro/);
+		});
+
+		await test.step('Check meta description', async () => {
+			const metaDescription = page.locator(
+				'meta[name="description"]',
+			);
+			await expect(metaDescription).toHaveAttribute(
+				'content',
+				/testing patterns/i,
+			);
+		});
+	});
+
+	test('should be responsive and mobile-friendly', async ({
+		page,
+	}) => {
+		await test.step('Test mobile viewport', async () => {
+			await page.setViewportSize({ width: 375, height: 667 });
+			await expect(
+				page.getByRole('heading', { name: 'TestSuite Pro' }),
+			).toBeVisible();
+		});
+
+		await test.step('Test tablet viewport', async () => {
+			await page.setViewportSize({ width: 768, height: 1024 });
+			await expect(
+				page.getByRole('heading', { name: 'TestSuite Pro' }),
+			).toBeVisible();
+		});
 	});
 });

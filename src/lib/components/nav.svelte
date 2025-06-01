@@ -149,7 +149,11 @@
 
 		<!-- Mobile Menu Dropdown -->
 		<div class="dropdown dropdown-end lg:hidden">
-			<div role="button" class="btn btn-ghost btn-circle">
+			<div
+				role="button"
+				class="btn btn-ghost btn-circle"
+				aria-label="Open mobile menu"
+			>
 				<Menu class_names="h-5 w-5" />
 			</div>
 			<ul
@@ -211,7 +215,11 @@
 
 		<!-- Settings Dropdown -->
 		<div class="dropdown dropdown-end">
-			<div role="button" class="btn btn-ghost btn-circle">
+			<div
+				role="button"
+				class="btn btn-ghost btn-circle"
+				aria-label="Open settings menu"
+			>
 				<MoreVertical class_names="h-5 w-5" />
 			</div>
 			<ul
