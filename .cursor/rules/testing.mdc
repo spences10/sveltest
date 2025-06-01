@@ -71,6 +71,46 @@ page.getByTestId('submit-button');
 // ✅ Assertions with locators (always await)
 await expect.element(page.getByText('Success')).toBeInTheDocument();
 await expect.element(page.getByRole('button')).toBeDisabled();
+
+// ✅ Handle multiple elements with .first(), .nth(), .last()
+page.getByRole('link', { name: 'Home' }).first(); // First matching element
+page.getByRole('link', { name: 'Home' }).nth(1); // Second matching element (0-indexed)
+page.getByRole('link', { name: 'Home' }).last(); // Last matching element
+```
+
+### CRITICAL: Strict Mode and Multiple Elements
+
+vitest-browser-svelte operates in **strict mode** by default, which
+means:
+
+- If a locator matches multiple elements, it will throw a "strict mode
+  violation" error
+- This commonly happens with navigation components that have desktop +
+  mobile versions
+- **Solution**: Use `.first()`, `.nth()`, or `.last()` to target
+  specific elements
+
+```typescript
+// ❌ FAILS: Strict mode violation if multiple elements match
+await expect
+	.element(page.getByRole('link', { name: 'Home' }))
+	.toBeInTheDocument();
+// Error: strict mode violation: getByRole('link', { name: /Home/i }) resolved to 3 elements
+
+// ✅ CORRECT: Use .first() for the first matching element
+await expect
+	.element(page.getByRole('link', { name: 'Home' }).first())
+	.toBeInTheDocument();
+
+// ✅ CORRECT: Use .nth() for specific position (0-indexed)
+await expect
+	.element(page.getByRole('link', { name: 'Home' }).nth(0))
+	.toBeInTheDocument();
+
+// ✅ CORRECT: Use .last() for the last matching element
+await expect
+	.element(page.getByRole('link', { name: 'Home' }).last())
+	.toBeInTheDocument();
 ```
 
 ### Svelte 5 Snippet Testing
@@ -273,6 +313,22 @@ test('should not crash when rendered', async () => {
 
 ## Common Error Solutions
 
+### "strict mode violation: getByRole() resolved to X elements"
+
+- **Cause**: Multiple elements match the same locator (common with
+  responsive navigation)
+- **Solution**: Use `.first()`, `.nth()`, or `.last()` to target
+  specific elements
+- **Example**:
+
+  ```typescript
+  // ❌ FAILS: Multiple nav links (desktop + mobile)
+  page.getByRole('link', { name: 'Home' });
+
+  // ✅ WORKS: Target first matching element
+  page.getByRole('link', { name: 'Home' }).first();
+  ```
+
 ### "Expected 2 arguments, but got 0"
 
 - **Cause**: Mock function signature doesn't match actual function
@@ -376,6 +432,8 @@ export default defineConfig({
 
 - ✅ Use locators (`page.getBy*()`) - never containers
 - ✅ Always await locator assertions: `await expect.element()`
+- ✅ Use `.first()`, `.nth()`, `.last()` for multiple elements to
+  avoid strict mode violations
 - ✅ Use `untrack()` for `$derived`:
   `expect(untrack(() => derivedValue))`
 - ✅ Use `force: true` for animations:
@@ -395,3 +453,5 @@ export default defineConfig({
 - ❌ Avoid children props in vitest-browser-svelte - use alternative
   approaches
 - ❌ Don't assume element roles - verify with browser dev tools
+- ❌ Don't ignore strict mode violations - use `.first()` instead of
+  hoping it works
