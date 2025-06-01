@@ -302,9 +302,11 @@ describe('LoginForm Component', () => {
 				loading: true,
 			});
 
+			// When loading is true, the button shows "Loading..." text
 			const submit_button = page.getByRole('button', {
-				name: 'Sign In',
+				name: 'Loading...',
 			});
+			await expect.element(submit_button).toBeInTheDocument();
 			await expect.element(submit_button).toBeDisabled();
 		});
 

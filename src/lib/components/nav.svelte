@@ -15,16 +15,22 @@
 	const main_links = [
 		{ href: '/', title: 'Home', icon: Home, color: 'primary' },
 		{
-			href: '/examples',
-			title: 'Examples',
+			href: '/components',
+			title: 'Components',
 			icon: Clipboard,
 			color: 'secondary',
+		},
+		{
+			href: '/examples',
+			title: 'Examples',
+			icon: BarChart,
+			color: 'accent',
 		},
 		{
 			href: '/todos',
 			title: 'Todo Manager',
 			icon: CheckCircle,
-			color: 'accent',
+			color: 'info',
 		},
 	];
 
