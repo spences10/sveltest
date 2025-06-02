@@ -1,39 +1,13 @@
 <script lang="ts">
 	import { Button, Calculator, Card, LoginForm, Modal } from '$lib';
 	import CodeBlock from '$lib/components/code-block.svelte';
+	import { component_examples } from '$lib/examples/code-examples';
 	import {
 		Calculator as CalculatorIcon,
 		Clipboard,
 		Eye,
 		Settings,
 	} from '$lib/icons';
-
-	// Code examples configuration
-	const code_examples = {
-		calculator_usage: `<Calculator />`,
-		modal_props: `is_open: boolean
-title?: string
-size?: 'sm' | 'md' | 'lg' | 'xl'
-close_on_backdrop_click?: boolean
-close_on_escape?: boolean
-onclose?: () => void`,
-		card_usage: `<Card
-  variant="elevated"
-  clickable={true}
-  title="Card Title"
-  subtitle="Optional subtitle"
-  content_text="Card content goes here"
-  onclick={handle_click}
-/>`,
-		login_form_usage: `<LoginForm
-  loading={false}
-  remember_me_enabled={true}
-  forgot_password_enabled={true}
-  onsubmit={handle_login}
-  onforgot_password={handle_forgot}
-  onregister_click={handle_register}
-/>`,
-	};
 
 	// Component showcase state
 	let modal_open = $state(false);
@@ -274,7 +248,7 @@ onclose?: () => void`,
 					<div>
 						<h3 class="mb-3 text-xl font-semibold">Usage</h3>
 						<CodeBlock
-							code={code_examples.calculator_usage}
+							code={component_examples.calculator_usage}
 							lang="svelte"
 							theme="night-owl"
 						/>
@@ -394,7 +368,7 @@ onclose?: () => void`,
 					<div>
 						<h3 class="mb-3 text-xl font-semibold">Props</h3>
 						<CodeBlock
-							code={code_examples.modal_props}
+							code={component_examples.modal_props}
 							lang="typescript"
 							theme="night-owl"
 						/>
@@ -538,7 +512,7 @@ onclose?: () => void`,
 					<div>
 						<h3 class="mb-3 text-xl font-semibold">Usage</h3>
 						<CodeBlock
-							code={code_examples.card_usage}
+							code={component_examples.card_usage}
 							lang="svelte"
 							theme="night-owl"
 						/>
@@ -661,7 +635,7 @@ onclose?: () => void`,
 					<div>
 						<h3 class="mb-3 text-xl font-semibold">Usage</h3>
 						<CodeBlock
-							code={code_examples.login_form_usage}
+							code={component_examples.login_form_usage}
 							lang="svelte"
 							theme="night-owl"
 						/>

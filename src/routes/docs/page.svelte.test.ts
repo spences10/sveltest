@@ -54,13 +54,19 @@ describe('Documentation Page', () => {
 				.element(page.getByRole('heading', { name: 'Quick Start' }))
 				.toBeInTheDocument();
 			await expect
-				.element(page.getByTestId('example-title-component-test'))
+				.element(page.getByTestId('example-title-essential-imports'))
 				.toBeInTheDocument();
 			await expect
-				.element(page.getByTestId('example-title-ssr-test'))
+				.element(page.getByTestId('example-title-your-first-test'))
 				.toBeInTheDocument();
 			await expect
-				.element(page.getByTestId('example-title-api-test'))
+				.element(page.getByTestId('example-title-component-testing'))
+				.toBeInTheDocument();
+			await expect
+				.element(page.getByTestId('example-title-ssr-testing'))
+				.toBeInTheDocument();
+			await expect
+				.element(page.getByTestId('example-title-server-testing'))
 				.toBeInTheDocument();
 		});
 
