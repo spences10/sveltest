@@ -1,6 +1,7 @@
 <script lang="ts">
 	import CalculatorComponent from '$lib/components/calculator.svelte';
 	import CodeBlock from '$lib/components/code-block.svelte';
+	import { unit_test_examples } from '$lib/examples/code-examples';
 	import {
 		ArrowLongRight,
 		BarChart,
@@ -12,37 +13,6 @@
 		LightningBolt,
 		Settings,
 	} from '$lib/icons';
-
-	// Code examples configuration
-	const code_examples = {
-		basic_function_test: `// calculator.test.js
-import { add } from './calculator.js';
-
-test('adds two numbers', () => {
-  // Arrange
-  const a = 2;
-  const b = 3;
-  
-  // Act
-  const result = add(a, b);
-  
-  // Assert
-  expect(result).toBe(5);
-});`,
-		component_test: `// Button.test.js
-import { render, fireEvent } from '@testing-library/svelte';
-import Button from './Button.svelte';
-
-test('calls onClick when clicked', async () => {
-  const onClick = vi.fn();
-  const { getByRole } = render(Button, {
-    props: { onClick }
-  });
-  
-  await fireEvent.click(getByRole('button'));
-  expect(onClick).toHaveBeenCalled();
-});`,
-	};
 </script>
 
 <svelte:head>
@@ -291,7 +261,7 @@ test('calls onClick when clicked', async () => {
 							class="bg-base-200/50 rounded-lg p-4 font-mono text-sm"
 						>
 							<CodeBlock
-								code={code_examples.basic_function_test}
+								code={unit_test_examples.basic_function_test}
 								lang="javascript"
 								theme="night-owl"
 							/>
@@ -316,7 +286,7 @@ test('calls onClick when clicked', async () => {
 							class="bg-base-200/50 rounded-lg p-4 font-mono text-sm"
 						>
 							<CodeBlock
-								code={code_examples.component_test}
+								code={unit_test_examples.component_test}
 								lang="javascript"
 								theme="night-owl"
 							/>

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import CodeBlock from '$lib/components/code-block.svelte';
+	import { e2e_test_examples } from '$lib/examples/code-examples';
 	import {
 		ArrowLongRight,
 		Calculator,
@@ -66,189 +67,6 @@
 			],
 		},
 	];
-
-	// Code examples configuration
-	const code_examples = {
-		user_journey: `import { expect, test } from '@playwright/test';
-
-test.describe('Todo Management User Journey', () => {
-  test('complete todo workflow', async ({ page }) => {
-    // Navigate to todos page
-    await page.goto('/todos');
-    
-    // Add a new todo
-    await page.getByTestId('new-todo-input').fill('Buy groceries');
-    await page.getByTestId('add-todo-button').click();
-    
-    // Verify todo appears in list
-    await expect(
-      page.getByText('Buy groceries')
-    ).toBeVisible();
-    
-    // Mark todo as complete
-    await page.getByTestId('todo-checkbox').check();
-    
-    // Verify completion state
-    await expect(
-      page.getByTestId('todo-item')
-    ).toHaveClass(/completed/);
-    
-    // Delete todo
-    await page.getByTestId('delete-todo-button').click();
-    
-    // Verify todo is removed
-    await expect(
-      page.getByText('Buy groceries')
-    ).not.toBeVisible();
-  });
-});`,
-		cross_browser: `import { test, devices } from '@playwright/test';
-
-// Test across multiple browsers and devices
-const browsers = [
-  { name: 'Desktop Chrome', ...devices['Desktop Chrome'] },
-  { name: 'Desktop Firefox', ...devices['Desktop Firefox'] },
-  { name: 'Desktop Safari', ...devices['Desktop Safari'] },
-  { name: 'iPhone 12', ...devices['iPhone 12'] },
-  { name: 'Pixel 5', ...devices['Pixel 5'] },
-];
-
-browsers.forEach(({ name, ...device }) => {
-  test.describe(\`\${name} Tests\`, () => {
-    test.use(device);
-    
-    test('homepage loads correctly', async ({ page }) => {
-      await page.goto('/');
-      
-      // Verify core functionality works across browsers
-      await expect(
-        page.getByRole('heading', { name: 'TestSuite Pro' })
-      ).toBeVisible();
-      
-      // Test responsive design
-      const viewport = page.viewportSize();
-      if (viewport.width < 768) {
-        // Mobile-specific tests
-        await expect(
-          page.getByTestId('mobile-menu-button')
-        ).toBeVisible();
-      } else {
-        // Desktop-specific tests
-        await expect(
-          page.getByTestId('desktop-navigation')
-        ).toBeVisible();
-      }
-    });
-  });
-});`,
-		performance: `import { expect, test } from '@playwright/test';
-
-test.describe('Performance Tests', () => {
-  test('meets Core Web Vitals thresholds', async ({ page }) => {
-    await page.goto('/');
-    
-    // Measure Core Web Vitals
-    const vitals = await page.evaluate(() => {
-      return new Promise((resolve) => {
-        new PerformanceObserver((list) => {
-          const entries = list.getEntries();
-          const vitals = {};
-          
-          entries.forEach((entry) => {
-            if (entry.name === 'FCP') {
-              vitals.fcp = entry.value;
-            }
-            if (entry.name === 'LCP') {
-              vitals.lcp = entry.value;
-            }
-            if (entry.name === 'CLS') {
-              vitals.cls = entry.value;
-            }
-          });
-          
-          resolve(vitals);
-        }).observe({ entryTypes: ['measure', 'navigation'] });
-      });
-    });
-    
-    // Assert performance thresholds
-    expect(vitals.fcp).toBeLessThan(1800); // First Contentful Paint
-    expect(vitals.lcp).toBeLessThan(2500); // Largest Contentful Paint
-    expect(vitals.cls).toBeLessThan(0.1);  // Cumulative Layout Shift
-  });
-  
-  test('page loads within acceptable time', async ({ page }) => {
-    const startTime = Date.now();
-    await page.goto('/');
-    await page.waitForLoadState('domcontentloaded');
-    const loadTime = Date.now() - startTime;
-    
-    expect(loadTime).toBeLessThan(3000);
-  });
-});`,
-		accessibility: `import { expect, test } from '@playwright/test';
-// Note: axe-playwright would need to be installed separately
-// import { injectAxe, checkA11y } from 'axe-playwright';
-
-test.describe('Accessibility Tests', () => {
-  test('passes automated accessibility checks', async ({ page }) => {
-    await page.goto('/');
-    
-    // Inject axe-core for accessibility testing
-    // await injectAxe(page);
-    
-    // Run accessibility checks
-    // await checkA11y(page, null, {
-    //   detailedReport: true,
-    //   detailedReportOptions: { html: true },
-    // });
-  });
-  
-  test('supports keyboard navigation', async ({ page }) => {
-    await page.goto('/');
-    
-    // Tab through focusable elements
-    await page.keyboard.press('Tab');
-    let focusedElement = page.locator(':focus');
-    await expect(focusedElement).toBeVisible();
-    
-    // Continue tabbing and verify focus management
-    await page.keyboard.press('Tab');
-    await page.keyboard.press('Tab');
-    
-    // Test Enter key activation
-    await page.keyboard.press('Enter');
-    
-    // Verify keyboard interaction worked
-    await expect(page).toHaveURL(/\\/examples/);
-  });
-  
-  test('works with screen reader simulation', async ({ page }) => {
-    await page.goto('/');
-    
-    // Test landmark navigation
-    const landmarks = page.locator('main, nav, header, footer');
-    const landmarkCount = await landmarks.count();
-    expect(landmarkCount).toBeGreaterThan(0);
-    
-    // Test heading structure
-    const headings = page.locator('h1, h2, h3, h4, h5, h6');
-    const firstHeading = headings.first();
-    await expect(firstHeading).toHaveText(/TestSuite Pro/);
-  });
-});`,
-		quick_start: `# Install dependencies
-pnpm install
-
-# Run E2E tests
-pnpm test:e2e
-
-# Run tests in headed mode
-pnpm test:e2e --headed
-
-# Run specific test file
-pnpm test:e2e homepage.spec.ts`,
-	};
 
 	// Best practices
 	const best_practices = [
@@ -339,7 +157,7 @@ pnpm test:e2e homepage.spec.ts`,
 	// Map category IDs to code example keys
 	const category_to_code_map: Record<
 		string,
-		keyof typeof code_examples
+		keyof typeof e2e_test_examples
 	> = {
 		'user-journeys': 'user_journey',
 		'cross-browser': 'cross_browser',
@@ -349,7 +167,7 @@ pnpm test:e2e homepage.spec.ts`,
 
 	// Get the current code example based on active category
 	const current_code_example = $derived(
-		code_examples[
+		e2e_test_examples[
 			category_to_code_map[active_category] || 'user_journey'
 		],
 	);
@@ -698,7 +516,7 @@ pnpm test:e2e homepage.spec.ts`,
 						</p>
 						<div class="bg-base-200 rounded-lg">
 							<CodeBlock
-								code={code_examples.quick_start}
+								code={e2e_test_examples.quick_start}
 								lang="bash"
 								theme="night-owl"
 							/>

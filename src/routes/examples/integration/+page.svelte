@@ -1,5 +1,6 @@
 <script lang="ts">
 	import CodeBlock from '$lib/components/code-block.svelte';
+	import { integration_test_examples } from '$lib/examples/code-examples';
 	import {
 		ArrowLongRight,
 		BarChart,
@@ -67,104 +68,6 @@
 		},
 	];
 
-	// Code examples configuration
-	const code_examples = {
-		component_integration: `import { render } from 'vitest-browser-svelte';
-import { page } from '@vitest/browser/context';
-import { expect, test } from 'vitest';
-import LoginForm from './login-form.svelte';
-
-test('login form integration workflow', async () => {
-  render(LoginForm);
-  
-  // Test Input + Button integration
-  const emailInput = page.getByLabelText('Email');
-  const passwordInput = page.getByLabelText('Password');
-  const submitButton = page.getByRole('button', { name: 'Sign In' });
-  
-  // Fill form and submit
-  await emailInput.fill('user@example.com');
-  await passwordInput.fill('password123');
-  await submitButton.click();
-  
-  // Verify integration behavior
-  await expect.element(page.getByText('Signing in...')).toBeInTheDocument();
-});`,
-		api_integration: `import { expect, test } from 'vitest';
-import { POST } from './+page.server.ts';
-
-test('form action integration', async () => {
-  const formData = new FormData();
-  formData.append('email', 'test@example.com');
-  formData.append('password', 'password123');
-  
-  const request = new Request('http://localhost', {
-    method: 'POST',
-    body: formData,
-  });
-  
-  const response = await POST({ request });
-  const result = await response.json();
-  
-  expect(result.success).toBe(true);
-  expect(result.user).toHaveProperty('email');
-});`,
-		state_management: `import { render } from 'vitest-browser-svelte';
-import { page } from '@vitest/browser/context';
-import { expect, test } from 'vitest';
-import TodoApp from './todo-app.svelte';
-
-test('state management integration', async () => {
-  render(TodoApp);
-  
-  // Add todo through one component
-  const input = page.getByTestId('new-todo-input');
-  const addButton = page.getByTestId('add-todo-button');
-  
-  await input.fill('Integration test todo');
-  await addButton.click();
-  
-  // Verify state update in another component
-  await expect.element(
-    page.getByTestId('todo-count')
-  ).toHaveTextContent('1 item');
-  
-  // Verify todo appears in list component
-  await expect.element(
-    page.getByText('Integration test todo')
-  ).toBeInTheDocument();
-});`,
-		form_workflows: `import { render } from 'vitest-browser-svelte';
-import { page } from '@vitest/browser/context';
-import { expect, test } from 'vitest';
-import MultiStepForm from './multi-step-form.svelte';
-
-test('multi-step form workflow', async () => {
-  render(MultiStepForm);
-  
-  // Step 1: Personal Info
-  await page.getByLabelText('First Name').fill('John');
-  await page.getByLabelText('Last Name').fill('Doe');
-  await page.getByRole('button', { name: 'Next' }).click();
-  
-  // Step 2: Contact Info
-  await expect.element(
-    page.getByText('Step 2 of 3')
-  ).toBeInTheDocument();
-  
-  await page.getByLabelText('Email').fill('john@example.com');
-  await page.getByRole('button', { name: 'Next' }).click();
-  
-  // Step 3: Review
-  await expect.element(
-    page.getByText('Review Your Information')
-  ).toBeInTheDocument();
-  
-  await expect.element(page.getByText('John Doe')).toBeInTheDocument();
-  await expect.element(page.getByText('john@example.com')).toBeInTheDocument();
-});`,
-	};
-
 	// Best practices
 	const best_practices = [
 		{
@@ -198,7 +101,7 @@ test('multi-step form workflow', async () => {
 	// Map category IDs to code example keys
 	const category_to_code_map: Record<
 		string,
-		keyof typeof code_examples
+		keyof typeof integration_test_examples
 	> = {
 		'component-integration': 'component_integration',
 		'api-integration': 'api_integration',
@@ -208,7 +111,7 @@ test('multi-step form workflow', async () => {
 
 	// Get the current code example based on active category
 	const current_code_example = $derived(
-		code_examples[
+		integration_test_examples[
 			category_to_code_map[active_category] || 'component_integration'
 		],
 	);
@@ -319,10 +222,12 @@ test('multi-step form workflow', async () => {
 				>
 					<div class="card-body p-6">
 						<h3 class="mb-4 text-xl font-bold">Code Example</h3>
-						<div class="bg-base-200 rounded-lg p-4">
+						<div
+							class="bg-base-200/50 rounded-lg p-4 font-mono text-sm"
+						>
 							<CodeBlock
-								code={current_code_example}
-								lang="typescript"
+								code={integration_test_examples.component_integration}
+								lang="javascript"
 								theme="night-owl"
 							/>
 						</div>
