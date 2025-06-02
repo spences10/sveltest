@@ -217,6 +217,40 @@ src/
 └── hooks.server.test.ts
 ```
 
+## 🤖 AI Assistant Rules for Teams
+
+One of the key outcomes of this project was creating comprehensive AI
+assistant rules that help teams adopt this testing methodology more
+easily. I'm onboarding my team to use this approach!
+
+### Cursor Rules (`.cursor/rules/testing.mdc`)
+
+- Comprehensive testing patterns for Cursor AI
+- Complete vitest-browser-svelte best practices
+- Code style enforcement (snake_case, kebab-case conventions)
+- Common error solutions and troubleshooting
+
+### Windsurf Rules (`.windsurf/rules/testing.md`)
+
+- Adapted for Windsurf's modern rule system
+- Trigger-based activation for test files
+- Same comprehensive patterns as Cursor rules
+- Team-ready configuration
+
+These rules files contain:
+
+- **Foundation First** testing approach guidelines
+- Complete vitest-browser-svelte patterns and anti-patterns
+- Svelte 5 runes testing strategies
+- SSR testing methodologies
+- Form validation lifecycle patterns
+- Quick reference DO's and DON'Ts
+
+**For Teams**: Copy these rule files to your projects to ensure
+consistent testing patterns across your team. The AI assistants will
+automatically follow the established patterns when writing or
+reviewing tests.
+
 ## 🎨 Testing Conventions
 
 ### My Opinionated Naming Conventions
