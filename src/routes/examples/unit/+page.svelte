@@ -257,15 +257,11 @@
 							</div>
 							<h3 class="text-xl font-bold">Basic Function Test</h3>
 						</div>
-						<div
-							class="bg-base-200/50 rounded-lg p-4 font-mono text-sm"
-						>
-							<CodeBlock
-								code={unit_test_examples.basic_function_test}
-								lang="javascript"
-								theme="night-owl"
-							/>
-						</div>
+						<CodeBlock
+							code={unit_test_examples.basic_function_test}
+							lang="javascript"
+							theme="night-owl"
+						/>
 					</div>
 				</div>
 
@@ -282,15 +278,11 @@
 							</div>
 							<h3 class="text-xl font-bold">Component Test</h3>
 						</div>
-						<div
-							class="bg-base-200/50 rounded-lg p-4 font-mono text-sm"
-						>
-							<CodeBlock
-								code={unit_test_examples.component_test}
-								lang="javascript"
-								theme="night-owl"
-							/>
-						</div>
+						<CodeBlock
+							code={unit_test_examples.component_test}
+							lang="javascript"
+							theme="night-owl"
+						/>
 					</div>
 				</div>
 			</div>

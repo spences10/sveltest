@@ -278,13 +278,11 @@
 				>
 					<div class="card-body p-6">
 						<h3 class="mb-4 text-xl font-bold">Code Example</h3>
-						<div class="bg-base-200 rounded-lg">
-							<CodeBlock
-								code={current_code_example}
-								lang="typescript"
-								theme="night-owl"
-							/>
-						</div>
+						<CodeBlock
+							code={current_code_example}
+							lang="typescript"
+							theme="night-owl"
+						/>
 					</div>
 				</div>
 
@@ -514,13 +512,11 @@
 							Get started with E2E testing in this project with these
 							simple commands
 						</p>
-						<div class="bg-base-200 rounded-lg">
-							<CodeBlock
-								code={e2e_test_examples.quick_start}
-								lang="bash"
-								theme="night-owl"
-							/>
-						</div>
+						<CodeBlock
+							code={e2e_test_examples.quick_start}
+							lang="bash"
+							theme="night-owl"
+						/>
 					</div>
 				</div>
 

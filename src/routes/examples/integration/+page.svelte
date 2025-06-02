@@ -222,15 +222,11 @@
 				>
 					<div class="card-body p-6">
 						<h3 class="mb-4 text-xl font-bold">Code Example</h3>
-						<div
-							class="bg-base-200/50 rounded-lg p-4 font-mono text-sm"
-						>
-							<CodeBlock
-								code={integration_test_examples.component_integration}
-								lang="javascript"
-								theme="night-owl"
-							/>
-						</div>
+						<CodeBlock
+							code={integration_test_examples.component_integration}
+							lang="javascript"
+							theme="night-owl"
+						/>
 					</div>
 				</div>
 
