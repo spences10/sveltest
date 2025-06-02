@@ -2,10 +2,9 @@
 // These are stored as strings to avoid Vite import resolution issues
 
 export const unit_test_examples = {
-	basic_function_test: `// calculator.test.js
+	basic_function_test: `// calculator.test.ts
+import { expect, test } from 'vitest';
 import { add } from './calculator.js';
-// testing vite import resolution issues
-import { render, fireEvent } from '@testing-library/svelte';
 
 test('adds two numbers', () => {
   // Arrange
@@ -19,22 +18,25 @@ test('adds two numbers', () => {
   expect(result).toBe(5);
 });`,
 
-	component_test: `// Button.test.js
+	component_test: `// button.svelte.test.ts
 import { render } from 'vitest-browser-svelte';
-import Button from './Button.svelte';
+import { page } from 'vitest-browser/context';
+import { expect, test, vi } from 'vitest';
+import Button from './button.svelte';
 
-test('calls onClick when clicked', async () => {
-  const onClick = vi.fn();
+test('calls on_click when clicked', async () => {
+  const on_click = vi.fn();
   render(Button, {
-    props: { onClick }
+    props: { on_click }
   });
   
   const button = page.getByRole('button');
   await button.click();
-  expect(onClick).toHaveBeenCalled();
+  expect(on_click).toHaveBeenCalled();
 });`,
 
-	state_test: `// todo-state.test.js
+	state_test: `// todo-state.test.ts
+import { expect, test } from 'vitest';
 import { untrack } from 'svelte';
 import { todo_store } from './todo-state.svelte.js';
 
@@ -50,32 +52,80 @@ test('should add new todo', () => {
   expect(new_count).toBe(initial_count + 1);
 });`,
 
-	form_validation_test: `// form-validation.test.js
+	form_validation_test: `// form-validation.test.ts
+import { render } from 'vitest-browser-svelte';
+import { page } from 'vitest-browser/context';
+import { expect, test } from 'vitest';
 import { untrack } from 'svelte';
-import { create_form_state } from './form-state.svelte.js';
+import LoginForm from './login-form.svelte';
 
-test('should validate required field', () => {
-  // Arrange
-  const form = create_form_state({
-    email: { 
-      value: '', 
-      validation_rules: { required: true } 
-    }
+test('form validation lifecycle', async () => {
+  render(LoginForm);
+  
+  const email_input = page.getByRole('textbox', { name: /email/i });
+  const submit_button = page.getByRole('button', { name: /submit/i });
+  
+  // Form starts valid (no validation triggered yet)
+  await expect.element(page.getByText('Invalid email')).not.toBeInTheDocument();
+  
+  // Trigger validation with invalid input
+  await email_input.fill('invalid-email');
+  await submit_button.click();
+  
+  // Now should show validation error
+  await expect.element(page.getByText('Invalid email')).toBeInTheDocument();
+  
+  // Fix the input
+  await email_input.fill('valid@email.com');
+  await submit_button.click();
+  
+  // Error should be gone
+  await expect.element(page.getByText('Invalid email')).not.toBeInTheDocument();
+});`,
+
+	async_test: `// async-component.test.ts
+import { render } from 'vitest-browser-svelte';
+import { page } from 'vitest-browser/context';
+import { expect, test } from 'vitest';
+import AsyncComponent from './async-component.svelte';
+
+test('handles async data loading', async () => {
+  render(AsyncComponent);
+  
+  // Should show loading state initially
+  await expect.element(page.getByText('Loading...')).toBeInTheDocument();
+  
+  // Wait for data to load
+  await expect.element(page.getByText('Data loaded')).toBeInTheDocument();
+  
+  // Loading state should be gone
+  await expect.element(page.getByText('Loading...')).not.toBeInTheDocument();
+});`,
+
+	accessibility_test: `// accessibility.test.ts
+import { render } from 'vitest-browser-svelte';
+import { page } from 'vitest-browser/context';
+import { expect, test } from 'vitest';
+import Button from './button.svelte';
+
+test('button has proper accessibility attributes', async () => {
+  render(Button, { 
+    props: { 
+      text: 'Save Changes',
+      disabled: false 
+    } 
   });
   
-  // Initially valid (no validation triggered)
-  expect(untrack(() => form.is_form_valid())).toBe(true);
+  const button = page.getByRole('button', { name: 'Save Changes' });
   
-  // Act - trigger validation
-  form.validate_all_fields();
-  
-  // Assert - now invalid
-  expect(untrack(() => form.is_form_valid())).toBe(false);
-});`,
+  await expect.element(button).toBeInTheDocument();
+  await expect.element(button).toBeEnabled();
+  await expect.element(button).toHaveAccessibleName('Save Changes');
+});`
 };
 
 export const integration_test_examples = {
-	component_integration: `// login-form.integration.test.js
+	component_integration: `// login-form.integration.test.ts
 import { render } from 'vitest-browser-svelte';
 import { page } from 'vitest-browser/context';
 import { expect, test } from 'vitest';
@@ -95,21 +145,21 @@ test('should handle complete login flow', async () => {
   await expect.element(page.getByText('Welcome back!')).toBeVisible();
 });`,
 
-	api_integration: `// api-integration.test.js
+	api_integration: `// api-integration.test.ts
 import { expect, test } from 'vitest';
 import { POST } from './+page.server.ts';
 
 test('should handle form submission', async () => {
-  const formData = new FormData();
-  formData.append('email', 'test@example.com');
+  const form_data = new FormData();
+  form_data.append('email', 'test@example.com');
   
-  const response = await POST({ request: { formData: () => formData } });
+  const response = await POST({ request: { formData: () => form_data } });
   const result = await response.json();
   
   expect(result.success).toBe(true);
 });`,
 
-	state_management: `// state-integration.test.js
+	state_management: `// state-integration.test.ts
 import { render } from 'vitest-browser-svelte';
 import { page } from 'vitest-browser/context';
 import { expect, test } from 'vitest';
@@ -126,30 +176,34 @@ test('should sync state across components', async () => {
   await expect.element(page.getByText('New task')).toBeVisible();
 });`,
 
-	form_workflows: `// multi-step-form.test.js
+	form_workflows: `// multi-step-form.test.ts
 import { render } from 'vitest-browser-svelte';
 import { page } from 'vitest-browser/context';
 import { expect, test } from 'vitest';
 import MultiStepForm from './multi-step-form.svelte';
 
-test('should navigate through form steps', async () => {
+test('should complete multi-step workflow', async () => {
   render(MultiStepForm);
   
-  // Step 1
+  // Step 1: Personal info
   await page.getByRole('textbox', { name: /name/i }).fill('John Doe');
   await page.getByRole('button', { name: /next/i }).click();
   
-  // Step 2
+  // Step 2: Contact info
   await page.getByRole('textbox', { name: /email/i }).fill('john@example.com');
-  await page.getByRole('button', { name: /submit/i }).click();
+  await page.getByRole('button', { name: /next/i }).click();
   
-  // Verify completion
-  await expect.element(page.getByText('Form submitted!')).toBeVisible();
-});`,
+  // Step 3: Review and submit
+  await expect.element(page.getByText('John Doe')).toBeVisible();
+  await expect.element(page.getByText('john@example.com')).toBeVisible();
+  
+  await page.getByRole('button', { name: /submit/i }).click();
+  await expect.element(page.getByText('Form submitted successfully')).toBeVisible();
+});`
 };
 
 export const e2e_test_examples = {
-	quick_start: `// basic-e2e.test.js
+	quick_start: `// basic-e2e.test.ts
 import { expect, test } from '@playwright/test';
 
 test('homepage loads correctly', async ({ page }) => {
@@ -159,7 +213,7 @@ test('homepage loads correctly', async ({ page }) => {
   await expect(page.getByText('Modern testing patterns')).toBeVisible();
 });`,
 
-	user_journey: `// user-journey.test.js
+	user_journey: `// user-journey.test.ts
 import { expect, test } from '@playwright/test';
 
 test('complete user workflow', async ({ page }) => {
@@ -178,53 +232,60 @@ test('complete user workflow', async ({ page }) => {
   await expect(page.getByText('Buy groceries')).toHaveClass(/line-through/);
 });`,
 
-	cross_browser: `// cross-browser.config.js
-import { test, devices } from '@playwright/test';
+	cross_browser: `// playwright.config.ts
+import { defineConfig, devices } from '@playwright/test';
 
-const config = {
+export default defineConfig({
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
     { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
     { name: 'webkit', use: { ...devices['Desktop Safari'] } },
     { name: 'mobile', use: { ...devices['iPhone 12'] } }
   ]
-};
+});`,
 
-export default config;`,
-
-	performance: `// performance.test.js
+	performance: `// performance.test.ts
 import { expect, test } from '@playwright/test';
 
 test('page loads within performance budget', async ({ page }) => {
   await page.goto('/');
   
-  const metrics = await page.evaluate(() => performance.getEntriesByType('navigation')[0]);
+  // Check Core Web Vitals
+  const performance_metrics = await page.evaluate(() => {
+    return new Promise((resolve) => {
+      new PerformanceObserver((list) => {
+        const entries = list.getEntries();
+        const metrics = {};
+        
+        entries.forEach((entry) => {
+          if (entry.name === 'first-contentful-paint') {
+            metrics.fcp = entry.startTime;
+          }
+          if (entry.name === 'largest-contentful-paint') {
+            metrics.lcp = entry.startTime;
+          }
+        });
+        
+        resolve(metrics);
+      }).observe({ entryTypes: ['paint', 'largest-contentful-paint'] });
+    });
+  });
   
-  expect(metrics.loadEventEnd - metrics.loadEventStart).toBeLessThan(2000);
-  expect(metrics.domContentLoadedEventEnd - metrics.domContentLoadedEventStart).toBeLessThan(1000);
+  expect(performance_metrics.fcp).toBeLessThan(2000); // 2s budget
+  expect(performance_metrics.lcp).toBeLessThan(2500); // 2.5s budget
 });`,
 
-	accessibility: `// accessibility.test.js
+	accessibility: `// accessibility.test.ts
 import { expect, test } from '@playwright/test';
-// import { injectAxe, checkA11y } from 'axe-playwright';
+import AxeBuilder from '@axe-core/playwright';
 
-test('page meets accessibility standards', async ({ page }) => {
+test('page has no accessibility violations', async ({ page }) => {
   await page.goto('/');
   
-  // Check for proper heading structure
-  const h1 = page.getByRole('heading', { level: 1 });
-  await expect(h1).toBeVisible();
+  const accessibility_scan_results = await new AxeBuilder({ page }).analyze();
   
-  // Check for alt text on images
-  const images = page.getByRole('img');
-  for (const img of await images.all()) {
-    await expect(img).toHaveAttribute('alt');
-  }
-  
-  // Check keyboard navigation
-  await page.keyboard.press('Tab');
-  await expect(page.locator(':focus')).toBeVisible();
-});`,
+  expect(accessibility_scan_results.violations).toEqual([]);
+});`
 };
 
 export const component_examples = {
@@ -286,9 +347,10 @@ export const component_examples = {
 };
 
 export const ssr_test_examples = {
-	basic_ssr: `// Button.ssr.test.js
+	basic_ssr: `// button.ssr.test.ts
+import { expect, test } from 'vitest';
 import { render } from 'svelte/server';
-import Button from './Button.svelte';
+import Button from './button.svelte';
 
 test('should render without errors', () => {
   expect(() => render(Button)).not.toThrow();
@@ -296,7 +358,7 @@ test('should render without errors', () => {
 
 test('should render button text', () => {
   const { body } = render(Button, {
-    props: { children: 'Click me' }
+    props: { text: 'Click me' }
   });
   expect(body).toContain('Click me');
 });`,
@@ -320,31 +382,31 @@ test('renders button with correct text', async () => {
 
 	component_testing: `import { render } from 'vitest-browser-svelte';
 import { page } from 'vitest-browser/context';
-import { expect, test } from 'vitest';
+import { expect, test, vi } from 'vitest';
 import Button from './button.svelte';
 
-test('calls onClick when clicked', async () => {
-  const onClick = vi.fn();
-  render(Button, { props: { onClick } });
+test('calls on_click when clicked', async () => {
+  const on_click = vi.fn();
+  render(Button, { props: { on_click } });
   
   await page.getByRole('button').click();
-  expect(onClick).toHaveBeenCalled();
+  expect(on_click).toHaveBeenCalled();
 });`,
 
 	form_testing: `test('form validation works', async () => {
   render(LoginForm);
   
-  const emailInput = page.getByLabelText('Email');
-  const submitButton = page.getByRole('button', { name: 'Submit' });
+  const email_input = page.getByRole('textbox', { name: /email/i });
+  const submit_button = page.getByRole('button', { name: /submit/i });
   
-  await emailInput.fill('invalid-email');
-  await submitButton.click();
+  await email_input.fill('invalid-email');
+  await submit_button.click();
   
   await expect.element(page.getByText('Invalid email')).toBeInTheDocument();
 });`,
 
 	state_testing: `test('component state updates', async () => {
-  render(Counter, { initialCount: 0 });
+  render(Counter, { initial_count: 0 });
   
   const button = page.getByRole('button', { name: 'Increment' });
   const display = page.getByTestId('count-display');
@@ -372,7 +434,7 @@ test('returns correct response', async () => {
   const data = await response.json();
   
   expect(data.success).toBe(true);
-});`,
+});`
 };
 
 // Legacy export for backward compatibility
