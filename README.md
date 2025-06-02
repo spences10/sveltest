@@ -13,13 +13,16 @@
 
 A comprehensive example project demonstrating
 **vitest-browser-svelte** testing patterns for modern Svelte 5
-applications.
+applications. Built over a weekend as a companion piece to my blog
+post:
+[Migrating from @testing-library/svelte to vitest-browser-svelte](https://scottspence.com/posts/migrating-from-testing-library-svelte-to-vitest-browser-svelte).
 
 ## 🎯 What is Sveltest?
 
 Sveltest showcases real-world testing patterns using
 `vitest-browser-svelte` - the modern testing solution for Svelte
-applications. This project demonstrates:
+applications. This project demonstrates my opinionated approach to
+testing with:
 
 - **Client-side component testing** with real browser environments
 - **Server-side testing** for SvelteKit API routes and hooks
@@ -33,7 +36,7 @@ production breaks due to client-server mismatches. Forms send data in
 one format, servers expect another, and mocked tests miss the
 disconnect.
 
-**Our Solution**: This project demonstrates a multi-layer testing
+**My Solution**: This project demonstrates a multi-layer testing
 approach with minimal mocking:
 
 - **Shared validation logic** between client and server prevents
@@ -216,11 +219,16 @@ src/
 
 ## 🎨 Testing Conventions
 
-### Naming Conventions
+### My Opinionated Naming Conventions
+
+I use specific naming conventions to help me identify code I've
+written versus external libraries:
 
 - **Files**: kebab-case (e.g., `login-form.svelte.test.ts`)
-- **Variables**: snake_case (e.g., `submit_button`, `error_message`)
+- **Variables & Functions**: snake_case (e.g., `submit_button`,
+  `error_message`) - This helps me instantly recognize my own code
 - **Test IDs**: kebab-case (e.g., `data-testid="submit-button"`)
+- **Interfaces**: TitleCase (following TypeScript conventions)
 
 ### Test Organization
 
@@ -231,77 +239,20 @@ src/
 
 ## 📊 Test Coverage
 
-- **30+ test files** across client, server, and SSR
-- **Comprehensive component coverage** for all UI components
+- **32 test files** across client, server, and SSR
+- **576 passing tests** with comprehensive component coverage
 - **Full server-side testing** for API routes and hooks
 - **SSR validation** for critical rendering paths
 
-## 🔧 Configuration
-
-### Vitest Configuration (`vite.config.ts`)
-
-```typescript
-export default defineConfig({
-	plugins: [sveltekit()],
-	test: {
-		// Browser mode for component tests
-		browser: {
-			enabled: true,
-			name: 'chromium',
-			provider: 'playwright',
-		},
-		// Multiple test environments
-		workspace: [
-			{
-				test: {
-					include: ['**/*.svelte.test.ts'],
-					name: 'client',
-					browser: { enabled: true },
-				},
-			},
-			{
-				test: {
-					include: ['**/*.ssr.test.ts'],
-					name: 'ssr',
-					environment: 'node',
-				},
-			},
-			{
-				test: {
-					include: ['**/*.server.test.ts'],
-					name: 'server',
-					environment: 'node',
-				},
-			},
-		],
-	},
-});
-```
-
-## 🚀 CI/CD
-
-This project includes automated CI/CD with GitHub Actions that:
-
-- **Runs in Playwright Docker container** (v1.52.0) for consistent
-  browser testing
-- **Automatically verifies Playwright version sync** between
-  package.json and container
-- **Executes comprehensive test suite** including unit tests, E2E
-  tests, and type checking
-- **Performs code quality checks** with linting and Svelte-specific
-  validation
-- **Triggers on PRs and pushes** to main branch with daily scheduled
-  runs
-
-The workflow uses the official Microsoft Playwright container to
-ensure consistent browser environments and includes intelligent
-version checking to prevent mismatches between your local Playwright
-version and the CI environment.
-
 ## 🚀 Migration from @testing-library/svelte
 
-If you're migrating from `@testing-library/svelte`, see our
-comprehensive [Migration Guide](./MIGRATION_GUIDE.md) which documents:
+This project was inspired by my experience migrating from
+`@testing-library/svelte` to `vitest-browser-svelte`. Read the full
+story in my blog post:
+[Migrating from @testing-library/svelte to vitest-browser-svelte](https://scottspence.com/posts/migrating-from-testing-library-svelte-to-vitest-browser-svelte).
+
+You can also check the comprehensive
+[Migration Guide](./MIGRATION_GUIDE.md) which documents:
 
 - Step-by-step migration process
 - Before/after code examples
@@ -309,37 +260,18 @@ comprehensive [Migration Guide](./MIGRATION_GUIDE.md) which documents:
 - Performance improvements
 - Troubleshooting guide
 
-## 📚 Key Benefits
-
-### Developer Experience
-
-- ✅ Real browser environment testing
-- ✅ Better debugging with browser DevTools
-- ✅ More accurate user interaction simulation
-- ✅ Improved async operation testing
-
-### Testing Capabilities
-
-- ✅ True DOM manipulation testing
-- ✅ CSS-in-JS and style testing
-- ✅ File upload and download testing
-- ✅ Network request interception
-
-### Maintenance
-
-- ✅ Reduced test flakiness
-- ✅ Better alignment with production environment
-- ✅ Simplified test setup and configuration
-- ✅ Future-proof testing approach
-
 ## 🤝 Contributing
 
-This project serves as a reference implementation. Feel free to:
+This project serves as a reference implementation of my testing
+methodology. Feel free to:
 
 - Open issues for questions about testing patterns
 - Submit PRs to improve examples
 - Share your own testing patterns
 - Report bugs or suggest improvements
+
+Keep in mind that the conventions used here are opinionated and
+reflect my personal coding style preferences.
 
 ## 📄 License
 
@@ -347,6 +279,7 @@ MIT License - see [LICENSE](./LICENSE) for details.
 
 ## 🔗 Related Resources
 
+- [My Blog Post: Migrating from @testing-library/svelte to vitest-browser-svelte](https://scottspence.com/posts/migrating-from-testing-library-svelte-to-vitest-browser-svelte)
 - [vitest-browser-svelte Documentation](https://github.com/vitest-dev/vitest-browser-svelte)
 - [Vitest Browser Mode](https://vitest.dev/guide/browser.html)
 - [SvelteKit Testing](https://kit.svelte.dev/docs/testing)
@@ -354,5 +287,5 @@ MIT License - see [LICENSE](./LICENSE) for details.
 
 ---
 
-**Sveltest** - Comprehensive vitest-browser-svelte testing patterns
+**Sveltest** - My comprehensive vitest-browser-svelte testing patterns
 for modern Svelte applications.
