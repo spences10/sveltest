@@ -1,5 +1,6 @@
 <script lang="ts">
 	import CodeBlock from '$lib/components/code-block.svelte';
+	import { documentation_examples } from '$lib/examples/code-examples';
 	import {
 		ArrowRight,
 		BookOpen,
@@ -60,51 +61,30 @@
 	// Quick start examples
 	const quick_start_examples = [
 		{
-			title: 'Component Test',
+			title: 'Essential Imports',
 			description:
-				'Test a Svelte component with vitest-browser-svelte',
-			code: `import { render } from 'vitest-browser-svelte';
-import { page } from '@vitest/browser/context';
-import { expect, test } from 'vitest';
-import Button from './button.svelte';
-
-test('button renders correctly', async () => {
-  render(Button, { variant: 'primary' });
-  
-  const button = page.getByRole('button');
-  await expect.element(button).toBeInTheDocument();
-  await expect.element(button).toHaveClass('btn-primary');
-});`,
+				'Core imports for testing with vitest-browser-svelte',
+			code: documentation_examples.essential_imports,
 		},
 		{
-			title: 'SSR Test',
-			description:
-				'Test server-side rendering for SEO and performance',
-			code: `import { render } from 'svelte/server';
-import { expect, test } from 'vitest';
-import Page from './+page.svelte';
-
-test('page renders on server', () => {
-  const { body } = render(Page);
-  
-  expect(body).toContain('<h1>');
-  expect(body).toContain('Welcome');
-});`,
+			title: 'Your First Test',
+			description: 'Simple component test example',
+			code: documentation_examples.first_test,
 		},
 		{
-			title: 'API Test',
-			description: 'Test SvelteKit API routes and server functions',
-			code: `import { expect, test } from 'vitest';
-import { GET } from './+server.ts';
-
-test('API returns data', async () => {
-  const request = new Request('http://localhost/api/data');
-  const response = await GET({ request });
-  
-  expect(response.status).toBe(200);
-  const data = await response.json();
-  expect(data).toHaveProperty('message');
-});`,
+			title: 'Component Testing',
+			description: 'Testing component interactions and events',
+			code: documentation_examples.component_testing,
+		},
+		{
+			title: 'SSR Testing',
+			description: 'Server-side rendering tests',
+			code: documentation_examples.ssr_testing,
+		},
+		{
+			title: 'Server Testing',
+			description: 'Testing API routes and server functions',
+			code: documentation_examples.server_testing,
 		},
 	];
 
@@ -139,56 +119,6 @@ test('API returns data', async () => {
 	let active_section = $state('getting-started');
 	let copied_code = $state('');
 
-	// Code examples as variables to avoid parsing issues
-	const first_test_example = `import { render } from 'vitest-browser-svelte';
-import { page } from '@vitest/browser/context';
-import { expect, test } from 'vitest';
-
-test('my first test', async () => {
-  render(MyComponent);
-  await expect.element(page.getByText('Hello')).toBeInTheDocument();
-});`;
-
-	const component_testing_example = `describe('Button Component', () => {
-  test('renders with correct variant', async () => {
-    render(Button, { variant: 'primary' });
-    const button = page.getByRole('button');
-    await expect.element(button).toHaveClass('btn-primary');
-  });
-
-  test('handles click events', async () => {
-    const onClick = vi.fn();
-    render(Button, { onclick: onClick });
-    
-    await page.getByRole('button').click();
-    expect(onClick).toHaveBeenCalled();
-  });
-});`;
-
-	const form_testing_example = `test('form validation works', async () => {
-  render(LoginForm);
-  
-  const emailInput = page.getByLabelText('Email');
-  const submitButton = page.getByRole('button', { name: 'Submit' });
-  
-  await emailInput.fill('invalid-email');
-  await submitButton.click();
-  
-  await expect.element(page.getByText('Invalid email')).toBeInTheDocument();
-});`;
-
-	const state_testing_example = `test('component state updates', async () => {
-  render(Counter, { initialCount: 0 });
-  
-  const button = page.getByRole('button', { name: 'Increment' });
-  const display = page.getByTestId('count-display');
-  
-  await expect.element(display).toHaveTextContent('0');
-  
-  await button.click();
-  await expect.element(display).toHaveTextContent('1');
-});`;
-
 	// Additional code examples
 	const installation_commands = `pnpm install
 pnpm test        # Run all tests
@@ -196,12 +126,7 @@ pnpm test:client # Component tests in browser
 pnpm test:server # Server-side tests
 pnpm test:ssr    # SSR tests`;
 
-	const essential_imports = `import { describe, expect, test, vi } from 'vitest';
-import { render } from 'vitest-browser-svelte';
-import { page } from '@vitest/browser/context';
-import { createRawSnippet } from 'svelte';
-import { flushSync, untrack } from 'svelte';`;
-
+	// Additional code examples
 	const assertions_example = `await expect.element(element).toBeInTheDocument();
 await expect.element(element).toHaveClass('btn-primary');
 await expect.element(element).toHaveTextContent('Hello');
@@ -363,7 +288,7 @@ vi.mock('$lib/heavy-computation', () => ({
 							class="text-xl font-bold"
 							data-testid="example-title-{example.title
 								.toLowerCase()
-								.replace(' ', '-')}"
+								.replace(/\s+/g, '-')}"
 						>
 							{example.title}
 						</h3>
@@ -493,7 +418,7 @@ vi.mock('$lib/heavy-computation', () => ({
 						</p>
 
 						<CodeBlock
-							code={first_test_example}
+							code={documentation_examples.first_test}
 							lang="typescript"
 							theme="night-owl"
 						/>
@@ -510,7 +435,7 @@ vi.mock('$lib/heavy-computation', () => ({
 						</p>
 
 						<CodeBlock
-							code={component_testing_example}
+							code={documentation_examples.component_testing}
 							lang="typescript"
 							theme="night-owl"
 						/>
@@ -519,7 +444,7 @@ vi.mock('$lib/heavy-computation', () => ({
 						<p>Test form interactions and validation:</p>
 
 						<CodeBlock
-							code={form_testing_example}
+							code={documentation_examples.form_testing}
 							lang="typescript"
 							theme="night-owl"
 						/>
@@ -528,7 +453,7 @@ vi.mock('$lib/heavy-computation', () => ({
 						<p>Test reactive state and component updates:</p>
 
 						<CodeBlock
-							code={state_testing_example}
+							code={documentation_examples.state_testing}
 							lang="typescript"
 							theme="night-owl"
 						/>
@@ -541,7 +466,7 @@ vi.mock('$lib/heavy-computation', () => ({
 					<div class="prose prose-lg max-w-none">
 						<h4>Essential Imports</h4>
 						<CodeBlock
-							code={essential_imports}
+							code={documentation_examples.essential_imports}
 							lang="typescript"
 							theme="night-owl"
 						/>

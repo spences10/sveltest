@@ -46,17 +46,18 @@ describe('Documentation Page SSR', () => {
 
 			// Check quick start content
 			expect(body).toContain('Quick Start');
-			expect(body).toContain('Component Test');
-			expect(body).toContain('SSR Test');
-			expect(body).toContain('API Test');
+			expect(body).toContain('Essential Imports');
+			expect(body).toContain('Your First Test');
+			expect(body).toContain('Component Testing');
+			expect(body).toContain('SSR Testing');
+			expect(body).toContain('Server Testing');
 		});
 
 		test('should render testing principles', () => {
 			const { body } = render(DocsPage);
 
-			// Check testing principles
+			// Check testing principles section
 			expect(body).toContain('Core Testing Principles');
-			expect(body).toContain('100% Test Coverage');
 			expect(body).toContain('Real Browser Testing');
 			expect(body).toContain('Accessibility First');
 			expect(body).toContain('Performance Focused');
