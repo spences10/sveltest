@@ -158,6 +158,74 @@ render(Component, {
 });
 ```
 
+### Brittle Tests Breaking After Library Updates
+
+**Cause**: Tests checking exact implementation details instead of user
+value.
+
+**Example Error**:
+
+```
+Expected: containing "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+Received: "M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1..."
+```
+
+This happens when icon libraries update (Heroicons v1 → v2, Lucide
+updates) and SVG path data changes.
+
+**Solution**: Test semantic classes and user experience instead:
+
+```typescript
+// ❌ BRITTLE - Breaks when icon library updates
+test('should render success icon', () => {
+	const { body } = render(StatusIcon, { status: 'success' });
+	expect(body).toContain(
+		'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
+	);
+});
+
+// ✅ ROBUST - Tests user-visible styling and accessibility
+test('should indicate success to users', async () => {
+	render(StatusIcon, { status: 'success' });
+
+	// Test what users see and experience
+	await expect
+		.element(page.getByRole('img', { name: /success/i }))
+		.toBeInTheDocument();
+	await expect
+		.element(page.getByTestId('status-icon'))
+		.toHaveClass('text-success');
+
+	// Test semantic structure (survives library updates)
+	const { body } = render(StatusIcon, { status: 'success' });
+	expect(body).toContain('text-success'); // Color users see
+	expect(body).toContain('h-4 w-4'); // Size users see
+	expect(body).toContain('<svg'); // Icon is present
+	expect(body).toContain('aria-label'); // Accessible
+});
+```
+
+**Prevention Strategy**:
+
+- Test CSS classes that control appearance (`text-success`, `h-4 w-4`)
+- Test semantic HTML structure (`<svg>`, `role="img"`)
+- Test user interactions and accessibility
+- Avoid testing exact SVG paths, internal markup, or generated class
+  names
+
+**Common Brittle Patterns to Avoid**:
+
+```typescript
+// ❌ SVG path coordinates (change with icon library updates)
+expect(body).toContain('M9 12l2 2 4-4...');
+
+// ❌ Internal component IDs (change with build tools)
+expect(body).toContain('__svelte_component_123');
+
+// ❌ Generated CSS class names (change with CSS-in-JS)
+expect(body).toContain('styles__button__abc123');
+```
+
 ## Browser Environment Issues
 
 ### Playwright Installation Problems
@@ -549,6 +617,8 @@ export default defineConfig({
 - **"Element not found"** → Add waits, check selectors
 - **Test hangs** → Avoid SvelteKit form submits, add timeouts
 - **"Snippet type error"** → Use createRawSnippet or alternative props
+- **Tests break after library updates** → Don't test SVG paths, test
+  semantic classes instead
 
 ### Performance Red Flags
 

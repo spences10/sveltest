@@ -81,6 +81,157 @@ describe('TodoManager Component', () => {
 - **No forgotten tests**: All edge cases planned from start
 - **Team alignment**: Everyone sees the testing scope
 
+## Avoid Testing Implementation Details
+
+### The User Value vs Implementation Detail Anti-Pattern
+
+**NEVER** test exact implementation details that provide no user
+value:
+
+```typescript
+// ❌ BRITTLE ANTI-PATTERN - Tests exact SVG path data
+test('should render check icon', () => {
+	const { body } = render(StatusIcon, { status: 'success' });
+
+	// This breaks when icon libraries update, even if visually identical
+	expect(body).toContain(
+		'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
+	);
+});
+
+// ✅ ROBUST PATTERN - Tests semantic meaning and user experience
+test('should indicate success state to users', async () => {
+	render(StatusIcon, { status: 'success' });
+
+	// Test what users actually see and experience
+	await expect
+		.element(page.getByRole('img', { name: /success/i }))
+		.toBeInTheDocument();
+	await expect
+		.element(page.getByTestId('status-icon'))
+		.toHaveClass('text-success');
+
+	// Test semantic styling classes that indicate proper theming
+	const { body } = render(StatusIcon, { status: 'success' });
+	expect(body).toContain('text-success');
+	expect(body).toContain('h-4 w-4');
+	expect(body).toContain('<svg');
+	expect(body).toContain('stroke="currentColor"');
+});
+```
+
+### Why This Matters
+
+**Implementation Details Change Without User Impact**:
+
+- SVG path coordinates change when icon libraries update (Heroicons v1
+  → v2, Lucide updates)
+- Internal markup changes during refactoring
+- CSS-in-JS libraries may generate different class names
+- Component library updates may change DOM structure
+
+**Focus on User Value**:
+
+- Does the user see the right color? (test `text-success` class)
+- Does the user see the right size? (test `h-4 w-4` class)
+- Does the user understand the meaning? (test accessibility
+  attributes)
+- Does the component work correctly? (test interactions and state)
+
+### Test These ✅
+
+**Semantic Classes**: CSS classes that control user-visible appearance
+
+```typescript
+expect(body).toContain('text-success'); // Color indicates success
+expect(body).toContain('text-error'); // Color indicates error
+expect(body).toContain('h-4 w-4'); // Size is correct
+expect(body).toContain('opacity-50'); // Disabled state visual
+```
+
+**Semantic HTML Structure**: Elements that affect accessibility and
+meaning
+
+```typescript
+expect(body).toContain('<svg'); // Icon is present
+expect(body).toContain('role="img"'); // Proper accessibility
+expect(body).toContain('aria-label="Success"'); // Screen reader support
+expect(body).toContain('stroke="currentColor"'); // Respects theme colors
+```
+
+**User-Visible Behavior**: What users actually experience
+
+```typescript
+await expect
+	.element(page.getByRole('img', { name: /success/i }))
+	.toBeInTheDocument();
+await expect
+	.element(page.getByTestId('status-icon'))
+	.toHaveClass('text-success');
+await expect.element(button).toBeDisabled(); // Disabled state works
+```
+
+### Don't Test These ❌
+
+**Exact SVG Path Coordinates**: Mathematical details users don't see
+
+```typescript
+// ❌ Brittle - breaks when icon library updates
+expect(body).toContain(
+	'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
+);
+```
+
+**Internal Implementation Details**: Library-specific markup
+
+```typescript
+// ❌ Brittle - breaks when component library updates
+expect(body).toContain('__svelte_component_internal_123');
+expect(body).toContain('data-radix-collection-item');
+```
+
+**Generated Class Names**: CSS-in-JS or build tool outputs
+
+```typescript
+// ❌ Brittle - breaks when build tools change
+expect(body).toContain('styles__button__abc123');
+```
+
+### Real-World Example
+
+```typescript
+// ❌ BEFORE: Brittle test that broke during Heroicons v1 → v2 update
+test('should render success icon', () => {
+	const { body } = render(StatusIndicator, { status: 'success' });
+	expect(body).toContain(
+		'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
+	);
+});
+
+// ✅ AFTER: Robust test that survives library updates
+test('should indicate success to users', async () => {
+	render(StatusIndicator, { status: 'success' });
+
+	// Test user experience
+	await expect
+		.element(page.getByRole('img', { name: /success/i }))
+		.toBeInTheDocument();
+	await expect
+		.element(page.getByTestId('status-indicator'))
+		.toHaveClass('text-success');
+
+	// Test semantic structure
+	const { body } = render(StatusIndicator, { status: 'success' });
+	expect(body).toContain('text-success'); // Users see green color
+	expect(body).toContain('h-5 w-5'); // Users see correct size
+	expect(body).toContain('<svg'); // Icon is present
+	expect(body).toContain('aria-label'); // Accessible to screen readers
+});
+```
+
+This test survived the Heroicons library update because it focused on
+user value, not implementation details.
+
 ## Accessibility Testing
 
 ### Semantic Queries Priority

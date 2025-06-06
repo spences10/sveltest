@@ -63,6 +63,27 @@ test('button renders with correct variant', async () => {
 });
 ```
 
+## Testing Philosophy: User Value Over Implementation
+
+**Key Principle**: Test what users see and experience, not internal
+implementation details.
+
+```typescript
+// ❌ AVOID: Testing exact SVG paths (breaks when icon libraries update)
+expect(body).toContain(
+	'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
+);
+
+// ✅ PREFER: Testing semantic classes and user experience
+expect(body).toContain('text-success'); // User sees green color
+await expect
+	.element(page.getByRole('img', { name: /success/i }))
+	.toBeInTheDocument();
+```
+
+This approach keeps tests robust through library updates and
+refactoring while ensuring they validate real user value.
+
 ## Project Structure
 
 ```
