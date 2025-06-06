@@ -2,12 +2,12 @@
 	import CodeBlock from '$lib/components/code-block.svelte';
 	import { documentation_examples } from '$lib/examples/code-examples';
 	import {
-		ArrowRight,
+		Arrow,
 		BookOpen,
 		CheckCircle,
 		Clipboard,
-		Code,
 		Eye,
+		Hashtag,
 		LightningBolt,
 		Settings,
 	} from '$lib/icons';
@@ -18,9 +18,9 @@
 	// Icon mapping for topics
 	const icon_map = {
 		'getting-started': BookOpen,
-		'testing-patterns': Code,
+		'testing-patterns': Hashtag,
 		'api-reference': Settings,
-		'migration-guide': ArrowRight,
+		'migration-guide': Arrow,
 		troubleshooting: CheckCircle,
 		'best-practices': LightningBolt,
 	};
@@ -288,7 +288,8 @@ vi.mock('$lib/heavy-computation', () => ({
 						>
 							<section.icon class_names="h-8 w-8" />
 						</div>
-						<ArrowRight
+						<Arrow
+							direction="right"
 							class_names="h-5 w-5 text-base-content/40 group-hover:text-{section.color} transition-colors group-hover:translate-x-1 transform"
 						/>
 					</div>
@@ -396,7 +397,8 @@ vi.mock('$lib/heavy-computation', () => ({
 						class="flex items-center text-{section.color} font-medium transition-all group-hover:gap-2"
 					>
 						<span>Read Guide</span>
-						<ArrowRight
+						<Arrow
+							direction="right"
 							class_names="h-4 w-4 transition-transform group-hover:translate-x-1"
 						/>
 					</div>
@@ -910,7 +912,7 @@ vi.mock('$lib/heavy-computation', () => ({
 				class="btn btn-primary btn-lg"
 				role="button"
 			>
-				<Code class_names="h-5 w-5" />
+				<Hashtag class_names="h-5 w-5" />
 				View Examples
 			</a>
 			<a
