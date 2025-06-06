@@ -451,7 +451,7 @@ test.describe('Accessibility Tests', () => {
 		page,
 	}) => {
 		const pages = [
-			{ url: '/', heading: 'TestSuite Pro' },
+			{ url: '/', heading: 'Sveltest' },
 			{ url: '/examples', heading: 'Testing Patterns' },
 			{ url: '/docs', heading: /Documentation|Docs|Guide/ },
 		];
@@ -522,7 +522,7 @@ test.describe('Accessibility Tests', () => {
 
 			// Page should still be functional with reduced motion
 			await expect(
-				page.getByRole('heading', { name: 'TestSuite Pro' }),
+				page.getByRole('heading', { name: 'Sveltest' }),
 			).toBeVisible();
 		});
 
@@ -532,7 +532,7 @@ test.describe('Accessibility Tests', () => {
 
 			// Page should work with animations enabled
 			await expect(
-				page.getByRole('heading', { name: 'TestSuite Pro' }),
+				page.getByRole('heading', { name: 'Sveltest' }),
 			).toBeVisible();
 		});
 	});

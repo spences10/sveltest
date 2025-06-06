@@ -83,7 +83,7 @@ describe('Nav Component SSR', () => {
 			// Test core navigation structure
 			expect(body).toContain('<nav');
 			expect(body).toContain('navbar');
-			expect(body).toContain('TestSuite Pro');
+			expect(body).toContain('Sveltest');
 		});
 
 		test('should render all main navigation links', () => {
@@ -169,7 +169,7 @@ describe('Nav Component SSR', () => {
 		test('should render brand logo and title', () => {
 			const { body } = render(Nav);
 
-			expect(body).toContain('TestSuite Pro');
+			expect(body).toContain('Sveltest');
 			expect(body).toContain('href="/"'); // Brand link to home
 		});
 
@@ -247,7 +247,7 @@ describe('Nav Component SSR', () => {
 		test('should render without errors when page context is available', () => {
 			expect(() => {
 				const { body } = render(Nav);
-				expect(body).toContain('TestSuite Pro');
+				expect(body).toContain('Sveltest');
 			}).not.toThrow();
 		});
 	});

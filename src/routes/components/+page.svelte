@@ -137,7 +137,7 @@
 </script>
 
 <svelte:head>
-	<title>Components - TestSuite Pro</title>
+	<title>Components - Sveltest</title>
 	<meta
 		name="description"
 		content="Interactive component library showcasing all available UI components with live examples and customizable props."

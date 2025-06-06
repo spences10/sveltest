@@ -2,7 +2,7 @@
 	import CodeBlock from '$lib/components/code-block.svelte';
 	import { e2e_test_examples } from '$lib/examples/code-examples';
 	import {
-		ArrowLongRight,
+		Arrow,
 		Calculator,
 		CheckCircle,
 		Clock,
@@ -174,7 +174,7 @@
 </script>
 
 <svelte:head>
-	<title>E2E Testing - TestSuite Pro</title>
+	<title>E2E Testing - Sveltest</title>
 	<meta
 		name="description"
 		content="Learn end-to-end testing patterns with Playwright - user journeys, cross-browser testing, performance monitoring, and accessibility validation"
@@ -584,7 +584,7 @@
 							href="/components"
 							class="btn btn-outline gap-2 transition-all duration-200 hover:scale-105"
 						>
-							<ArrowLongRight class_names="h-4 w-4" />
+							<Arrow direction="right" class_names="h-4 w-4" />
 							Component Showcase
 						</a>
 					</div>

@@ -12,8 +12,7 @@
 </script>
 
 <svelte:head>
-	<title>TestSuite Pro - Comprehensive Testing Suite for Svelte</title
-	>
+	<title>Sveltest - Comprehensive Testing Suite for Svelte</title>
 	<meta
 		name="description"
 		content="A comprehensive collection of testing patterns and examples for modern Svelte applications"
@@ -50,7 +49,7 @@
 					<span
 						class="text-base-content/70 text-sm font-medium tracking-wider uppercase"
 					>
-						Professional Testing Suite
+						Battle-Tested in Production
 					</span>
 				</div>
 
@@ -59,7 +58,7 @@
 					<h1
 						class="from-primary via-secondary to-accent bg-gradient-to-r bg-clip-text text-7xl leading-tight font-black text-transparent lg:text-8xl"
 					>
-						TestSuite Pro
+						Sveltest
 					</h1>
 					<p
 						class="text-base-content/80 mx-auto max-w-4xl text-2xl leading-relaxed font-light lg:text-3xl"

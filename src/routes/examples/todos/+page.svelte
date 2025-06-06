@@ -1,10 +1,10 @@
 <script lang="ts">
 	import TodoManager from '$lib/components/todo-manager.svelte';
-	import { ArrowLeft, Document } from '$lib/icons';
+	import { Arrow, Document } from '$lib/icons';
 </script>
 
 <svelte:head>
-	<title>Form Actions Testing - TestSuite Pro</title>
+	<title>Form Actions Testing - Sveltest</title>
 	<meta
 		name="description"
 		content="Interactive todo demonstration for testing form actions with server-side validation"
@@ -61,7 +61,7 @@
 		<!-- Navigation -->
 		<div class="mt-8 text-center">
 			<a href="/examples" class="btn btn-outline gap-2">
-				<ArrowLeft class_names="h-4 w-4" />
+				<Arrow direction="left" class_names="h-4 w-4" />
 				Back to Examples
 			</a>
 		</div>

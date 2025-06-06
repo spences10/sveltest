@@ -10,7 +10,7 @@
 </script>
 
 <svelte:head>
-	<title>Todo Manager - TestSuite Pro</title>
+	<title>Todo Manager - Sveltest</title>
 	<meta
 		name="description"
 		content="Interactive todo management with comprehensive testing examples"

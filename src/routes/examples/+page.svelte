@@ -1,13 +1,13 @@
 <script lang="ts">
 	import {
-		ArrowLongRight,
+		Arrow,
 		BarChart,
 		BookOpen,
 		Calculator,
 		CheckCircle,
-		Code,
 		Document,
 		Eye,
+		Hashtag,
 		LightningBolt,
 		Server,
 		Settings,
@@ -15,7 +15,7 @@
 </script>
 
 <svelte:head>
-	<title>Testing Examples - TestSuite Pro</title>
+	<title>Testing Examples - Sveltest</title>
 	<meta
 		name="description"
 		content="Comprehensive testing examples and patterns for Svelte applications"
@@ -58,7 +58,7 @@
 							href="/examples/unit"
 							class="btn btn-outline btn-lg gap-2 transition-all duration-200 hover:scale-105"
 						>
-							<Code class_names="h-5 w-5" />
+							<Hashtag class_names="h-5 w-5" />
 							Unit Tests
 						</a>
 						<a
@@ -72,7 +72,7 @@
 							href="/todos"
 							class="btn btn-outline btn-lg gap-2 transition-all duration-200 hover:scale-105"
 						>
-							<ArrowLongRight class_names="h-5 w-5" />
+							<Arrow direction="right" class_names="h-5 w-5" />
 							Live Demo
 						</a>
 						<a
@@ -102,7 +102,7 @@
 							<div
 								class="from-primary/20 to-primary/10 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br transition-transform duration-300 group-hover:scale-110"
 							>
-								<Code class_names="text-primary h-8 w-8" />
+								<Hashtag class_names="text-primary h-8 w-8" />
 							</div>
 							<h3 class="mb-4 text-2xl font-bold">Unit Testing</h3>
 							<p class="text-base-content/70 mb-6 leading-relaxed">
@@ -122,7 +122,7 @@
 								href="/examples/unit"
 								class="btn btn-primary gap-2 transition-all duration-200 hover:scale-105"
 							>
-								<ArrowLongRight class_names="h-4 w-4" />
+								<Arrow direction="right" class_names="h-4 w-4" />
 								View Examples
 							</a>
 						</div>
@@ -162,7 +162,7 @@
 								href="/examples/integration"
 								class="btn btn-secondary gap-2 transition-all duration-200 hover:scale-105"
 							>
-								<ArrowLongRight class_names="h-4 w-4" />
+								<Arrow direction="right" class_names="h-4 w-4" />
 								View Examples
 							</a>
 						</div>
@@ -200,7 +200,7 @@
 								href="/examples/e2e"
 								class="btn btn-accent gap-2 transition-all duration-200 hover:scale-105"
 							>
-								<ArrowLongRight class_names="h-4 w-4" />
+								<Arrow direction="right" class_names="h-4 w-4" />
 								View Examples
 							</a>
 						</div>
@@ -378,14 +378,14 @@
 							href="/examples/unit"
 							class="btn btn-primary btn-lg gap-2 px-8"
 						>
-							<Code class_names="h-5 w-5" />
+							<Hashtag class_names="h-5 w-5" />
 							Start with Unit Tests
 						</a>
 						<a
 							href="/todos"
 							class="btn btn-outline btn-lg gap-2 px-8"
 						>
-							<ArrowLongRight class_names="h-5 w-5" />
+							<Arrow direction="right" class_names="h-5 w-5" />
 							Try Live Demo
 						</a>
 					</div>

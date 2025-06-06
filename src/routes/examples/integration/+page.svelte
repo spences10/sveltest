@@ -2,11 +2,11 @@
 	import CodeBlock from '$lib/components/code-block.svelte';
 	import { integration_test_examples } from '$lib/examples/code-examples';
 	import {
-		ArrowLongRight,
+		Arrow,
 		BarChart,
 		CheckCircle,
-		Code,
 		Eye,
+		Hashtag,
 		LightningBolt,
 		Server,
 		Settings,
@@ -18,7 +18,7 @@
 			id: 'component-integration',
 			title: 'Component Integration',
 			description: 'Testing how multiple components work together',
-			icon: Code,
+			icon: Hashtag,
 			color: 'primary',
 			examples: [
 				'Form + Input + Button workflows',
@@ -118,7 +118,7 @@
 </script>
 
 <svelte:head>
-	<title>Integration Testing - TestSuite Pro</title>
+	<title>Integration Testing - Sveltest</title>
 	<meta
 		name="description"
 		content="Learn integration testing patterns for Svelte applications - component integration, API testing, state management, and form workflows"
@@ -426,7 +426,7 @@
 								href="/todos"
 								class="btn btn-outline gap-2 transition-all duration-200 hover:scale-105"
 							>
-								<ArrowLongRight class_names="h-4 w-4" />
+								<Arrow direction="right" class_names="h-4 w-4" />
 								Try Demo
 							</a>
 						</div>
@@ -441,7 +441,7 @@
 							<div
 								class="from-secondary/20 to-secondary/10 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br"
 							>
-								<Code class_names="text-secondary h-6 w-6" />
+								<Hashtag class_names="text-secondary h-6 w-6" />
 							</div>
 							<h3 class="text-xl font-bold">Component Showcase</h3>
 						</div>
@@ -462,7 +462,7 @@
 								href="/examples/unit"
 								class="btn btn-outline gap-2 transition-all duration-200 hover:scale-105"
 							>
-								<ArrowLongRight class_names="h-4 w-4" />
+								<Arrow direction="right" class_names="h-4 w-4" />
 								Unit Tests
 							</a>
 						</div>
@@ -496,7 +496,7 @@
 							href="/docs"
 							class="btn btn-outline gap-2 transition-all duration-200 hover:scale-105"
 						>
-							<ArrowLongRight class_names="h-4 w-4" />
+							<Arrow direction="right" class_names="h-4 w-4" />
 							View Documentation
 						</a>
 					</div>

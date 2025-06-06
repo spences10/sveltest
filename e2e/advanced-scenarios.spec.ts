@@ -22,7 +22,7 @@ test.describe('Advanced E2E Scenarios', () => {
 			await page.context().setOffline(false);
 			await page.goto('/');
 			await expect(
-				page.getByRole('heading', { name: 'TestSuite Pro' }),
+				page.getByRole('heading', { name: 'Sveltest' }),
 			).toBeVisible();
 		});
 	});
@@ -38,7 +38,7 @@ test.describe('Advanced E2E Scenarios', () => {
 
 			await page.goto('/');
 			await expect(
-				page.getByRole('heading', { name: 'TestSuite Pro' }),
+				page.getByRole('heading', { name: 'Sveltest' }),
 			).toBeVisible();
 		});
 	});
@@ -167,7 +167,7 @@ test.describe('Advanced E2E Scenarios', () => {
 		await test.step('Navigate through multiple pages', async () => {
 			await page.goto('/');
 			await expect(
-				page.getByRole('heading', { name: 'TestSuite Pro' }),
+				page.getByRole('heading', { name: 'Sveltest' }),
 			).toBeVisible({ timeout: 5000 });
 
 			await page.goto('/examples');
@@ -202,7 +202,7 @@ test.describe('Advanced E2E Scenarios', () => {
 			// Go back to homepage
 			await page.goBack();
 			await expect(
-				page.getByRole('heading', { name: 'TestSuite Pro' }),
+				page.getByRole('heading', { name: 'Sveltest' }),
 			).toBeVisible();
 
 			// Go forward to examples
@@ -231,7 +231,7 @@ test.describe('Advanced E2E Scenarios', () => {
 
 				await page.goto('/');
 				await expect(
-					page.getByRole('heading', { name: 'TestSuite Pro' }),
+					page.getByRole('heading', { name: 'Sveltest' }),
 				).toBeVisible();
 
 				// Check that content is accessible at this viewport

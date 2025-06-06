@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-	<title>404 - Page Not Found | TestSuite Pro</title>
+	<title>404 - Page Not Found | Sveltest</title>
 	<meta
 		name="description"
 		content="The page you're looking for could not be found."

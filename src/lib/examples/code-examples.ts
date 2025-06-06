@@ -121,7 +121,7 @@ test('button has proper accessibility attributes', async () => {
   await expect.element(button).toBeInTheDocument();
   await expect.element(button).toBeEnabled();
   await expect.element(button).toHaveAccessibleName('Save Changes');
-});`
+});`,
 };
 
 export const integration_test_examples = {
@@ -199,7 +199,7 @@ test('should complete multi-step workflow', async () => {
   
   await page.getByRole('button', { name: /submit/i }).click();
   await expect.element(page.getByText('Form submitted successfully')).toBeVisible();
-});`
+});`,
 };
 
 export const e2e_test_examples = {
@@ -209,7 +209,7 @@ import { expect, test } from '@playwright/test';
 test('homepage loads correctly', async ({ page }) => {
   await page.goto('/');
   
-  await expect(page.getByRole('heading', { name: 'TestSuite Pro' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Sveltest' })).toBeVisible();
   await expect(page.getByText('Modern testing patterns')).toBeVisible();
 });`,
 
@@ -285,7 +285,7 @@ test('page has no accessibility violations', async ({ page }) => {
   const accessibility_scan_results = await new AxeBuilder({ page }).analyze();
   
   expect(accessibility_scan_results.violations).toEqual([]);
-});`
+});`,
 };
 
 export const component_examples = {
@@ -434,7 +434,7 @@ test('returns correct response', async () => {
   const data = await response.json();
   
   expect(data.success).toBe(true);
-});`
+});`,
 };
 
 // Legacy export for backward compatibility

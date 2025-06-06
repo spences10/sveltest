@@ -9,7 +9,6 @@
 		Home,
 		Menu,
 		MoreVertical,
-		Settings,
 	} from '$lib/icons';
 
 	const main_links = [
@@ -77,7 +76,7 @@
 			<span
 				class="from-primary to-secondary bg-gradient-to-r bg-clip-text text-transparent"
 			>
-				TestSuite Pro
+				Sveltest
 			</span>
 		</a>
 	</div>

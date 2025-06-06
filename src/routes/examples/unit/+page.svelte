@@ -3,20 +3,20 @@
 	import CodeBlock from '$lib/components/code-block.svelte';
 	import { unit_test_examples } from '$lib/examples/code-examples';
 	import {
-		ArrowLongRight,
+		Arrow,
 		BarChart,
 		BookOpen,
 		Calculator,
 		CheckCircle,
-		Code,
 		Eye,
+		Hashtag,
 		LightningBolt,
 		Settings,
 	} from '$lib/icons';
 </script>
 
 <svelte:head>
-	<title>Unit Testing Examples - TestSuite Pro</title>
+	<title>Unit Testing Examples - Sveltest</title>
 	<meta
 		name="description"
 		content="Learn unit testing with practical examples using Vitest and Testing Library"
@@ -111,7 +111,7 @@
 								<h3
 									class="mb-4 flex items-center gap-2 text-lg font-bold"
 								>
-									<Code class_names="text-info h-5 w-5" />
+									<Hashtag class_names="text-info h-5 w-5" />
 									Testing Tools
 								</h3>
 								<div class="space-y-2">
@@ -253,7 +253,7 @@
 							<div
 								class="bg-success/20 flex h-10 w-10 items-center justify-center rounded-lg"
 							>
-								<Code class_names="text-success h-5 w-5" />
+								<Hashtag class_names="text-success h-5 w-5" />
 							</div>
 							<h3 class="text-xl font-bold">Basic Function Test</h3>
 						</div>
@@ -373,7 +373,7 @@
 							href="/todos"
 							class="btn btn-outline gap-2 transition-all duration-200 hover:scale-105"
 						>
-							<ArrowLongRight class_names="h-4 w-4" />
+							<Arrow direction="right" class_names="h-4 w-4" />
 							Try Live Demo
 						</a>
 					</div>

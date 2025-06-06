@@ -47,7 +47,7 @@ describe('E2E Testing Page SSR', () => {
 
 			// Title tag is critical for SEO and browser tabs
 			expect(head).toContain('<title>');
-			expect(head).toContain('E2E Testing - TestSuite Pro');
+			expect(head).toContain('E2E Testing - Sveltest');
 
 			// Meta description helps search engines show relevant snippets
 			expect(head).toContain('meta name="description"');

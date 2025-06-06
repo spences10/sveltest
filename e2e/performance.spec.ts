@@ -14,7 +14,7 @@ test.describe('Performance Tests', () => {
 		await test.step('Check Largest Contentful Paint (LCP)', async () => {
 			// Wait for main content to be visible
 			await expect(
-				page.getByRole('heading', { name: 'TestSuite Pro' }),
+				page.getByRole('heading', { name: 'Sveltest' }),
 			).toBeVisible();
 
 			// Measure LCP using Performance API
@@ -144,7 +144,7 @@ test.describe('Performance Tests', () => {
 			// Verify all pages loaded successfully
 			for (const p of pages) {
 				await expect(
-					p.getByRole('heading', { name: 'TestSuite Pro' }),
+					p.getByRole('heading', { name: 'Sveltest' }),
 				).toBeVisible();
 			}
 
@@ -173,7 +173,7 @@ test.describe('Performance Tests', () => {
 					// Verify page loaded with specific heading
 					if (pagePath === '/') {
 						await expect(
-							page.getByRole('heading', { name: 'TestSuite Pro' }),
+							page.getByRole('heading', { name: 'Sveltest' }),
 						).toBeVisible();
 					} else if (pagePath === '/examples') {
 						await expect(
