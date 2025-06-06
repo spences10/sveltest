@@ -47,42 +47,54 @@ Our project has rich testing documentation across multiple formats:
 - Advanced testing patterns and best practices
 - AI assistant rules for consistent testing
 
-## Implementation Strategy
+## Implementation Strategy (Updated)
 
-### Phase 1: Create Markdown Documentation Pages
+### Phase 1: Create Centralized Markdown Content
 
-Create standalone markdown files that can be served as routes and used
-for llms.txt:
+Create a centralized content directory that both documentation pages
+and llms.txt generation can use:
 
-1. **src/routes/docs/getting-started.md** - Setup and first test
-2. **src/routes/docs/testing-patterns.md** - Component, SSR, server
-   patterns
-3. **src/routes/docs/api-reference.md** - All utilities and helpers
-4. **src/routes/docs/migration-guide.md** - Link to existing
-   MIGRATION_GUIDE.md
-5. **src/routes/docs/best-practices.md** - Advanced patterns and
-   optimization
-6. **src/routes/docs/troubleshooting.md** - Common issues and
-   solutions
+```
+src/copy/
+├── getting-started.md
+├── testing-patterns.md
+├── api-reference.md
+├── migration-guide.md
+├── best-practices.md
+└── troubleshooting.md
+```
 
-### Phase 2: Create SvelteKit Routes for Documentation
+This approach provides:
 
-Use SvelteKit's file-based routing to serve documentation:
+- **Single source of truth** for all documentation content
+- **Easy maintenance** - update content in one place
+- **Reusability** - same content used by web pages and llms.txt
+- **Version control** - track content changes separately from styling
+
+### Phase 2: Create SvelteKit Documentation Routes
+
+Use your proven pattern from `/test` for documentation pages:
 
 ```
 src/routes/docs/
 ├── getting-started/
-│   └── +page.md
+│   ├── +page.svelte  (styling + layout)
+│   └── +page.ts      (loads from src/copy/getting-started.md)
 ├── testing-patterns/
-│   └── +page.md
+│   ├── +page.svelte
+│   └── +page.ts      (loads from src/copy/testing-patterns.md)
 ├── api-reference/
-│   └── +page.md
+│   ├── +page.svelte
+│   └── +page.ts      (loads from src/copy/api-reference.md)
 ├── migration-guide/
-│   └── +page.md
+│   ├── +page.svelte
+│   └── +page.ts      (loads from src/copy/migration-guide.md)
 ├── best-practices/
-│   └── +page.md
+│   ├── +page.svelte
+│   └── +page.ts      (loads from src/copy/best-practices.md)
 └── troubleshooting/
-    └── +page.md
+    ├── +page.svelte
+    └── +page.ts      (loads from src/copy/troubleshooting.md)
 ```
 
 ### Phase 3: Implement llms.txt Routes
@@ -184,102 +196,184 @@ export const topics: Topic[] = [
 	},
 ];
 
-export function generate_llm_content(
+export async function generate_llm_content(
 	options: GenerateLlmContentOptions,
-): string {
-	// Implementation will read markdown files and generate structured content
+): Promise<string> {
+	if (options.include_full_content) {
+		// Generate llms-full.txt with all content
+		let content = '# Sveltest Testing Documentation\n\n';
+		content +=
+			'> Comprehensive vitest-browser-svelte testing patterns for modern Svelte 5 applications. Real-world examples demonstrating client-server alignment, component testing in actual browsers, SSR validation, and migration from @testing-library/svelte.\n\n';
+
+		for (const topic of options.topics) {
+			try {
+				// Import the markdown file and extract its content
+				const markdownModule = await import(
+					`../../copy/${topic.slug}.md?raw`
+				);
+				content += `\n# ${topic.title}\n\n`;
+				content += markdownModule.default;
+				content += '\n';
+			} catch (error) {
+				console.warn(
+					`Could not load content for ${topic.slug}:`,
+					error,
+				);
+			}
+		}
+
+		return content;
+	} else {
+		// Generate llms.txt index with links
+		return generate_llms_index(options.topics);
+	}
+}
+
+function generate_llms_index(topics: Topic[]): string {
+	let content = '# Sveltest Testing Documentation\n\n';
+	content +=
+		'> Comprehensive vitest-browser-svelte testing patterns for modern Svelte 5 applications. Real-world examples demonstrating client-server alignment, component testing in actual browsers, SSR validation, and migration from @testing-library/svelte.\n\n';
+
+	content += '## Getting Started\n\n';
+	content +=
+		'- [Installation & Setup](/docs/getting-started): Initial project setup, dependencies, and configuration\n';
+	content +=
+		'- [Your First Test](/docs/getting-started#first-test): Writing your first component test\n';
+	content +=
+		'- [Project Structure](/docs/getting-started#structure): Recommended file organization\n\n';
+
+	content += '## Testing Patterns\n\n';
+	content +=
+		'- [Component Testing](/docs/testing-patterns#component): Real browser testing with vitest-browser-svelte\n';
+	content +=
+		'- [SSR Testing](/docs/testing-patterns#ssr): Server-side rendering validation\n';
+	content +=
+		'- [Server Testing](/docs/testing-patterns#server): API routes, hooks, and server functions\n';
+	content +=
+		'- [Integration Testing](/docs/testing-patterns#integration): End-to-end testing patterns\n\n';
+
+	content += '## API Reference\n\n';
+	content +=
+		'- [Essential Imports](/docs/api-reference#imports): Core testing utilities and functions\n';
+	content +=
+		'- [Locators & Queries](/docs/api-reference#locators): Finding elements with semantic queries\n';
+	content +=
+		'- [Assertions](/docs/api-reference#assertions): Testing element states and properties\n';
+	content +=
+		'- [User Interactions](/docs/api-reference#interactions): Simulating user events\n\n';
+
+	content += '## Migration Guide\n\n';
+	content +=
+		'- [From @testing-library/svelte](/docs/migration-guide): Complete step-by-step migration process\n';
+	content +=
+		'- [Common Patterns](/docs/migration-guide#patterns): Before/after code examples\n';
+	content +=
+		'- [Troubleshooting Migration](/docs/migration-guide#troubleshooting): Solving common migration issues\n\n';
+
+	content += '## Best Practices\n\n';
+	content +=
+		'- [Foundation First Approach](/docs/best-practices#foundation-first): 100% test coverage strategy\n';
+	content +=
+		'- [Accessibility Testing](/docs/best-practices#accessibility): Semantic queries and ARIA testing\n';
+	content +=
+		'- [Performance Optimization](/docs/best-practices#performance): Fast test execution patterns\n';
+	content +=
+		'- [Team Collaboration](/docs/best-practices#team): AI assistant rules and conventions\n\n';
+
+	content += '## Troubleshooting\n\n';
+	content +=
+		'- [Common Errors](/docs/troubleshooting#errors): Solutions for frequent issues\n';
+	content +=
+		'- [Environment Setup](/docs/troubleshooting#environment): Configuration problems\n';
+	content +=
+		'- [Browser Issues](/docs/troubleshooting#browser): Playwright and browser-specific fixes\n\n';
+
+	content += '## Optional\n\n';
+	content +=
+		'- [Example Components](/examples): Live component implementations\n';
+	content +=
+		'- [GitHub Repository](https://github.com/spences10/sveltest): Full source code\n';
+	content +=
+		'- [Blog Post](https://scottspence.com/posts/migrating-from-testing-library-svelte-to-vitest-browser-svelte): Migration story\n';
+
+	return content;
 }
 ```
 
-## Expected File Structure
+## Page Load Function Pattern
 
-```
-# Sveltest Testing Documentation
+Based on your test implementation, each documentation page will use
+this pattern:
 
-> Comprehensive vitest-browser-svelte testing patterns for modern Svelte 5 applications. Real-world examples demonstrating client-server alignment, component testing in actual browsers, SSR validation, and migration from @testing-library/svelte.
-
-## Getting Started
-
-- [Installation & Setup](/docs/getting-started): Initial project setup, dependencies, and configuration
-- [Your First Test](/docs/getting-started#first-test): Writing your first component test
-- [Project Structure](/docs/getting-started#structure): Recommended file organization
-
-## Testing Patterns
-
-- [Component Testing](/docs/testing-patterns#component): Real browser testing with vitest-browser-svelte
-- [SSR Testing](/docs/testing-patterns#ssr): Server-side rendering validation
-- [Server Testing](/docs/testing-patterns#server): API routes, hooks, and server functions
-- [Integration Testing](/docs/testing-patterns#integration): End-to-end testing patterns
-
-## API Reference
-
-- [Essential Imports](/docs/api-reference#imports): Core testing utilities and functions
-- [Locators & Queries](/docs/api-reference#locators): Finding elements with semantic queries
-- [Assertions](/docs/api-reference#assertions): Testing element states and properties
-- [User Interactions](/docs/api-reference#interactions): Simulating user events
-
-## Migration Guide
-
-- [From @testing-library/svelte](/docs/migration-guide): Complete step-by-step migration process
-- [Common Patterns](/docs/migration-guide#patterns): Before/after code examples
-- [Troubleshooting Migration](/docs/migration-guide#troubleshooting): Solving common migration issues
-
-## Best Practices
-
-- [Foundation First Approach](/docs/best-practices#foundation-first): 100% test coverage strategy
-- [Accessibility Testing](/docs/best-practices#accessibility): Semantic queries and ARIA testing
-- [Performance Optimization](/docs/best-practices#performance): Fast test execution patterns
-- [Team Collaboration](/docs/best-practices#team): AI assistant rules and conventions
-
-## Troubleshooting
-
-- [Common Errors](/docs/troubleshooting#errors): Solutions for frequent issues
-- [Environment Setup](/docs/troubleshooting#environment): Configuration problems
-- [Browser Issues](/docs/troubleshooting#browser): Playwright and browser-specific fixes
-
-## Optional
-
-- [Example Components](/examples): Live component implementations
-- [GitHub Repository](https://github.com/spences10/sveltest): Full source code
-- [Blog Post](https://scottspence.com/posts/migrating-from-testing-library-svelte-to-vitest-browser-svelte): Migration story
-```
-
-## Implementation Steps
-
-### Step 1: Extract Documentation Content
-
-1. **Extract key sections from README.md** into individual markdown
-   files
-2. **Convert MIGRATION_GUIDE.md** content into structured
-   documentation
-3. **Extract testing patterns** from the Svelte documentation page
-4. **Document API reference** from actual test files and utilities
-
-### Step 2: Create Markdown Documentation Files
-
-Use mdsvex to create `.md` files that can be rendered as SvelteKit
-pages:
+**src/routes/docs/[topic]/+page.ts**
 
 ```typescript
-// svelte.config.js
-import { mdsvex } from 'mdsvex';
+import { error } from '@sveltejs/kit';
 
-const config = {
-	extensions: ['.svelte', '.md'],
-	preprocess: [
-		mdsvex({
-			extensions: ['.md'],
-		}),
-	],
+export const load = async ({ params }) => {
+	const slug = params.topic || 'getting-started';
+	try {
+		const Copy = await import(`../../../copy/${slug}.md`);
+		return {
+			Copy: Copy.default,
+			slug,
+		};
+	} catch (e) {
+		error(404, `Documentation for "${slug}" not found`);
+	}
 };
 ```
 
-### Step 3: Create Server Routes
+**src/routes/docs/[topic]/+page.svelte**
 
-1. Implement `src/routes/llms.txt/+server.ts`
-2. Implement `src/routes/llms-full.txt/+server.ts`
-3. Create the content generation library
-4. Add proper caching and headers
+```svelte
+<script lang="ts">
+	const { data } = $props();
+	const { Copy, slug } = data;
+</script>
+
+<svelte:head>
+	<title
+		>{slug.replace('-', ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
+		- Sveltest Docs</title
+	>
+</svelte:head>
+
+<div class="prose prose-lg mx-auto max-w-4xl p-6">
+	<Copy />
+</div>
+
+<style>
+	/* Custom styling for your documentation */
+	:global(.prose) {
+		/* Your documentation styling */
+	}
+</style>
+```
+
+## Implementation Steps (Revised)
+
+### Step 1: Create Central Content Directory
+
+1. **Create `src/copy/` directory** for all markdown content
+2. **Extract content from README.md** into topic-specific files
+3. **Convert MIGRATION_GUIDE.md** content for migration-guide.md
+4. **Extract patterns from docs page** into testing-patterns.md
+5. **Document API patterns** from test files into api-reference.md
+
+### Step 2: Create Documentation Routes
+
+1. **Set up dynamic route** at `src/routes/docs/[topic]/`
+2. **Create load function** that imports from `src/copy/`
+3. **Style the documentation pages** with consistent design
+4. **Add navigation** between documentation sections
+
+### Step 3: Implement LLMs.txt Generation
+
+1. **Create llms.txt server route** that generates index
+2. **Create llms-full.txt server route** that includes all content
+3. **Implement content aggregation** from centralized markdown files
+4. **Add proper caching and headers**
 
 ### Step 4: Test and Validate
 
@@ -288,43 +382,35 @@ const config = {
 3. **Validate markdown structure** follows llms.txt specification
 4. **Test with AI systems** (ChatGPT, Claude, Cursor)
 
-## Benefits for Users
+## Benefits of This Approach
 
-### For Developers
+### Content Management
 
-- **Quick AI assistance** when implementing tests
-- **Context-aware code suggestions** in AI coding assistants
-- **Instant access** to best practices and patterns
-- **Troubleshooting help** from AI systems
+- **Single source of truth** - All content in `src/copy/`
+- **Easy updates** - Change content once, updates everywhere
+- **Version control** - Track content changes independently
+- **Reusability** - Same content for web and AI consumption
 
-### For AI Tools
+### Developer Experience
 
-- **Structured documentation** that fits within context windows
-- **Semantic navigation** of testing concepts
-- **Real-world examples** for better code generation
-- **Up-to-date patterns** for Svelte 5 testing
+- **Consistent styling** - Svelte components handle presentation
+- **Type safety** - TypeScript for load functions
+- **Hot reloading** - Changes to markdown files update immediately
+- **SEO friendly** - Proper meta tags and semantic HTML
 
-## Future Enhancements
+### AI Integration
 
-1. **Auto-generation** from test files and comments
-2. **Interactive examples** embedded in documentation
-3. **Video content** integration for complex patterns
-4. **Community contributions** for additional patterns
+- **Structured content** - Markdown format perfect for AI parsing
+- **Context-aware** - Full content available in llms-full.txt
+- **Discoverable** - Index in llms.txt for navigation
+- **Standards compliant** - Follows llms.txt specification
 
-## Success Metrics
+## Next Immediate Steps
 
-- **AI system compatibility** - Test with ChatGPT, Claude, Cursor
-- **Documentation discoverability** - Track llms.txt usage
-- **Developer feedback** - Improved testing adoption
-- **Community adoption** - Other projects using our patterns
+1. **Create `src/copy/` directory**
+2. **Extract getting-started.md** from README content
+3. **Set up first documentation route** to test the pattern
+4. **Implement basic llms.txt generation**
 
-## Timeline
-
-- **Week 1**: Extract and structure markdown content
-- **Week 2**: Implement SvelteKit routes and content generation
-- **Week 3**: Test with AI systems and refine content
-- **Week 4**: Documentation polish and community feedback
-
-This implementation will make Sveltest's comprehensive testing
-knowledge easily accessible to AI systems, helping developers adopt
-modern testing patterns more efficiently.
+This revised approach leverages your excellent separation of concerns
+pattern and will be much more maintainable long-term!

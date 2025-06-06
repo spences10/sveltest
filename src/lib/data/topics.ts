@@ -1,0 +1,38 @@
+export interface Topic {
+	slug: string;
+	title: string;
+	description: string;
+}
+
+export const topics: Topic[] = [
+	{
+		slug: 'getting-started',
+		title: 'Getting Started',
+		description: 'Setup, installation, and your first test',
+	},
+	{
+		slug: 'testing-patterns',
+		title: 'Testing Patterns',
+		description: 'Component, SSR, and server testing patterns',
+	},
+	{
+		slug: 'api-reference',
+		title: 'API Reference',
+		description: 'Complete testing utilities and helper functions',
+	},
+	{
+		slug: 'migration-guide',
+		title: 'Migration Guide',
+		description: 'Migrating from @testing-library/svelte',
+	},
+	{
+		slug: 'best-practices',
+		title: 'Best Practices',
+		description: 'Advanced patterns and optimization techniques',
+	},
+	{
+		slug: 'troubleshooting',
+		title: 'Troubleshooting',
+		description: 'Common issues and solutions',
+	},
+];

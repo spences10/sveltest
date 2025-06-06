@@ -12,51 +12,38 @@
 		Settings,
 	} from '$lib/icons';
 
-	// Documentation sections
-	const sections = [
-		{
-			id: 'getting-started',
-			title: 'Getting Started',
-			description: 'Setup, configuration, and your first test',
-			icon: BookOpen,
-			color: 'primary',
-		},
-		{
-			id: 'testing-patterns',
-			title: 'Testing Patterns',
-			description: 'Component, integration, and E2E examples',
-			icon: Code,
-			color: 'secondary',
-		},
-		{
-			id: 'api-reference',
-			title: 'API Reference',
-			description: 'All testing utilities and helpers',
-			icon: Settings,
-			color: 'accent',
-		},
-		{
-			id: 'migration-guide',
-			title: 'Migration Guide',
-			description: 'From other testing frameworks',
-			icon: ArrowRight,
-			color: 'info',
-		},
-		{
-			id: 'troubleshooting',
-			title: 'Troubleshooting',
-			description: 'Common issues and solutions',
-			icon: CheckCircle,
-			color: 'success',
-		},
-		{
-			id: 'best-practices',
-			title: 'Best Practices',
-			description: 'Advanced patterns and optimization',
-			icon: LightningBolt,
-			color: 'warning',
-		},
-	];
+	const { data } = $props();
+	const { topics } = data;
+
+	// Icon mapping for topics
+	const icon_map = {
+		'getting-started': BookOpen,
+		'testing-patterns': Code,
+		'api-reference': Settings,
+		'migration-guide': ArrowRight,
+		troubleshooting: CheckCircle,
+		'best-practices': LightningBolt,
+	};
+
+	// Color mapping for topics
+	const color_map = {
+		'getting-started': 'primary',
+		'testing-patterns': 'secondary',
+		'api-reference': 'accent',
+		'migration-guide': 'info',
+		troubleshooting: 'success',
+		'best-practices': 'warning',
+	};
+
+	// Map topics to sections with icons and colors
+	const sections = topics.map((topic) => ({
+		id: topic.slug,
+		title: topic.title,
+		description: topic.description,
+		icon: icon_map[topic.slug as keyof typeof icon_map] || BookOpen,
+		color:
+			color_map[topic.slug as keyof typeof color_map] || 'primary',
+	}));
 
 	// Quick start examples
 	const quick_start_examples = [
@@ -262,6 +249,190 @@ vi.mock('$lib/heavy-computation', () => ({
 					A11y
 				</div>
 				<div class="text-base-content/60 text-sm">Accessible</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- Documentation Navigation - Prominent Section -->
+<section
+	class="from-primary/5 to-secondary/5 bg-gradient-to-br px-4 py-24"
+>
+	<div class="container mx-auto max-w-7xl">
+		<div class="mb-16 text-center">
+			<h2
+				class="from-primary to-secondary mb-4 bg-gradient-to-r bg-clip-text text-5xl font-bold text-transparent"
+			>
+				Documentation Guide
+			</h2>
+			<p
+				class="text-base-content/80 mx-auto max-w-3xl text-xl leading-relaxed"
+			>
+				Complete testing documentation for Svelte 5 +
+				vitest-browser-svelte. Start with any section below - all
+				content is dynamically generated and always up-to-date.
+			</p>
+		</div>
+
+		<!-- Prominent Documentation Links -->
+		<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+			{#each sections as section}
+				<a
+					href="/docs/{section.id}"
+					class="group bg-base-100 hover:bg-base-200/80 border-base-300/50 hover:border-{section.color}/30 rounded-2xl border p-8 shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
+					data-testid="doc-link-{section.id}"
+				>
+					<div class="mb-6 flex items-center justify-between">
+						<div
+							class="bg-{section.color}/10 text-{section.color} group-hover:bg-{section.color}/20 flex h-16 w-16 items-center justify-center rounded-2xl transition-colors"
+						>
+							<section.icon class_names="h-8 w-8" />
+						</div>
+						<ArrowRight
+							class_names="h-5 w-5 text-base-content/40 group-hover:text-{section.color} transition-colors group-hover:translate-x-1 transform"
+						/>
+					</div>
+					<h3
+						class="text-base-content mb-3 text-2xl font-bold group-hover:text-{section.color} transition-colors"
+					>
+						{section.title}
+					</h3>
+					<p class="text-base-content/70 text-base leading-relaxed">
+						{section.description}
+					</p>
+				</a>
+			{/each}
+		</div>
+
+		<!-- Quick Access Bar -->
+		<div
+			class="bg-base-100 border-base-300/50 mt-16 rounded-2xl border p-8 shadow-lg"
+		>
+			<div
+				class="flex flex-col items-center justify-between gap-6 lg:flex-row"
+			>
+				<div>
+					<h3 class="mb-2 text-2xl font-bold">Quick Access</h3>
+					<p class="text-base-content/70">
+						Jump directly to any documentation section or download the
+						complete guide
+					</p>
+				</div>
+				<div class="flex flex-wrap gap-3">
+					<a
+						href="/llms.txt"
+						class="btn btn-outline btn-sm"
+						target="_blank"
+					>
+						<Eye class_names="h-4 w-4" />
+						LLMs Index
+					</a>
+					<a
+						href="/llms-full.txt"
+						class="btn btn-primary btn-sm"
+						target="_blank"
+					>
+						<BookOpen class_names="h-4 w-4" />
+						Full Documentation
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- Documentation Navigation - Prominent Section -->
+<section
+	class="from-primary/10 to-secondary/10 bg-gradient-to-r px-4 py-20"
+>
+	<div class="container mx-auto max-w-7xl">
+		<div class="mb-12 text-center">
+			<h2 class="text-base-content mb-6 text-5xl font-bold">
+				📚 Complete Documentation
+			</h2>
+			<p
+				class="text-base-content/80 mx-auto max-w-3xl text-xl leading-relaxed"
+			>
+				Jump to any section to master Svelte 5 testing with
+				vitest-browser-svelte. Each guide includes practical examples,
+				best practices, and real-world patterns.
+			</p>
+		</div>
+
+		<!-- Prominent Documentation Links Grid -->
+		<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+			{#each sections as section, index}
+				<a
+					href="/docs/{section.id}"
+					class="group bg-base-100 hover:bg-base-200 border-base-300/50 hover:border-{section.color}/50 transform rounded-2xl border p-8 shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
+					data-testid="docs-link-{section.id}"
+				>
+					<div class="mb-4 flex items-center justify-between">
+						<div
+							class="bg-{section.color}/10 text-{section.color} flex h-14 w-14 items-center justify-center rounded-xl transition-colors group-hover:bg-{section.color}/20"
+						>
+							<section.icon class_names="h-7 w-7" />
+						</div>
+						<div
+							class="text-{section.color} bg-{section.color}/10 rounded-full px-3 py-1 text-sm font-medium"
+						>
+							{index + 1}
+						</div>
+					</div>
+
+					<h3
+						class="text-base-content mb-3 text-2xl font-bold group-hover:text-{section.color} transition-colors"
+					>
+						{section.title}
+					</h3>
+
+					<p
+						class="text-base-content/70 mb-4 text-base leading-relaxed"
+					>
+						{section.description}
+					</p>
+
+					<div
+						class="flex items-center text-{section.color} font-medium transition-all group-hover:gap-2"
+					>
+						<span>Read Guide</span>
+						<ArrowRight
+							class_names="h-4 w-4 transition-transform group-hover:translate-x-1"
+						/>
+					</div>
+				</a>
+			{/each}
+		</div>
+
+		<!-- Quick Access Info -->
+		<div class="mt-12 text-center">
+			<div
+				class="bg-base-100/50 border-base-300/50 rounded-xl border p-6 backdrop-blur-sm"
+			>
+				<p class="text-base-content/70 mb-4 text-lg">
+					🚀 <strong>Need something specific?</strong> All documentation
+					pages include:
+				</p>
+				<div class="flex flex-wrap justify-center gap-4 text-sm">
+					<span
+						class="bg-primary/10 text-primary rounded-full px-3 py-1"
+					>
+						📋 Copy-paste examples
+					</span>
+					<span
+						class="bg-secondary/10 text-secondary rounded-full px-3 py-1"
+					>
+						🔍 Comprehensive API coverage
+					</span>
+					<span
+						class="bg-accent/10 text-accent rounded-full px-3 py-1"
+					>
+						♿ Accessibility patterns
+					</span>
+					<span class="bg-info/10 text-info rounded-full px-3 py-1">
+						⚡ Performance tips
+					</span>
+				</div>
 			</div>
 		</div>
 	</div>
