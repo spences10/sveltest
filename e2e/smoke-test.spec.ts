@@ -16,7 +16,7 @@ test.describe('Smoke Tests', () => {
 		await test.step('Verify core content is visible', async () => {
 			// Check for the main heading specifically
 			await expect(
-				page.getByRole('heading', { name: 'TestSuite Pro' }),
+				page.getByRole('heading', { name: 'Sveltest' }),
 			).toBeVisible();
 
 			// Check for main navigation links
@@ -129,7 +129,7 @@ test.describe('Smoke Tests', () => {
 		page,
 	}) => {
 		const pages = [
-			{ url: '/', heading: 'TestSuite Pro' },
+			{ url: '/', heading: 'Sveltest' },
 			{ url: '/examples', heading: 'Testing Patterns' },
 		];
 

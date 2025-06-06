@@ -140,7 +140,7 @@ describe('Documentation Page SSR', () => {
 
 			// Check meta tags
 			expect(head).toContain(
-				'<title>Documentation - TestSuite Pro</title>',
+				'<title>Documentation - Sveltest</title>',
 			);
 			expect(head).toContain('name="description"');
 			expect(head).toContain('name="keywords"');

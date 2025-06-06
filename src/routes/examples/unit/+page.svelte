@@ -16,7 +16,7 @@
 </script>
 
 <svelte:head>
-	<title>Unit Testing Examples - TestSuite Pro</title>
+	<title>Unit Testing Examples - Sveltest</title>
 	<meta
 		name="description"
 		content="Learn unit testing with practical examples using Vitest and Testing Library"

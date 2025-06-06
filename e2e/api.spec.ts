@@ -52,7 +52,7 @@ test.describe('API Integration Tests', () => {
 
 			// Verify UI handles mocked API data correctly
 			await expect(
-				page.getByRole('heading', { name: 'TestSuite Pro' }),
+				page.getByRole('heading', { name: 'Sveltest' }),
 			).toBeVisible();
 		});
 	});
@@ -73,7 +73,7 @@ test.describe('API Integration Tests', () => {
 
 			// Page should still load even with API errors
 			await expect(
-				page.getByRole('heading', { name: 'TestSuite Pro' }),
+				page.getByRole('heading', { name: 'Sveltest' }),
 			).toBeVisible();
 
 			// Check for error states or fallback content
@@ -100,7 +100,7 @@ test.describe('API Integration Tests', () => {
 			// Check for loading indicators if they exist
 			// This is app-specific based on your loading UI
 			await expect(
-				page.getByRole('heading', { name: 'TestSuite Pro' }),
+				page.getByRole('heading', { name: 'Sveltest' }),
 			).toBeVisible();
 		});
 	});
@@ -118,7 +118,7 @@ test.describe('API Integration Tests', () => {
 
 			// App should still function even with API timeouts
 			await expect(
-				page.getByRole('heading', { name: 'TestSuite Pro' }),
+				page.getByRole('heading', { name: 'Sveltest' }),
 			).toBeVisible();
 		});
 	});
@@ -155,7 +155,7 @@ test.describe('API Integration Tests', () => {
 
 			// Verify app handles different content types appropriately
 			await expect(
-				page.getByRole('heading', { name: 'TestSuite Pro' }),
+				page.getByRole('heading', { name: 'Sveltest' }),
 			).toBeVisible();
 		});
 	});
@@ -187,7 +187,7 @@ test.describe('API Integration Tests', () => {
 
 			// App should work correctly with security headers
 			await expect(
-				page.getByRole('heading', { name: 'TestSuite Pro' }),
+				page.getByRole('heading', { name: 'Sveltest' }),
 			).toBeVisible();
 		});
 	});
@@ -218,7 +218,7 @@ test.describe('API Integration Tests', () => {
 
 			// Test both authenticated and unauthenticated states
 			await expect(
-				page.getByRole('heading', { name: 'TestSuite Pro' }),
+				page.getByRole('heading', { name: 'Sveltest' }),
 			).toBeVisible();
 		});
 	});

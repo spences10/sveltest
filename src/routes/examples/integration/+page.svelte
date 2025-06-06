@@ -118,7 +118,7 @@
 </script>
 
 <svelte:head>
-	<title>Integration Testing - TestSuite Pro</title>
+	<title>Integration Testing - Sveltest</title>
 	<meta
 		name="description"
 		content="Learn integration testing patterns for Svelte applications - component integration, API testing, state management, and form workflows"

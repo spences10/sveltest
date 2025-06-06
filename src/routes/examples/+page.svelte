@@ -15,7 +15,7 @@
 </script>
 
 <svelte:head>
-	<title>Testing Examples - TestSuite Pro</title>
+	<title>Testing Examples - Sveltest</title>
 	<meta
 		name="description"
 		content="Comprehensive testing examples and patterns for Svelte applications"

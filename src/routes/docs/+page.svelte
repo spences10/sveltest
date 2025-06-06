@@ -176,7 +176,7 @@ vi.mock('$lib/heavy-computation', () => ({
 </script>
 
 <svelte:head>
-	<title>Documentation - TestSuite Pro</title>
+	<title>Documentation - Sveltest</title>
 	<meta
 		name="description"
 		content="Comprehensive testing documentation for Svelte 5 + vitest-browser-svelte. Learn testing patterns, best practices, and advanced techniques."
@@ -559,8 +559,8 @@ vi.mock('$lib/heavy-computation', () => ({
 					<div class="prose prose-lg max-w-none">
 						<h4>Installation &amp; Setup</h4>
 						<p>
-							TestSuite Pro comes pre-configured with everything you
-							need for comprehensive testing:
+							Sveltest comes pre-configured with everything you need
+							for comprehensive testing:
 						</p>
 
 						<CodeBlock

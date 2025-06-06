@@ -174,7 +174,7 @@
 </script>
 
 <svelte:head>
-	<title>E2E Testing - TestSuite Pro</title>
+	<title>E2E Testing - Sveltest</title>
 	<meta
 		name="description"
 		content="Learn end-to-end testing patterns with Playwright - user journeys, cross-browser testing, performance monitoring, and accessibility validation"

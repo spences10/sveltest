@@ -38,7 +38,9 @@ describe('+layout.svelte SSR', () => {
 				props: { children: mock_children },
 			});
 
-			expect(body).toContain('from-primary/5 via-secondary/3 to-accent/5');
+			expect(body).toContain(
+				'from-primary/5 via-secondary/3 to-accent/5',
+			);
 			expect(body).toContain('Test Content');
 		});
 
@@ -74,7 +76,7 @@ describe('+layout.svelte SSR', () => {
 				props: { children: mock_children },
 			});
 
-			expect(body).toContain('TestSuite Pro');
+			expect(body).toContain('Sveltest');
 		});
 
 		test('should render mobile dock navigation', () => {
@@ -249,7 +251,7 @@ describe('+layout.svelte SSR', () => {
 				props: { children: mock_children },
 			});
 
-			expect(body).toContain('TestSuite Pro');
+			expect(body).toContain('Sveltest');
 			expect(body).toContain('Test Content');
 		});
 	});

@@ -11,7 +11,7 @@ test.describe('Homepage', () => {
 		await test.step('Check main heading', async () => {
 			// Be specific about which heading we want - the main title
 			await expect(
-				page.getByRole('heading', { name: 'TestSuite Pro' }),
+				page.getByRole('heading', { name: 'Sveltest' }),
 			).toBeVisible();
 		});
 
@@ -67,7 +67,7 @@ test.describe('Homepage', () => {
 		page,
 	}) => {
 		await test.step('Check page title', async () => {
-			await expect(page).toHaveTitle(/TestSuite Pro/);
+			await expect(page).toHaveTitle(/Sveltest/);
 		});
 
 		await test.step('Check meta description', async () => {
@@ -87,14 +87,14 @@ test.describe('Homepage', () => {
 		await test.step('Test mobile viewport', async () => {
 			await page.setViewportSize({ width: 375, height: 667 });
 			await expect(
-				page.getByRole('heading', { name: 'TestSuite Pro' }),
+				page.getByRole('heading', { name: 'Sveltest' }),
 			).toBeVisible();
 		});
 
 		await test.step('Test tablet viewport', async () => {
 			await page.setViewportSize({ width: 768, height: 1024 });
 			await expect(
-				page.getByRole('heading', { name: 'TestSuite Pro' }),
+				page.getByRole('heading', { name: 'Sveltest' }),
 			).toBeVisible();
 		});
 	});

@@ -327,7 +327,7 @@ describe('Components Page', () => {
 			render(ComponentsPage);
 
 			// Check title is set
-			expect(document.title).toBe('Components - TestSuite Pro');
+			expect(document.title).toBe('Components - Sveltest');
 
 			// Check meta description
 			const metaDescription = document.querySelector(

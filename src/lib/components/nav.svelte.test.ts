@@ -74,7 +74,7 @@ describe('Nav Component', () => {
 			render(Nav);
 
 			await expect
-				.element(page.getByText('TestSuite Pro'))
+				.element(page.getByText('Sveltest'))
 				.toBeInTheDocument();
 		});
 
@@ -176,7 +176,7 @@ describe('Nav Component', () => {
 			render(Nav);
 
 			await expect
-				.element(page.getByText('TestSuite Pro'))
+				.element(page.getByText('Sveltest'))
 				.toBeInTheDocument();
 		});
 

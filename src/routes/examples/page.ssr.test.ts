@@ -142,7 +142,7 @@ describe('/examples/+page.svelte SSR', () => {
 
 			// Title tag is critical for SEO and browser tabs
 			expect(head).toContain('<title>');
-			expect(head).toContain('Testing Examples - TestSuite Pro');
+			expect(head).toContain('Testing Examples - Sveltest');
 
 			// Meta description helps search engines show relevant snippets
 			expect(head).toContain('meta name="description"');

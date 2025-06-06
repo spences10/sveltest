@@ -4,7 +4,7 @@
 </script>
 
 <svelte:head>
-	<title>Form Actions Testing - TestSuite Pro</title>
+	<title>Form Actions Testing - Sveltest</title>
 	<meta
 		name="description"
 		content="Interactive todo demonstration for testing form actions with server-side validation"
