@@ -263,8 +263,8 @@ describe('/examples/+page.svelte SSR', () => {
 
 		/**
 		 * Visual Elements Test - checks for essential visual context.
-		 * While we don't test detailed styling in SSR, we verify that
-		 * key visual elements (like icons) are rendered as SVG content.
+		 * We verify that key visual elements (like icons) are rendered properly
+		 * without testing implementation-specific details like exact SVG paths.
 		 */
 		test('should include essential visual elements', () => {
 			const { body } = render(ExamplesPage);
@@ -274,11 +274,12 @@ describe('/examples/+page.svelte SSR', () => {
 			expect(body).toContain('<svg');
 			expect(body).toContain('stroke="currentColor"');
 
-			// Verify some specific SVG paths are rendered (icons are present)
-			expect(body).toContain('M13 10V3L4 14h7v7l9-11h-7z'); // Lightning bolt path
-			expect(body).toContain(
-				'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
-			); // Check circle path
+			// Verify semantic meaning and styling rather than exact paths
+			expect(body).toContain('text-primary'); // Icons have proper theming
+			expect(body).toContain('text-success'); // Success indicators present
+			expect(body).toContain('h-4 w-4'); // Icons have proper sizing
+			expect(body).toContain('h-6 w-6'); // Larger icons present
+			expect(body).toContain('h-8 w-8'); // Section icons present
 		});
 
 		/**

@@ -25,7 +25,7 @@ describe('/+page.svelte SSR', () => {
 		expect(body).toContain('Developer Experience');
 
 		// Test badge content
-		expect(body).toContain('Professional Testing Suite');
+		expect(body).toContain('Battle-Tested in Production');
 	});
 
 	test('should generate CSS for styling', () => {

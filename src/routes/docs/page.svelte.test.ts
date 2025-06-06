@@ -3,6 +3,42 @@ import { describe, expect, test } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import DocsPage from './+page.svelte';
 
+// Mock data that matches the expected structure
+const mock_data = {
+	topics: [
+		{
+			slug: 'getting-started',
+			title: 'Getting Started',
+			description: 'Setup, installation, and your first test',
+		},
+		{
+			slug: 'testing-patterns',
+			title: 'Testing Patterns',
+			description: 'Component, SSR, and server testing patterns',
+		},
+		{
+			slug: 'api-reference',
+			title: 'API Reference',
+			description: 'Complete testing utilities and helper functions',
+		},
+		{
+			slug: 'migration-guide',
+			title: 'Migration Guide',
+			description: 'Migrating from @testing-library/svelte',
+		},
+		{
+			slug: 'best-practices',
+			title: 'Best Practices',
+			description: 'Advanced patterns and optimization techniques',
+		},
+		{
+			slug: 'troubleshooting',
+			title: 'Troubleshooting',
+			description: 'Common issues and solutions',
+		},
+	],
+};
+
 /**
  * Component Testing for Documentation Page
  *
@@ -17,7 +53,7 @@ import DocsPage from './+page.svelte';
 describe('Documentation Page', () => {
 	describe('Initial Rendering', () => {
 		test('should render the page without errors', async () => {
-			render(DocsPage);
+			render(DocsPage, { data: mock_data });
 
 			await expect
 				.element(
@@ -29,7 +65,7 @@ describe('Documentation Page', () => {
 		});
 
 		test('should display documentation statistics', async () => {
-			render(DocsPage);
+			render(DocsPage, { data: mock_data });
 
 			// Use test IDs to avoid conflicts
 			await expect
@@ -47,7 +83,7 @@ describe('Documentation Page', () => {
 		});
 
 		test('should render quick start examples', async () => {
-			render(DocsPage);
+			render(DocsPage, { data: mock_data });
 
 			// Check quick start section
 			await expect
@@ -71,7 +107,7 @@ describe('Documentation Page', () => {
 		});
 
 		test('should render testing principles', async () => {
-			render(DocsPage);
+			render(DocsPage, { data: mock_data });
 
 			// Check testing principles section
 			await expect
@@ -106,7 +142,7 @@ describe('Documentation Page', () => {
 
 	describe('Section Navigation', () => {
 		test('should render all section navigation buttons', async () => {
-			render(DocsPage);
+			render(DocsPage, { data: mock_data });
 
 			// Check section navigation buttons
 			await expect
@@ -138,7 +174,7 @@ describe('Documentation Page', () => {
 		});
 
 		test('should show getting started content by default', async () => {
-			render(DocsPage);
+			render(DocsPage, { data: mock_data });
 
 			// Check default content using test ID
 			await expect
@@ -151,7 +187,7 @@ describe('Documentation Page', () => {
 
 		// Use smoke test approach for complex reactive components
 		test('should have navigation buttons without clicking them', async () => {
-			render(DocsPage);
+			render(DocsPage, { data: mock_data });
 
 			// Just verify buttons exist and are enabled - don't click them
 			const testing_patterns_button = page.getByRole('button', {
@@ -170,7 +206,7 @@ describe('Documentation Page', () => {
 		});
 
 		test('should have clickable navigation buttons', async () => {
-			render(DocsPage);
+			render(DocsPage, { data: mock_data });
 
 			// Test that all buttons are clickable
 			const buttons = [
@@ -188,7 +224,7 @@ describe('Documentation Page', () => {
 
 		// Test button state changes instead of content changes
 		test('should show active state on button clicks', async () => {
-			render(DocsPage);
+			render(DocsPage, { data: mock_data });
 
 			// Getting Started should be active by default
 			const getting_started_button = page.getByRole('button', {
@@ -213,7 +249,7 @@ describe('Documentation Page', () => {
 
 	describe('Interactive Features', () => {
 		test('should have copy code functionality', async () => {
-			render(DocsPage);
+			render(DocsPage, { data: mock_data });
 
 			// Check for copy buttons in quick start examples
 			const copyButtons = page.getByTitle('Copy code');
@@ -221,7 +257,7 @@ describe('Documentation Page', () => {
 		});
 
 		test('should render code examples', async () => {
-			render(DocsPage);
+			render(DocsPage, { data: mock_data });
 
 			// Wait for the page to render first
 			await expect
@@ -245,7 +281,7 @@ describe('Documentation Page', () => {
 
 	describe('Call to Action', () => {
 		test('should render call to action section', async () => {
-			render(DocsPage);
+			render(DocsPage, { data: mock_data });
 
 			await expect
 				.element(
@@ -257,7 +293,7 @@ describe('Documentation Page', () => {
 		});
 
 		test('should have navigation links', async () => {
-			render(DocsPage);
+			render(DocsPage, { data: mock_data });
 
 			// Test that buttons exist and are properly formed (they have role="button")
 			await expect
@@ -273,7 +309,7 @@ describe('Documentation Page', () => {
 
 	describe('SEO and Accessibility', () => {
 		test('should have proper page title and meta tags', async () => {
-			render(DocsPage);
+			render(DocsPage, { data: mock_data });
 
 			// Check that the page renders (meta tags are in head)
 			await expect
@@ -286,7 +322,7 @@ describe('Documentation Page', () => {
 		});
 
 		test('should have accessible navigation', async () => {
-			render(DocsPage);
+			render(DocsPage, { data: mock_data });
 
 			// Check for proper button roles
 			await expect
@@ -297,7 +333,7 @@ describe('Documentation Page', () => {
 		});
 
 		test('should have semantic HTML structure', async () => {
-			render(DocsPage);
+			render(DocsPage, { data: mock_data });
 
 			// Check for proper heading hierarchy - use first() to avoid multiple matches
 			await expect
