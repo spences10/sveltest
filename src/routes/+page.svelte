@@ -7,7 +7,6 @@
 		Clipboard,
 		Heart,
 		LightningBolt,
-		Settings,
 	} from '$lib/icons';
 </script>
 
@@ -77,18 +76,18 @@
 					class="flex flex-col items-center justify-center gap-4 pt-8 sm:flex-row"
 				>
 					<a
-						href="/examples"
+						href="/docs/getting-started"
 						class="btn btn-primary btn-lg gap-3 px-8 shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+					>
+						<BookOpen class_names="h-6 w-6" />
+						Get Started
+					</a>
+					<a
+						href="/examples"
+						class="btn btn-outline btn-lg hover:bg-base-100/10 gap-3 px-8 backdrop-blur-sm transition-all duration-300"
 					>
 						<LightningBolt class_names="h-6 w-6" />
 						Explore Examples
-					</a>
-					<a
-						href="/todos"
-						class="btn btn-outline btn-lg hover:bg-base-100/10 gap-3 px-8 backdrop-blur-sm transition-all duration-300"
-					>
-						<Clipboard class_names="h-6 w-6" />
-						Try Todo Manager
 					</a>
 				</div>
 
@@ -283,25 +282,25 @@
 					</p>
 					<div class="flex flex-col justify-center gap-4 sm:flex-row">
 						<a
-							href="/examples"
+							href="/docs/getting-started"
 							class="btn btn-primary btn-lg gap-2 px-8"
 						>
-							<LightningBolt class_names="h-5 w-5" />
+							<BookOpen class_names="h-5 w-5" />
 							Get Started
 						</a>
 						<a
-							href="/docs"
+							href="/examples"
 							class="btn btn-secondary btn-lg gap-2 px-8"
 						>
-							<BookOpen class_names="h-5 w-5" />
-							Documentation
+							<LightningBolt class_names="h-5 w-5" />
+							Explore Examples
 						</a>
 						<a
 							href="/todos"
 							class="btn btn-outline btn-lg gap-2 px-8"
 						>
-							<Settings class_names="h-5 w-5" />
-							View Demo
+							<Clipboard class_names="h-5 w-5" />
+							Try Todo Manager
 						</a>
 					</div>
 				</div>
