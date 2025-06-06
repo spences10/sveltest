@@ -373,6 +373,60 @@ test('should not crash when rendered', async () => {
 });
 ```
 
+### 4. ⚠️ AVOID Testing Implementation Details
+
+**CRITICAL ANTI-PATTERN**: Don't test exact implementation details that don't provide user value.
+
+```typescript
+// ❌ BRITTLE - Tests exact SVG path data (implementation detail)
+test('should render check icon', () => {
+	const { body } = render(StatusIcon, { status: 'success' });
+	// This breaks when icon library updates, even if visually identical
+	expect(body).toContain('M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z');
+});
+
+// ✅ ROBUST - Tests semantic meaning and styling
+test('should render success styling and structure', () => {
+	const { body } = render(StatusIcon, { status: 'success' });
+	
+	// Test semantic classes that indicate proper theming
+	expect(body).toContain('text-success');
+	expect(body).toContain('h-4 w-4');
+	
+	// Test structural elements users care about
+	expect(body).toContain('<svg');
+	expect(body).toContain('stroke="currentColor"');
+	
+	// DON'T test exact path data - it's implementation detail
+});
+
+// ✅ BETTER - Test user-visible behavior
+test('should indicate success state to users', async () => {
+	render(StatusIcon, { status: 'success' });
+	
+	// Test what users actually see/experience
+	await expect.element(page.getByRole('img', { name: /success/i })).toBeInTheDocument();
+	await expect.element(page.getByTestId('status-icon')).toHaveClass('text-success');
+});
+```
+
+**Why This Matters**:
+- **SVG path data changes** when icon libraries update (Heroicons, Lucide, etc.)
+- **Tests should survive refactoring** as long as user experience stays the same
+- **Focus on user value**: Does the user see the right color? Right size? Right meaning?
+- **Semantic styling classes** (`text-success`, `h-4 w-4`) indicate proper theming
+- **Structural elements** (`<svg>`, `stroke="currentColor"`) indicate proper implementation
+
+**Test This** ✅:
+- CSS classes that control appearance (`text-success`, `text-error`, `h-4 w-4`)
+- Semantic HTML structure (`<svg>`, `role="img"`, `aria-label`)
+- User-visible behavior (color changes, size changes, accessibility)
+
+**Don't Test This** ❌:
+- Exact SVG path coordinates (`M9 12l2 2 4-4...`)
+- Internal implementation details that users don't see
+- Library-specific markup that changes with updates
+
 ## Common Error Solutions
 
 ### "strict mode violation: getByRole() resolved to X elements"
@@ -523,3 +577,5 @@ export default defineConfig({
   hoping it works
 - ❌ Don't expect forms to be invalid initially - test the validation
   lifecycle
+- ❌ Don't test implementation details (SVG paths, internal markup) - test user value
+- ❌ Don't write brittle tests that break when libraries update without user impact
