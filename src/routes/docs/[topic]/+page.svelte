@@ -1,23 +1,29 @@
 <script lang="ts">
+	import DocsToc from '$lib/components/docs-toc.svelte';
 	import './prism.css';
 
-	const { data } = $props();
-	const { Copy, slug } = data;
-
-	// Format the title from slug
-	const title = slug
-		.replace('-', ' ')
-		.replace(/\b\w/g, (l) => l.toUpperCase());
+	let { data } = $props();
 </script>
 
 <svelte:head>
-	<title>{title} - Sveltest Docs</title>
+	<title>{data.topic_info.title} - Sveltest Docs</title>
 	<meta
 		name="description"
-		content="Comprehensive testing documentation for Svelte 5 + vitest-browser-svelte. Learn {title.toLowerCase()} patterns and best practices."
+		content="{data.topic_info
+			.description} - Comprehensive testing documentation for Svelte 5 + vitest-browser-svelte."
 	/>
 </svelte:head>
 
-<div class="prose prose-lg mx-auto max-w-4xl p-6">
-	<Copy />
+<!-- Fixed positioned TOC -->
+<DocsToc current_topic={data.slug} />
+
+<div class="container mx-auto max-w-4xl px-4 py-6">
+	<!-- Main Content -->
+	<main class="min-w-0">
+		{#key data.slug}
+			<div class="prose prose-lg max-w-none">
+				<data.Copy />
+			</div>
+		{/key}
+	</main>
 </div>

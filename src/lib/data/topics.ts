@@ -35,4 +35,9 @@ export const topics: Topic[] = [
 		title: 'Troubleshooting',
 		description: 'Common issues and solutions',
 	},
+	{
+		slug: 'about',
+		title: 'About',
+		description: 'About this project and its goals',
+	},
 ];
