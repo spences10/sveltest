@@ -7,7 +7,7 @@ export default defineConfig({
 	plugins: [sveltekit(), tailwindcss()],
 
 	test: {
-		workspace: [
+		projects: [
 			{
 				// Client-side tests (Svelte components)
 				extends: './vite.config.ts',
@@ -19,7 +19,11 @@ export default defineConfig({
 					browser: {
 						enabled: true,
 						provider: 'playwright',
-						instances: [{ browser: 'chromium' }],
+						instances: [
+							{ browser: 'chromium' },
+							// { browser: 'firefox' },
+							// { browser: 'webkit' },
+						],
 					},
 					include: ['src/**/*.svelte.{test,spec}.{js,ts}'],
 					exclude: [
