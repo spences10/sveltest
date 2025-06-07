@@ -1,8 +1,11 @@
 # API Reference
 
-## Essential Imports
+Complete reference for vitest-browser-svelte testing APIs, organized
+by immediate developer needs.
 
-### Core Testing Framework
+## Quick Start Imports
+
+### Essential Setup
 
 ```typescript
 import { describe, expect, test, vi } from 'vitest';
@@ -10,176 +13,137 @@ import { render } from 'vitest-browser-svelte';
 import { page } from '@vitest/browser/context';
 ```
 
-### Svelte 5 Specific
+### Svelte 5 Runes & SSR
 
 ```typescript
 import { createRawSnippet } from 'svelte';
 import { flushSync, untrack } from 'svelte';
-import { render } from 'svelte/server'; // For SSR testing
+import { render } from 'svelte/server'; // SSR testing only
 ```
 
-### Component Imports
+## 🎯 Locators (Auto-Retry Built-in)
 
-```typescript
-import Button from '$lib/components/button.svelte';
-import Input from '$lib/components/input.svelte';
-import Modal from '$lib/components/modal.svelte';
-```
-
-## Locators & Queries
+> **CRITICAL**: Always use locators, never containers. Locators have
+> automatic waiting and retrying.
 
 ### Semantic Queries (Preferred)
 
-#### getByRole()
-
 ```typescript
-// Buttons
+// ✅ Buttons - test accessibility
 page.getByRole('button', { name: 'Submit' });
 page.getByRole('button', { name: /submit/i }); // Case insensitive
 
-// Form controls
-page.getByRole('textbox', { name: 'Email' });
+// ✅ Form controls - semantic HTML
+page.getByRole('textbox', { name: 'Email' }); // <input type="text">
 page.getByRole('checkbox', { name: 'Remember me' });
-page.getByRole('combobox', { name: 'Country' });
+page.getByRole('combobox', { name: 'Country' }); // <select>
 
-// Navigation
+// ✅ Navigation & structure
 page.getByRole('link', { name: 'Documentation' });
-page.getByRole('navigation');
-
-// Structure
 page.getByRole('heading', { level: 1 });
-page.getByRole('dialog');
 page.getByRole('main');
+page.getByRole('navigation');
 ```
 
-#### getByLabel()
+### Form-Specific Queries
 
 ```typescript
-// Form labels
+// ✅ Labels - best for forms
 page.getByLabel('Email address');
 page.getByLabel('Password');
-page.getByLabel(/phone/i); // Regex matching
-```
+page.getByLabel(/phone/i);
 
-#### getByText()
-
-```typescript
-// Exact text
-page.getByText('Welcome back');
-
-// Partial text
-page.getByText('Welcome', { exact: false });
-
-// Regex
-page.getByText(/welcome/i);
-```
-
-#### getByPlaceholder()
-
-```typescript
+// ✅ Placeholders - when no label
 page.getByPlaceholder('Enter your email');
 page.getByPlaceholder(/search/i);
 ```
 
-### Test ID Queries
+### Content Queries
 
 ```typescript
-// When semantic queries aren't possible
+// ✅ Text content
+page.getByText('Welcome back');
+page.getByText('Welcome', { exact: false }); // Partial match
+page.getByText(/welcome/i); // Regex
+```
+
+### Test ID Fallback
+
+```typescript
+// ✅ Only when semantic queries aren't possible
 page.getByTestId('submit-button');
 page.getByTestId('error-message');
 page.getByTestId('loading-spinner');
 ```
 
-### Advanced Selectors
+### 🚨 Handle Multiple Elements (Strict Mode)
 
 ```typescript
-// Multiple elements
+// ❌ FAILS: "strict mode violation" - multiple elements
+page.getByRole('link', { name: 'Home' });
+
+// ✅ CORRECT: Use .first(), .nth(), .last()
+page.getByRole('link', { name: 'Home' }).first();
+page.getByRole('listitem').nth(2); // Zero-indexed
+page.getByRole('button').last();
+
+// ✅ Filter for specificity
 page.getByRole('button').filter({ hasText: 'Delete' });
 
-// Chaining
+// ✅ Chain for context
 page.getByRole('dialog').getByRole('button', { name: 'Close' });
-
-// First/Last
-page.getByRole('listitem').first();
-page.getByRole('listitem').last();
-
-// Nth element
-page.getByRole('listitem').nth(2);
 ```
 
-## Assertions
+## 🔍 Assertions (Always Await)
 
 ### Element Presence
 
 ```typescript
-// Element exists in DOM
+// ✅ Always await element assertions
 await expect.element(page.getByText('Success')).toBeInTheDocument();
-
-// Element is visible
 await expect.element(page.getByRole('button')).toBeVisible();
-
-// Element is hidden
 await expect.element(page.getByTestId('error')).toBeHidden();
-
-// Element is attached
 await expect.element(page.getByRole('dialog')).toBeAttached();
 ```
 
 ### Element States
 
 ```typescript
-// Enabled/Disabled
+// ✅ Interactive states
 await expect.element(page.getByRole('button')).toBeEnabled();
 await expect.element(page.getByRole('button')).toBeDisabled();
-
-// Checked/Unchecked
 await expect.element(page.getByRole('checkbox')).toBeChecked();
-await expect.element(page.getByRole('checkbox')).not.toBeChecked();
-
-// Focused
 await expect.element(page.getByRole('textbox')).toBeFocused();
-
-// Selected
-await expect.element(page.getByRole('option')).toBeSelected();
 ```
 
-### Content Assertions
+### Content & Attributes
 
 ```typescript
-// Text content
+// ✅ Text content
 await expect.element(page.getByRole('heading')).toHaveText('Welcome');
 await expect.element(page.getByTestId('counter')).toContainText('5');
 
-// Values
+// ✅ Form values
 await expect
 	.element(page.getByRole('textbox'))
 	.toHaveValue('john@example.com');
-await expect.element(page.getByRole('textbox')).toHaveValue(/john/);
 
-// Attributes
+// ✅ Attributes & classes
 await expect
 	.element(page.getByRole('link'))
 	.toHaveAttribute('href', '/docs');
 await expect
-	.element(page.getByRole('textbox'))
-	.toHaveAttribute('aria-invalid', 'true');
-
-// CSS Classes
-await expect
 	.element(page.getByRole('button'))
 	.toHaveClass('btn-primary');
-await expect
-	.element(page.getByRole('button'))
-	.toHaveClass(['btn', 'btn-primary']);
 ```
 
 ### Count Assertions
 
 ```typescript
-// Exact count
+// ✅ Exact count
 await expect.element(page.getByRole('listitem')).toHaveCount(3);
 
-// At least/most
+// ✅ Range counts
 await expect
 	.element(page.getByRole('button'))
 	.toHaveCount({ min: 1 });
@@ -188,46 +152,44 @@ await expect
 	.toHaveCount({ max: 5 });
 ```
 
-## User Interactions
+## 🖱️ User Interactions
 
 ### Click Events
 
 ```typescript
-// Simple click
+// ✅ Simple click
 await page.getByRole('button', { name: 'Submit' }).click();
 
-// Click with options
+// ✅ Force click (bypass animations)
+await page.getByRole('button').click({ force: true });
+
+// ✅ Advanced click options
 await page.getByRole('button').click({
-	force: true, // Bypass actionability checks
 	button: 'right', // Right click
 	clickCount: 2, // Double click
+	position: { x: 10, y: 20 }, // Specific position
 });
-
-// Click at specific position
-await page.getByRole('button').click({ position: { x: 10, y: 20 } });
 ```
 
 ### Form Interactions
 
 ```typescript
-// Fill input
+// ✅ Fill inputs
 await page
 	.getByRole('textbox', { name: 'Email' })
 	.fill('john@example.com');
 
-// Clear and fill
+// ✅ Clear and refill
 await page.getByRole('textbox').clear();
 await page.getByRole('textbox').fill('new-value');
 
-// Check/uncheck
+// ✅ Checkboxes and selects
 await page.getByRole('checkbox').check();
 await page.getByRole('checkbox').uncheck();
-
-// Select options
 await page.getByRole('combobox').selectOption('value');
 await page.getByRole('combobox').selectOption(['value1', 'value2']);
 
-// Upload files
+// ✅ File uploads
 await page
 	.getByRole('textbox', { name: 'Upload' })
 	.setInputFiles('path/to/file.txt');
@@ -236,85 +198,78 @@ await page
 ### Keyboard Interactions
 
 ```typescript
-// Single key press
+// ✅ Key presses
 await page.keyboard.press('Enter');
 await page.keyboard.press('Escape');
 await page.keyboard.press('Tab');
 
-// Key combinations
+// ✅ Key combinations
 await page.keyboard.press('Control+A');
 await page.keyboard.press('Shift+Tab');
 
-// Type text
+// ✅ Type text
 await page.keyboard.type('Hello World');
 
-// Element-specific keyboard
+// ✅ Element-specific keyboard
 await page.getByRole('textbox').press('Enter');
 ```
 
-### Mouse Interactions
-
-```typescript
-// Hover
-await page.getByRole('button').hover();
-
-// Drag and drop
-await page
-	.getByTestId('draggable')
-	.dragTo(page.getByTestId('dropzone'));
-
-// Mouse wheel
-await page.mouse.wheel(0, 100); // Scroll down
-```
-
-## Component Rendering
+## 🎭 Component Rendering
 
 ### Basic Rendering
 
 ```typescript
-// Simple component
-render(Button, { variant: 'primary', children: 'Click me' });
+// ✅ Simple component with snake_case props
+render(Button, {
+	variant: 'primary',
+	is_disabled: false,
+	click_handler: vi.fn(),
+});
 
-// Component with props
+// ✅ Form component with validation
 render(Input, {
-	type: 'email',
-	label: 'Email',
-	value: 'test@example.com',
-	error: 'Invalid email',
+	input_type: 'email',
+	label_text: 'Email',
+	current_value: 'test@example.com',
+	error_message: 'Invalid email',
+	is_required: true,
 });
 ```
 
 ### Advanced Rendering
 
 ```typescript
-// Component with event handlers
-const click_handler = vi.fn();
+// ✅ Event handlers with snake_case
+const handle_click = vi.fn();
+const handle_submit = vi.fn();
+
 render(Button, {
-	onclick: click_handler,
+	onclick: handle_click,
+	onsubmit: handle_submit,
 	children: 'Click me',
 });
 
-// Component with slots/children
+// ✅ Svelte 5 snippets (limited support)
 const children = createRawSnippet(() => ({
-	render: () => `<span>Custom content</span>`,
+	render: () => `<span>Custom content</span>`, // Must return HTML
 }));
 render(Modal, { children });
 
-// Component with context
+// ✅ Component with context
 render(
 	Component,
-	{ props },
-	{ context: new Map([['key', 'value']]) },
+	{ user_data: { name: 'Test' } },
+	{ context: new Map([['theme', 'dark']]) },
 );
 ```
 
-## Svelte 5 Runes
+## 🔄 Svelte 5 Runes Testing
 
 ### State Testing
 
 ```typescript
-// $state
-test('reactive state', () => {
+// ✅ $state - direct testing
+test('reactive state updates', () => {
 	let count = $state(0);
 	expect(count).toBe(0);
 
@@ -322,23 +277,33 @@ test('reactive state', () => {
 	expect(count).toBe(5);
 });
 
-// $derived
-test('derived state', () => {
+// ✅ $derived - ALWAYS use untrack()
+test('derived state calculation', () => {
 	let count = $state(0);
 	let doubled = $derived(count * 2);
 
+	// CRITICAL: Always untrack derived values
 	expect(untrack(() => doubled)).toBe(0);
 
 	count = 5;
-	flushSync();
+	flushSync(); // Force synchronous update
 	expect(untrack(() => doubled)).toBe(10);
+});
+
+// ✅ Complex derived with getters
+test('derived getter functions', () => {
+	const form_state = create_form_state();
+	const is_valid_getter = form_state.is_form_valid;
+
+	// Get function first, then untrack
+	expect(untrack(() => is_valid_getter())).toBe(true);
 });
 ```
 
 ### Effect Testing
 
 ```typescript
-// $effect
+// ✅ $effect with spy functions
 test('effect runs on state change', () => {
 	const effect_spy = vi.fn();
 	let count = $state(0);
@@ -354,22 +319,25 @@ test('effect runs on state change', () => {
 });
 ```
 
-## SSR Testing API
+## 🖥️ SSR Testing
 
 ### Component Rendering
 
 ```typescript
 import { render } from 'svelte/server';
 
-// Basic SSR render
+// ✅ Basic SSR render
 const { body, head } = render(Component);
 
-// With props
+// ✅ With props using snake_case
 const { body, head } = render(Component, {
-	props: { title: 'Test' },
+	props: {
+		page_title: 'Test Page',
+		user_data: { name: 'Test User' },
+	},
 });
 
-// With context
+// ✅ With context
 const { body, head } = render(Component, {
 	props: {},
 	context: new Map([['theme', 'dark']]),
@@ -379,109 +347,165 @@ const { body, head } = render(Component, {
 ### SSR Assertions
 
 ```typescript
-// Content assertions
+// ✅ Content structure (not implementation details)
 expect(body).toContain('<h1>Welcome</h1>');
-expect(body).toMatch(/<nav.*>.*<\/nav>/);
+expect(body).toContain('role="main"');
+expect(body).toContain('aria-label="Navigation"');
 
-// Head assertions
+// ✅ Head content for SEO
 expect(head).toContain('<title>Page Title</title>');
 expect(head).toContain('<meta name="description"');
 
-// Structure assertions
-expect(body).toContain('role="main"');
-expect(body).toContain('aria-label="Navigation"');
+// ❌ AVOID: Testing exact SVG paths or implementation details
+// expect(body).toContain('M9 12l2 2 4-4m6 2a9'); // Brittle!
+
+// ✅ BETTER: Test semantic structure
+expect(body).toContain('<svg');
+expect(body).toContain('text-success');
 ```
 
-## Mocking
+## 🎭 Mocking (Minimal - Real Browser Testing)
 
-### Function Mocking
+> **PRINCIPLE**: In vitest-browser-svelte, render real components.
+> Mock only when necessary.
 
-```typescript
-// Simple mock
-const mock_fn = vi.fn();
+### Component Mocking Decision Tree
 
-// Mock with return value
-const mock_fn = vi.fn(() => 'mocked-result');
-
-// Mock with implementation
-const mock_fn = vi.fn((input: string) => `processed-${input}`);
-
-// Spy on existing function
-const spy = vi.spyOn(obj, 'method');
+```
+Is component EXTERNAL? → Mock it
+Is component STATELESS/PRESENTATIONAL? → Mock it
+Does component have COMPLEX LOGIC? → Mock for unit, render for integration
+DEFAULT → Render the component
 ```
 
-### Module Mocking
+### When to Mock Components
 
 ```typescript
-// Mock entire module
-vi.mock('$lib/utils', () => ({
-	validate_email: vi.fn(() => true),
-	format_date: vi.fn(() => '2023-01-01'),
-}));
-
-// Partial module mock
-vi.mock('$lib/api', async (importOriginal) => {
-	const actual = await importOriginal();
-	return {
-		...actual,
-		fetch_user: vi.fn(() => ({ id: 1, name: 'Test User' })),
-	};
-});
-```
-
-### Component Mocking
-
-```typescript
-// Mock Svelte component
-vi.mock('$lib/components/heavy-component.svelte', () => ({
-	default: vi.fn().mockImplementation(() => ({
+// ✅ Mock EXTERNAL components (third-party libraries)
+vi.mock('@external/heavy-chart', () => ({
+	default: vi.fn(() => ({
 		$$: {},
 		$set: vi.fn(),
 		$destroy: vi.fn(),
-		$on: vi.fn(),
 	})),
 }));
+
+// ✅ Mock STATELESS presentational components in unit tests
+vi.mock('$lib/components/icon.svelte', () => ({
+	default: vi.fn(() => ({
+		$$: {},
+		$set: vi.fn(),
+		$destroy: vi.fn(),
+	})),
+}));
+
+// ❌ DON'T mock your own components with logic - render them!
+// render(MyComplexComponent); // Test the real thing
 ```
 
-## Wait Utilities
-
-### Wait for Elements
+### Function & Module Mocking
 
 ```typescript
-// Wait for element to appear
+// ✅ Mock utility functions with snake_case
+const mock_validate_email = vi.fn(() => true);
+const mock_api_call = vi.fn((user_id: string) => ({
+	user_id,
+	user_name: 'Test User',
+	is_active: true,
+}));
+
+// ✅ Mock external APIs and services
+vi.mock('$lib/api', () => ({
+	fetch_user_data: vi.fn(() => Promise.resolve({ user_id: 1 })),
+	send_analytics: vi.fn(),
+}));
+
+// ✅ Spy on existing functions when needed
+const validate_spy = vi.spyOn(utils, 'validate_email');
+```
+
+## ⏱️ Wait Utilities
+
+### Element Waiting
+
+```typescript
+// ✅ Wait for elements (built into locators)
 await expect
 	.element(page.getByText('Loading complete'))
 	.toBeInTheDocument();
 
-// Wait with timeout
+// ✅ Custom timeout
 await expect
 	.element(page.getByText('Data loaded'))
 	.toBeInTheDocument({ timeout: 10000 });
 
-// Wait for element to disappear
+// ✅ Wait for disappearance
 await expect
 	.element(page.getByText('Loading...'))
 	.not.toBeInTheDocument();
 ```
 
-### Wait for Conditions
+### Custom Conditions
 
 ```typescript
-// Wait for custom condition
-await page.waitForFunction(() => window.dataLoaded === true);
+// ✅ Wait for JavaScript conditions
+await page.waitForFunction(() => window.data_loaded === true);
 
-// Wait for network
-await page.waitForResponse('**/api/data');
+// ✅ Wait for network requests
+await page.waitForResponse('**/api/user-data');
 
-// Wait for timeout
+// ✅ Simple timeout (use sparingly)
 await page.waitForTimeout(1000);
 ```
 
-## Error Handling
+## 🚨 Error Handling & Edge Cases
 
-### Assertion Errors
+### Form Validation Testing
 
 ```typescript
+// ✅ Test validation lifecycle: valid → validate → invalid → fix → valid
+test('form validation lifecycle', async () => {
+	const form_state = create_form_state({
+		email: { value: '', validation_rules: { required: true } },
+	});
+
+	// Initially valid (no validation run yet)
+	expect(untrack(() => form_state.is_form_valid())).toBe(true);
+
+	// Trigger validation - now invalid
+	form_state.validate_all_fields();
+	expect(untrack(() => form_state.is_form_valid())).toBe(false);
+
+	// Fix the error - valid again
+	form_state.update_field('email', 'test@example.com');
+	expect(untrack(() => form_state.is_form_valid())).toBe(true);
+});
+```
+
+### Component Error Testing
+
+```typescript
+// ✅ Test error boundaries
+expect(() => {
+	render(BrokenComponent);
+}).toThrow('Component error');
+
+// ✅ Test error states
+render(Component, {
+	props: {
+		error_message: 'Something went wrong',
+		has_error: true,
+	},
+});
+await expect
+	.element(page.getByText('Something went wrong'))
+	.toBeInTheDocument();
+```
+
+### Assertion Error Handling
+
+```typescript
+// ✅ Handle expected assertion failures
 try {
 	await expect
 		.element(page.getByText('Nonexistent'))
@@ -491,93 +515,55 @@ try {
 }
 ```
 
-### Component Error Testing
-
-```typescript
-// Test error boundaries
-expect(() => {
-	render(BrokenComponent);
-}).toThrow('Component error');
-
-// Test error states
-render(Component, { props: { error: 'Something went wrong' } });
-await expect
-	.element(page.getByText('Something went wrong'))
-	.toBeInTheDocument();
-```
-
-## Performance Testing
-
-### Timing
-
-```typescript
-// Measure render time
-const start = performance.now();
-render(HeavyComponent);
-const render_time = performance.now() - start;
-expect(render_time).toBeLessThan(100); // ms
-```
-
-### Memory
-
-```typescript
-// Check for memory leaks (simplified)
-const initial_heap = performance.memory?.usedJSHeapSize || 0;
-render(Component);
-// ... perform operations
-const final_heap = performance.memory?.usedJSHeapSize || 0;
-expect(final_heap - initial_heap).toBeLessThan(1000000); // bytes
-```
-
-## Custom Utilities
+## 🛠️ Custom Utilities
 
 ### Test Helpers
 
 ```typescript
-// Custom render helper
-function render_with_theme(Component: any, props = {}) {
+// ✅ Custom render helper with snake_case
+const render_with_theme = (Component: any, props = {}) => {
 	return render(Component, {
 		...props,
 		context: new Map([['theme', 'dark']]),
 	});
-}
+};
 
-// Form testing helper
-async function fill_form(data: Record<string, string>) {
-	for (const [field, value] of Object.entries(data)) {
-		await page.getByLabelText(field).fill(value);
+// ✅ Form testing helper
+const fill_form_data = async (form_data: Record<string, string>) => {
+	for (const [field_name, field_value] of Object.entries(form_data)) {
+		await page.getByLabelText(field_name).fill(field_value);
 	}
-}
+};
 
-// Wait helper
-async function wait_for_loading_to_complete() {
+// ✅ Loading state helper
+const wait_for_loading_complete = async () => {
 	await expect
-		.element(page.getByTestId('loading'))
+		.element(page.getByTestId('loading-spinner'))
 		.not.toBeInTheDocument();
-}
+};
 ```
 
 ### Custom Matchers
 
 ```typescript
-// Extend expect with custom matchers
+// ✅ Extend expect with domain-specific matchers
 expect.extend({
-	toHaveValidationError(received: any, expected: string) {
-		const error_element = page.getByText(expected);
-		const pass = !!error_element;
+	to_have_validation_error(received: any, expected_error: string) {
+		const error_element = page.getByText(expected_error);
+		const element_exists = !!error_element;
 
 		return {
-			pass,
+			pass: element_exists,
 			message: () =>
-				pass
-					? `Expected not to have validation error: ${expected}`
-					: `Expected to have validation error: ${expected}`,
+				element_exists
+					? `Expected not to have validation error: ${expected_error}`
+					: `Expected to have validation error: ${expected_error}`,
 		};
 	},
 });
 ```
 
-## Configuration
+## ⚙️ Configuration Reference
 
 ### Vitest Browser Config
 
@@ -589,28 +575,114 @@ export default defineConfig({
 			enabled: true,
 			name: 'chromium',
 			provider: 'playwright',
-			// Slow tests down for debugging
-			slowMo: 100,
-			// Take screenshots on failure
+			// Debugging options
+			slowMo: 100, // Slow down for debugging
 			screenshot: 'only-on-failure',
+			// Headless mode
+			headless: true,
 		},
+		// Workspace configuration
+		workspace: [
+			{
+				test: {
+					include: ['**/*.svelte.test.ts'],
+					name: 'client',
+					browser: { enabled: true },
+				},
+			},
+			{
+				test: {
+					include: ['**/*.ssr.test.ts'],
+					name: 'ssr',
+					environment: 'node',
+				},
+			},
+		],
 	},
 });
 ```
 
-### Test Environment
+### Test Environment Setup
 
 ```typescript
-// Set environment variables
+// ✅ Environment variables
 process.env.NODE_ENV = 'test';
 process.env.API_URL = 'http://localhost:3000';
 
-// Configure test timeouts
+// ✅ Custom timeouts
 test(
-	'slow test',
+	'slow integration test',
 	async () => {
-		// Custom timeout for this test
+		// Test implementation
 	},
 	{ timeout: 30000 },
 );
+
+// ✅ Test-specific configuration
+test.concurrent('parallel test', async () => {
+	// Runs in parallel with other concurrent tests
+});
 ```
+
+## 🚫 Critical Anti-Patterns
+
+### ❌ Never Use Containers
+
+```typescript
+// ❌ NEVER - No auto-retry, manual DOM queries
+const { container } = render(MyComponent);
+const button = container.querySelector('[data-testid="submit"]');
+
+// ✅ ALWAYS - Auto-retry, semantic queries
+render(MyComponent);
+const button = page.getByTestId('submit');
+await button.click();
+```
+
+### ❌ Don't Test Implementation Details
+
+```typescript
+// ❌ BRITTLE - Tests exact SVG path data
+expect(body).toContain(
+	'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
+);
+
+// ✅ ROBUST - Tests user-visible behavior
+await expect
+	.element(page.getByRole('img', { name: /success/i }))
+	.toBeInTheDocument();
+```
+
+### ❌ Don't Click Form Submits
+
+```typescript
+// ❌ Can cause hangs with SvelteKit enhance
+await page.getByRole('button', { name: 'Submit' }).click();
+
+// ✅ Test form state directly
+render(MyForm, { props: { errors: { email: 'Required' } } });
+await expect.element(page.getByText('Required')).toBeInTheDocument();
+```
+
+## 📚 Quick Reference
+
+### Essential Patterns
+
+- ✅ Use `page.getBy*()` locators - never containers
+- ✅ Always `await expect.element()` for assertions
+- ✅ Use `.first()`, `.nth()`, `.last()` for multiple elements
+- ✅ Use `untrack()` for `$derived` values
+- ✅ Use `force: true` for animations
+- ✅ Use snake_case for variables/functions
+- ✅ Test form validation lifecycle
+- ✅ Handle strict mode violations properly
+
+### Common Fixes
+
+- **"strict mode violation"**: Use `.first()`, `.nth()`, `.last()`
+- **Role confusion**: Links with `role="button"` are buttons
+- **Input elements**: Use `getByRole('textbox')`, not
+  `getByRole('input')`
+- **Derived values**: Always use `untrack(() => derived_value)`
+- **Form validation**: Test initial valid → validate → invalid → fix →
+  valid
