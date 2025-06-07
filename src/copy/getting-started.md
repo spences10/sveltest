@@ -7,6 +7,10 @@ applications using the experimental `vitest-browser-svelte` - the
 modern testing solution that runs your tests in real browsers instead
 of simulated environments.
 
+> **Note:** Vitest Browser Mode is currently experimental. While
+> stable for most use cases, APIs may change in future versions. Pin
+> your Vitest version when using Browser Mode in production.
+
 **You'll learn:**
 
 - Essential testing patterns that work in real browsers
@@ -105,6 +109,8 @@ export default defineConfig({
 					browser: {
 						enabled: true,
 						provider: 'playwright',
+						// Multiple browser instances for better performance
+						// Uses single Vite server with shared caching
 						instances: [
 							{ browser: 'chromium' },
 							// { browser: 'firefox' },
