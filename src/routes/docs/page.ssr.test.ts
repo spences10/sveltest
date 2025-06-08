@@ -47,6 +47,12 @@ const mock_data = {
 			description: 'Common issues and solutions',
 		},
 	],
+	docs_stats: {
+		sections: 6,
+		examples: 50,
+		coverage: 100,
+		accessibility: 'A11y',
+	},
 };
 
 describe('Documentation Page SSR', () => {

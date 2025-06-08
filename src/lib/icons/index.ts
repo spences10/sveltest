@@ -23,6 +23,7 @@ export { default as Menu } from './menu.svelte';
 export { default as MoreVertical } from './more-vertical.svelte';
 export { default as Plus } from './plus.svelte';
 export { default as Robot } from './robot.svelte';
+export { default as Search } from './search.svelte';
 export { default as Server } from './server.svelte';
 export { default as Settings } from './settings.svelte';
 export { default as Trash } from './trash.svelte';

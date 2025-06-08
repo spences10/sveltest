@@ -1,5 +1,6 @@
 <script lang="ts">
 	import CodeBlock from '$lib/components/code-block.svelte';
+	import DocsSearch from '$lib/components/docs-search.svelte';
 	import { documentation_examples } from '$lib/examples/code-examples';
 	import {
 		Arrow,
@@ -11,9 +12,8 @@
 		LightningBolt,
 		Settings,
 	} from '$lib/icons';
-
 	const { data } = $props();
-	const { topics } = data;
+	const { topics, docs_stats } = data;
 
 	// Icon mapping for topics
 	const icon_map = {
@@ -219,7 +219,7 @@ vi.mock('$lib/heavy-computation', () => ({
 					class="text-primary text-3xl font-bold"
 					data-testid="stat-sections"
 				>
-					6
+					{docs_stats.sections}
 				</div>
 				<div class="text-base-content/60 text-sm">Sections</div>
 			</div>
@@ -228,7 +228,7 @@ vi.mock('$lib/heavy-computation', () => ({
 					class="text-secondary text-3xl font-bold"
 					data-testid="stat-examples"
 				>
-					50+
+					{docs_stats.examples}+
 				</div>
 				<div class="text-base-content/60 text-sm">Examples</div>
 			</div>
@@ -237,7 +237,7 @@ vi.mock('$lib/heavy-computation', () => ({
 					class="text-accent text-3xl font-bold"
 					data-testid="stat-coverage"
 				>
-					100%
+					{docs_stats.coverage}%
 				</div>
 				<div class="text-base-content/60 text-sm">Coverage</div>
 			</div>
@@ -246,10 +246,15 @@ vi.mock('$lib/heavy-computation', () => ({
 					class="text-info text-3xl font-bold"
 					data-testid="stat-a11y"
 				>
-					A11y
+					{docs_stats.accessibility}
 				</div>
 				<div class="text-base-content/60 text-sm">Accessible</div>
 			</div>
+		</div>
+
+		<!-- Search Section -->
+		<div class="mx-auto mt-16 max-w-2xl">
+			<DocsSearch />
 		</div>
 	</div>
 </section>
