@@ -1,4 +1,4 @@
-# Migration Guide: @testing-library/svelte → vitest-browser-svelte
+# Migration Guide
 
 A comprehensive, step-by-step guide for migrating your Svelte testing
 setup from `@testing-library/svelte` to `vitest-browser-svelte`, based
