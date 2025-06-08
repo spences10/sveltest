@@ -14,22 +14,41 @@
 }
 
 @layer utilities {
+	/* Handle headers with rehype-autolink-headings 'wrap' behavior */
+	/* Structure: <h1><a>content</a></h1> */
+	.prose h1 a,
 	.prose h1 {
 		@apply from-primary via-secondary to-accent bg-gradient-to-r bg-clip-text leading-normal font-black tracking-wide text-transparent drop-shadow-lg;
 	}
 
+	.prose h2 a,
 	.prose h2 {
 		@apply text-secondary font-bold tracking-tight drop-shadow-sm;
 	}
 
+	.prose h3 a,
 	.prose h3 {
 		@apply text-secondary font-semibold tracking-tight;
 	}
 
+	.prose h4 a,
+	.prose h5 a,
+	.prose h6 a,
 	.prose h4,
 	.prose h5,
 	.prose h6 {
 		@apply text-secondary font-medium;
+	}
+
+	/* Ensure anchor links inside headers don't show underlines */
+	.prose h1 a,
+	.prose h2 a,
+	.prose h3 a,
+	.prose h4 a,
+	.prose h5 a,
+	.prose h6 a {
+		@apply no-underline;
+		text-decoration: none;
 	}
 
 	/* Add some nice text effects for emphasis */

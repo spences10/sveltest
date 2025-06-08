@@ -35,6 +35,16 @@
 						fill="currentColor"
 					/>
 					<span class="text-base-content/70">
+						by <a
+							href="https://scottspence.com"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="text-base-content/70 link hover:text-base-content"
+						>
+							Scott Spence
+						</a>
+					</span>
+					<span class="text-base-content/70">
 						for the Svelte community
 					</span>
 				</div>
