@@ -1,4 +1,5 @@
 <script lang="ts">
+	import GitHubStatusPills from '$lib/components/github-status-pills.svelte';
 	import {
 		Arrow,
 		BarChart,
@@ -42,18 +43,20 @@
 	<div class="hero relative flex min-h-screen items-center">
 		<div class="hero-content mx-auto max-w-6xl px-4 text-center">
 			<div class="space-y-8">
-				<!-- Badge -->
-				<div
-					class="bg-base-100/80 border-base-300/50 inline-flex items-center gap-3 rounded-full border px-6 py-3 shadow-lg backdrop-blur-sm"
-				>
+				<!-- Badge and Status Pills -->
+				<div class="space-y-3">
 					<div
-						class="bg-success h-2 w-2 animate-pulse rounded-full"
-					></div>
-					<span
-						class="text-base-content/70 text-sm font-medium tracking-wider uppercase"
+						class="bg-base-100/80 border-base-300/50 inline-flex items-center gap-3 rounded-full border px-6 py-3 shadow-lg backdrop-blur-sm"
 					>
-						Battle-Tested in Production
-					</span>
+						<CheckCircle class_names="h-4 w-4 text-success" />
+						<span
+							class="text-base-content/70 text-sm font-medium tracking-wider uppercase"
+						>
+							Battle-Tested in Production
+						</span>
+					</div>
+
+					<GitHubStatusPills />
 				</div>
 
 				<!-- Main heading -->
