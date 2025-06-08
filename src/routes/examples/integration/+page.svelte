@@ -5,8 +5,8 @@
 		Arrow,
 		BarChart,
 		CheckCircle,
+		Code,
 		Eye,
-		Hashtag,
 		LightningBolt,
 		Server,
 		Settings,
@@ -18,7 +18,7 @@
 			id: 'component-integration',
 			title: 'Component Integration',
 			description: 'Testing how multiple components work together',
-			icon: Hashtag,
+			icon: Code,
 			color: 'primary',
 			examples: [
 				'Form + Input + Button workflows',
@@ -441,7 +441,7 @@
 							<div
 								class="from-secondary/20 to-secondary/10 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br"
 							>
-								<Hashtag class_names="text-secondary h-6 w-6" />
+								<Code class_names="text-secondary h-6 w-6" />
 							</div>
 							<h3 class="text-xl font-bold">Component Showcase</h3>
 						</div>

@@ -8,8 +8,8 @@
 		BookOpen,
 		Calculator,
 		CheckCircle,
+		Code,
 		Eye,
-		Hashtag,
 		LightningBolt,
 		Settings,
 	} from '$lib/icons';
@@ -111,7 +111,7 @@
 								<h3
 									class="mb-4 flex items-center gap-2 text-lg font-bold"
 								>
-									<Hashtag class_names="text-info h-5 w-5" />
+									<Code class_names="text-info h-5 w-5" />
 									Testing Tools
 								</h3>
 								<div class="space-y-2">
@@ -253,7 +253,7 @@
 							<div
 								class="bg-success/20 flex h-10 w-10 items-center justify-center rounded-lg"
 							>
-								<Hashtag class_names="text-success h-5 w-5" />
+								<Code class_names="text-success h-5 w-5" />
 							</div>
 							<h3 class="text-xl font-bold">Basic Function Test</h3>
 						</div>

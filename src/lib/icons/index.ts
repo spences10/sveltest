@@ -16,7 +16,6 @@ export { default as Eye } from './eye.svelte';
 export { default as Filter } from './filter.svelte';
 export { default as GitHubFork } from './github-fork.svelte';
 export { default as GitHub } from './github.svelte';
-export { default as Hashtag } from './hashtag.svelte';
 export { default as Heart } from './heart.svelte';
 export { default as Home } from './home.svelte';
 export { default as LightningBolt } from './lightning-bolt.svelte';

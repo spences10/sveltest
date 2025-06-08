@@ -6,8 +6,8 @@
 		BookOpen,
 		CheckCircle,
 		Clipboard,
+		Code,
 		Eye,
-		Hashtag,
 		LightningBolt,
 		Settings,
 	} from '$lib/icons';
@@ -18,7 +18,7 @@
 	// Icon mapping for topics
 	const icon_map = {
 		'getting-started': BookOpen,
-		'testing-patterns': Hashtag,
+		'testing-patterns': Code,
 		'api-reference': Settings,
 		'migration-guide': Arrow,
 		troubleshooting: CheckCircle,
@@ -912,7 +912,7 @@ vi.mock('$lib/heavy-computation', () => ({
 				class="btn btn-primary btn-lg"
 				role="button"
 			>
-				<Hashtag class_names="h-5 w-5" />
+				<Code class_names="h-5 w-5" />
 				View Examples
 			</a>
 			<a
