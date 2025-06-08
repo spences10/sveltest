@@ -5,8 +5,10 @@
 		BookOpen,
 		Calculator,
 		CheckCircle,
+		CircleDot,
 		Clipboard,
 		GitHub,
+		GithubFork,
 		Heart,
 		LightningBolt,
 	} from '$lib/icons';
@@ -227,7 +229,8 @@
 						<div
 							class="from-secondary/20 to-secondary/10 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br transition-transform duration-300 group-hover:scale-110"
 						>
-							<CheckCircle class_names="text-secondary h-8 w-8" />
+							<!-- <CheckCircle class_names="text-secondary h-8 w-8" /> -->
+							<CircleDot class_names="text-secondary h-8 w-8" />
 						</div>
 						<h3 class="mb-4 text-2xl font-bold">Report Issues</h3>
 						<p class="text-base-content/70 mb-6 leading-relaxed">
@@ -323,7 +326,7 @@
 							rel="noopener noreferrer"
 							class="btn btn-primary btn-lg gap-3 px-8 shadow-xl transition-all duration-300 hover:scale-105"
 						>
-							<GitHub class_names="h-6 w-6" />
+							<GithubFork class_names="h-6 w-6" />
 							Fork & Contribute
 							<Arrow
 								direction="up-right"

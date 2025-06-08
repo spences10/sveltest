@@ -10,7 +10,7 @@
 		height = '24px',
 		width = '24px',
 		class_names,
-		aria_label = 'More options icon',
+		aria_label = 'Circle dot icon',
 	}: Props = $props();
 </script>
 
@@ -19,16 +19,13 @@
 	{height}
 	{width}
 	class={class_names}
-	fill="none"
-	viewBox="0 0 24 24"
-	stroke="currentColor"
+	fill="currentColor"
+	viewBox="0 0 16 16"
 	aria-label={aria_label}
 	role="img"
 >
+	<path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path>
 	<path
-		stroke-linecap="round"
-		stroke-linejoin="round"
-		stroke-width="2"
-		d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
-	/>
+		d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Z"
+	></path>
 </svg>

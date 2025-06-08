@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Nav from '$lib/components/nav.svelte';
-	import { Arrow, GitHub, Heart, Robot } from '$lib/icons';
+	import { Arrow, CircleDot, GitHub, Heart, Robot } from '$lib/icons';
 	import '../app.css';
 
 	let { children } = $props();
@@ -58,6 +58,7 @@
 						rel="noopener noreferrer"
 						class="btn btn-ghost btn-sm hover:bg-base-300/50"
 					>
+						<CircleDot class_names="h-4 w-4" />
 						Report Issue
 						<Arrow
 							direction="up-right"

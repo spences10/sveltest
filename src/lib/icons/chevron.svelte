@@ -6,6 +6,7 @@
 		height?: string;
 		width?: string;
 		class_names?: string;
+		aria_label?: string;
 	}
 
 	let {
@@ -13,6 +14,7 @@
 		height = '24px',
 		width = '24px',
 		class_names,
+		aria_label,
 	}: Props = $props();
 
 	const get_rotation = (dir: Direction): string => {
@@ -25,7 +27,20 @@
 		return rotations[dir];
 	};
 
+	const get_default_aria_label = (dir: Direction): string => {
+		const labels = {
+			up: 'Chevron pointing up',
+			right: 'Chevron pointing right',
+			down: 'Chevron pointing down',
+			left: 'Chevron pointing left',
+		};
+		return labels[dir];
+	};
+
 	const rotation = $derived(get_rotation(direction));
+	const computed_aria_label = $derived(
+		aria_label || get_default_aria_label(direction),
+	);
 </script>
 
 <svg
@@ -38,6 +53,8 @@
 	stroke-width="1.5"
 	stroke="currentColor"
 	style="transform: rotate({rotation}); transition: transform 0.2s ease;"
+	aria-label={computed_aria_label}
+	role="img"
 >
 	<path
 		stroke-linecap="round"

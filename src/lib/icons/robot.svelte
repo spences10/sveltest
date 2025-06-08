@@ -3,12 +3,14 @@
 		height?: string;
 		width?: string;
 		class_names?: string;
+		aria_label?: string;
 	}
 
 	let {
 		height = '24px',
 		width = '24px',
 		class_names,
+		aria_label = 'Robot icon',
 	}: Props = $props();
 </script>
 
@@ -19,6 +21,8 @@
 	class={class_names}
 	fill="none"
 	viewBox="0 0 12 12"
+	aria-label={aria_label}
+	role="img"
 >
 	<path
 		fill="currentColor"
