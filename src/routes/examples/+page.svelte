@@ -107,12 +107,12 @@
 							<h3 class="mb-4 text-2xl font-bold">Unit Testing</h3>
 							<p class="text-base-content/70 mb-6 leading-relaxed">
 								Test individual components and functions in isolation
-								with Vitest and Testing Library
+								with Vitest and vitest-browser-svelte
 							</p>
 							<div class="mb-6 flex flex-wrap gap-2">
 								<div class="badge badge-primary badge-sm">Vitest</div>
 								<div class="badge badge-secondary badge-sm">
-									Testing Library
+									vitest-browser-svelte
 								</div>
 								<div class="badge badge-accent badge-sm">
 									Component Testing

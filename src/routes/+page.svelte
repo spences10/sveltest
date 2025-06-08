@@ -8,7 +8,7 @@
 		CircleDot,
 		Clipboard,
 		GitHub,
-		GithubFork,
+		GitHubFork,
 		Heart,
 		LightningBolt,
 	} from '$lib/icons';
@@ -326,7 +326,7 @@
 							rel="noopener noreferrer"
 							class="btn btn-primary btn-lg gap-3 px-8 shadow-xl transition-all duration-300 hover:scale-105"
 						>
-							<GithubFork class_names="h-6 w-6" />
+							<GitHubFork class_names="h-6 w-6" />
 							Fork & Contribute
 							<Arrow
 								direction="up-right"
@@ -378,7 +378,7 @@
 						<h3 class="mb-4 text-2xl font-bold">Testing Types</h3>
 						<p class="text-base-content/70 mb-6 leading-relaxed">
 							Unit, integration, and component testing examples using
-							Vitest and Testing Library
+							Vitest and vitest-browser-svelte
 						</p>
 						<div class="flex flex-wrap gap-2">
 							<div class="badge badge-primary badge-sm">

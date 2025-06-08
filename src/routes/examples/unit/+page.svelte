@@ -19,7 +19,7 @@
 	<title>Unit Testing Examples - Sveltest</title>
 	<meta
 		name="description"
-		content="Learn unit testing with practical examples using Vitest and Testing Library"
+		content="Learn unit testing with practical examples using Vitest and vitest-browser-svelte"
 	/>
 </svelte:head>
 
@@ -42,7 +42,7 @@
 			</h1>
 			<p class="text-base-content/70 mx-auto max-w-3xl text-xl">
 				Learn unit testing fundamentals with practical examples using
-				Vitest and Testing Library
+				Vitest and vitest-browser-svelte
 			</p>
 		</div>
 
@@ -119,7 +119,7 @@
 										Vitest
 									</div>
 									<div class="badge badge-outline badge-sm">
-										Testing Library
+										vitest-browser-svelte
 									</div>
 									<div class="badge badge-outline badge-sm">
 										User Events
