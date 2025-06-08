@@ -103,7 +103,9 @@
 	<div class="mb-8">
 		<h2 class="text-base-content mb-2 text-3xl font-bold">{title}</h2>
 		{#if showStats}
-			<div class="stats bg-base-100 shadow">
+			<div
+				class="stats stats-vertical lg:stats-horizontal bg-base-100 shadow"
+			>
 				<div class="stat">
 					<div class="stat-figure text-primary">
 						<BarChart class_names="w-8 h-8" />
