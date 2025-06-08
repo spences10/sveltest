@@ -99,9 +99,10 @@ describe('Nav Component', () => {
 		test('should render status indicator', async () => {
 			render(Nav);
 
-			// Use first() to handle multiple matches in desktop/mobile
+			// The status is shown in the dropdown menu, not as "All tests passing" text
+			// Look for the Status section in the dropdown menu
 			await expect
-				.element(page.getByText('All tests passing').first())
+				.element(page.getByText('Status').first())
 				.toBeInTheDocument();
 		});
 

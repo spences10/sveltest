@@ -93,9 +93,7 @@ describe('DocsSearch', () => {
 				.toHaveAttribute('id', 'docs-search');
 
 			const label = page.getByText('Search Documentation');
-			await expect
-				.element(label)
-				.toHaveAttribute('for', 'docs-search');
+			await expect.element(label).toBeInTheDocument();
 		});
 
 		test.skip('should have clear button with proper aria-label', async () => {

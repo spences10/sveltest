@@ -79,12 +79,25 @@ export class GitHubStatusManager {
 	get status_message(): string {
 		if (!this.state.data) return 'Status unknown';
 
+		const { unit_tests, e2e_tests } = this.state.data;
 		const overall = this.overall_status;
 
 		if (overall === 'passing') {
 			return 'All tests passing';
 		} else if (overall === 'failing') {
-			return 'Tests failing';
+			// Provide specific failure messages
+			const unit_failing = unit_tests.status === 'failing';
+			const e2e_failing = e2e_tests.status === 'failing';
+
+			if (unit_failing && e2e_failing) {
+				return 'Unit & E2E tests failing';
+			} else if (unit_failing) {
+				return 'Unit tests failing';
+			} else if (e2e_failing) {
+				return 'E2E tests failing';
+			} else {
+				return 'Tests failing';
+			}
 		} else {
 			return 'Test status unknown';
 		}

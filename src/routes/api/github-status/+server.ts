@@ -66,6 +66,10 @@ export const GET: RequestHandler = async () => {
 			get_workflow_status(E2E_WORKFLOW),
 		]);
 
+		// Check if any status is unknown due to errors
+		const has_errors =
+			unit_status === 'unknown' || e2e_status === 'unknown';
+
 		const status: GitHubStatus = {
 			unit_tests: {
 				status: unit_status,
@@ -76,6 +80,16 @@ export const GET: RequestHandler = async () => {
 				badge_url: `https://github.com/${GITHUB_REPO}/actions/workflows/${E2E_WORKFLOW}/badge.svg`,
 			},
 		};
+
+		// Return 500 if there were errors fetching status
+		if (has_errors) {
+			return json(status, {
+				status: 500,
+				headers: {
+					'Cache-Control': 'public, max-age=60', // Shorter cache for errors
+				},
+			});
+		}
 
 		return json(status, {
 			headers: {
