@@ -41,6 +41,41 @@ methodologies. Whether you're using Cursor, Windsurf, or other
 AI-powered editors, these rules ensure consistent, high-quality
 testing patterns across your team.
 
+## Community-Driven Development
+
+Sveltest is more than just a personal project - it's a **community
+resource** built by developers, for developers. The patterns,
+examples, and documentation you see here represent collective wisdom
+from teams working with Svelte 5 and modern testing tools in
+production environments.
+
+### Open Source & Collaborative
+
+The entire project is
+[open source on GitHub](https://github.com/spences10/sveltest), where
+you can:
+
+- **Contribute new testing patterns** from your own projects
+- **Report issues** or suggest improvements
+- **Share knowledge** through discussions and examples
+- **Help improve documentation** for the community
+
+Every contribution, whether it's a bug report, a new testing example,
+or documentation improvement, makes the resource better for everyone
+in the Svelte ecosystem.
+
+### Your Testing Patterns Matter
+
+Have you discovered a testing pattern that works well in your project?
+Found a better way to test a specific Svelte 5 feature? Encountered an
+edge case that others should know about? **Your experience can help
+other developers.**
+
+The best testing resources come from real-world usage, and every team
+brings unique challenges and solutions. By sharing your patterns and
+contributing to the project, you help build the most comprehensive
+Svelte testing resource available.
+
 ## Why Share This?
 
 The Svelte ecosystem deserves modern, production-ready testing
@@ -67,4 +102,9 @@ documentation for the modern web development era.
 
 _Sveltest represents the testing patterns and approaches I wish had
 existed when I started my Svelte testing journey. Now they're here for
-you._
+you - and with your contributions, they can be even better for the
+next developer._
+
+**Ready to contribute?** Visit the
+[GitHub repository](https://github.com/spences10/sveltest) to get
+started.

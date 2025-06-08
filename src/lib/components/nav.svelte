@@ -6,6 +6,7 @@
 		CheckCircle,
 		Clipboard,
 		Document,
+		GitHub,
 		Home,
 		Menu,
 		MoreVertical,
@@ -50,6 +51,12 @@
 
 	const settings_links = [
 		{ href: '/docs', title: 'Documentation', icon: Document },
+		{
+			href: 'https://github.com/spences10/sveltest',
+			title: 'GitHub Repository',
+			icon: GitHub,
+			external: true,
+		},
 	];
 
 	const is_active = (path: string) => {
@@ -225,9 +232,18 @@
 			>
 				{#each settings_links as link}
 					<li>
-						<a href={link.href} class="gap-2">
+						<a
+							href={link.href}
+							class="gap-2"
+							{...link.external
+								? { target: '_blank', rel: 'noopener noreferrer' }
+								: {}}
+						>
 							<link.icon class_names="h-4 w-4" />
 							{link.title}
+							{#if link.external}
+								<span class="text-xs opacity-60">↗</span>
+							{/if}
 						</a>
 					</li>
 				{/each}

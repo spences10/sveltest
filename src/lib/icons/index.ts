@@ -13,6 +13,7 @@ export { default as Document } from './document.svelte';
 export { default as EyeOff } from './eye-off.svelte';
 export { default as Eye } from './eye.svelte';
 export { default as Filter } from './filter.svelte';
+export { default as GitHub } from './github.svelte';
 export { default as Hashtag } from './hashtag.svelte';
 export { default as Heart } from './heart.svelte';
 export { default as Home } from './home.svelte';

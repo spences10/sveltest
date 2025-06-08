@@ -3,6 +3,14 @@
 	"private": true,
 	"version": "0.0.1",
 	"type": "module",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/spences10/sveltest.git"
+	},
+	"homepage": "https://github.com/spences10/sveltest",
+	"bugs": {
+		"url": "https://github.com/spences10/sveltest/issues"
+	},
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
