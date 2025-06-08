@@ -16,6 +16,12 @@ export const topics: Topic[] = [
 		description: 'Component, SSR, and server testing patterns',
 	},
 	{
+		slug: 'e2e-testing',
+		title: 'E2E Testing',
+		description:
+			'End-to-end testing patterns and integration validation',
+	},
+	{
 		slug: 'api-reference',
 		title: 'API Reference',
 		description: 'Complete testing utilities and helper functions',
@@ -29,6 +35,11 @@ export const topics: Topic[] = [
 		slug: 'best-practices',
 		title: 'Best Practices',
 		description: 'Advanced patterns and optimization techniques',
+	},
+	{
+		slug: 'ci-cd',
+		title: 'CI/CD',
+		description: 'Production-ready testing pipelines and automation',
 	},
 	{
 		slug: 'troubleshooting',
