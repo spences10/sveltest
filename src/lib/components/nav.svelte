@@ -243,11 +243,30 @@
 						<span>Status</span>
 					</li>
 
-					<!-- Detailed Status (if data available) -->
-					{#if github_status.data}
-						<li class="disabled" role="none">
-							<!-- svelte-ignore a11y_missing_attribute -->
-							<a class="gap-2">
+					<!-- Status Display -->
+					<li class="disabled" role="none">
+						<!-- svelte-ignore a11y_missing_attribute -->
+						<a class="gap-2">
+							{#if github_status.loading}
+								<div
+									class="flex items-center gap-2 text-xs opacity-70"
+								>
+									<div
+										class="loading loading-spinner loading-xs"
+									></div>
+									<span>Loading status...</span>
+								</div>
+							{:else if github_status.error}
+								<div
+									class="flex items-center gap-2 text-xs opacity-70"
+								>
+									<div
+										class="bg-warning h-1.5 w-1.5 rounded-full"
+										aria-hidden="true"
+									></div>
+									<span>Status unavailable</span>
+								</div>
+							{:else if github_status.data}
 								<div class="flex flex-col gap-1 text-xs opacity-70">
 									<div class="flex items-center gap-2">
 										<div
@@ -282,7 +301,34 @@
 										>
 									</div>
 								</div>
-							</a>
+							{:else}
+								<div
+									class="flex items-center gap-2 text-xs opacity-70"
+								>
+									<div
+										class="bg-warning h-1.5 w-1.5 rounded-full"
+										aria-hidden="true"
+									></div>
+									<span>Status unknown</span>
+								</div>
+							{/if}
+						</a>
+					</li>
+
+					<!-- Refresh Button (when there's an error) -->
+					{#if github_status.error}
+						<li role="none">
+							<button
+								class="gap-2 text-xs"
+								onclick={() => github_status.refresh()}
+								role="menuitem"
+							>
+								<div
+									class="loading loading-spinner loading-xs"
+									class:hidden={!github_status.loading}
+								></div>
+								<span>Retry</span>
+							</button>
 						</li>
 					{/if}
 				</ul>

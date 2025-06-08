@@ -133,18 +133,28 @@ export class GitHubStatusManager {
 		try {
 			const response = await fetch('/api/github-status');
 
-			if (!response.ok) {
+			// Handle both successful responses and 500s with valid data
+			if (response.ok || response.status === 500) {
+				const data: GitHubStatus = await response.json();
+
+				this.state.data = data;
+				this.state.loading = false;
+				this.state.last_updated = Date.now();
+
+				// Set error state for 500 responses but still use the data
+				if (response.status === 500) {
+					this.state.error = 'GitHub API temporarily unavailable';
+					console.warn(
+						'GitHub status API returned 500, using fallback data',
+					);
+				} else {
+					this.state.error = null;
+				}
+			} else {
 				throw new Error(
 					`HTTP ${response.status}: ${response.statusText}`,
 				);
 			}
-
-			const data: GitHubStatus = await response.json();
-
-			this.state.data = data;
-			this.state.loading = false;
-			this.state.error = null;
-			this.state.last_updated = Date.now();
 		} catch (error) {
 			const error_message =
 				error instanceof Error
