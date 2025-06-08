@@ -202,17 +202,19 @@ Start with a simple component to establish patterns:
 ```typescript
 // page.svelte.test.ts (OLD)
 import { render, screen } from '@testing-library/svelte';
-import { expect, test } from 'vitest';
+import { expect, it, describe } from 'vitest';
 import Page from './+page.svelte';
 
-it('homepage renders navigation', async () => {
-	render(Page);
+describe('Home Page', () => {
+	it('homepage renders navigation', async () => {
+		render(Page);
 
-	const nav = screen.getByRole('navigation');
-	expect(nav).toBeInTheDocument();
+		const nav = screen.getByRole('navigation');
+		expect(nav).toBeInTheDocument();
 
-	const heading = screen.getByRole('heading', { level: 1 });
-	expect(heading).toHaveTextContent('Welcome to Sveltest');
+		const heading = screen.getByRole('heading', { level: 1 });
+		expect(heading).toHaveTextContent('Welcome to Sveltest');
+	});
 });
 ```
 
@@ -429,25 +431,32 @@ describe('Modal Component', () => {
 ```typescript
 // BEFORE: Manual waiting with @testing-library/svelte
 import { waitFor } from '@testing-library/dom';
+import { describe, it } from 'vitest';
 
-it('async operation', async () => {
-	render(Component);
-	const button = screen.getByRole('button');
-	await button.click();
+describe('Async Operations', () => {
+	it('async operation', async () => {
+		render(Component);
+		const button = screen.getByRole('button');
+		await button.click();
 
-	await waitFor(() => {
-		expect(screen.getByText('Success')).toBeInTheDocument();
+		await waitFor(() => {
+			expect(screen.getByText('Success')).toBeInTheDocument();
+		});
 	});
 });
 
 // AFTER: Built-in retry with vitest-browser-svelte
-it('async operation', async () => {
-	render(Component);
-	const button = page.getByRole('button');
-	await button.click();
+describe('Async Operations', () => {
+	it('async operation', async () => {
+		render(Component);
+		const button = page.getByRole('button');
+		await button.click();
 
-	// Auto-retry built-in - no waitFor needed!
-	await expect.element(page.getByText('Success')).toBeInTheDocument();
+		// Auto-retry built-in - no waitFor needed!
+		await expect
+			.element(page.getByText('Success'))
+			.toBeInTheDocument();
+	});
 });
 ```
 
@@ -459,21 +468,25 @@ it('async operation', async () => {
 // Testing components with Svelte 5 runes
 import { render } from 'vitest-browser-svelte';
 import { page } from '@vitest/browser/context';
-import { expect, it } from 'vitest';
+import { expect, it, describe } from 'vitest';
 import Counter from './counter.svelte';
 
-it('counter with runes', async () => {
-	render(Counter, { initialCount: 5 });
+describe('Counter Component', () => {
+	describe('Svelte 5 Runes', () => {
+		it('counter with runes', async () => {
+			render(Counter, { initialCount: 5 });
 
-	const count_display = page.getByTestId('count');
-	await expect.element(count_display).toHaveTextContent('5');
+			const count_display = page.getByTestId('count');
+			await expect.element(count_display).toHaveTextContent('5');
 
-	const increment_button = page.getByRole('button', {
-		name: 'Increment',
+			const increment_button = page.getByRole('button', {
+				name: 'Increment',
+			});
+			await increment_button.click();
+
+			await expect.element(count_display).toHaveTextContent('6');
+		});
 	});
-	await increment_button.click();
-
-	await expect.element(count_display).toHaveTextContent('6');
 });
 ```
 
@@ -514,7 +527,7 @@ describe('LoginForm Validation', () => {
 // Testing components with dependencies
 import { render } from 'vitest-browser-svelte';
 import { page } from '@vitest/browser/context';
-import { expect, it, vi } from 'vitest';
+import { expect, it, vi, describe } from 'vitest';
 import { validate_email } from '$lib/utils/validation';
 import LoginForm from './login-form.svelte';
 
@@ -524,19 +537,27 @@ vi.mock('$lib/utils/validation', () => ({
 	validate_password: vi.fn(),
 }));
 
-it('form uses validation utilities', async () => {
-	const mockValidateEmail = vi.mocked(validate_email);
-	mockValidateEmail.mockReturnValue({
-		valid: false,
-		message: 'Invalid email',
+describe('LoginForm Component', () => {
+	describe('Validation Integration', () => {
+		it('form uses validation utilities', async () => {
+			const mockValidateEmail = vi.mocked(validate_email);
+			mockValidateEmail.mockReturnValue({
+				valid: false,
+				message: 'Invalid email',
+			});
+
+			render(LoginForm);
+
+			const email_input = page.getByPlaceholderText(
+				'Enter your email',
+			);
+			await email_input.fill('test@example.com');
+
+			expect(mockValidateEmail).toHaveBeenCalledWith(
+				'test@example.com',
+			);
+		});
 	});
-
-	render(LoginForm);
-
-	const email_input = page.getByPlaceholderText('Enter your email');
-	await email_input.fill('test@example.com');
-
-	expect(mockValidateEmail).toHaveBeenCalledWith('test@example.com');
 });
 ```
 
@@ -558,50 +579,56 @@ expect(someValue).toBe(true);
 ### 2. Event Handler Testing Issues
 
 ```typescript
-// ❌ PROBLEMATIC: Events not triggering in test environment
-it('form submission', async () => {
-	render(LoginForm);
-	const form = page.getByRole('form');
-	await form.submit(); // May not trigger onsubmit
-});
+describe('Form Submission', () => {
+	// ❌ PROBLEMATIC: Events not triggering in test environment
+	it('form submission', async () => {
+		render(LoginForm);
+		const form = page.getByRole('form');
+		await form.submit(); // May not trigger onsubmit
+	});
 
-// ✅ BETTER: Test button clicks instead
-it('form submission', async () => {
-	render(LoginForm);
-	const submit_button = page.getByRole('button', { name: 'Submit' });
-	await submit_button.click({ force: true });
+	// ✅ BETTER: Test button clicks instead
+	it('form submission', async () => {
+		render(LoginForm);
+		const submit_button = page.getByRole('button', {
+			name: 'Submit',
+		});
+		await submit_button.click({ force: true });
+	});
 });
 ```
 
 ### 3. Timing Issues with State Updates
 
 ```typescript
-// ❌ PROBLEMATIC: Immediate assertions after state changes
-it('password toggle', async () => {
-	render(LoginForm);
-	const toggle_button = page.getByTestId('password-toggle');
-	await toggle_button.click();
+describe('Password Toggle', () => {
+	// ❌ PROBLEMATIC: Immediate assertions after state changes
+	it('password toggle', async () => {
+		render(LoginForm);
+		const toggle_button = page.getByTestId('password-toggle');
+		await toggle_button.click();
 
-	// This might fail due to timing
-	const password_input = page.getByLabelText('Password');
-	await expect
-		.element(password_input)
-		.toHaveAttribute('type', 'text');
-});
+		// This might fail due to timing
+		const password_input = page.getByLabelText('Password');
+		await expect
+			.element(password_input)
+			.toHaveAttribute('type', 'text');
+	});
 
-// ✅ BETTER: Test the interaction, not immediate state
-it('password toggle interaction', async () => {
-	render(LoginForm);
-	const toggle_button = page.getByTestId('password-toggle');
+	// ✅ BETTER: Test the interaction, not immediate state
+	it('password toggle interaction', async () => {
+		render(LoginForm);
+		const toggle_button = page.getByTestId('password-toggle');
 
-	// Test that the button is clickable and responds
-	await expect.element(toggle_button).toBeVisible();
-	await toggle_button.click();
+		// Test that the button is clickable and responds
+		await expect.element(toggle_button).toBeVisible();
+		await toggle_button.click();
 
-	// Test the toggle button state change instead
-	await expect
-		.element(toggle_button)
-		.toHaveAttribute('aria-pressed', 'true');
+		// Test the toggle button state change instead
+		await expect
+			.element(toggle_button)
+			.toHaveAttribute('aria-pressed', 'true');
+	});
 });
 ```
 
