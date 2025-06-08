@@ -13,6 +13,12 @@ vi.mock('$app/state', () => ({
 
 // Mock all icon components for SSR
 vi.mock('$lib/icons', () => ({
+	Arrow: vi.fn().mockImplementation(() => ({
+		$$: {},
+		$set: vi.fn(),
+		$destroy: vi.fn(),
+		$on: vi.fn(),
+	})),
 	BarChart: vi.fn().mockImplementation(() => ({
 		$$: {},
 		$set: vi.fn(),
@@ -38,6 +44,12 @@ vi.mock('$lib/icons', () => ({
 		$on: vi.fn(),
 	})),
 	Document: vi.fn().mockImplementation(() => ({
+		$$: {},
+		$set: vi.fn(),
+		$destroy: vi.fn(),
+		$on: vi.fn(),
+	})),
+	GitHub: vi.fn().mockImplementation(() => ({
 		$$: {},
 		$set: vi.fn(),
 		$destroy: vi.fn(),
@@ -91,10 +103,12 @@ describe('Nav Component SSR', () => {
 
 			// Test main navigation links for SEO
 			expect(body).toContain('href="/"');
+			expect(body).toContain('href="/docs"');
 			expect(body).toContain('href="/components"');
 			expect(body).toContain('href="/examples"');
 			expect(body).toContain('href="/todos"');
 			expect(body).toContain('Home');
+			expect(body).toContain('Docs');
 			expect(body).toContain('Components');
 			expect(body).toContain('Examples');
 			expect(body).toContain('Todo Manager');
@@ -110,12 +124,14 @@ describe('Nav Component SSR', () => {
 			expect(body).toContain('Form Actions');
 		});
 
-		test('should render settings links', () => {
+		test('should render GitHub repository link', () => {
 			const { body } = render(Nav);
 
-			// Test settings dropdown links (now only contains documentation)
-			expect(body).toContain('href="/docs"');
-			expect(body).toContain('Documentation');
+			// Test GitHub link
+			expect(body).toContain(
+				'href="https://github.com/spences10/sveltest"',
+			);
+			expect(body).toContain('GitHub Repository');
 		});
 	});
 
@@ -141,8 +157,7 @@ describe('Nav Component SSR', () => {
 			const { body } = render(Nav);
 
 			// Test ARIA labels for interactive elements
-			expect(body).toContain('aria-label="Open mobile menu"');
-			expect(body).toContain('aria-label="Open settings menu"');
+			expect(body).toContain('aria-label="Open navigation menu"');
 		});
 
 		test('should render proper link structure for crawlers', () => {
@@ -151,12 +166,13 @@ describe('Nav Component SSR', () => {
 			// Test that all important links are present for SEO
 			const important_links = [
 				'href="/"',
+				'href="/docs"',
 				'href="/components"',
 				'href="/examples"',
 				'href="/todos"',
-				'href="/docs"',
 				'href="/examples/unit"',
 				'href="/examples/todos"',
+				'href="https://github.com/spences10/sveltest"',
 			];
 
 			important_links.forEach((link) => {
@@ -185,7 +201,7 @@ describe('Nav Component SSR', () => {
 			const { body } = render(Nav);
 
 			// Test mobile menu button
-			expect(body).toContain('Open mobile menu');
+			expect(body).toContain('Open navigation menu');
 			expect(body).toContain('dropdown');
 		});
 
@@ -200,11 +216,65 @@ describe('Nav Component SSR', () => {
 		test('should render mobile navigation links', () => {
 			const { body } = render(Nav);
 
-			// Test that mobile navigation contains the same essential links
+			// Test that mobile dock contains main navigation
 			expect(body).toContain('Home');
-			expect(body).toContain('Components');
-			expect(body).toContain('Examples');
-			expect(body).toContain('Todo Manager');
+			expect(body).toContain('Docs');
+		});
+	});
+
+	describe('External Links', () => {
+		test('should render external links with proper attributes', () => {
+			const { body } = render(Nav);
+
+			// Test external link attributes for security
+			expect(body).toContain('target="_blank"');
+			expect(body).toContain('rel="noopener noreferrer"');
+		});
+
+		test('should render GitHub repository link', () => {
+			const { body } = render(Nav);
+
+			expect(body).toContain(
+				'href="https://github.com/spences10/sveltest"',
+			);
+			expect(body).toContain('GitHub Repository');
+		});
+	});
+
+	describe('Responsive Design', () => {
+		test('should render responsive classes', () => {
+			const { body } = render(Nav);
+
+			// Test responsive utility classes
+			expect(body).toContain('lg:flex');
+			expect(body).toContain('lg:hidden');
+			expect(body).toContain('hidden');
+		});
+
+		test('should render mobile-specific elements', () => {
+			const { body } = render(Nav);
+
+			// Test mobile dock
+			expect(body).toContain('dock');
+			expect(body).toContain('fixed');
+			expect(body).toContain('bottom-0');
+		});
+	});
+
+	describe('Status and Indicators', () => {
+		test('should render test status indicator', () => {
+			const { body } = render(Nav);
+
+			expect(body).toContain('All tests passing');
+			expect(body).toContain('bg-success');
+		});
+
+		test('should render status with proper styling', () => {
+			const { body } = render(Nav);
+
+			// Test status indicator styling
+			expect(body).toContain('animate-pulse');
+			expect(body).toContain('text-success');
 		});
 	});
 
@@ -216,15 +286,6 @@ describe('Nav Component SSR', () => {
 			expect(body).toContain('bg-base-100/90');
 			expect(body).toContain('sticky');
 			expect(body).toContain('top-0');
-		});
-
-		test('should render responsive classes', () => {
-			const { body } = render(Nav);
-
-			// Test responsive visibility classes
-			expect(body).toContain('lg:flex');
-			expect(body).toContain('lg:hidden');
-			expect(body).toContain('hidden');
 		});
 
 		test('should render dropdown classes', () => {
@@ -266,8 +327,8 @@ describe('Nav Component SSR', () => {
 			const { body } = render(Nav);
 
 			expect(body).toContain('Testing');
-			expect(body).toContain('details');
-			expect(body).toContain('summary');
+			expect(body).toContain('dropdown');
+			expect(body).toContain('menu');
 		});
 
 		test('should render proper menu structure', () => {

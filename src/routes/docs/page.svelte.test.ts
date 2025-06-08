@@ -3,7 +3,7 @@ import { describe, expect, test } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import DocsPage from './+page.svelte';
 
-// Mock data that matches the expected structure
+// Mock data that matches the expected structure from +page.ts
 const mock_data = {
 	topics: [
 		{
@@ -37,6 +37,12 @@ const mock_data = {
 			description: 'Common issues and solutions',
 		},
 	],
+	docs_stats: {
+		sections: 6,
+		examples: 50,
+		coverage: 100,
+		accessibility: 'A11y',
+	},
 };
 
 /**

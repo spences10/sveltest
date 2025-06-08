@@ -14,11 +14,13 @@ vi.mock('$app/state', () => ({
 
 // Mock all icon components with simpler structure that renders actual content
 vi.mock('$lib/icons', () => ({
+	Arrow: vi.fn(() => 'Arrow'),
 	BarChart: vi.fn(() => 'BarChart'),
 	Calculator: vi.fn(() => 'Calculator'),
 	CheckCircle: vi.fn(() => 'CheckCircle'),
 	Clipboard: vi.fn(() => 'Clipboard'),
 	Document: vi.fn(() => 'Document'),
+	GitHub: vi.fn(() => 'GitHub'),
 	Home: vi.fn(() => 'Home'),
 	Menu: vi.fn(() => 'Menu'),
 	MoreVertical: vi.fn(() => 'MoreVertical'),
@@ -34,6 +36,8 @@ describe('Nav Component', () => {
 		test('should have all icon components mocked correctly', async () => {
 			const icons = await import('$lib/icons');
 
+			expect(icons.Arrow).toBeDefined();
+			expect(vi.isMockFunction(icons.Arrow)).toBe(true);
 			expect(icons.BarChart).toBeDefined();
 			expect(vi.isMockFunction(icons.BarChart)).toBe(true);
 			expect(icons.Calculator).toBeDefined();
@@ -44,6 +48,8 @@ describe('Nav Component', () => {
 			expect(vi.isMockFunction(icons.Clipboard)).toBe(true);
 			expect(icons.Document).toBeDefined();
 			expect(vi.isMockFunction(icons.Document)).toBe(true);
+			expect(icons.GitHub).toBeDefined();
+			expect(vi.isMockFunction(icons.GitHub)).toBe(true);
 			expect(icons.Home).toBeDefined();
 			expect(vi.isMockFunction(icons.Home)).toBe(true);
 			expect(icons.Menu).toBeDefined();
@@ -78,38 +84,15 @@ describe('Nav Component', () => {
 				.toBeInTheDocument();
 		});
 
-		test('should render main navigation links', async () => {
+		test('should render mobile dock navigation links', async () => {
 			render(Nav);
 
-			// Use .first() to handle multiple instances (desktop + mobile)
+			// Test mobile dock links (these are always visible)
 			await expect
-				.element(page.getByRole('link', { name: /Home/i }).first())
+				.element(page.getByRole('tab', { name: /Home page/i }))
 				.toBeInTheDocument();
 			await expect
-				.element(
-					page.getByRole('link', { name: /Components/i }).first(),
-				)
-				.toBeInTheDocument();
-			await expect
-				.element(
-					page.getByRole('link', { name: /Examples/i }).first(),
-				)
-				.toBeInTheDocument();
-			await expect
-				.element(
-					page.getByRole('link', { name: /Todo Manager/i }).first(),
-				)
-				.toBeInTheDocument();
-		});
-
-		test('should render testing dropdown', async () => {
-			render(Nav);
-
-			// Use a more specific selector for the testing dropdown
-			await expect
-				.element(
-					page.getByRole('button', { name: /Testing/i }).first(),
-				)
+				.element(page.getByRole('tab', { name: /Docs page/i }))
 				.toBeInTheDocument();
 		});
 
@@ -122,22 +105,12 @@ describe('Nav Component', () => {
 				.toBeInTheDocument();
 		});
 
-		test('should render mobile menu button', async () => {
+		test('should render navigation menu button', async () => {
 			render(Nav);
 
 			await expect
 				.element(
-					page.getByRole('button', { name: /Open mobile menu/i }),
-				)
-				.toBeInTheDocument();
-		});
-
-		test('should render settings menu button', async () => {
-			render(Nav);
-
-			await expect
-				.element(
-					page.getByRole('button', { name: /Open settings menu/i }),
+					page.getByRole('button', { name: /Open navigation menu/i }),
 				)
 				.toBeInTheDocument();
 		});
@@ -148,27 +121,15 @@ describe('Nav Component', () => {
 	});
 
 	describe('Navigation Links', () => {
-		test('should have navigation links present', async () => {
+		test('should have mobile dock navigation links present', async () => {
 			render(Nav);
 
-			// Use .first() to handle multiple instances and avoid strict mode violations
+			// Test mobile dock links (these are the visible navigation)
 			await expect
-				.element(page.getByRole('link', { name: /Home/i }).first())
+				.element(page.getByRole('tab', { name: /Home page/i }))
 				.toBeInTheDocument();
 			await expect
-				.element(
-					page.getByRole('link', { name: /Components/i }).first(),
-				)
-				.toBeInTheDocument();
-			await expect
-				.element(
-					page.getByRole('link', { name: /Examples/i }).first(),
-				)
-				.toBeInTheDocument();
-			await expect
-				.element(
-					page.getByRole('link', { name: /Todo Manager/i }).first(),
-				)
+				.element(page.getByRole('tab', { name: /Docs page/i }))
 				.toBeInTheDocument();
 		});
 
@@ -177,6 +138,15 @@ describe('Nav Component', () => {
 
 			await expect
 				.element(page.getByText('Sveltest'))
+				.toBeInTheDocument();
+		});
+
+		test('should have dropdown menu structure', async () => {
+			render(Nav);
+
+			// Test that dropdown menu exists (even if collapsed)
+			await expect
+				.element(page.getByRole('menu', { name: /Navigation menu/i }))
 				.toBeInTheDocument();
 		});
 
@@ -196,7 +166,7 @@ describe('Nav Component', () => {
 			// Smoke test for active state rendering
 			// The component should render without throwing errors
 			await expect
-				.element(page.getByRole('navigation'))
+				.element(page.getByRole('navigation').first())
 				.toBeInTheDocument();
 		});
 
@@ -211,52 +181,30 @@ describe('Nav Component', () => {
 	});
 
 	describe('User Interactions', () => {
-		test('should handle mobile menu button click', async () => {
+		test('should handle navigation menu button click', async () => {
 			render(Nav);
 
-			const mobile_menu_button = page.getByRole('button', {
-				name: /Open mobile menu/i,
+			const navigation_menu_button = page.getByRole('button', {
+				name: /Open navigation menu/i,
 			});
 
 			// Verify the button exists and is accessible
-			await expect.element(mobile_menu_button).toBeInTheDocument();
+			await expect
+				.element(navigation_menu_button)
+				.toBeInTheDocument();
 		});
 
-		test.skip('should handle mobile menu button click interaction', async () => {
+		test.skip('should handle navigation menu button click interaction', async () => {
 			// TODO: Fix viewport issues in CI - element outside viewport error
-			// The mobile menu button click fails in CI due to viewport size differences
+			// The navigation menu button click fails in CI due to viewport size differences
 			// Need to configure proper viewport settings or use alternative testing approach
 			render(Nav);
 
-			const mobile_menu_button = page.getByRole('button', {
-				name: /Open mobile menu/i,
+			const navigation_menu_button = page.getByRole('button', {
+				name: /Open navigation menu/i,
 			});
 
-			await mobile_menu_button.click({ force: true });
-		});
-
-		test('should handle settings menu button click', async () => {
-			render(Nav);
-
-			const settings_button = page.getByRole('button', {
-				name: /Open settings menu/i,
-			});
-
-			// Verify the button exists and is accessible
-			await expect.element(settings_button).toBeInTheDocument();
-		});
-
-		test.skip('should handle settings menu button click interaction', async () => {
-			// TODO: Fix viewport issues in CI - element outside viewport error
-			// The settings menu button click fails in CI due to viewport size differences
-			// Need to configure proper viewport settings or use alternative testing approach
-			render(Nav);
-
-			const settings_button = page.getByRole('button', {
-				name: /Open settings menu/i,
-			});
-
-			await settings_button.click({ force: true });
+			await navigation_menu_button.click({ force: true });
 		});
 
 		test.skip('should handle testing dropdown interaction', async () => {
@@ -286,7 +234,7 @@ describe('Nav Component', () => {
 		test('should apply correct navbar classes', async () => {
 			render(Nav);
 
-			const navbar = page.getByRole('navigation');
+			const navbar = page.getByRole('navigation').first();
 			await expect.element(navbar).toHaveClass(/navbar/);
 			await expect.element(navbar).toHaveClass(/bg-base-100\/90/);
 			await expect.element(navbar).toHaveClass(/sticky/);
@@ -319,26 +267,20 @@ describe('Nav Component', () => {
 		test('should have proper ARIA labels for interactive elements', async () => {
 			render(Nav);
 
-			const mobileMenuButton = page.getByRole('button', {
-				name: /Open mobile menu/i,
-			});
-			const settingsButton = page.getByRole('button', {
-				name: /Open settings menu/i,
+			const navigationMenuButton = page.getByRole('button', {
+				name: /Open navigation menu/i,
 			});
 
 			await expect
-				.element(mobileMenuButton)
-				.toHaveAttribute('aria-label', 'Open mobile menu');
-			await expect
-				.element(settingsButton)
-				.toHaveAttribute('aria-label', 'Open settings menu');
+				.element(navigationMenuButton)
+				.toHaveAttribute('aria-label', 'Open navigation menu');
 		});
 
 		test('should have proper navigation landmark', async () => {
 			render(Nav);
 
 			await expect
-				.element(page.getByRole('navigation'))
+				.element(page.getByRole('navigation').first())
 				.toBeInTheDocument();
 		});
 
