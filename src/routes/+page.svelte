@@ -46,11 +46,11 @@
 				<!-- Badge and Status Pills -->
 				<div class="space-y-3">
 					<div
-						class="bg-base-100/80 border-base-300/50 inline-flex items-center gap-3 rounded-full border px-6 py-3 shadow-lg backdrop-blur-sm"
+						class="from-success/10 via-base-100/80 to-success/10 border-success/20 inline-flex items-center gap-3 rounded-full border bg-gradient-to-r px-6 py-3 shadow-lg backdrop-blur-sm"
 					>
 						<CheckCircle class_names="h-4 w-4 text-success" />
 						<span
-							class="text-base-content/70 text-sm font-medium tracking-wider uppercase"
+							class="text-base-content/70 text-sm font-medium tracking-wider uppercase text-shadow-2xs"
 						>
 							Battle-Tested in Production
 						</span>

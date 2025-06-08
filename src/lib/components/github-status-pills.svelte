@@ -6,7 +6,7 @@
 	<div class="flex flex-wrap items-center justify-center gap-3">
 		<!-- Unit Tests Status -->
 		<div
-			class="bg-base-100/80 border-base-300/50 inline-flex items-center gap-2 rounded-full border px-4 py-2 shadow-lg backdrop-blur-sm"
+			class="from-primary/10 via-base-100/80 to-primary/10 border-primary/20 inline-flex items-center gap-2 rounded-full border bg-gradient-to-r px-4 py-2 shadow-lg backdrop-blur-sm"
 		>
 			<div
 				class="h-2 w-2 animate-pulse rounded-full {github_status.data
@@ -17,7 +17,7 @@
 						: 'bg-warning'}"
 			></div>
 			<span
-				class="text-base-content/70 text-xs font-medium tracking-wider uppercase"
+				class="text-base-content/70 text-xs font-medium tracking-wider uppercase text-shadow-2xs"
 			>
 				Unit Tests
 			</span>
@@ -25,7 +25,7 @@
 
 		<!-- E2E Tests Status -->
 		<div
-			class="bg-base-100/80 border-base-300/50 inline-flex items-center gap-2 rounded-full border px-4 py-2 shadow-lg backdrop-blur-sm"
+			class="from-primary/10 via-base-100/80 to-primary/10 border-primary/20 inline-flex items-center gap-2 rounded-full border bg-gradient-to-r px-4 py-2 shadow-lg backdrop-blur-sm"
 		>
 			<div
 				class="h-2 w-2 animate-pulse rounded-full {github_status.data
@@ -36,14 +36,14 @@
 						: 'bg-warning'}"
 			></div>
 			<span
-				class="text-base-content/70 text-xs font-medium tracking-wider uppercase"
+				class="text-base-content/70 text-xs font-medium tracking-wider uppercase text-shadow-2xs"
 			>
 				E2E Tests
 			</span>
 		</div>
 	</div>
 {:else if github_status.loading}
-	<div class="mt-4 flex items-center justify-center gap-2">
+	<div class="flex items-center justify-center gap-2">
 		<span class="loading loading-spinner loading-sm"></span>
 		<span class="text-base-content/60 text-sm">Loading status...</span
 		>
