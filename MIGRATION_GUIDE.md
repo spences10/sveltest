@@ -53,7 +53,7 @@ All subsequent commits will document the migration process."
 pnpm add -D @vitest/browser vitest-browser-svelte playwright
 
 # Remove old testing library dependencies
-pnpm remove @testing-library/svelte @testing-library/jest-dom
+pnpm remove @testing-library/svelte @testing-library/jest-dom jsdom
 
 # Commit dependency changes
 git add package.json pnpm-lock.yaml
@@ -66,7 +66,8 @@ Added packages:
 
 Removed packages:
 - @testing-library/svelte: Replaced by vitest-browser-svelte
-- @testing-library/jest-dom: Not needed in browser environment"
+- @testing-library/jest-dom: Not needed
+- jsdom: Not needed
 ```
 
 ### Step 3: Update Vitest Configuration
@@ -74,55 +75,62 @@ Removed packages:
 Update your `vite.config.ts` to enable browser mode:
 
 ```typescript
-import { defineConfig } from 'vite';
 import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
 	plugins: [sveltekit()],
+
 	test: {
-		// Enable browser mode for component tests
-		browser: {
-			enabled: true,
-			name: 'chromium',
-			provider: 'playwright',
-		},
-		// Support multiple test environments
-		workspace: [
+		projects: [
 			{
+				// Client-side tests (Svelte components)
+				extends: './vite.config.ts',
 				test: {
-					include: ['**/*.svelte.test.ts'],
 					name: 'client',
-					browser: { enabled: true },
+					environment: 'browser',
+					// Timeout for browser tests - prevent hanging on element lookups
+					testTimeout: 2000,
+					browser: {
+						enabled: true,
+						provider: 'playwright',
+						instances: [
+							{ browser: 'chromium' },
+							// { browser: 'firefox' },
+							// { browser: 'webkit' },
+						],
+					},
+					include: ['src/**/*.svelte.{test,spec}.{js,ts}'],
+					exclude: [
+						'src/lib/server/**',
+						'src/**/*.ssr.{test,spec}.{js,ts}',
+					],
+					setupFiles: ['./vitest-setup-client.ts'],
 				},
 			},
 			{
+				// SSR tests (Server-side rendering)
+				extends: './vite.config.ts',
 				test: {
-					include: ['**/*.ssr.test.ts'],
 					name: 'ssr',
 					environment: 'node',
+					include: ['src/**/*.ssr.{test,spec}.{js,ts}'],
 				},
 			},
 			{
+				// Server-side tests (Node.js utilities)
+				extends: './vite.config.ts',
 				test: {
-					include: ['**/*.server.test.ts'],
 					name: 'server',
 					environment: 'node',
+					include: ['src/**/*.{test,spec}.{js,ts}'],
+					exclude: [
+						'src/**/*.svelte.{test,spec}.{js,ts}',
+						'src/**/*.ssr.{test,spec}.{js,ts}',
+					],
 				},
 			},
 		],
-		// Coverage configuration
-		coverage: {
-			provider: 'v8',
-			reporter: ['text', 'json', 'html'],
-			exclude: [
-				'coverage/**',
-				'dist/**',
-				'**/node_modules/**',
-				'**/*.d.ts',
-				'**/*.config.*',
-				'**/test-setup.*',
-			],
-		},
 	},
 });
 ```
@@ -142,9 +150,10 @@ Changes:
 
 ## 🔧 Phase 2: Test Environment Setup
 
-### Step 4: Update Test Setup
+### Step 4: Update `vitest-setup-client.ts`
 
-Remove jsdom-specific polyfills since you're now using real browsers:
+Remove jsdom-specific polyfills from `vitest-setup-client.ts` since
+you're now using real browsers:
 
 ```typescript
 // BEFORE: test-setup.js (remove these)
@@ -166,7 +175,8 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 // AFTER: vitest-setup-client.ts (minimal setup)
-// Real browser environment - no polyfills needed!
+/// <reference types="@vitest/browser/matchers" />
+/// <reference types="@vitest/browser/providers/playwright" />
 ```
 
 Commit the cleanup:
@@ -195,7 +205,7 @@ import { render, screen } from '@testing-library/svelte';
 import { expect, test } from 'vitest';
 import Page from './+page.svelte';
 
-test('homepage renders navigation', async () => {
+it('homepage renders navigation', async () => {
 	render(Page);
 
 	const nav = screen.getByRole('navigation');
@@ -210,21 +220,18 @@ test('homepage renders navigation', async () => {
 
 ```typescript
 // page.svelte.test.ts (NEW)
-import { render } from 'vitest-browser-svelte';
 import { page } from '@vitest/browser/context';
-import { expect, test } from 'vitest';
+import { describe, expect, it } from 'vitest';
+import { render } from 'vitest-browser-svelte';
 import Page from './+page.svelte';
 
-test('homepage renders navigation', async () => {
-	render(Page);
+describe('/+page.svelte', () => {
+	it('should render h1', async () => {
+		render(Page);
 
-	const nav = page.getByRole('navigation');
-	await expect.element(nav).toBeInTheDocument();
-
-	const heading = page.getByRole('heading', { level: 1 });
-	await expect
-		.element(heading)
-		.toHaveTextContent('Welcome to Sveltest');
+		const heading = page.getByRole('heading', { level: 1 });
+		await expect.element(heading).toBeInTheDocument();
+	});
 });
 ```
 
@@ -260,17 +267,17 @@ Continue with your component library, one component at a time:
 ```typescript
 // BEFORE: @testing-library/svelte
 import { render, screen, fireEvent } from '@testing-library/svelte';
-import { expect, test, describe } from 'vitest';
+import { expect, it, describe } from 'vitest';
 import Button from './button.svelte';
 
 describe('Button Component', () => {
-	test('renders with correct variant', () => {
+	it('renders with correct variant', () => {
 		render(Button, { variant: 'primary' });
 		const button = screen.getByRole('button');
 		expect(button).toHaveClass('btn-primary');
 	});
 
-	test('handles click events', async () => {
+	it('handles click events', async () => {
 		let clicked = false;
 		render(Button, {
 			onclick: () => {
@@ -287,17 +294,17 @@ describe('Button Component', () => {
 // AFTER: vitest-browser-svelte
 import { render } from 'vitest-browser-svelte';
 import { page } from '@vitest/browser/context';
-import { expect, test, describe } from 'vitest';
+import { expect, it, describe } from 'vitest';
 import Button from './button.svelte';
 
 describe('Button Component', () => {
-	test('renders with correct variant', async () => {
+	it('renders with correct variant', async () => {
 		render(Button, { variant: 'primary' });
 		const button = page.getByRole('button');
 		await expect.element(button).toHaveClass('btn-primary');
 	});
 
-	test('handles click events', async () => {
+	it('handles click events', async () => {
 		let clicked = false;
 		render(Button, {
 			onclick: () => {
@@ -317,11 +324,11 @@ describe('Button Component', () => {
 ```typescript
 // BEFORE: Complex modal testing with @testing-library/svelte
 import { render, screen, fireEvent } from '@testing-library/svelte';
-import { expect, test, describe } from 'vitest';
+import { expect, it, describe } from 'vitest';
 import Modal from './modal.svelte';
 
 describe('Modal Component', () => {
-	test('closes on backdrop click', async () => {
+	it('closes on backdrop click', async () => {
 		let isOpen = true;
 		render(Modal, {
 			isOpen,
@@ -335,7 +342,7 @@ describe('Modal Component', () => {
 		expect(isOpen).toBe(false);
 	});
 
-	test('closes on escape key', async () => {
+	it('closes on escape key', async () => {
 		let isOpen = true;
 		render(Modal, {
 			isOpen,
@@ -353,11 +360,11 @@ describe('Modal Component', () => {
 import { render } from 'vitest-browser-svelte';
 import { page } from '@vitest/browser/context';
 import { userEvent } from '@vitest/browser/context';
-import { expect, test, describe } from 'vitest';
+import { expect, it, describe } from 'vitest';
 import Modal from './modal.svelte';
 
 describe('Modal Component', () => {
-	test('closes on backdrop click', async () => {
+	it('closes on backdrop click', async () => {
 		let isOpen = true;
 		render(Modal, {
 			isOpen,
@@ -372,7 +379,7 @@ describe('Modal Component', () => {
 		expect(isOpen).toBe(false);
 	});
 
-	test('closes on escape key', async () => {
+	it('closes on escape key', async () => {
 		let isOpen = true;
 		render(Modal, {
 			isOpen,
@@ -423,7 +430,7 @@ describe('Modal Component', () => {
 // BEFORE: Manual waiting with @testing-library/svelte
 import { waitFor } from '@testing-library/dom';
 
-test('async operation', async () => {
+it('async operation', async () => {
 	render(Component);
 	const button = screen.getByRole('button');
 	await button.click();
@@ -434,7 +441,7 @@ test('async operation', async () => {
 });
 
 // AFTER: Built-in retry with vitest-browser-svelte
-test('async operation', async () => {
+it('async operation', async () => {
 	render(Component);
 	const button = page.getByRole('button');
 	await button.click();
@@ -452,10 +459,10 @@ test('async operation', async () => {
 // Testing components with Svelte 5 runes
 import { render } from 'vitest-browser-svelte';
 import { page } from '@vitest/browser/context';
-import { expect, test } from 'vitest';
+import { expect, it } from 'vitest';
 import Counter from './counter.svelte';
 
-test('counter with runes', async () => {
+it('counter with runes', async () => {
 	render(Counter, { initialCount: 5 });
 
 	const count_display = page.getByTestId('count');
@@ -476,11 +483,11 @@ test('counter with runes', async () => {
 // Complex form validation patterns
 import { render } from 'vitest-browser-svelte';
 import { page } from '@vitest/browser/context';
-import { expect, test, describe } from 'vitest';
+import { expect, it, describe } from 'vitest';
 import LoginForm from './login-form.svelte';
 
 describe('LoginForm Validation', () => {
-	test('shows validation errors', async () => {
+	it('shows validation errors', async () => {
 		render(LoginForm);
 
 		const email_input = page.getByPlaceholderText('Enter your email');
@@ -507,7 +514,7 @@ describe('LoginForm Validation', () => {
 // Testing components with dependencies
 import { render } from 'vitest-browser-svelte';
 import { page } from '@vitest/browser/context';
-import { expect, test, vi } from 'vitest';
+import { expect, it, vi } from 'vitest';
 import { validate_email } from '$lib/utils/validation';
 import LoginForm from './login-form.svelte';
 
@@ -517,7 +524,7 @@ vi.mock('$lib/utils/validation', () => ({
 	validate_password: vi.fn(),
 }));
 
-test('form uses validation utilities', async () => {
+it('form uses validation utilities', async () => {
 	const mockValidateEmail = vi.mocked(validate_email);
 	mockValidateEmail.mockReturnValue({
 		valid: false,
@@ -552,14 +559,14 @@ expect(someValue).toBe(true);
 
 ```typescript
 // ❌ PROBLEMATIC: Events not triggering in test environment
-test('form submission', async () => {
+it('form submission', async () => {
 	render(LoginForm);
 	const form = page.getByRole('form');
 	await form.submit(); // May not trigger onsubmit
 });
 
 // ✅ BETTER: Test button clicks instead
-test('form submission', async () => {
+it('form submission', async () => {
 	render(LoginForm);
 	const submit_button = page.getByRole('button', { name: 'Submit' });
 	await submit_button.click({ force: true });
@@ -570,7 +577,7 @@ test('form submission', async () => {
 
 ```typescript
 // ❌ PROBLEMATIC: Immediate assertions after state changes
-test('password toggle', async () => {
+it('password toggle', async () => {
 	render(LoginForm);
 	const toggle_button = page.getByTestId('password-toggle');
 	await toggle_button.click();
@@ -583,7 +590,7 @@ test('password toggle', async () => {
 });
 
 // ✅ BETTER: Test the interaction, not immediate state
-test('password toggle interaction', async () => {
+it('password toggle interaction', async () => {
 	render(LoginForm);
 	const toggle_button = page.getByTestId('password-toggle');
 
