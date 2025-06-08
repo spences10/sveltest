@@ -133,16 +133,16 @@
 	<!-- Search Input -->
 	<div class="form-control w-full">
 		<label class="label" for="docs-search">
-			<span class="label-text text-lg font-medium"
-				>Search Documentation</span
-			>
+			<span class="label-text text-lg font-medium">
+				Search Documentation
+			</span>
 			<span class="label-text-alt text-sm opacity-60">
 				<kbd class="kbd kbd-sm">Ctrl</kbd> +
 				<kbd class="kbd kbd-sm">k</kbd>
 			</span>
 		</label>
 		<label
-			class="input input-bordered input-lg flex w-full items-center gap-2"
+			class="input input-bordered input-lg rounded-box flex w-full items-center gap-2"
 		>
 			{#if is_searching}
 				<span class="loading loading-spinner loading-sm text-primary"
