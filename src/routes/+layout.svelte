@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Nav from '$lib/components/nav.svelte';
-	import { GitHub, Heart } from '$lib/icons';
+	import { Arrow, GitHub, Heart, Robot } from '$lib/icons';
 	import '../app.css';
 
 	let { children } = $props();
@@ -28,9 +28,14 @@
 			>
 				<div class="flex items-center gap-2">
 					<span class="text-base-content/70"> Built with </span>
-					<Heart class_names="text-red-500 h-4 w-4" />
+					<Robot class_names="text-primary h-4 w-4" />
+					<span class="text-base-content/70"> and </span>
+					<Heart
+						class_names="text-red-500 h-4 w-4"
+						fill="currentColor"
+					/>
 					<span class="text-base-content/70">
-						by the Svelte community
+						for the Svelte community
 					</span>
 				</div>
 				<div class="flex items-center gap-4">
@@ -42,7 +47,10 @@
 					>
 						<GitHub class_names="h-4 w-4" />
 						GitHub
-						<span class="text-xs opacity-60">↗</span>
+						<Arrow
+							direction="up-right"
+							class_names="h-3 w-3 opacity-60"
+						/>
 					</a>
 					<a
 						href="https://github.com/spences10/sveltest/issues"
@@ -51,7 +59,10 @@
 						class="btn btn-ghost btn-sm hover:bg-base-300/50"
 					>
 						Report Issue
-						<span class="text-xs opacity-60">↗</span>
+						<Arrow
+							direction="up-right"
+							class_names="h-3 w-3 opacity-60"
+						/>
 					</a>
 				</div>
 			</div>

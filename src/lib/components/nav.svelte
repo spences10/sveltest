@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import {
+		Arrow,
 		BarChart,
 		Calculator,
 		CheckCircle,
@@ -242,7 +243,10 @@
 							<link.icon class_names="h-4 w-4" />
 							{link.title}
 							{#if link.external}
-								<span class="text-xs opacity-60">↗</span>
+								<Arrow
+									direction="up-right"
+									class_names="h-3 w-3 opacity-60"
+								/>
 							{/if}
 						</a>
 					</li>

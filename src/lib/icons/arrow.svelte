@@ -1,5 +1,5 @@
 <script lang="ts">
-	type Direction = 'up' | 'down' | 'left' | 'right';
+	type Direction = 'up' | 'down' | 'left' | 'right' | 'up-right';
 
 	interface Props {
 		direction?: Direction;
@@ -21,6 +21,7 @@
 			right: '0deg',
 			down: '90deg',
 			left: '180deg',
+			'up-right': '315deg',
 		};
 		return rotations[dir];
 	};

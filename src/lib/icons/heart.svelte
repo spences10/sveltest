@@ -3,12 +3,20 @@
 		height?: string;
 		width?: string;
 		class_names?: string;
+		fill?: string;
+		stroke?: string;
+		stroke_width?: string;
+		aria_label?: string;
 	}
 
 	let {
 		height = '24px',
 		width = '24px',
 		class_names,
+		fill = 'none',
+		stroke = 'currentColor',
+		stroke_width = '1.5',
+		aria_label = 'Heart icon',
 	}: Props = $props();
 </script>
 
@@ -17,10 +25,12 @@
 	{height}
 	{width}
 	class={class_names}
-	fill="none"
+	{fill}
 	viewBox="0 0 24 24"
-	stroke-width="1.5"
-	stroke="currentColor"
+	stroke-width={stroke_width}
+	{stroke}
+	aria-label={aria_label}
+	role="img"
 >
 	<path
 		stroke-linecap="round"
