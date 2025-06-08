@@ -246,6 +246,7 @@
 					<!-- Detailed Status (if data available) -->
 					{#if github_status.data}
 						<li class="disabled" role="none">
+							<!-- svelte-ignore a11y_missing_attribute -->
 							<a class="gap-2">
 								<div class="flex flex-col gap-1 text-xs opacity-70">
 									<div class="flex items-center gap-2">
