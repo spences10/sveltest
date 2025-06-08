@@ -789,11 +789,18 @@ describe('Layout SSR', () => {
 
 ## Server Testing Patterns
 
+### Client-Server Alignment in Server Tests
+
+Server tests follow the **Client-Server Alignment Strategy** by using
+real `FormData` and `Request` objects instead of heavy mocking. This
+catches client-server contract mismatches that mocked tests miss.
+
 ### API Route Pattern
 
 ```typescript
 describe('API Route', () => {
 	it('should handle GET requests', async () => {
+		// ✅ Real Request object - catches URL/header issues
 		const request = new Request('http://localhost/api/todos');
 		const response = await GET({ request });
 
@@ -805,6 +812,7 @@ describe('API Route', () => {
 	});
 
 	it('should handle POST requests with validation', async () => {
+		// ✅ Real Request with JSON body - tests actual parsing
 		const request = new Request('http://localhost/api/todos', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
@@ -839,6 +847,30 @@ describe('API Route', () => {
 
 		const response = await GET({ request });
 		expect(response.status).toBe(200);
+	});
+
+	it('should handle FormData submissions', async () => {
+		// ✅ Real FormData - catches field name mismatches
+		const form_data = new FormData();
+		form_data.append('email', 'user@example.com');
+		form_data.append('password', 'secure123');
+
+		const request = new Request('http://localhost/api/register', {
+			method: 'POST',
+			body: form_data,
+		});
+
+		// Only mock external services, not data structures
+		vi.mocked(database.users.create).mockResolvedValue({
+			id: '123',
+			email: 'user@example.com',
+		});
+
+		const response = await POST({ request });
+		expect(response.status).toBe(201);
+
+		const data = await response.json();
+		expect(data.user.email).toBe('user@example.com');
 	});
 });
 ```

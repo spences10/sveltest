@@ -2,72 +2,86 @@
 
 ## Foundation First Approach
 
-### The 100% Test Coverage Strategy
+### The Strategic Test Planning Method
 
-Start with complete test structure before implementation:
+Start with complete test structure using `describe` and `it.skip` to
+plan comprehensively:
 
 ```typescript
+import { describe, expect, it, vi } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import { page } from '@vitest/browser/context';
+
 describe('TodoManager Component', () => {
 	describe('Initial Rendering', () => {
-		test('should render empty state', async () => {
-			// Implemented
+		it('should render empty state', async () => {
+			render(TodoManager);
+
+			await expect
+				.element(page.getByText('No todos yet'))
+				.toBeInTheDocument();
+			await expect
+				.element(page.getByRole('list'))
+				.toHaveAttribute('aria-label', 'Todo list');
 		});
 
-		test.skip('should render with initial todos', async () => {
+		it.skip('should render with initial todos', async () => {
 			// TODO: Test with pre-populated data
 		});
 	});
 
 	describe('User Interactions', () => {
-		test('should add new todo', async () => {
-			// Implemented
+		it('should add new todo', async () => {
+			render(TodoManager);
+
+			const input = page.getByLabelText('New todo');
+			const add_button = page.getByRole('button', {
+				name: 'Add Todo',
+			});
+
+			await input.fill('Buy groceries');
+			await add_button.click();
+
+			await expect
+				.element(page.getByText('Buy groceries'))
+				.toBeInTheDocument();
 		});
 
-		test.skip('should edit existing todo', async () => {
+		it.skip('should edit existing todo', async () => {
 			// TODO: Test inline editing
 		});
 
-		test.skip('should delete todo', async () => {
+		it.skip('should delete todo', async () => {
 			// TODO: Test deletion flow
 		});
 	});
 
 	describe('Form Validation', () => {
-		test.skip('should prevent empty todo submission', async () => {
+		it.skip('should prevent empty todo submission', async () => {
 			// TODO: Test validation rules
 		});
 
-		test.skip('should handle duplicate todos', async () => {
+		it.skip('should handle duplicate todos', async () => {
 			// TODO: Test duplicate prevention
 		});
 	});
 
-	describe('State Management', () => {
-		test.skip('should persist todos to localStorage', async () => {
-			// TODO: Test persistence
-		});
-
-		test.skip('should restore todos on reload', async () => {
-			// TODO: Test restoration
-		});
-	});
-
 	describe('Accessibility', () => {
-		test.skip('should support keyboard navigation', async () => {
+		it.skip('should support keyboard navigation', async () => {
 			// TODO: Test tab order and shortcuts
 		});
 
-		test.skip('should announce changes to screen readers', async () => {
+		it.skip('should announce changes to screen readers', async () => {
 			// TODO: Test ARIA live regions
 		});
 	});
 
 	describe('Edge Cases', () => {
-		test.skip('should handle network failures gracefully', async () => {
+		it.skip('should handle network failures gracefully', async () => {
 			// TODO: Test offline scenarios
 		});
 
-		test.skip('should handle large todo lists', async () => {
+		it.skip('should handle large todo lists', async () => {
 			// TODO: Test performance with 1000+ items
 		});
 	});
@@ -77,20 +91,302 @@ describe('TodoManager Component', () => {
 ### Benefits of Foundation First
 
 - **Complete picture**: See all requirements upfront
-- **Incremental progress**: Remove `.skip` as you implement
+- **Incremental progress**: Remove `.skip` as you implement features
 - **No forgotten tests**: All edge cases planned from start
 - **Team alignment**: Everyone sees the testing scope
+- **Flexible coverage**: Implement tests as needed, not for arbitrary
+  coverage metrics
+
+## Client-Server Alignment Strategy
+
+### The Problem with Heavy Mocking
+
+**The Issue**: Server unit tests with heavy mocking can pass while
+production breaks due to client-server mismatches. Forms send data in
+one format, servers expect another, and mocked tests miss the
+disconnect.
+
+**Real-World Example**: Your client sends `FormData` with field names
+like `email`, but your server expects `user_email`. Mocked tests pass
+because they don't use real `FormData` objects, but production fails
+silently.
+
+### The Multi-Layer Testing Solution
+
+This project demonstrates a strategic approach with minimal mocking:
+
+```typescript
+// ❌ BRITTLE: Heavy mocking hides client-server mismatches
+describe('User Registration - WRONG WAY', () => {
+	it('should register user', async () => {
+		const mock_request = {
+			formData: vi.fn().mockResolvedValue({
+				get: vi.fn().mockReturnValue('test@example.com'),
+			}),
+		};
+
+		// This passes but doesn't test real FormData behavior
+		const result = await register_user(mock_request);
+		expect(result.success).toBe(true);
+	});
+});
+
+// ✅ ROBUST: Real FormData objects catch actual mismatches
+describe('User Registration - CORRECT WAY', () => {
+	it('should register user with real FormData', async () => {
+		const form_data = new FormData();
+		form_data.append('email', 'test@example.com');
+		form_data.append('password', 'secure123');
+
+		const request = new Request('http://localhost/register', {
+			method: 'POST',
+			body: form_data,
+		});
+
+		// Only mock external services (database), not data structures
+		vi.mocked(database.create_user).mockResolvedValue({
+			id: '123',
+			email: 'test@example.com',
+		});
+
+		const result = await register_user(request);
+		expect(result.success).toBe(true);
+	});
+});
+```
+
+### Four-Layer Testing Strategy
+
+#### 1. Shared Validation Logic
+
+```typescript
+// lib/validation/user-schema.ts
+export const user_registration_schema = {
+	email: { required: true, type: 'email' },
+	password: { required: true, min_length: 8 },
+};
+
+// Used in both client and server
+export const validate_user_registration = (data: FormData) => {
+	const email = data.get('email')?.toString();
+	const password = data.get('password')?.toString();
+
+	// Same validation logic everywhere
+	return {
+		email: validate_email(email),
+		password: validate_password(password),
+	};
+};
+```
+
+#### 2. Real FormData/Request Objects in Server Tests
+
+```typescript
+describe('Registration API', () => {
+	it('should handle real form submission', async () => {
+		// Real FormData - catches field name mismatches
+		const form_data = new FormData();
+		form_data.append('email', 'user@example.com');
+		form_data.append('password', 'secure123');
+
+		// Real Request object - catches header/method issues
+		const request = new Request('http://localhost/api/register', {
+			method: 'POST',
+			body: form_data,
+			headers: { 'Content-Type': 'multipart/form-data' },
+		});
+
+		// Only mock external services
+		vi.mocked(database.users.create).mockResolvedValue({
+			id: '123',
+			email: 'user@example.com',
+		});
+
+		const response = await POST({ request });
+		expect(response.status).toBe(201);
+	});
+});
+```
+
+#### 3. TypeScript Contracts
+
+```typescript
+// lib/types/user.ts
+export interface UserRegistration {
+	email: string;
+	password: string;
+}
+
+export interface UserResponse {
+	id: string;
+	email: string;
+	created_at: string;
+}
+
+// Both client and server use the same types
+// Compiler catches mismatches at build time
+```
+
+#### 4. E2E Safety Net
+
+```typescript
+// e2e/registration.spec.ts
+test('full registration flow', async ({ page }) => {
+	await page.goto('/register');
+
+	await page.getByLabelText('Email').fill('user@example.com');
+	await page.getByLabelText('Password').fill('secure123');
+	await page.getByRole('button', { name: 'Register' }).click();
+
+	// Tests the complete client-server integration
+	await expect(page.getByText('Welcome!')).toBeVisible();
+});
+```
+
+### Benefits of This Approach
+
+- **Fast unit test feedback** with minimal mocking overhead
+- **Confidence that client and server actually work together**
+- **Catches contract mismatches early** in development
+- **Reduces production bugs** from client-server disconnects
+- **Maintains test speed** while improving reliability
+
+### What to Mock vs What to Keep Real
+
+#### ✅ Mock These (External Dependencies)
+
+```typescript
+// Database operations
+vi.mock('$lib/database', () => ({
+	users: {
+		create: vi.fn(),
+		find_by_email: vi.fn(),
+	},
+}));
+
+// External APIs
+vi.mock('$lib/email-service', () => ({
+	send_welcome_email: vi.fn(),
+}));
+
+// File system operations
+vi.mock('fs/promises', () => ({
+	writeFile: vi.fn(),
+	readFile: vi.fn(),
+}));
+```
+
+#### ❌ Keep These Real (Data Contracts)
+
+```typescript
+// ✅ Real FormData objects
+const form_data = new FormData();
+form_data.append('email', 'test@example.com');
+
+// ✅ Real Request/Response objects
+const request = new Request('http://localhost/api/users', {
+	method: 'POST',
+	body: form_data,
+});
+
+// ✅ Real validation functions
+const validation_result = validate_user_input(form_data);
+
+// ✅ Real data transformation utilities
+const formatted_data = format_user_data(raw_input);
+```
+
+## Always Use Locators, Never Containers
+
+### The Critical vitest-browser-svelte Pattern
+
+**NEVER** use containers - they don't have auto-retry and require
+manual DOM queries:
+
+```typescript
+// ❌ NEVER use containers - no auto-retry, manual DOM queries
+it('should handle button click - WRONG WAY', async () => {
+	const { container } = render(MyComponent);
+	const button = container.querySelector('[data-testid="submit"]');
+	// This can fail randomly due to timing issues
+});
+
+// ✅ ALWAYS use locators - auto-retry, semantic queries
+it('should handle button click', async () => {
+	render(MyComponent);
+	const button = page.getByTestId('submit');
+	await button.click(); // Automatic waiting and retrying
+
+	await expect.element(page.getByText('Success')).toBeInTheDocument();
+});
+```
+
+### Locator Patterns with Auto-retry
+
+```typescript
+describe('Locator Best Practices', () => {
+	it('should use semantic queries first', async () => {
+		render(LoginForm);
+
+		// ✅ Semantic queries (preferred - test accessibility)
+		const email_input = page.getByRole('textbox', { name: 'Email' });
+		const password_input = page.getByLabelText('Password');
+		const submit_button = page.getByRole('button', {
+			name: 'Sign In',
+		});
+
+		await email_input.fill('user@example.com');
+		await password_input.fill('password123');
+		await submit_button.click();
+
+		await expect
+			.element(page.getByText('Welcome back!'))
+			.toBeInTheDocument();
+	});
+
+	it('should handle multiple elements with strict mode', async () => {
+		render(NavigationMenu);
+
+		// ❌ FAILS: Multiple elements match
+		// page.getByRole('link', { name: 'Home' });
+
+		// ✅ CORRECT: Use .first(), .nth(), .last()
+		const home_link = page
+			.getByRole('link', { name: 'Home' })
+			.first();
+		await home_link.click();
+
+		await expect
+			.element(page.getByHeading('Welcome Home'))
+			.toBeInTheDocument();
+	});
+
+	it('should use test ids when semantic queries are not possible', async () => {
+		render(ComplexWidget);
+
+		// ✅ Test IDs (when semantic queries aren't possible)
+		const widget = page.getByTestId('complex-widget');
+		await expect.element(widget).toBeInTheDocument();
+
+		// Still prefer semantic queries for interactions
+		const action_button = page.getByRole('button', {
+			name: 'Process Data',
+		});
+		await action_button.click();
+	});
+});
+```
 
 ## Avoid Testing Implementation Details
 
-### The User Value vs Implementation Detail Anti-Pattern
+### Focus on User Value, Not Internal Structure
 
 **NEVER** test exact implementation details that provide no user
 value:
 
 ```typescript
 // ❌ BRITTLE ANTI-PATTERN - Tests exact SVG path data
-test('should render check icon', () => {
+it('should render check icon - WRONG WAY', () => {
 	const { body } = render(StatusIcon, { status: 'success' });
 
 	// This breaks when icon libraries update, even if visually identical
@@ -100,7 +396,7 @@ test('should render check icon', () => {
 });
 
 // ✅ ROBUST PATTERN - Tests semantic meaning and user experience
-test('should indicate success state to users', async () => {
+it('should indicate success state to users', async () => {
 	render(StatusIcon, { status: 'success' });
 
 	// Test what users actually see and experience
@@ -110,65 +406,36 @@ test('should indicate success state to users', async () => {
 	await expect
 		.element(page.getByTestId('status-icon'))
 		.toHaveClass('text-success');
-
-	// Test semantic styling classes that indicate proper theming
-	const { body } = render(StatusIcon, { status: 'success' });
-	expect(body).toContain('text-success');
-	expect(body).toContain('h-4 w-4');
-	expect(body).toContain('<svg');
-	expect(body).toContain('stroke="currentColor"');
 });
 ```
-
-### Why This Matters
-
-**Implementation Details Change Without User Impact**:
-
-- SVG path coordinates change when icon libraries update (Heroicons v1
-  → v2, Lucide updates)
-- Internal markup changes during refactoring
-- CSS-in-JS libraries may generate different class names
-- Component library updates may change DOM structure
-
-**Focus on User Value**:
-
-- Does the user see the right color? (test `text-success` class)
-- Does the user see the right size? (test `h-4 w-4` class)
-- Does the user understand the meaning? (test accessibility
-  attributes)
-- Does the component work correctly? (test interactions and state)
 
 ### Test These ✅
 
 **Semantic Classes**: CSS classes that control user-visible appearance
 
 ```typescript
-expect(body).toContain('text-success'); // Color indicates success
-expect(body).toContain('text-error'); // Color indicates error
-expect(body).toContain('h-4 w-4'); // Size is correct
-expect(body).toContain('opacity-50'); // Disabled state visual
-```
+it('should apply correct styling classes', () => {
+	const { body } = render(Button, { variant: 'success' });
 
-**Semantic HTML Structure**: Elements that affect accessibility and
-meaning
-
-```typescript
-expect(body).toContain('<svg'); // Icon is present
-expect(body).toContain('role="img"'); // Proper accessibility
-expect(body).toContain('aria-label="Success"'); // Screen reader support
-expect(body).toContain('stroke="currentColor"'); // Respects theme colors
+	expect(body).toContain('text-success'); // Color indicates success
+	expect(body).toContain('btn-success'); // Semantic button class
+	expect(body).toContain('px-4 py-2'); // Consistent spacing
+});
 ```
 
 **User-Visible Behavior**: What users actually experience
 
 ```typescript
-await expect
-	.element(page.getByRole('img', { name: /success/i }))
-	.toBeInTheDocument();
-await expect
-	.element(page.getByTestId('status-icon'))
-	.toHaveClass('text-success');
-await expect.element(button).toBeDisabled(); // Disabled state works
+it('should respond to user interactions', async () => {
+	const click_handler = vi.fn();
+	render(Button, { onclick: click_handler });
+
+	const button = page.getByRole('button');
+	await button.click();
+
+	expect(click_handler).toHaveBeenCalledOnce();
+	await expect.element(button).toBeFocused();
+});
 ```
 
 ### Don't Test These ❌
@@ -190,77 +457,75 @@ expect(body).toContain('__svelte_component_internal_123');
 expect(body).toContain('data-radix-collection-item');
 ```
 
-**Generated Class Names**: CSS-in-JS or build tool outputs
+## Svelte 5 Runes Testing
+
+### Testing Reactive State with untrack()
 
 ```typescript
-// ❌ Brittle - breaks when build tools change
-expect(body).toContain('styles__button__abc123');
-```
+import { flushSync, untrack } from 'svelte';
 
-### Real-World Example
+describe('Reactive State', () => {
+	it('should handle $state and $derived correctly', () => {
+		let count = $state(0);
+		let doubled = $derived(count * 2);
 
-```typescript
-// ❌ BEFORE: Brittle test that broke during Heroicons v1 → v2 update
-test('should render success icon', () => {
-	const { body } = render(StatusIndicator, { status: 'success' });
-	expect(body).toContain(
-		'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
-	);
-});
+		// ✅ Always use untrack() for $derived values
+		expect(untrack(() => doubled)).toBe(0);
 
-// ✅ AFTER: Robust test that survives library updates
-test('should indicate success to users', async () => {
-	render(StatusIndicator, { status: 'success' });
+		count = 5;
+		flushSync(); // Still needed for derived state evaluation
 
-	// Test user experience
-	await expect
-		.element(page.getByRole('img', { name: /success/i }))
-		.toBeInTheDocument();
-	await expect
-		.element(page.getByTestId('status-indicator'))
-		.toHaveClass('text-success');
+		expect(untrack(() => doubled)).toBe(10);
+	});
 
-	// Test semantic structure
-	const { body } = render(StatusIndicator, { status: 'success' });
-	expect(body).toContain('text-success'); // Users see green color
-	expect(body).toContain('h-5 w-5'); // Users see correct size
-	expect(body).toContain('<svg'); // Icon is present
-	expect(body).toContain('aria-label'); // Accessible to screen readers
+	it('should test form state lifecycle', () => {
+		const form_state = create_form_state({
+			email: { value: '', validation_rules: { required: true } },
+		});
+
+		// ✅ Test the full lifecycle: valid → validate → invalid → fix → valid
+		expect(untrack(() => form_state.is_form_valid())).toBe(true); // Initially valid
+
+		form_state.validate_all_fields();
+		expect(untrack(() => form_state.is_form_valid())).toBe(false); // Now invalid
+
+		form_state.email.value = 'user@example.com';
+		expect(untrack(() => form_state.is_form_valid())).toBe(true); // Valid again
+	});
 });
 ```
 
-This test survived the Heroicons library update because it focused on
-user value, not implementation details.
-
-## Accessibility Testing
+## Accessibility Testing Patterns
 
 ### Semantic Queries Priority
 
 Always prefer semantic queries that test accessibility:
 
 ```typescript
-// ✅ EXCELLENT - Tests accessibility and semantics
-page.getByRole('button', { name: 'Submit form' });
-page.getByLabelText('Email address');
-page.getByRole('textbox', { name: 'Search products' });
+describe('Accessibility Best Practices', () => {
+	it('should use semantic queries for better accessibility testing', async () => {
+		render(ContactForm);
 
-// ✅ GOOD - Tests text content users see
-page.getByText('Welcome back, John');
-page.getByPlaceholder('Enter your message');
+		// ✅ EXCELLENT - Tests accessibility and semantics
+		const name_input = page.getByRole('textbox', {
+			name: 'Full Name',
+		});
+		const email_input = page.getByLabelText('Email address');
+		const submit_button = page.getByRole('button', {
+			name: 'Submit form',
+		});
 
-// ⚠️ OKAY - When semantic queries aren't possible
-page.getByTestId('complex-widget');
+		await name_input.fill('John Doe');
+		await email_input.fill('john@example.com');
+		await submit_button.click();
 
-// ❌ AVOID - Doesn't test accessibility
-page.locator('#submit-btn');
-page.locator('.email-input');
-```
+		// ✅ GOOD - Tests text content users see
+		await expect
+			.element(page.getByText('Thank you, John!'))
+			.toBeInTheDocument();
+	});
 
-### ARIA Testing Patterns
-
-```typescript
-describe('Modal Accessibility', () => {
-	test('should have proper ARIA roles and properties', async () => {
+	it('should test ARIA properties and roles', async () => {
 		render(Modal, { open: true, title: 'Settings' });
 
 		const modal = page.getByRole('dialog');
@@ -271,170 +536,48 @@ describe('Modal Accessibility', () => {
 		await expect.element(title).toHaveText('Settings');
 	});
 
-	test('should trap focus within modal', async () => {
-		render(Modal, { open: true });
+	it('should test keyboard navigation', async () => {
+		render(TabPanel);
 
-		// First focusable element should receive focus
-		const close_button = page.getByRole('button', { name: 'Close' });
-		await expect.element(close_button).toBeFocused();
+		const first_tab = page.getByRole('tab').first();
+		await first_tab.focus();
 
-		// Tab should cycle within modal
-		await page.keyboard.press('Tab');
-		const save_button = page.getByRole('button', { name: 'Save' });
-		await expect.element(save_button).toBeFocused();
+		// Test arrow key navigation
+		await page.keyboard.press('ArrowRight');
+		const second_tab = page.getByRole('tab').nth(1);
+		await expect.element(second_tab).toBeFocused();
 
-		// Shift+Tab should cycle backwards
-		await page.keyboard.press('Shift+Tab');
-		await expect.element(close_button).toBeFocused();
-	});
-
-	test('should announce changes to screen readers', async () => {
-		render(Form);
-
-		const input = page.getByLabelText('Email');
-		await input.fill('invalid-email');
-
-		const error_message = page.getByText(
-			'Please enter a valid email address',
-		);
+		// Test Enter key activation
+		await page.keyboard.press('Enter');
 		await expect
-			.element(error_message)
-			.toHaveAttribute('aria-live', 'polite');
-		await expect
-			.element(input)
-			.toHaveAttribute('aria-invalid', 'true');
-		await expect.element(input).toHaveAttribute('aria-describedby');
+			.element(second_tab)
+			.toHaveAttribute('aria-selected', 'true');
 	});
-});
-```
-
-## Performance Optimization
-
-### Parallel Test Execution
-
-```typescript
-// Use concurrent tests for independent operations
-describe('Independent Component Tests', () => {
-	test.concurrent('button variants render correctly', async () => {
-		render(Button, { variant: 'primary' });
-		await expect
-			.element(page.getByRole('button'))
-			.toHaveClass('btn-primary');
-	});
-
-	test.concurrent('input validation works', async () => {
-		render(Input, { type: 'email', error: 'Invalid email' });
-		await expect
-			.element(page.getByText('Invalid email'))
-			.toBeInTheDocument();
-	});
-
-	test.concurrent('modal opens and closes', async () => {
-		const close_handler = vi.fn();
-		render(Modal, { open: true, onclose: close_handler });
-
-		await page.keyboard.press('Escape');
-		expect(close_handler).toHaveBeenCalled();
-	});
-});
-```
-
-### Smart Mocking Strategy
-
-```typescript
-// Mock heavy operations but keep business logic real
-vi.mock('$lib/api/heavy-computation', () => ({
-	compute_analytics: vi.fn(() =>
-		Promise.resolve({
-			users: 1000,
-			revenue: 50000,
-		}),
-	),
-	generate_report: vi.fn(() => Promise.resolve('report-data')),
-}));
-
-// Keep validation logic real to catch actual bugs
-// Don't mock: validation functions, utilities, formatters
-
-describe('Dashboard Performance', () => {
-	test('should render quickly with mocked data', async () => {
-		const start = performance.now();
-
-		render(Dashboard);
-		await expect
-			.element(page.getByText('1000 users'))
-			.toBeInTheDocument();
-
-		const render_time = performance.now() - start;
-		expect(render_time).toBeLessThan(100); // ms
-	});
-});
-```
-
-### Test Environment Optimization
-
-```typescript
-// vite.config.ts
-export default defineConfig({
-	test: {
-		browser: {
-			enabled: true,
-			name: 'chromium',
-			provider: 'playwright',
-			headless: true, // Faster execution
-		},
-		pool: 'threads',
-		poolOptions: {
-			threads: {
-				// Use all CPU cores
-				maxThreads: os.cpus().length,
-				minThreads: 1,
-			},
-		},
-		// Fail fast in CI
-		bail: process.env.CI ? 1 : 0,
-	},
 });
 ```
 
 ## Component Testing Patterns
 
-### Props Testing Strategy
+### Props and Event Testing
 
 ```typescript
-describe('Component Props', () => {
-	// Test all prop combinations systematically
-	const variants = ['primary', 'secondary', 'danger'] as const;
-	const sizes = ['sm', 'md', 'lg'] as const;
-	const states = [true, false] as const;
+describe('Component Props and Events', () => {
+	it('should handle all prop variants systematically', async () => {
+		const variants = ['primary', 'secondary', 'danger'] as const;
+		const sizes = ['sm', 'md', 'lg'] as const;
 
-	variants.forEach((variant) => {
-		sizes.forEach((size) => {
-			states.forEach((disabled) => {
-				test(`should render ${variant} ${size} ${disabled ? 'disabled' : 'enabled'}`, async () => {
-					render(Button, { variant, size, disabled });
+		for (const variant of variants) {
+			for (const size of sizes) {
+				render(Button, { variant, size });
 
-					const button = page.getByRole('button');
-					await expect.element(button).toHaveClass(`btn-${variant}`);
-					await expect.element(button).toHaveClass(`btn-${size}`);
-
-					if (disabled) {
-						await expect.element(button).toBeDisabled();
-					} else {
-						await expect.element(button).toBeEnabled();
-					}
-				});
-			});
-		});
+				const button = page.getByRole('button');
+				await expect.element(button).toHaveClass(`btn-${variant}`);
+				await expect.element(button).toHaveClass(`btn-${size}`);
+			}
+		}
 	});
-});
-```
 
-### Event Testing Patterns
-
-```typescript
-describe('Event Handling', () => {
-	test('should handle multiple event types', async () => {
+	it('should handle multiple event types', async () => {
 		const handlers = {
 			click: vi.fn(),
 			focus: vi.fn(),
@@ -472,51 +615,65 @@ describe('Event Handling', () => {
 });
 ```
 
-## Advanced Testing Patterns
+## Mocking Best Practices
 
-### State Machine Testing
+### Smart Mocking Strategy
 
 ```typescript
-describe('Form State Machine', () => {
-	test('should transition through all states correctly', async () => {
-		render(ContactForm);
+describe('Mocking Patterns', () => {
+	// ✅ Mock utility functions with realistic return values
+	vi.mock('$lib/utils/data-fetcher', () => ({
+		fetch_user_data: vi.fn(() =>
+			Promise.resolve({
+				id: '1',
+				name: 'Test User',
+				email: 'test@example.com',
+			}),
+		),
+		fetch_todos: vi.fn(() =>
+			Promise.resolve([
+				{ id: '1', title: 'Test Todo', completed: false },
+			]),
+		),
+	}));
 
-		// Initial state: empty form
-		await expect
-			.element(page.getByRole('button', { name: 'Submit' }))
-			.toBeDisabled();
+	it('should verify mocks are working correctly', async () => {
+		const { fetch_user_data } = await import(
+			'$lib/utils/data-fetcher'
+		);
 
-		// Filling state: partially filled
-		await page.getByLabelText('Name').fill('John Doe');
-		await expect
-			.element(page.getByRole('button', { name: 'Submit' }))
-			.toBeDisabled();
+		expect(fetch_user_data).toBeDefined();
+		expect(vi.isMockFunction(fetch_user_data)).toBe(true);
 
-		// Valid state: all required fields filled
-		await page.getByLabelText('Email').fill('john@example.com');
-		await expect
-			.element(page.getByRole('button', { name: 'Submit' }))
-			.toBeEnabled();
+		const result = await fetch_user_data('123');
+		expect(result).toEqual({
+			id: '1',
+			name: 'Test User',
+			email: 'test@example.com',
+		});
+	});
 
-		// Submitting state: loading
-		await page.getByRole('button', { name: 'Submit' }).click();
+	it('should test component with mocked data', async () => {
+		render(UserProfile, { user_id: '123' });
+
+		// Wait for async data loading
 		await expect
-			.element(page.getByText('Submitting...'))
+			.element(page.getByText('Test User'))
 			.toBeInTheDocument();
-
-		// Success state: form submitted
 		await expect
-			.element(page.getByText('Thank you for your message!'))
+			.element(page.getByText('test@example.com'))
 			.toBeInTheDocument();
 	});
 });
 ```
 
-### Error Boundary Testing
+## Error Handling and Edge Cases
+
+### Robust Error Testing
 
 ```typescript
 describe('Error Handling', () => {
-	test('should display error boundary for component failures', async () => {
+	it('should handle component errors gracefully', async () => {
 		// Mock console.error to avoid test noise
 		const console_error = vi
 			.spyOn(console, 'error')
@@ -540,285 +697,139 @@ describe('Error Handling', () => {
 		console_error.mockRestore();
 	});
 
-	test('should recover from errors when retry is clicked', async () => {
-		let should_error = true;
-
-		render(ErrorBoundary, {
-			children: createRawSnippet(() => ({
-				render: () => {
-					if (should_error) {
-						throw new Error('Temporary error');
-					}
-					return '<div>Content loaded successfully</div>';
-				},
-			})),
-		});
-
-		// Initially shows error
-		await expect
-			.element(page.getByText('Something went wrong'))
-			.toBeInTheDocument();
-
-		// Fix the error condition
-		should_error = false;
-
-		// Click retry
-		await page.getByRole('button', { name: 'Try again' }).click();
-
-		// Should now show content
-		await expect
-			.element(page.getByText('Content loaded successfully'))
-			.toBeInTheDocument();
-	});
-});
-```
-
-## Team Collaboration Patterns
-
-### Shared Test Utilities
-
-```typescript
-// tests/utils/test-helpers.ts
-export class TestHelpers {
-	static async fill_login_form(email: string, password: string) {
-		await page.getByLabelText('Email').fill(email);
-		await page.getByLabelText('Password').fill(password);
-	}
-
-	static async wait_for_loading_to_complete() {
-		await expect
-			.element(page.getByTestId('loading-spinner'))
-			.not.toBeInTheDocument();
-	}
-
-	static async expect_error_message(message: string) {
-		await expect
-			.element(page.getByRole('alert'))
-			.toHaveTextContent(message);
-	}
-
-	static create_mock_user(overrides: Partial<User> = {}): User {
-		return {
-			id: '1',
-			email: 'test@example.com',
-			name: 'Test User',
-			role: 'user',
-			...overrides,
-		};
-	}
-}
-```
-
-### Consistent Test Data
-
-```typescript
-// tests/fixtures/test-data.ts
-export const TEST_USERS = {
-	admin: {
-		id: 'admin-1',
-		email: 'admin@example.com',
-		name: 'Admin User',
-		role: 'admin' as const,
-	},
-	regular: {
-		id: 'user-1',
-		email: 'user@example.com',
-		name: 'Regular User',
-		role: 'user' as const,
-	},
-	guest: {
-		id: 'guest-1',
-		email: 'guest@example.com',
-		name: 'Guest User',
-		role: 'guest' as const,
-	},
-} as const;
-
-export const TEST_TODOS = [
-	{ id: '1', title: 'Buy groceries', completed: false },
-	{ id: '2', title: 'Walk the dog', completed: true },
-	{ id: '3', title: 'Write tests', completed: false },
-] as const;
-```
-
-### Page Object Pattern
-
-```typescript
-// tests/page-objects/todo-page.ts
-export class TodoPage {
-	async add_todo(title: string) {
-		await page.getByLabelText('New todo').fill(title);
-		await page.getByRole('button', { name: 'Add Todo' }).click();
-	}
-
-	async complete_todo(title: string) {
-		const todo_item = page
-			.getByRole('listitem')
-			.filter({ hasText: title });
-		await todo_item.getByRole('checkbox').check();
-	}
-
-	async delete_todo(title: string) {
-		const todo_item = page
-			.getByRole('listitem')
-			.filter({ hasText: title });
-		await todo_item.getByRole('button', { name: 'Delete' }).click();
-	}
-
-	async expect_todo_count(count: number) {
-		await expect
-			.element(page.getByRole('listitem'))
-			.toHaveCount(count);
-	}
-
-	async expect_todo_exists(title: string) {
-		await expect.element(page.getByText(title)).toBeInTheDocument();
-	}
-}
-
-// Usage in tests
-describe('Todo Management', () => {
-	const todo_page = new TodoPage();
-
-	test('should manage todo lifecycle', async () => {
-		render(TodoApp);
-
-		await todo_page.add_todo('Buy milk');
-		await todo_page.expect_todo_exists('Buy milk');
-
-		await todo_page.complete_todo('Buy milk');
-		await todo_page.delete_todo('Buy milk');
-
-		await todo_page.expect_todo_count(0);
-	});
-});
-```
-
-## CI/CD Optimization
-
-### Test Parallelization
-
-```yaml
-# .github/workflows/test.yml
-name: Tests
-on: [push, pull_request]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        shard: [1, 2, 3, 4]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'pnpm'
-
-      - run: pnpm install
-      - run: pnpm test --shard=${{ matrix.shard }}/4
-```
-
-### Test Result Artifacts
-
-```typescript
-// vite.config.ts
-export default defineConfig({
-	test: {
-		browser: {
-			enabled: true,
-			name: 'chromium',
-			provider: 'playwright',
-			// Capture screenshots and videos on failure
-			screenshot: 'only-on-failure',
-			video: 'retain-on-failure',
-		},
-		// Generate detailed reports
-		reporters: ['default', 'junit', 'html'],
-		outputFile: {
-			junit: './test-results/junit.xml',
-			html: './test-results/index.html',
-		},
-	},
-});
-```
-
-## Security Testing
-
-### XSS Prevention Testing
-
-```typescript
-describe('XSS Prevention', () => {
-	test('should escape user input in templates', async () => {
-		const malicious_input = '<script>alert("xss")</script>';
-
-		render(UserComment, {
-			comment: malicious_input,
-			author: 'Test User',
-		});
-
-		// Should render as text, not execute script
-		await expect
-			.element(page.getByText(malicious_input))
-			.toBeInTheDocument();
-
-		// Should not create script element
-		const script_elements = page
-			.locator('script')
-			.filter({ hasText: 'alert' });
-		await expect.element(script_elements).toHaveCount(0);
-	});
-});
-```
-
-### CSP Testing
-
-```typescript
-describe('Content Security Policy', () => {
-	test('should not execute inline scripts', async () => {
-		render(App);
-
-		// Check that CSP headers are set
-		const response = await page.evaluate(() =>
-			fetch(window.location.href).then((r) =>
-				r.headers.get('content-security-policy'),
-			),
+	it('should handle network failures', async () => {
+		// Mock fetch to simulate network error
+		vi.spyOn(global, 'fetch').mockRejectedValueOnce(
+			new Error('Network error'),
 		);
 
-		expect(response).toContain("script-src 'self'");
-		expect(response).not.toContain("'unsafe-inline'");
+		render(DataComponent);
+
+		await expect
+			.element(page.getByText('Failed to load data'))
+			.toBeInTheDocument();
+		await expect
+			.element(page.getByRole('button', { name: 'Retry' }))
+			.toBeInTheDocument();
+	});
+
+	it('should handle empty data states', async () => {
+		render(TodoList, { todos: [] });
+
+		await expect
+			.element(page.getByText('No todos yet'))
+			.toBeInTheDocument();
+		await expect
+			.element(page.getByText('Add your first todo to get started'))
+			.toBeInTheDocument();
+	});
+});
+```
+
+## Performance and Animation Testing
+
+### Handle Animations and Timing
+
+```typescript
+describe('Animation and Performance', () => {
+	it('should handle animated elements', async () => {
+		render(AnimatedModal, { open: true });
+
+		const modal = page.getByRole('dialog');
+
+		// ✅ Use force: true for elements that may be animating
+		const close_button = page.getByRole('button', { name: 'Close' });
+		await close_button.click({ force: true });
+
+		// Wait for animation to complete
+		await expect.element(modal).not.toBeInTheDocument();
+	});
+
+	it('should test component performance', async () => {
+		const start = performance.now();
+
+		render(ComplexDashboard, { data: large_dataset });
+
+		// Wait for initial render
+		await expect
+			.element(page.getByTestId('dashboard'))
+			.toBeInTheDocument();
+
+		const render_time = performance.now() - start;
+		expect(render_time).toBeLessThan(1000); // Should render within 1 second
+	});
+});
+```
+
+## SSR Testing Patterns
+
+### Server-Side Rendering Validation
+
+```typescript
+import { render } from 'svelte/server';
+
+describe('SSR Testing', () => {
+	it('should render without errors on server', () => {
+		expect(() => {
+			render(ComponentName);
+		}).not.toThrow();
+	});
+
+	it('should render essential content for SEO', () => {
+		const { body, head } = render(HomePage);
+
+		// Test core content
+		expect(body).toContain('<h1>Welcome to Our Site</h1>');
+		expect(body).toContain('href="/about"');
+		expect(body).toContain('main');
+
+		// Test meta information
+		expect(head).toContain('<title>');
+		expect(head).toContain('meta name="description"');
+	});
+
+	it('should handle props correctly in SSR', () => {
+		const { body } = render(UserCard, {
+			user: { name: 'John Doe', email: 'john@example.com' },
+		});
+
+		expect(body).toContain('John Doe');
+		expect(body).toContain('john@example.com');
 	});
 });
 ```
 
 ## Quick Reference Checklist
 
-### Before Writing Tests
+### Essential Patterns ✅
 
-- [ ] Plan complete test structure with `.skip`
-- [ ] Choose semantic queries over test IDs
-- [ ] Consider accessibility implications
-- [ ] Design test data fixtures
+- Use `describe` and `it` (not `test`) for consistency with Vitest
+  docs
+- Use `it.skip` for planned tests, not strict 100% coverage
+- Always use locators (`page.getBy*()`) - never containers
+- Always await locator assertions: `await expect.element()`
+- Use `untrack()` for Svelte 5 `$derived` values
+- Use `.first()`, `.nth()`, `.last()` for multiple elements
+- Use `force: true` for animations:
+  `await element.click({ force: true })`
+- Prefer semantic queries over test IDs
+- Test user value, not implementation details
+- Use real `FormData`/`Request` objects in server tests
+- Share validation logic between client and server
+- Mock external services, keep data contracts real
 
-### While Writing Tests
+### Common Mistakes ❌
 
-- [ ] Use `await expect.element()` for assertions
-- [ ] Prefer `page.getByRole()` for interactive elements
-- [ ] Test keyboard navigation and screen reader support
-- [ ] Mock external services, keep business logic real
+- Never click SvelteKit form submits - test state directly
+- Don't ignore strict mode violations - use `.first()` instead
+- Don't test SVG paths or internal markup
+- Don't assume element roles - verify with browser dev tools
+- Don't write tests for arbitrary coverage metrics
+- Don't use containers from render() - use page locators instead
 
-### Code Review Checklist
+### Code Style Requirements
 
-- [ ] Tests cover happy path, edge cases, and error states
-- [ ] No flaky timing dependencies
-- [ ] Proper use of mocks vs real implementations
-- [ ] Accessibility testing included
-- [ ] Performance considerations addressed
-
-### Maintenance
-
-- [ ] Remove `.skip` from implemented tests
-- [ ] Update tests when requirements change
-- [ ] Refactor common patterns into utilities
-- [ ] Monitor test execution time and optimize slow tests
+- Use `snake_case` for variables and functions
+- Use `kebab-case` for file names
+- Prefer arrow functions where possible
+- Keep interfaces in TitleCase

@@ -2,6 +2,42 @@
 
 ## Common Errors & Solutions
 
+### Client-Server Mismatch Issues
+
+**Cause**: Client and server expecting different data formats or field
+names, often hidden by heavy mocking in tests.
+
+**Example Scenarios**:
+
+- Client sends `email` but server expects `user_email`
+- Form sends `FormData` but server expects JSON
+- Client uses different validation rules than server
+
+**Solution**: Use the **Client-Server Alignment Strategy**:
+
+```typescript
+// ❌ BRITTLE: Mocking hides real mismatches
+const mock_request = {
+	formData: vi.fn().mockResolvedValue({
+		get: vi.fn().mockReturnValue('test@example.com'),
+	}),
+};
+
+// ✅ ROBUST: Real FormData catches field name issues
+const form_data = new FormData();
+form_data.append('email', 'test@example.com'); // Must match server expectations
+const request = new Request('http://localhost/api/register', {
+	method: 'POST',
+	body: form_data,
+});
+```
+
+**Prevention**:
+
+- Share validation logic between client and server
+- Use real `FormData`/`Request` objects in server tests
+- Add E2E tests for critical form flows
+
 ### "Expected 2 arguments, but got 0"
 
 **Cause**: Mock function signature doesn't match the actual function

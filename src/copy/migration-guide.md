@@ -12,16 +12,19 @@ on real-world migration experience and current best practices.
   modern Svelte patterns
 - **Auto-retry Logic**: Built-in element waiting and retrying
   eliminates flaky tests
+- **Client-Server Alignment**: Enables testing with real FormData and
+  Request objects for better integration confidence
 - **Future-Proof**: Official Svelte team recommendation for modern
   testing
 
 ## 📋 Migration Strategy
 
-This guide follows a proven **Foundation First** approach:
+This guide follows a proven **Foundation First** approach that
+supports the **Client-Server Alignment Strategy**:
 
 1. **Phase 1**: Environment setup and configuration
 2. **Phase 2**: Core pattern migration (one test file at a time)
-3. **Phase 3**: Advanced patterns and optimization
+3. **Phase 3**: Advanced patterns and server testing alignment
 4. **Phase 4**: Cleanup and validation
 
 ## 🚀 Phase 1: Environment Setup

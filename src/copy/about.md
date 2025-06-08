@@ -20,6 +20,11 @@ edge cases, and developing patterns that actually work when you scale
 them up. These aren't theoretical examples; they're patterns we use
 every day to ship reliable software.
 
+The **Client-Server Alignment Strategy** emerged from real production
+pain points where heavily mocked tests passed but production failed
+due to client-server contract mismatches. This approach ensures your
+tests catch the integration issues that matter.
+
 ## A Living Documentation Project
 
 Every component, every test, every pattern in Sveltest serves as a

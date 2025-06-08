@@ -1,7 +1,8 @@
 # API Reference
 
 Complete reference for vitest-browser-svelte testing APIs, organized
-by immediate developer needs.
+by immediate developer needs. These APIs support the **Client-Server
+Alignment Strategy** for reliable full-stack testing.
 
 ## Quick Start Imports
 
@@ -19,6 +20,17 @@ import { page } from '@vitest/browser/context';
 import { createRawSnippet } from 'svelte';
 import { flushSync, untrack } from 'svelte';
 import { render } from 'svelte/server'; // SSR testing only
+```
+
+### Server Testing (Client-Server Alignment)
+
+```typescript
+// Real web APIs for server tests - no mocking
+const form_data = new FormData();
+const request = new Request('http://localhost/api/endpoint', {
+	method: 'POST',
+	body: form_data,
+});
 ```
 
 ## 🎯 Locators (Auto-Retry Built-in)

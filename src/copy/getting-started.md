@@ -16,6 +16,8 @@ of simulated environments.
 - Essential testing patterns that work in real browsers
 - Best practices for testing Svelte 5 components with runes
 - How to avoid common pitfalls and write reliable tests
+- The **Client-Server Alignment Strategy** for reliable full-stack
+  testing
 
 ### What is Sveltest?
 
@@ -86,7 +88,9 @@ pnpm un @testing-library/jest-dom @testing-library/svelte jsdom
 ### Configure Vitest Browser Mode
 
 Update your `vite.config.ts` to use the official Vitest Browser
-configuration:
+configuration. This multi-project setup supports the **Client-Server
+Alignment Strategy** - testing client components in real browsers
+while keeping server tests fast with minimal mocking:
 
 ```typescript
 import tailwindcss from '@tailwindcss/vite';
@@ -185,6 +189,45 @@ describe('/+page.svelte', () => {
 
 Running `pnpm run test:unit` should run the `page.svelte.test.ts` file
 in the browser and pass!
+
+## Understanding the Client-Server Alignment Strategy
+
+Before diving into component testing, it's important to understand the
+**Client-Server Alignment Strategy** that guides this testing
+approach:
+
+### The Four-Layer Approach
+
+1. **Shared Validation Logic**: Use the same validation functions on
+   both client and server
+2. **Real FormData/Request Objects**: Server tests use real web APIs,
+   not mocks
+3. **TypeScript Contracts**: Shared interfaces catch mismatches at
+   compile time
+4. **E2E Tests**: Final safety net for complete integration validation
+
+### Why This Matters
+
+Traditional testing with heavy mocking can pass while production fails
+due to client-server mismatches. This strategy ensures your tests
+catch real integration issues:
+
+```typescript
+// ❌ BRITTLE: Heavy mocking hides real issues
+const mock_request = { formData: vi.fn().mockResolvedValue(...) };
+
+// ✅ ROBUST: Real FormData catches field name mismatches
+const form_data = new FormData();
+form_data.append('email', 'user@example.com');
+const request = new Request('http://localhost/api/register', {
+	method: 'POST',
+	body: form_data,
+});
+```
+
+This multi-project Vitest setup supports this strategy by keeping
+client, server, and SSR tests separate while maintaining shared
+validation logic.
 
 ## Write Your First Test
 
