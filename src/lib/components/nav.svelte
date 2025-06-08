@@ -11,6 +11,7 @@
 		Home,
 		Menu,
 	} from '$lib/icons';
+	import { github_status } from '$lib/state/github-status.svelte';
 
 	const main_links = [
 		{ href: '/', title: 'Home', icon: Home, color: 'primary' },
@@ -74,6 +75,11 @@
 			? page.url.pathname === '/'
 			: page.url.pathname.startsWith(path);
 	};
+
+	// Reactive status values using Svelte 5 runes
+	$: status_message = github_status.status_message;
+	$: status_color = github_status.status_color;
+	$: overall_status = github_status.overall_status;
 </script>
 
 <!-- Desktop Navigation -->
@@ -124,25 +130,8 @@
 			</ul>
 		</div>
 
-		<!-- Navbar End - Status & Actions -->
+		<!-- Navbar End - Actions -->
 		<div class="navbar-end">
-			<!-- Status Indicator (Desktop) -->
-			<div class="mr-4 hidden items-center gap-2 lg:flex">
-				<div
-					class="bg-success/10 border-success/20 flex items-center gap-2 rounded-lg border px-3 py-1"
-					role="status"
-					aria-label="Test status"
-				>
-					<div
-						class="bg-success h-2 w-2 animate-pulse rounded-full"
-						aria-hidden="true"
-					></div>
-					<span class="text-success text-xs font-medium">
-						All tests passing
-					</span>
-				</div>
-			</div>
-
 			<!-- Menu Dropdown (Both Mobile and Desktop) -->
 			<div class="dropdown dropdown-end">
 				<div
@@ -253,21 +242,48 @@
 					<li class="menu-title" role="none">
 						<span>Status</span>
 					</li>
-					<li class="disabled" role="none">
-						<div
-							class="flex items-center gap-2"
-							role="status"
-							aria-label="Test status"
-						>
-							<div
-								class="bg-success h-2 w-2 animate-pulse rounded-full"
-								aria-hidden="true"
-							></div>
-							<span class="text-success text-xs">
-								All tests passing
-							</span>
-						</div>
-					</li>
+
+					<!-- Detailed Status (if data available) -->
+					{#if github_status.data}
+						<li class="disabled" role="none">
+							<a class="gap-2">
+								<div class="flex flex-col gap-1 text-xs opacity-70">
+									<div class="flex items-center gap-2">
+										<div
+											class="{github_status.data.unit_tests.status ===
+											'passing'
+												? 'bg-success'
+												: github_status.data.unit_tests.status ===
+													  'failing'
+													? 'bg-error'
+													: 'bg-warning'} h-1.5 w-1.5 rounded-full"
+											aria-hidden="true"
+										></div>
+										<span
+											>Unit Tests: {github_status.data.unit_tests
+												.status}</span
+										>
+									</div>
+									<div class="flex items-center gap-2">
+										<div
+											class="{github_status.data.e2e_tests.status ===
+											'passing'
+												? 'bg-success'
+												: github_status.data.e2e_tests.status ===
+													  'failing'
+													? 'bg-error'
+													: 'bg-warning'} h-1.5 w-1.5 rounded-full"
+											aria-hidden="true"
+										></div>
+										<span
+											>E2E Tests: {github_status.data.e2e_tests
+												.status}</span
+										>
+									</div>
+								</div>
+							</a>
+						</li>
+					{/if}
 				</ul>
 			</div>
 		</div>
