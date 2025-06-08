@@ -16,9 +16,9 @@ test.describe('Homepage', () => {
 		});
 
 		await test.step('Check navigation elements', async () => {
-			// Check for main navigation links
+			// ✅ Use .first() to handle multiple "Explore Examples" links
 			await expect(
-				page.getByRole('link', { name: 'Explore Examples' }),
+				page.getByRole('link', { name: 'Explore Examples' }).first(),
 			).toBeVisible();
 			await expect(
 				page.getByRole('link', { name: 'Try Todo Manager' }),
@@ -33,8 +33,10 @@ test.describe('Homepage', () => {
 
 	test('should navigate to examples page', async ({ page }) => {
 		await test.step('Click examples link', async () => {
+			// ✅ Use .first() to handle multiple "Explore Examples" links
 			await page
 				.getByRole('link', { name: 'Explore Examples' })
+				.first()
 				.click();
 		});
 

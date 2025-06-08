@@ -19,9 +19,9 @@ test.describe('Smoke Tests', () => {
 				page.getByRole('heading', { name: 'Sveltest' }),
 			).toBeVisible();
 
-			// Check for main navigation links
+			// ✅ Use .first() to handle multiple "Explore Examples" links
 			await expect(
-				page.getByRole('link', { name: 'Explore Examples' }),
+				page.getByRole('link', { name: 'Explore Examples' }).first(),
 			).toBeVisible();
 			await expect(
 				page.getByRole('link', { name: 'Try Todo Manager' }),
