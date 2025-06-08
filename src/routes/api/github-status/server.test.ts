@@ -3,7 +3,30 @@ import { GET } from './+server';
 
 // Mock fetch globally
 const mock_fetch = vi.fn();
-global.fetch = mock_fetch;
+vi.stubGlobal('fetch', mock_fetch);
+
+// Create a mock RequestEvent for testing
+const create_mock_request_event = () =>
+	({
+		request: new Request('http://localhost/api/github-status'),
+		url: new URL('http://localhost/api/github-status'),
+		params: {},
+		route: { id: '/api/github-status' },
+		platform: undefined,
+		locals: {},
+		cookies: {
+			get: vi.fn(),
+			getAll: vi.fn(),
+			set: vi.fn(),
+			delete: vi.fn(),
+			serialize: vi.fn(),
+		},
+		fetch: mock_fetch,
+		getClientAddress: vi.fn(() => '127.0.0.1'),
+		isDataRequest: false,
+		isSubRequest: false,
+		setHeaders: vi.fn(),
+	}) as any;
 
 describe('GitHub Status API', () => {
 	beforeEach(() => {
@@ -37,7 +60,7 @@ describe('GitHub Status API', () => {
 					}),
 				});
 
-			const response = await GET();
+			const response = await GET(create_mock_request_event());
 			const data = await response.json();
 
 			expect(data).toEqual({
@@ -84,7 +107,7 @@ describe('GitHub Status API', () => {
 					}),
 				});
 
-			const response = await GET();
+			const response = await GET(create_mock_request_event());
 			const data = await response.json();
 
 			expect(data.unit_tests.status).toBe('failing');
@@ -107,7 +130,7 @@ describe('GitHub Status API', () => {
 					}),
 				});
 
-			const response = await GET();
+			const response = await GET(create_mock_request_event());
 			const data = await response.json();
 
 			expect(data.unit_tests.status).toBe('unknown');
@@ -130,7 +153,7 @@ describe('GitHub Status API', () => {
 					statusText: 'Not Found',
 				});
 
-			const response = await GET();
+			const response = await GET(create_mock_request_event());
 			const data = await response.json();
 
 			expect(data.unit_tests.status).toBe('unknown');
@@ -147,7 +170,7 @@ describe('GitHub Status API', () => {
 				.mockRejectedValueOnce(new Error('Network error'))
 				.mockRejectedValueOnce(new Error('Network error'));
 
-			const response = await GET();
+			const response = await GET(create_mock_request_event());
 			const data = await response.json();
 
 			expect(data.unit_tests.status).toBe('unknown');
@@ -176,7 +199,7 @@ describe('GitHub Status API', () => {
 					}),
 				});
 
-			const response = await GET();
+			const response = await GET(create_mock_request_event());
 			const data = await response.json();
 
 			expect(data.unit_tests.status).toBe('unknown');
@@ -205,7 +228,7 @@ describe('GitHub Status API', () => {
 					}),
 				});
 
-			await GET();
+			await GET(create_mock_request_event());
 
 			expect(mock_fetch).toHaveBeenCalledTimes(2);
 
@@ -254,7 +277,7 @@ describe('GitHub Status API', () => {
 					}),
 				});
 
-			const response = await GET();
+			const response = await GET(create_mock_request_event());
 			const data = await response.json();
 
 			expect(data.unit_tests.badge_url).toBe(

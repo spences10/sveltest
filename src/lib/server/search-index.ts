@@ -19,6 +19,10 @@ export interface SearchIndexItem {
 	keywords: string[]; // Additional searchable terms
 }
 
+export interface SearchResult extends SearchIndexItem {
+	score: number;
+}
+
 export interface SearchIndex {
 	items: SearchIndexItem[];
 	generated_at: string;
@@ -204,7 +208,7 @@ export function search_full_text(
 	query: string,
 	index: SearchIndex,
 	filter: string = 'all',
-): SearchIndexItem[] {
+): SearchResult[] {
 	if (!query.trim()) return [];
 
 	const search_terms = query
