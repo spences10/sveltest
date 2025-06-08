@@ -1,9 +1,6 @@
 import { flushSync, untrack } from 'svelte';
 import { describe, expect, it, vi } from 'vitest';
-import {
-	validate_email,
-	validate_password,
-} from './validation.js';
+import { validate_email, validate_password } from './validation.ts';
 
 // Mock the validation utilities
 vi.mock('../utils/validation.ts', () => ({
