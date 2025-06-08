@@ -10,11 +10,19 @@
 		GitHub,
 		Home,
 		Menu,
-		MoreVertical,
 	} from '$lib/icons';
 
 	const main_links = [
 		{ href: '/', title: 'Home', icon: Home, color: 'primary' },
+		{
+			href: '/docs',
+			title: 'Docs',
+			icon: Document,
+			color: 'secondary',
+		},
+	];
+
+	const other_links = [
 		{
 			href: '/components',
 			title: 'Components',
@@ -26,12 +34,6 @@
 			title: 'Examples',
 			icon: BarChart,
 			color: 'accent',
-		},
-		{
-			href: '/todos',
-			title: 'Todo Manager',
-			icon: CheckCircle,
-			color: 'info',
 		},
 	];
 
@@ -51,7 +53,12 @@
 	];
 
 	const settings_links = [
-		{ href: '/docs', title: 'Documentation', icon: Document },
+		{
+			href: '/todos',
+			title: 'Todo Manager',
+			icon: CheckCircle,
+			color: 'info',
+		},
 		{
 			href: 'https://github.com/spences10/sveltest',
 			title: 'GitHub Repository',
@@ -70,229 +77,227 @@
 </script>
 
 <!-- Desktop Navigation -->
-<nav
-	class="navbar bg-base-100/90 border-base-300/50 sticky top-0 z-40 border-b shadow-lg backdrop-blur-md"
->
-	<!-- Navbar Start - Brand -->
-	<div class="navbar-start">
-		<a href="/" class="btn btn-ghost text-xl font-black">
-			<div
-				class="from-primary to-secondary mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br shadow-md"
-			>
-				<CheckCircle class_names="text-primary-content h-5 w-5" />
-			</div>
-			<span
-				class="from-primary to-secondary bg-gradient-to-r bg-clip-text text-transparent"
-			>
-				Sveltest
-			</span>
-		</a>
-	</div>
-
-	<!-- Navbar Center - Main Navigation (Desktop) -->
-	<div class="navbar-center hidden lg:flex">
-		<ul class="menu menu-horizontal gap-1 px-1">
-			<!-- Main Navigation Links -->
-			{#each main_links as link}
-				<li>
-					<a
-						href={link.href}
-						class="gap-2 {is_active(link.href)
-							? `bg-${link.color}/10 text-${link.color}`
-							: ''}"
-						title={link.title}
-					>
-						<link.icon class_names="h-4 w-4" />
-						{link.title}
-					</a>
-				</li>
-			{/each}
-
-			<!-- Testing Section Dropdown -->
-			<li>
-				<details>
-					<summary class="gap-2">
-						<BarChart class_names="h-4 w-4" />
-						Testing
-					</summary>
-					<ul
-						class="bg-base-100/95 rounded-box border-base-300/50 z-50 w-48 border p-2 shadow-xl backdrop-blur-sm"
-					>
-						{#each testing_links as link}
-							<li>
-								<a
-									href={link.href}
-									class="gap-2 {is_active(link.href)
-										? `bg-${link.color}/10 text-${link.color}`
-										: ''}"
-								>
-									<link.icon class_names="h-4 w-4" />
-									{link.title}
-								</a>
-							</li>
-						{/each}
-					</ul>
-				</details>
-			</li>
-		</ul>
-	</div>
-
-	<!-- Navbar End - Status & Actions -->
-	<div class="navbar-end">
-		<!-- Status Indicator (Desktop) -->
-		<div class="mr-4 hidden items-center gap-2 lg:flex">
-			<div
-				class="bg-success/10 border-success/20 flex items-center gap-2 rounded-lg border px-3 py-1"
+<header>
+	<nav
+		class="navbar bg-base-100/90 border-base-300/50 sticky top-0 z-40 border-b shadow-lg backdrop-blur-md"
+		aria-label="Main navigation"
+	>
+		<!-- Navbar Start - Brand -->
+		<div class="navbar-start">
+			<a
+				href="/"
+				class="btn btn-ghost text-xl font-black"
+				aria-label="Sveltest home"
 			>
 				<div
-					class="bg-success h-2 w-2 animate-pulse rounded-full"
-				></div>
-				<span class="text-success text-xs font-medium">
-					All tests passing
+					class="from-primary to-secondary mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br shadow-md"
+				>
+					<CheckCircle class_names="text-primary-content h-5 w-5" />
+				</div>
+				<span
+					class="from-primary to-secondary bg-gradient-to-r bg-clip-text text-transparent"
+				>
+					Sveltest
 				</span>
-			</div>
+			</a>
 		</div>
 
-		<!-- Mobile Menu Dropdown -->
-		<div class="dropdown dropdown-end lg:hidden">
-			<div
-				role="button"
-				class="btn btn-ghost btn-circle"
-				aria-label="Open mobile menu"
-			>
-				<Menu class_names="h-5 w-5" />
-			</div>
-			<ul
-				class="dropdown-content menu bg-base-100/95 rounded-box border-base-300/50 z-50 w-64 border p-2 shadow-xl backdrop-blur-sm"
-			>
-				<!-- Mobile Navigation -->
-				<li class="menu-title">
-					<span>Navigation</span>
-				</li>
+		<!-- Navbar Center - Main Navigation (Desktop) -->
+		<div class="navbar-center hidden lg:flex">
+			<ul class="menu menu-horizontal gap-1 px-1" role="menubar">
+				<!-- Main Navigation Links -->
 				{#each main_links as link}
-					<li>
+					<li role="none">
 						<a
 							href={link.href}
 							class="gap-2 {is_active(link.href)
 								? `bg-${link.color}/10 text-${link.color}`
 								: ''}"
+							title={link.title}
+							role="menuitem"
 						>
 							<link.icon class_names="h-4 w-4" />
 							{link.title}
 						</a>
 					</li>
 				{/each}
-
-				<li class="menu-title">
-					<span>Testing</span>
-				</li>
-				{#each testing_links as link}
-					<li>
-						<a
-							href={link.href}
-							class="gap-2 {is_active(link.href)
-								? `bg-${link.color}/10 text-${link.color}`
-								: ''}"
-						>
-							<link.icon class_names="h-4 w-4" />
-							{link.title}
-						</a>
-					</li>
-				{/each}
-
-				<div class="divider my-2"></div>
-
-				<!-- Mobile Status -->
-				<li class="menu-title">
-					<span>Status</span>
-				</li>
-				<li class="disabled">
-					<div class="flex items-center gap-2">
-						<div
-							class="bg-success h-2 w-2 animate-pulse rounded-full"
-						></div>
-						<span class="text-success text-xs">
-							All tests passing
-						</span>
-					</div>
-				</li>
 			</ul>
 		</div>
 
-		<!-- Settings Dropdown -->
-		<div class="dropdown dropdown-end">
-			<div
-				role="button"
-				class="btn btn-ghost btn-circle"
-				aria-label="Open settings menu"
-			>
-				<MoreVertical class_names="h-5 w-5" />
+		<!-- Navbar End - Status & Actions -->
+		<div class="navbar-end">
+			<!-- Status Indicator (Desktop) -->
+			<div class="mr-4 hidden items-center gap-2 lg:flex">
+				<div
+					class="bg-success/10 border-success/20 flex items-center gap-2 rounded-lg border px-3 py-1"
+					role="status"
+					aria-label="Test status"
+				>
+					<div
+						class="bg-success h-2 w-2 animate-pulse rounded-full"
+						aria-hidden="true"
+					></div>
+					<span class="text-success text-xs font-medium">
+						All tests passing
+					</span>
+				</div>
 			</div>
-			<ul
-				class="dropdown-content menu bg-base-100/95 rounded-box border-base-300/50 z-50 w-52 border p-2 shadow-xl backdrop-blur-sm"
-			>
-				{#each settings_links as link}
-					<li>
-						<a
-							href={link.href}
-							class="gap-2"
-							{...link.external
-								? { target: '_blank', rel: 'noopener noreferrer' }
-								: {}}
-						>
-							<link.icon class_names="h-4 w-4" />
-							{link.title}
-							{#if link.external}
-								<Arrow
-									direction="up-right"
-									class_names="h-3 w-3 opacity-60"
-								/>
-							{/if}
-						</a>
+
+			<!-- Menu Dropdown (Both Mobile and Desktop) -->
+			<div class="dropdown dropdown-end">
+				<div
+					tabindex="0"
+					role="button"
+					class="btn btn-ghost btn-circle"
+					aria-label="Open navigation menu"
+					aria-haspopup="true"
+					aria-expanded="false"
+				>
+					<Menu class_names="h-5 w-5" />
+				</div>
+				<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+				<ul
+					tabindex="0"
+					class="dropdown-content menu bg-base-100/95 rounded-box border-base-300/50 z-50 w-64 border p-2 shadow-xl backdrop-blur-sm"
+					role="menu"
+					aria-label="Navigation menu"
+				>
+					<!-- Main Navigation -->
+					<li class="menu-title" role="none">
+						<span>Main</span>
 					</li>
-				{/each}
-			</ul>
+					{#each main_links as link}
+						<li role="none">
+							<a
+								href={link.href}
+								class="gap-2 {is_active(link.href)
+									? `bg-${link.color}/10 text-${link.color}`
+									: ''}"
+								role="menuitem"
+							>
+								<link.icon class_names="h-4 w-4" />
+								{link.title}
+							</a>
+						</li>
+					{/each}
+
+					<!-- Other Navigation Links -->
+					<li class="menu-title" role="none">
+						<span>Navigation</span>
+					</li>
+					{#each other_links as link}
+						<li role="none">
+							<a
+								href={link.href}
+								class="gap-2 {is_active(link.href)
+									? `bg-${link.color}/10 text-${link.color}`
+									: ''}"
+								role="menuitem"
+							>
+								<link.icon class_names="h-4 w-4" />
+								{link.title}
+							</a>
+						</li>
+					{/each}
+
+					<!-- Testing Section -->
+					<li class="menu-title" role="none">
+						<span>Testing</span>
+					</li>
+					{#each testing_links as link}
+						<li role="none">
+							<a
+								href={link.href}
+								class="gap-2 {is_active(link.href)
+									? `bg-${link.color}/10 text-${link.color}`
+									: ''}"
+								role="menuitem"
+							>
+								<link.icon class_names="h-4 w-4" />
+								{link.title}
+							</a>
+						</li>
+					{/each}
+
+					<!-- Settings Links -->
+					<li class="menu-title" role="none">
+						<span>Settings</span>
+					</li>
+					{#each settings_links as link}
+						<li role="none">
+							<a
+								href={link.href}
+								class="gap-2 {is_active(link.href)
+									? `bg-${link.color}/10 text-${link.color}`
+									: ''}"
+								{...link.external
+									? { target: '_blank', rel: 'noopener noreferrer' }
+									: {}}
+								role="menuitem"
+							>
+								<link.icon class_names="h-4 w-4" />
+								{link.title}
+								{#if link.external}
+									<Arrow
+										direction="up-right"
+										class_names="h-3 w-3 opacity-60"
+									/>
+								{/if}
+							</a>
+						</li>
+					{/each}
+
+					<div class="divider my-2" role="separator"></div>
+
+					<!-- Status -->
+					<li class="menu-title" role="none">
+						<span>Status</span>
+					</li>
+					<li class="disabled" role="none">
+						<div
+							class="flex items-center gap-2"
+							role="status"
+							aria-label="Test status"
+						>
+							<div
+								class="bg-success h-2 w-2 animate-pulse rounded-full"
+								aria-hidden="true"
+							></div>
+							<span class="text-success text-xs">
+								All tests passing
+							</span>
+						</div>
+					</li>
+				</ul>
+			</div>
 		</div>
-	</div>
-</nav>
+	</nav>
+</header>
 
 <!-- Mobile Navigation Dock (Bottom) -->
-<div class="fixed right-0 bottom-0 left-0 z-30 lg:hidden">
+<nav
+	class="fixed right-0 bottom-0 left-0 z-30 lg:hidden"
+	aria-label="Mobile navigation dock"
+>
 	<div
 		class="dock bg-primary rounded-box mx-auto mb-4 max-w-[95vw] shadow-xl"
+		role="tablist"
 	>
 		{#each main_links as link}
-			<button class={is_active(link.href) ? 'dock-active' : ''}>
-				<a
-					href={link.href}
-					class="text-primary-content flex flex-col items-center gap-1"
-				>
-					<link.icon height="24" width="24" />
-					<span class="text-xs">{link.title}</span>
-				</a>
-			</button>
-		{/each}
-
-		<!-- Testing Dropdown in Dock -->
-		<div class="dropdown dropdown-top dropdown-end">
-			<button class="text-primary-content">
-				<div class="flex flex-col items-center gap-1">
-					<BarChart height="24" width="24" />
-					<span class="text-xs">Testing</span>
-				</div>
-			</button>
-			<ul
-				class="dropdown-content menu bg-base-100 rounded-box z-50 mb-2 w-48 p-2 shadow-xl"
+			<a
+				href={link.href}
+				class="text-primary-content flex flex-col items-center gap-1 {is_active(
+					link.href,
+				)
+					? 'dock-active'
+					: ''}"
+				role="tab"
+				aria-selected={is_active(link.href)}
+				aria-label="{link.title} page"
 			>
-				{#each testing_links as link}
-					<li>
-						<a href={link.href} class="gap-2">
-							<link.icon class_names="h-4 w-4" />
-							{link.title}
-						</a>
-					</li>
-				{/each}
-			</ul>
-		</div>
+				<link.icon height="24" width="24" />
+				<span class="text-xs">{link.title}</span>
+			</a>
+		{/each}
 	</div>
-</div>
+</nav>

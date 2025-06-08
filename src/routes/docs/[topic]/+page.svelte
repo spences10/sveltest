@@ -17,11 +17,11 @@
 <!-- Fixed positioned TOC -->
 <DocsToc current_topic={data.slug} />
 
-<div class="container mx-auto max-w-4xl px-4 py-6">
+<div class="container mx-auto max-w-4xl overflow-x-hidden px-4 py-6">
 	<!-- Main Content -->
-	<main class="min-w-0">
+	<main class="max-w-full min-w-0">
 		{#key data.slug}
-			<div class="prose prose-lg max-w-none">
+			<div class="prose prose-lg max-w-none overflow-x-auto">
 				<data.Copy />
 			</div>
 		{/key}
