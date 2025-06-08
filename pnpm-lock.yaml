@@ -16,10 +16,10 @@ importers:
         version: 9.28.0
       '@fontsource-variable/inter':
         specifier: ^5.2.5
-        version: 5.2.5
+        version: 5.2.6
       '@fontsource-variable/victor-mono':
         specifier: ^5.2.5
-        version: 5.2.5
+        version: 5.2.6
       '@playwright/test':
         specifier: ^1.52.0
         version: 1.52.0
@@ -371,11 +371,11 @@ packages:
     resolution: {integrity: sha512-0J+zgWxHN+xXONWIyPWKFMgVuJoZuGiIFu8yxk7RJjxkzpGmyja5wRFqZIVtjDVOQpV+Rw0iOAjYPE2eQyjr0w==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@fontsource-variable/inter@5.2.5':
-    resolution: {integrity: sha512-TrWffUAFOnT8zroE9YmGybagoOgM/HjRqMQ8k9R0vVgXlnUh/vnpbGPAS/Caz1KIlOPnPGh6fvJbb7DHbFCncA==}
+  '@fontsource-variable/inter@5.2.6':
+    resolution: {integrity: sha512-jks/bficUPQ9nn7GvXvHtlQIPudW7Wx8CrlZoY8bhxgeobNxlQan8DclUJuYF2loYRrGpfrhCIZZspXYysiVGg==}
 
-  '@fontsource-variable/victor-mono@5.2.5':
-    resolution: {integrity: sha512-o8PBOBGGtPDNRheUXEDuGpblkTHUefKda45k+5rH3HOaUhDVrorXQhnEfKsCeVN9g338HXAU3T5dpw2zR0h+nw==}
+  '@fontsource-variable/victor-mono@5.2.6':
+    resolution: {integrity: sha512-0UPLrQzT67pcuxeRSz9UAmSTKkjNUE6WJp90U6h+q0t9QC2+/kVHCj83nqdst6fKqUftgXrYn5Izpu+nzQ4tpw==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -2395,9 +2395,9 @@ snapshots:
       '@eslint/core': 0.14.0
       levn: 0.4.1
 
-  '@fontsource-variable/inter@5.2.5': {}
+  '@fontsource-variable/inter@5.2.6': {}
 
-  '@fontsource-variable/victor-mono@5.2.5': {}
+  '@fontsource-variable/victor-mono@5.2.6': {}
 
   '@humanfs/core@0.19.1': {}
 
