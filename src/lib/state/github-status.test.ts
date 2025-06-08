@@ -171,16 +171,40 @@ describe('GitHubStatusManager', () => {
 			expect(manager.error).toBe('Network error');
 		});
 
-		test('should handle HTTP errors', async () => {
+		test('should handle 500 errors with fallback data', async () => {
+			const fallback_data: GitHubStatus = {
+				unit_tests: { status: 'unknown', badge_url: 'fallback-url' },
+				e2e_tests: { status: 'unknown', badge_url: 'fallback-url' },
+			};
+
 			mock_fetch.mockResolvedValueOnce({
 				ok: false,
 				status: 500,
 				statusText: 'Internal Server Error',
+				json: async () => fallback_data,
 			});
 
 			await manager.fetch_status();
 
-			expect(manager.error).toBe('HTTP 500: Internal Server Error');
+			expect(manager.data).toEqual(fallback_data);
+			expect(manager.error).toBe(
+				'GitHub API temporarily unavailable',
+			);
+			expect(manager.loading).toBe(false);
+		});
+
+		test('should handle non-500 HTTP errors', async () => {
+			mock_fetch.mockResolvedValueOnce({
+				ok: false,
+				status: 404,
+				statusText: 'Not Found',
+			});
+
+			await manager.fetch_status();
+
+			expect(manager.data).toBe(null);
+			expect(manager.error).toBe('HTTP 404: Not Found');
+			expect(manager.loading).toBe(false);
 		});
 
 		test('should not fetch if browser is false', async () => {
