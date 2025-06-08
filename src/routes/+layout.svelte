@@ -70,8 +70,8 @@
 			<div class="divider my-4"></div>
 			<div class="text-center">
 				<p class="text-base-content/50 text-sm">
-					© 2024 Sveltest - Open source testing resource for Svelte
-					applications
+					© {new Date().getFullYear()} Sveltest - Open source testing
+					resource for Svelte applications
 				</p>
 			</div>
 		</div>
