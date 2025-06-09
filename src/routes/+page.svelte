@@ -1,5 +1,6 @@
 <script lang="ts">
 	import GitHubStatusPills from '$lib/components/github-status-pills.svelte';
+	import Logo from '$lib/components/logo.svelte';
 	import {
 		Arrow,
 		BarChart,
@@ -64,9 +65,14 @@
 				<!-- Main heading -->
 				<div class="space-y-4">
 					<h1
-						class="from-primary via-secondary to-accent bg-gradient-to-r bg-clip-text text-7xl leading-tight font-black text-transparent lg:text-8xl"
+						class="from-primary via-secondary to-accent flex items-center justify-center gap-4 bg-gradient-to-r bg-clip-text text-7xl leading-tight font-black text-transparent lg:text-8xl"
 					>
 						Sveltest
+						<Logo
+							height="90px"
+							width="90px"
+							class_names="lg:h-24 lg:w-24 text-primary"
+						/>
 					</h1>
 					<p
 						class="text-base-content/80 mx-auto max-w-4xl text-2xl leading-relaxed font-light lg:text-3xl"

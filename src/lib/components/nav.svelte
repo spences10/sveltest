@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import Logo from '$lib/components/logo.svelte';
 	import {
 		Arrow,
 		BarChart,
@@ -95,11 +96,11 @@
 				class="btn btn-ghost text-xl font-black"
 				aria-label="Sveltest home"
 			>
-				<div
-					class="from-primary to-secondary mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br shadow-md"
-				>
-					<CheckCircle class_names="text-primary-content h-5 w-5" />
-				</div>
+				<Logo
+					height="32px"
+					width="32px"
+					class_names="mr-2 text-primary"
+				/>
 				<span
 					class="from-primary to-secondary bg-gradient-to-r bg-clip-text text-transparent"
 				>
