@@ -53,7 +53,7 @@
 					>
 						<CheckCircle class_names="h-4 w-4 text-success" />
 						<span
-							class="text-base-content/70 text-sm font-medium tracking-wider uppercase text-shadow-2xs"
+							class="text-base-content/70 text-xs font-medium tracking-wider uppercase text-shadow-2xs sm:text-sm"
 						>
 							Battle-Tested in Production
 						</span>
@@ -64,16 +64,32 @@
 
 				<!-- Main heading -->
 				<div class="space-y-4">
+					<!-- Mobile layout: Logo above text -->
+					<div class="flex flex-col items-center gap-4 sm:hidden">
+						<Logo
+							height="64px"
+							width="64px"
+							class_names="text-primary"
+						/>
+						<h1
+							class="from-primary via-secondary to-accent bg-gradient-to-r bg-clip-text text-6xl leading-tight font-black text-transparent"
+						>
+							Sveltest
+						</h1>
+					</div>
+
+					<!-- Desktop layout: Logo beside text -->
 					<h1
-						class="from-primary via-secondary to-accent flex items-center justify-center gap-4 bg-gradient-to-r bg-clip-text text-7xl leading-tight font-black text-transparent lg:text-8xl"
+						class="from-primary via-secondary to-accent hidden items-center justify-center gap-4 bg-gradient-to-r bg-clip-text text-7xl leading-tight font-black text-transparent sm:flex lg:text-8xl"
 					>
 						Sveltest
 						<Logo
-							height="90px"
-							width="90px"
+							height="80px"
+							width="80px"
 							class_names="lg:h-24 lg:w-24 text-primary"
 						/>
 					</h1>
+
 					<p
 						class="text-base-content/80 mx-auto max-w-4xl text-2xl leading-relaxed font-light lg:text-3xl"
 					>
