@@ -279,10 +279,10 @@
 													: 'bg-warning'} h-1.5 w-1.5 rounded-full"
 											aria-hidden="true"
 										></div>
-										<span
-											>Unit Tests: {github_status.data.unit_tests
-												.status}</span
-										>
+										<span>
+											Unit Tests: {github_status.data.unit_tests
+												.status}
+										</span>
 									</div>
 									<div class="flex items-center gap-2">
 										<div
@@ -295,10 +295,9 @@
 													: 'bg-warning'} h-1.5 w-1.5 rounded-full"
 											aria-hidden="true"
 										></div>
-										<span
-											>E2E Tests: {github_status.data.e2e_tests
-												.status}</span
-										>
+										<span>
+											E2E Tests: {github_status.data.e2e_tests.status}
+										</span>
 									</div>
 								</div>
 							{:else}
