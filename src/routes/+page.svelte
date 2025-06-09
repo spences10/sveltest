@@ -8,10 +8,12 @@
 		CheckCircle,
 		CircleDot,
 		Clipboard,
+		Cursor,
 		GitHub,
 		GitHubFork,
 		Heart,
 		LightningBolt,
+		Windsurf,
 	} from '$lib/icons';
 </script>
 
@@ -363,6 +365,77 @@
 				Comprehensive testing tools and examples for building robust
 				Svelte applications
 			</p>
+		</div>
+
+		<!-- AI Testing Rules Row -->
+		<div class="mb-12 grid grid-cols-1 gap-8 md:grid-cols-2">
+			<!-- Cursor Rules Card -->
+			<div class="group relative">
+				<div
+					class="card bg-base-100/80 border-base-300/50 hover:shadow-3xl border shadow-2xl backdrop-blur-sm transition-all duration-300 hover:-translate-y-2"
+				>
+					<div class="card-body p-8">
+						<div
+							class="from-info/20 to-info/10 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br transition-transform duration-300 group-hover:scale-110"
+						>
+							<Cursor class_names="text-info h-8 w-8" />
+						</div>
+						<h3 class="mb-4 text-2xl font-bold">Cursor Rules</h3>
+						<p class="text-base-content/70 mb-6 leading-relaxed">
+							Pre-configured AI assistant rules for Cursor that
+							enforce testing best practices automatically when
+							editing test files
+						</p>
+						<a
+							href="https://github.com/spences10/sveltest/blob/main/.cursor/rules/testing.mdc"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="btn btn-info btn-lg w-full gap-3 text-lg"
+						>
+							<GitHub class_names="h-5 w-5" />
+							View Cursor Rules
+							<Arrow
+								direction="up-right"
+								class_names="h-4 w-4 opacity-60"
+							/>
+						</a>
+					</div>
+				</div>
+			</div>
+
+			<!-- Windsurf Rules Card -->
+			<div class="group relative">
+				<div
+					class="card bg-base-100/80 border-base-300/50 hover:shadow-3xl border shadow-2xl backdrop-blur-sm transition-all duration-300 hover:-translate-y-2"
+				>
+					<div class="card-body p-8">
+						<div
+							class="from-warning/20 to-warning/10 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br transition-transform duration-300 group-hover:scale-110"
+						>
+							<Windsurf class_names="text-warning h-8 w-8" />
+						</div>
+						<h3 class="mb-4 text-2xl font-bold">Windsurf Rules</h3>
+						<p class="text-base-content/70 mb-6 leading-relaxed">
+							Modern rule system with trigger-based activation for
+							Windsurf. Same comprehensive patterns optimized for
+							advanced AI capabilities
+						</p>
+						<a
+							href="https://github.com/spences10/sveltest/blob/main/.windsurf/rules/testing.md"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="btn btn-warning btn-lg w-full gap-3 text-lg"
+						>
+							<GitHub class_names="h-5 w-5" />
+							View Windsurf Rules
+							<Arrow
+								direction="up-right"
+								class_names="h-4 w-4 opacity-60"
+							/>
+						</a>
+					</div>
+				</div>
+			</div>
 		</div>
 
 		<!-- Feature grid -->
