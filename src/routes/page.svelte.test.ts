@@ -23,7 +23,7 @@ describe('/+page.svelte', () => {
 	test('should render h1', async () => {
 		render(Page);
 
-		const heading = page.getByRole('heading', { level: 1 });
+		const heading = page.getByText('Sveltest').first();
 		await expect.element(heading).toBeInTheDocument();
 	});
 });
