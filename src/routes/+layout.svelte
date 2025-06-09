@@ -26,7 +26,9 @@
 			<div
 				class="flex flex-col items-center justify-between gap-4 md:flex-row"
 			>
-				<div class="flex items-center gap-2">
+				<div
+					class="flex flex-wrap items-center justify-center gap-1 text-center md:justify-start md:text-left"
+				>
 					<span class="text-base-content/70"> Built with </span>
 					<Robot class_names="text-primary h-4 w-4" />
 					<span class="text-base-content/70"> and </span>
@@ -34,16 +36,15 @@
 						class_names="text-red-500 h-4 w-4"
 						fill="currentColor"
 					/>
-					<span class="text-base-content/70">
-						by <a
-							href="https://scottspence.com"
-							target="_blank"
-							rel="noopener noreferrer"
-							class="text-base-content/70 link hover:text-base-content"
-						>
-							Scott Spence
-						</a>
-					</span>
+					<span class="text-base-content/70"> by </span>
+					<a
+						href="https://scottspence.com"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="text-base-content/70 link hover:text-base-content"
+					>
+						Scott Spence
+					</a>
 					<span class="text-base-content/70">
 						for the Svelte community
 					</span>
