@@ -47,6 +47,7 @@
 		"eslint": "^9.28.0",
 		"eslint-config-prettier": "^10.1.5",
 		"eslint-plugin-svelte": "^3.9.2",
+		"fathom-client": "^3.7.2",
 		"globals": "^16.2.0",
 		"jsdom": "^26.1.0",
 		"mdsvex": "^0.12.6",

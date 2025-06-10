@@ -59,6 +59,9 @@ importers:
       eslint-plugin-svelte:
         specifier: ^3.9.2
         version: 3.9.2(eslint@9.28.0(jiti@2.4.2))(svelte@5.33.18)
+      fathom-client:
+        specifier: ^3.7.2
+        version: 3.7.2
       globals:
         specifier: ^16.2.0
         version: 16.2.0
@@ -1185,6 +1188,9 @@ packages:
 
   fastq@1.19.1:
     resolution: {integrity: sha512-GwLTyxkCXjXbxqIhTsMI2Nui8huMPtnxg7krajPJAjnEG/iiOS7i+zCtWGZR9G0NBKbXKh6X9m9UIsYX/N6vvQ==}
+
+  fathom-client@3.7.2:
+    resolution: {integrity: sha512-sWtaNivhg7uwp/q1bUuIiNj4LeQZMEZ5NXXFFpZ8le4uDedAfQG84gPOdYehtVXbl+1yX2s8lmXZ2+IQ9a/xxA==}
 
   fdir@6.4.4:
     resolution: {integrity: sha512-1NZP+GK4GfuAv3PqKvxQRDMjdSRZjnkq7KfhlNrCNNlZ0ygQFpebfrnfnq/W7fpUnAv9aGWmY1zKx7FYL3gwhg==}
@@ -3281,6 +3287,8 @@ snapshots:
   fastq@1.19.1:
     dependencies:
       reusify: 1.1.0
+
+  fathom-client@3.7.2: {}
 
   fdir@6.4.4(picomatch@4.0.2):
     optionalDependencies:

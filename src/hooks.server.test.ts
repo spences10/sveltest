@@ -46,6 +46,24 @@ describe('Server Hooks', () => {
 			);
 		});
 
+		it('should include Fathom analytics domains in CSP', () => {
+			expect(csp_directives['script-src']).toContain(
+				'https://cdn.usefathom.com',
+			);
+			expect(csp_directives['script-src-elem']).toContain(
+				'https://cdn.usefathom.com',
+			);
+			expect(csp_directives['img-src']).toContain(
+				'https://cdn.usefathom.com',
+			);
+			expect(csp_directives['connect-src']).toContain(
+				'https://api.usefathom.com',
+			);
+			expect(csp_directives['connect-src']).toContain(
+				'https://*.usefathom.com',
+			);
+		});
+
 		it('should generate correct CSP directive string', async () => {
 			const response = await handle_security_headers({
 				event: mock_event,
@@ -56,12 +74,20 @@ describe('Server Hooks', () => {
 				'Content-Security-Policy',
 			);
 			expect(csp_header).toContain("default-src 'self'");
-			expect(csp_header).toContain("img-src 'self' data:");
 			expect(csp_header).toContain(
-				"script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval'",
+				"img-src 'self' data: https://cdn.usefathom.com",
+			);
+			expect(csp_header).toContain(
+				"script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.usefathom.com",
+			);
+			expect(csp_header).toContain(
+				"script-src-elem 'self' 'unsafe-inline' https://cdn.usefathom.com",
 			);
 			expect(csp_header).toContain(
 				"style-src 'self' 'unsafe-inline'",
+			);
+			expect(csp_header).toContain(
+				"connect-src 'self' https://api.usefathom.com https://*.usefathom.com",
 			);
 			expect(csp_header).toContain('upgrade-insecure-requests');
 			expect(csp_header).toContain('report-uri /api/csp-report');
