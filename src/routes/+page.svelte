@@ -448,9 +448,9 @@
 				>
 					<div class="card-body p-8">
 						<div
-							class="from-warning/20 to-warning/10 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br transition-transform duration-300 group-hover:scale-110"
+							class="from-info/20 to-info/10 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br transition-transform duration-300 group-hover:scale-110"
 						>
-							<Windsurf class_names="text-warning h-8 w-8" />
+							<Windsurf class_names="text-info h-8 w-8" />
 						</div>
 						<h3 class="mb-4 text-2xl font-bold">Windsurf Rules</h3>
 						<p class="text-base-content/70 mb-6 leading-relaxed">
@@ -462,7 +462,7 @@
 							href="https://github.com/spences10/sveltest/blob/main/.windsurf/rules/testing.md"
 							target="_blank"
 							rel="noopener noreferrer"
-							class="btn btn-warning btn-lg w-full gap-3 text-lg"
+							class="btn btn-info btn-lg w-full gap-3 text-lg"
 							onclick={() =>
 								Fathom.trackEvent('windsurf_rules_clicked')}
 						>
