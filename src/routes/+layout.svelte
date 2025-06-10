@@ -60,6 +60,8 @@
 						target="_blank"
 						rel="noopener noreferrer"
 						class="text-base-content/70 link hover:text-base-content"
+						onclick={() =>
+							Fathom.trackEvent('scott_spence_site_clicked')}
 					>
 						Scott Spence
 					</a>
@@ -73,6 +75,7 @@
 						target="_blank"
 						rel="noopener noreferrer"
 						class="btn btn-ghost btn-sm hover:bg-base-300/50 gap-2"
+						onclick={() => Fathom.trackEvent('github_repo_clicked')}
 					>
 						<GitHub class_names="h-4 w-4" />
 						GitHub
@@ -86,6 +89,7 @@
 						target="_blank"
 						rel="noopener noreferrer"
 						class="btn btn-ghost btn-sm hover:bg-base-300/50"
+						onclick={() => Fathom.trackEvent('report_issue_clicked')}
 					>
 						<CircleDot class_names="h-4 w-4" />
 						Report Issue
