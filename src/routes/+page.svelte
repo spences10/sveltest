@@ -1,4 +1,5 @@
 <script lang="ts">
+	import FeatureCard from '$lib/components/feature-card.svelte';
 	import GitHubStatusPills from '$lib/components/github-status-pills.svelte';
 	import Logo from '$lib/components/logo.svelte';
 	import {
@@ -218,111 +219,41 @@
 
 		<div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
 			<!-- Contribute Code -->
-			<div class="group relative">
-				<div
-					class="card bg-base-100/80 border-base-300/50 hover:shadow-3xl border shadow-2xl backdrop-blur-sm transition-all duration-300 hover:-translate-y-2"
-				>
-					<div class="card-body p-8">
-						<div
-							class="from-primary/20 to-primary/10 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br transition-transform duration-300 group-hover:scale-110"
-						>
-							<GitHub class_names="text-primary h-8 w-8" />
-						</div>
-						<h3 class="mb-4 text-2xl font-bold">Contribute Code</h3>
-						<p class="text-base-content/70 mb-6 leading-relaxed">
-							Add new testing examples, improve existing patterns, or
-							help with documentation. Every contribution makes the
-							resource better.
-						</p>
-						<a
-							href="https://github.com/spences10/sveltest"
-							target="_blank"
-							rel="noopener noreferrer"
-							class="btn btn-primary btn-sm gap-2"
-							onclick={() =>
-								Fathom.trackEvent('contribute_code_clicked')}
-						>
-							<GitHub class_names="h-4 w-4" />
-							View on GitHub
-							<Arrow
-								direction="up-right"
-								class_names="h-3 w-3 opacity-60"
-							/>
-						</a>
-					</div>
-				</div>
-			</div>
+			<FeatureCard
+				icon={GitHub}
+				title="Contribute Code"
+				description="Add new testing examples, improve existing patterns, or help with documentation. Every contribution makes the resource better."
+				href="https://github.com/spences10/sveltest"
+				button_text="View on GitHub"
+				color_scheme="primary"
+				onclick_event={() =>
+					Fathom.trackEvent('contribute_code_clicked')}
+			/>
 
 			<!-- Report Issues -->
-			<div class="group relative">
-				<div
-					class="card bg-base-100/80 border-base-300/50 hover:shadow-3xl border shadow-2xl backdrop-blur-sm transition-all duration-300 hover:-translate-y-2"
-				>
-					<div class="card-body p-8">
-						<div
-							class="from-secondary/20 to-secondary/10 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br transition-transform duration-300 group-hover:scale-110"
-						>
-							<!-- <CheckCircle class_names="text-secondary h-8 w-8" /> -->
-							<CircleDot class_names="text-secondary h-8 w-8" />
-						</div>
-						<h3 class="mb-4 text-2xl font-bold">Report Issues</h3>
-						<p class="text-base-content/70 mb-6 leading-relaxed">
-							Found a bug or have a suggestion? Open an issue on
-							GitHub. Your feedback helps us improve the testing
-							experience.
-						</p>
-						<a
-							href="https://github.com/spences10/sveltest/issues"
-							target="_blank"
-							rel="noopener noreferrer"
-							class="btn btn-secondary btn-sm gap-2"
-							onclick={() =>
-								Fathom.trackEvent('community_report_issue_clicked')}
-						>
-							<CheckCircle class_names="h-4 w-4" />
-							Report Issue
-							<Arrow
-								direction="up-right"
-								class_names="h-3 w-3 opacity-60"
-							/>
-						</a>
-					</div>
-				</div>
-			</div>
+			<FeatureCard
+				icon={CircleDot}
+				title="Report Issues"
+				description="Found a bug or have a suggestion? Open an issue on GitHub. Your feedback helps us improve the testing experience."
+				href="https://github.com/spences10/sveltest/issues"
+				button_text="Report Issue"
+				color_scheme="secondary"
+				onclick_event={() =>
+					Fathom.trackEvent('community_report_issue_clicked')}
+			/>
 
 			<!-- Share Knowledge -->
-			<div class="group relative md:col-span-2 lg:col-span-1">
-				<div
-					class="card bg-base-100/80 border-base-300/50 hover:shadow-3xl border shadow-2xl backdrop-blur-sm transition-all duration-300 hover:-translate-y-2"
-				>
-					<div class="card-body p-8">
-						<div
-							class="from-accent/20 to-accent/10 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br transition-transform duration-300 group-hover:scale-110"
-						>
-							<Heart class_names="text-accent h-8 w-8" />
-						</div>
-						<h3 class="mb-4 text-2xl font-bold">Share Knowledge</h3>
-						<p class="text-base-content/70 mb-6 leading-relaxed">
-							Share your testing patterns, contribute examples from
-							your projects, or help others learn through discussions.
-						</p>
-						<a
-							href="https://github.com/spences10/sveltest/discussions"
-							target="_blank"
-							rel="noopener noreferrer"
-							class="btn btn-accent btn-sm gap-2"
-							onclick={() =>
-								Fathom.trackEvent('join_discussion_clicked')}
-						>
-							<Heart class_names="h-4 w-4" />
-							Join Discussion
-							<Arrow
-								direction="up-right"
-								class_names="h-3 w-3 opacity-60"
-							/>
-						</a>
-					</div>
-				</div>
+			<div class="md:col-span-2 lg:col-span-1">
+				<FeatureCard
+					icon={Heart}
+					title="Share Knowledge"
+					description="Share your testing patterns, contribute examples from your projects, or help others learn through discussions."
+					href="https://github.com/spences10/sveltest/discussions"
+					button_text="Join Discussion"
+					color_scheme="accent"
+					onclick_event={() =>
+						Fathom.trackEvent('join_discussion_clicked')}
+				/>
 			</div>
 		</div>
 
@@ -406,76 +337,36 @@
 		<!-- AI Testing Rules Row -->
 		<div class="mb-12 grid grid-cols-1 gap-8 md:grid-cols-2">
 			<!-- Cursor Rules Card -->
-			<div class="group relative">
-				<div
-					class="card bg-base-100/80 border-base-300/50 hover:shadow-3xl border shadow-2xl backdrop-blur-sm transition-all duration-300 hover:-translate-y-2"
-				>
-					<div class="card-body p-8">
-						<div
-							class="from-info/20 to-info/10 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br transition-transform duration-300 group-hover:scale-110"
-						>
-							<Cursor class_names="text-info h-8 w-8" />
-						</div>
-						<h3 class="mb-4 text-2xl font-bold">Cursor Rules</h3>
-						<p class="text-base-content/70 mb-6 leading-relaxed">
-							Pre-configured AI assistant rules for Cursor that
-							enforce testing best practices automatically when
-							editing test files
-						</p>
-						<a
-							href="https://github.com/spences10/sveltest/blob/main/.cursor/rules/testing.mdc"
-							target="_blank"
-							rel="noopener noreferrer"
-							class="btn btn-info btn-lg w-full gap-3 text-lg"
-							onclick={() =>
-								Fathom.trackEvent('cursor_rules_clicked')}
-						>
-							<GitHub class_names="h-5 w-5" />
-							View Cursor Rules
-							<Arrow
-								direction="up-right"
-								class_names="h-4 w-4 opacity-60"
-							/>
-						</a>
-					</div>
-				</div>
-			</div>
+			<FeatureCard
+				icon={Cursor}
+				title="Cursor Rules"
+				description="Pre-configured AI assistant rules for Cursor that enforce testing best practices automatically when editing test files"
+				href="https://github.com/spences10/sveltest/blob/main/.cursor/rules/testing.mdc"
+				button_text="View Cursor Rules"
+				color_scheme="info"
+				button_icon={GitHub}
+				button_size="btn-lg"
+				button_classes="w-full text-lg"
+				button_icon_classes="h-5 w-5"
+				onclick_event={() =>
+					Fathom.trackEvent('cursor_rules_clicked')}
+			/>
 
 			<!-- Windsurf Rules Card -->
-			<div class="group relative">
-				<div
-					class="card bg-base-100/80 border-base-300/50 hover:shadow-3xl border shadow-2xl backdrop-blur-sm transition-all duration-300 hover:-translate-y-2"
-				>
-					<div class="card-body p-8">
-						<div
-							class="from-info/20 to-info/10 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br transition-transform duration-300 group-hover:scale-110"
-						>
-							<Windsurf class_names="text-info h-8 w-8" />
-						</div>
-						<h3 class="mb-4 text-2xl font-bold">Windsurf Rules</h3>
-						<p class="text-base-content/70 mb-6 leading-relaxed">
-							Modern rule system with trigger-based activation for
-							Windsurf. Same comprehensive patterns optimized for
-							advanced AI capabilities
-						</p>
-						<a
-							href="https://github.com/spences10/sveltest/blob/main/.windsurf/rules/testing.md"
-							target="_blank"
-							rel="noopener noreferrer"
-							class="btn btn-info btn-lg w-full gap-3 text-lg"
-							onclick={() =>
-								Fathom.trackEvent('windsurf_rules_clicked')}
-						>
-							<GitHub class_names="h-5 w-5" />
-							View Windsurf Rules
-							<Arrow
-								direction="up-right"
-								class_names="h-4 w-4 opacity-60"
-							/>
-						</a>
-					</div>
-				</div>
-			</div>
+			<FeatureCard
+				icon={Windsurf}
+				title="Windsurf Rules"
+				description="Modern rule system with trigger-based activation for Windsurf. Same comprehensive patterns optimized for advanced AI capabilities"
+				href="https://github.com/spences10/sveltest/blob/main/.windsurf/rules/testing.md"
+				button_text="View Windsurf Rules"
+				color_scheme="info"
+				button_icon={GitHub}
+				button_size="btn-lg"
+				button_classes="w-full text-lg"
+				button_icon_classes="h-5 w-5"
+				onclick_event={() =>
+					Fathom.trackEvent('windsurf_rules_clicked')}
+			/>
 		</div>
 
 		<!-- Feature grid -->

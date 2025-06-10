@@ -31,7 +31,7 @@
 			</div>
 
 			<h1
-				class="from-success via-success/80 to-success/60 mb-4 bg-gradient-to-r bg-clip-text text-5xl font-black text-transparent"
+				class="from-success via-success/80 to-success/60 mb-4 bg-gradient-to-r bg-clip-text text-5xl leading-normal font-black text-transparent"
 			>
 				Form Actions Testing
 			</h1>

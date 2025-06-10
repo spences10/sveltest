@@ -1,4 +1,5 @@
 <script lang="ts">
+	import FeatureCard from '$lib/components/feature-card.svelte';
 	import {
 		Arrow,
 		BarChart,
@@ -94,118 +95,55 @@
 			</h2>
 			<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
 				<!-- Unit Testing -->
-				<div class="group">
-					<div
-						class="card bg-base-100/80 border-base-300/50 hover:shadow-3xl border shadow-2xl backdrop-blur-sm transition-all duration-300 hover:-translate-y-2"
-					>
-						<div class="card-body p-8">
-							<div
-								class="from-primary/20 to-primary/10 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br transition-transform duration-300 group-hover:scale-110"
-							>
-								<Code class_names="text-primary h-8 w-8" />
-							</div>
-							<h3 class="mb-4 text-2xl font-bold">Unit Testing</h3>
-							<p class="text-base-content/70 mb-6 leading-relaxed">
-								Test individual components and functions in isolation
-								with Vitest and vitest-browser-svelte
-							</p>
-							<div class="mb-6 flex flex-wrap gap-2">
-								<div class="badge badge-primary badge-sm">Vitest</div>
-								<div class="badge badge-secondary badge-sm">
-									vitest-browser-svelte
-								</div>
-								<div class="badge badge-accent badge-sm">
-									Component Testing
-								</div>
-							</div>
-							<a
-								href="/examples/unit"
-								class="btn btn-primary gap-2 transition-all duration-200 hover:scale-105"
-							>
-								<Arrow direction="right" class_names="h-4 w-4" />
-								View Examples
-							</a>
-						</div>
-					</div>
-				</div>
+				<FeatureCard
+					icon={Code}
+					title="Unit Testing"
+					description="Test individual components and functions in isolation with Vitest and vitest-browser-svelte"
+					href="/examples/unit"
+					button_text="View Examples"
+					color_scheme="primary"
+					button_size=""
+					button_classes="transition-all duration-200 hover:scale-105"
+					badges={[
+						{ text: 'Vitest', color: 'primary' },
+						{ text: 'vitest-browser', color: 'secondary' },
+						{ text: 'Component Testing', color: 'accent' },
+					]}
+				/>
 
 				<!-- Integration Testing -->
-				<div class="group">
-					<div
-						class="card bg-base-100/80 border-base-300/50 hover:shadow-3xl border shadow-2xl backdrop-blur-sm transition-all duration-300 hover:-translate-y-2"
-					>
-						<div class="card-body p-8">
-							<div
-								class="from-secondary/20 to-secondary/10 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br transition-transform duration-300 group-hover:scale-110"
-							>
-								<BarChart class_names="text-secondary h-8 w-8" />
-							</div>
-							<h3 class="mb-4 text-2xl font-bold">
-								Integration Testing
-							</h3>
-							<p class="text-base-content/70 mb-6 leading-relaxed">
-								Test how multiple components work together and
-								interact with external services
-							</p>
-							<div class="mb-6 flex flex-wrap gap-2">
-								<div class="badge badge-info badge-sm">
-									API Testing
-								</div>
-								<div class="badge badge-success badge-sm">
-									Component Integration
-								</div>
-								<div class="badge badge-warning badge-sm">
-									Data Flow
-								</div>
-							</div>
-							<a
-								href="/examples/integration"
-								class="btn btn-secondary gap-2 transition-all duration-200 hover:scale-105"
-							>
-								<Arrow direction="right" class_names="h-4 w-4" />
-								View Examples
-							</a>
-						</div>
-					</div>
-				</div>
+				<FeatureCard
+					icon={BarChart}
+					title="Integration Testing"
+					description="Test how multiple components work together and interact with external services"
+					href="/examples/integration"
+					button_text="View Examples"
+					color_scheme="secondary"
+					button_size=""
+					button_classes="transition-all duration-200 hover:scale-105"
+					badges={[
+						{ text: 'API Testing', color: 'info' },
+						{ text: 'Component Integration', color: 'success' },
+						{ text: 'Data Flow', color: 'warning' },
+					]}
+				/>
 
 				<!-- E2E Testing -->
-				<div class="group">
-					<div
-						class="card bg-base-100/80 border-base-300/50 hover:shadow-3xl border shadow-2xl backdrop-blur-sm transition-all duration-300 hover:-translate-y-2"
-					>
-						<div class="card-body p-8">
-							<div
-								class="from-accent/20 to-accent/10 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br transition-transform duration-300 group-hover:scale-110"
-							>
-								<Calculator class_names="text-accent h-8 w-8" />
-							</div>
-							<h3 class="mb-4 text-2xl font-bold">E2E Testing</h3>
-							<p class="text-base-content/70 mb-6 leading-relaxed">
-								Test complete user workflows from start to finish
-								using Playwright
-							</p>
-							<div class="mb-6 flex flex-wrap gap-2">
-								<div class="badge badge-error badge-sm">
-									Playwright
-								</div>
-								<div class="badge badge-info badge-sm">
-									User Workflows
-								</div>
-								<div class="badge badge-success badge-sm">
-									Browser Testing
-								</div>
-							</div>
-							<a
-								href="/examples/e2e"
-								class="btn btn-accent gap-2 transition-all duration-200 hover:scale-105"
-							>
-								<Arrow direction="right" class_names="h-4 w-4" />
-								View Examples
-							</a>
-						</div>
-					</div>
-				</div>
+				<FeatureCard
+					icon={Calculator}
+					title="E2E Testing"
+					description="Test complete user workflows from start to finish using Playwright"
+					href="/examples/e2e"
+					button_text="View Examples"
+					color_scheme="accent"
+					button_size=""
+					button_classes="transition-all duration-200 hover:scale-105"
+					badges={[
+						{ text: 'Playwright', color: 'error' },
+						{ text: 'User Workflows', color: 'info' },
+						{ text: 'Browser Testing', color: 'success' },
+					]}
+				/>
 			</div>
 		</div>
 

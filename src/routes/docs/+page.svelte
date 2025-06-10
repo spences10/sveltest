@@ -1,5 +1,6 @@
 <script lang="ts">
 	import CodeBlock from '$lib/components/code-block.svelte';
+	import DocCard from '$lib/components/doc-card.svelte';
 	import DocsSearch from '$lib/components/docs-search.svelte';
 	import { documentation_examples } from '$lib/examples/code-examples';
 	import {
@@ -282,31 +283,14 @@ vi.mock('$lib/heavy-computation', () => ({
 		<!-- Prominent Documentation Links -->
 		<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 			{#each sections as section}
-				<a
+				<DocCard
 					href="/docs/{section.id}"
-					class="group bg-base-100 hover:bg-base-200/80 border-base-300/50 hover:border-{section.color}/30 rounded-2xl border p-8 shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
-					data-testid="doc-link-{section.id}"
-				>
-					<div class="mb-6 flex items-center justify-between">
-						<div
-							class="bg-{section.color}/10 text-{section.color} group-hover:bg-{section.color}/20 flex h-16 w-16 items-center justify-center rounded-2xl transition-colors"
-						>
-							<section.icon class_names="h-8 w-8" />
-						</div>
-						<Arrow
-							direction="right"
-							class_names="h-5 w-5 text-base-content/40 group-hover:text-{section.color} transition-colors group-hover:translate-x-1 transform"
-						/>
-					</div>
-					<h3
-						class="text-base-content mb-3 text-2xl font-bold group-hover:text-{section.color} transition-colors"
-					>
-						{section.title}
-					</h3>
-					<p class="text-base-content/70 text-base leading-relaxed">
-						{section.description}
-					</p>
-				</a>
+					title={section.title}
+					description={section.description}
+					icon={section.icon}
+					color_scheme={section.color}
+					test_id="doc-link-{section.id}"
+				/>
 			{/each}
 		</div>
 
@@ -368,46 +352,15 @@ vi.mock('$lib/heavy-computation', () => ({
 		<!-- Prominent Documentation Links Grid -->
 		<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 			{#each sections as section, index}
-				<a
+				<DocCard
 					href="/docs/{section.id}"
-					class="group bg-base-100 hover:bg-base-200 border-base-300/50 hover:border-{section.color}/50 transform rounded-2xl border p-8 shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
-					data-testid="docs-link-{section.id}"
-				>
-					<div class="mb-4 flex items-center justify-between">
-						<div
-							class="bg-{section.color}/10 text-{section.color} flex h-14 w-14 items-center justify-center rounded-xl transition-colors group-hover:bg-{section.color}/20"
-						>
-							<section.icon class_names="h-7 w-7" />
-						</div>
-						<div
-							class="text-{section.color} bg-{section.color}/10 rounded-full px-3 py-1 text-sm font-medium"
-						>
-							{index + 1}
-						</div>
-					</div>
-
-					<h3
-						class="text-base-content mb-3 text-2xl font-bold group-hover:text-{section.color} transition-colors"
-					>
-						{section.title}
-					</h3>
-
-					<p
-						class="text-base-content/70 mb-4 text-base leading-relaxed"
-					>
-						{section.description}
-					</p>
-
-					<div
-						class="flex items-center text-{section.color} font-medium transition-all group-hover:gap-2"
-					>
-						<span>Read Guide</span>
-						<Arrow
-							direction="right"
-							class_names="h-4 w-4 transition-transform group-hover:translate-x-1"
-						/>
-					</div>
-				</a>
+					title={section.title}
+					description={section.description}
+					icon={section.icon}
+					color_scheme={section.color}
+					{index}
+					test_id="docs-link-{section.id}"
+				/>
 			{/each}
 		</div>
 
