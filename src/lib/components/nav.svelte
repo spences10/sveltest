@@ -13,6 +13,7 @@
 		Menu,
 	} from '$lib/icons';
 	import { github_status } from '$lib/state/github-status.svelte';
+	import * as Fathom from 'fathom-client';
 
 	const main_links = [
 		{ href: '/', title: 'Home', icon: Home, color: 'primary' },
@@ -224,6 +225,13 @@
 									? { target: '_blank', rel: 'noopener noreferrer' }
 									: {}}
 								role="menuitem"
+								onclick={() => {
+									if (link.external) {
+										Fathom.trackEvent(
+											`nav_${link.title.toLowerCase().replace(/\s+/g, '_')}_clicked`,
+										);
+									}
+								}}
 							>
 								<link.icon class_names="h-4 w-4" />
 								{link.title}

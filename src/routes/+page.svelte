@@ -16,6 +16,7 @@
 		LightningBolt,
 		Windsurf,
 	} from '$lib/icons';
+	import * as Fathom from 'fathom-client';
 </script>
 
 <svelte:head>
@@ -109,6 +110,7 @@
 					<a
 						href="/docs/getting-started"
 						class="btn btn-primary btn-lg gap-3 px-8 shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+						onclick={() => Fathom.trackEvent('get_started_clicked')}
 					>
 						<BookOpen class_names="h-6 w-6" />
 						Get Started
@@ -116,6 +118,8 @@
 					<a
 						href="/examples"
 						class="btn btn-outline btn-lg hover:bg-base-100/10 gap-3 px-8 backdrop-blur-sm transition-all duration-300"
+						onclick={() =>
+							Fathom.trackEvent('explore_examples_clicked')}
 					>
 						<LightningBolt class_names="h-6 w-6" />
 						Explore Examples
@@ -235,6 +239,8 @@
 							target="_blank"
 							rel="noopener noreferrer"
 							class="btn btn-primary btn-sm gap-2"
+							onclick={() =>
+								Fathom.trackEvent('contribute_code_clicked')}
 						>
 							<GitHub class_names="h-4 w-4" />
 							View on GitHub
@@ -270,6 +276,8 @@
 							target="_blank"
 							rel="noopener noreferrer"
 							class="btn btn-secondary btn-sm gap-2"
+							onclick={() =>
+								Fathom.trackEvent('community_report_issue_clicked')}
 						>
 							<CheckCircle class_names="h-4 w-4" />
 							Report Issue
@@ -303,6 +311,8 @@
 							target="_blank"
 							rel="noopener noreferrer"
 							class="btn btn-accent btn-sm gap-2"
+							onclick={() =>
+								Fathom.trackEvent('join_discussion_clicked')}
 						>
 							<Heart class_names="h-4 w-4" />
 							Join Discussion
@@ -339,6 +349,8 @@
 							target="_blank"
 							rel="noopener noreferrer"
 							class="btn btn-outline btn-lg hover:bg-base-100/10 gap-3 px-8 backdrop-blur-sm transition-all duration-300"
+							onclick={() =>
+								Fathom.trackEvent('star_on_github_clicked')}
 						>
 							<GitHub class_names="h-6 w-6" />
 							Star on GitHub
@@ -352,6 +364,8 @@
 							target="_blank"
 							rel="noopener noreferrer"
 							class="btn btn-primary btn-lg gap-3 px-8 shadow-xl transition-all duration-300 hover:scale-105"
+							onclick={() =>
+								Fathom.trackEvent('fork_and_contribute_clicked')}
 						>
 							<GitHubFork class_names="h-6 w-6" />
 							Fork & Contribute
@@ -413,6 +427,8 @@
 							target="_blank"
 							rel="noopener noreferrer"
 							class="btn btn-info btn-lg w-full gap-3 text-lg"
+							onclick={() =>
+								Fathom.trackEvent('cursor_rules_clicked')}
 						>
 							<GitHub class_names="h-5 w-5" />
 							View Cursor Rules
@@ -447,6 +463,8 @@
 							target="_blank"
 							rel="noopener noreferrer"
 							class="btn btn-warning btn-lg w-full gap-3 text-lg"
+							onclick={() =>
+								Fathom.trackEvent('windsurf_rules_clicked')}
 						>
 							<GitHub class_names="h-5 w-5" />
 							View Windsurf Rules
@@ -565,6 +583,8 @@
 						<a
 							href="/docs/getting-started"
 							class="btn btn-primary btn-lg gap-2 px-8"
+							onclick={() =>
+								Fathom.trackEvent('bottom_get_started_clicked')}
 						>
 							<BookOpen class_names="h-5 w-5" />
 							Get Started
@@ -572,6 +592,8 @@
 						<a
 							href="/examples"
 							class="btn btn-secondary btn-lg gap-2 px-8"
+							onclick={() =>
+								Fathom.trackEvent('bottom_explore_examples_clicked')}
 						>
 							<LightningBolt class_names="h-5 w-5" />
 							Explore Examples
@@ -579,6 +601,8 @@
 						<a
 							href="/todos"
 							class="btn btn-outline btn-lg gap-2 px-8"
+							onclick={() =>
+								Fathom.trackEvent('try_todo_manager_clicked')}
 						>
 							<Clipboard class_names="h-5 w-5" />
 							Try Todo Manager

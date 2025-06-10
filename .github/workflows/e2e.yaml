@@ -81,8 +81,12 @@ jobs:
         run: pnpm build
         env:
           API_SECRET: ${{ secrets.API_SECRET }}
+          PUBLIC_FATHOM_ID: ${{ secrets.PUBLIC_FATHOM_ID }}
+          PUBLIC_FATHOM_URL: ${{ secrets.PUBLIC_FATHOM_URL }}
 
       - name: Run E2E tests
         run: pnpm test:e2e
         env:
           API_SECRET: ${{ secrets.API_SECRET }}
+          PUBLIC_FATHOM_ID: ${{ secrets.PUBLIC_FATHOM_ID }}
+          PUBLIC_FATHOM_URL: ${{ secrets.PUBLIC_FATHOM_URL }}

@@ -159,14 +159,18 @@ Don't test exact implementation details that provide no user value.
 
 ```typescript
 // ❌ BRITTLE - Tests exact SVG path data
-expect(body).toContain('M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z');
+expect(body).toContain(
+	'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
+);
 
 // ✅ ROBUST - Tests semantic styling and structure
 expect(body).toContain('text-success');
 expect(body).toContain('<svg');
 
 // ✅ BEST - Tests user-visible behavior
-await expect.element(page.getByRole('img', { name: /success/i })).toBeInTheDocument();
+await expect
+	.element(page.getByRole('img', { name: /success/i }))
+	.toBeInTheDocument();
 ```
 
 **Why**: SVG paths change when icon libraries update. Test CSS
