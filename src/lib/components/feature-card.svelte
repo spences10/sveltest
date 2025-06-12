@@ -79,7 +79,10 @@
 					<ButtonIcon class_names={button_icon_classes} />
 					{button_text}
 					{#if !button_icon}
-						<Arrow direction="right" class_names="h-4 w-4" />
+						<Arrow
+							direction={is_external_url(href) ? 'up-right' : 'right'}
+							class_names="h-4 w-4"
+						/>
 					{/if}
 				</a>
 			{/if}
