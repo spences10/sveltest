@@ -9,6 +9,7 @@
 		CheckCircle,
 		Clipboard,
 		Code,
+		Document,
 		Eye,
 		LightningBolt,
 		Settings,
@@ -159,6 +160,84 @@ vi.mock('$lib/heavy-computation', () => ({
   compute: vi.fn(() => 'mocked-result')
 }));`;
 
+	// LLM documentation formats configuration
+	const llm_formats = {
+		standard: [
+			{
+				title: 'LLMs Index',
+				href: '/llms.txt',
+				description: 'A listing of all available documentation files',
+				button_class: 'btn-outline',
+				icon: BookOpen,
+				color: 'primary',
+			},
+			{
+				title: 'Full Documentation',
+				href: '/llms-full.txt',
+				description:
+					'Complete testing documentation with all examples and patterns',
+				button_class: 'btn-primary',
+				icon: Document,
+				color: 'secondary',
+			},
+		],
+		context: [
+			{
+				title: 'Medium Context',
+				href: '/llms-medium.txt',
+				description:
+					'Compressed documentation for medium context window LLMs (like GPT-3.5, Claude Instant)',
+				button_class: 'btn-secondary',
+				icon: Settings,
+				color: 'accent',
+			},
+			{
+				title: 'Small Context',
+				href: '/llms-small.txt',
+				description:
+					'Highly compressed essential patterns for small context window models',
+				button_class: 'btn-accent',
+				icon: LightningBolt,
+				color: 'info',
+			},
+		],
+		special: [
+			{
+				title: 'XML Format',
+				href: '/llms-ctx.txt',
+				description:
+					'Structured XML format optimized for systems like Claude that work well with structured content',
+				button_class: 'btn-info',
+				icon: Code,
+				color: 'success',
+			},
+			{
+				title: 'API Reference',
+				href: '/llms-api.txt',
+				description: 'Core testing utilities and functions only',
+				button_class: 'btn-success',
+				icon: Settings,
+				color: 'warning',
+			},
+			{
+				title: 'Code Examples',
+				href: '/llms-examples.txt',
+				description: 'Collection of ready-to-use testing patterns',
+				button_class: 'btn-error',
+				icon: Clipboard,
+				color: 'error',
+			},
+			{
+				title: 'Directory',
+				href: '/llms-directory.txt',
+				description: 'Complete directory of all available formats',
+				button_class: 'btn-warning',
+				icon: Arrow,
+				color: 'primary',
+			},
+		],
+	};
+
 	function set_active_section(section_id: string) {
 		active_section = section_id;
 	}
@@ -281,7 +360,7 @@ vi.mock('$lib/heavy-computation', () => ({
 		</div>
 
 		<!-- Prominent Documentation Links -->
-		<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+		<div class="mb-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 			{#each sections as section}
 				<DocCard
 					href="/docs/{section.id}"
@@ -296,35 +375,80 @@ vi.mock('$lib/heavy-computation', () => ({
 
 		<!-- Quick Access Bar -->
 		<div
-			class="bg-base-100 border-base-300/50 mt-16 rounded-2xl border p-8 shadow-lg"
+			class="from-primary/5 via-secondary/5 to-accent/5 border-base-300/50 rounded-2xl border bg-gradient-to-br p-8 shadow-lg backdrop-blur-sm"
 		>
-			<div
-				class="flex flex-col items-center justify-between gap-6 lg:flex-row"
-			>
-				<div>
-					<h3 class="mb-2 text-2xl font-bold">Quick Access</h3>
-					<p class="text-base-content/70">
-						Jump directly to any documentation section or download the
-						complete guide
+			<div class="flex min-h-96 flex-col gap-6 lg:flex-row">
+				<!-- Left side content -->
+				<div class="lg:w-3/4">
+					<div
+						class="bg-primary/10 mb-6 inline-flex items-center gap-2 rounded-full px-4 py-2"
+					>
+						<Code class_names="text-primary h-4 w-4" />
+						<span class="text-primary text-sm font-medium"
+							>LLM Documentation</span
+						>
+					</div>
+					<h3 class="mb-4 text-3xl font-bold">
+						Documentation for LLMs
+					</h3>
+					<p class="text-base-content/70 mb-4">
+						We support the <a
+							href="https://llms.txt"
+							class="link"
+							target="_blank">llms.txt convention</a
+						> for making documentation available to large language models
+						and the applications that make use of them.
+					</p>
+
+					<h4 class="mb-2 text-xl font-semibold">
+						Available Formats
+					</h4>
+					<p class="text-base-content/70 mb-3">
+						We provide documentation in multiple formats optimized for
+						different context window sizes:
+					</p>
+
+					<ul class="text-base-content/70 mb-4 ml-5 list-disc">
+						{#each [...llm_formats.standard, ...llm_formats.context] as format}
+							<li>
+								<strong>{format.title}</strong> - {format.description}
+							</li>
+						{/each}
+					</ul>
+
+					<h4 class="mb-2 text-xl font-semibold">Special Formats</h4>
+					<p class="text-base-content/70 mb-3">
+						We also provide specialized formats for different use
+						cases:
+					</p>
+
+					<ul class="text-base-content/70 mb-4 ml-5 list-disc">
+						{#each llm_formats.special as format}
+							<li>
+								<strong>{format.title}</strong> - {format.description}
+							</li>
+						{/each}
+					</ul>
+
+					<p class="text-base-content/70 mt-4">
+						Using the appropriate format helps LLMs provide more
+						accurate assistance with less token usage, making
+						interactions more efficient and effective.
 					</p>
 				</div>
-				<div class="flex flex-wrap gap-3">
-					<a
-						href="/llms.txt"
-						class="btn btn-outline btn-sm"
-						target="_blank"
-					>
-						<Eye class_names="h-4 w-4" />
-						LLMs Index
-					</a>
-					<a
-						href="/llms-full.txt"
-						class="btn btn-primary btn-sm"
-						target="_blank"
-					>
-						<BookOpen class_names="h-4 w-4" />
-						Full Documentation
-					</a>
+
+				<!-- Right side buttons -->
+				<div class="flex flex-col justify-between lg:w-1/4">
+					{#each [...llm_formats.standard, ...llm_formats.context, ...llm_formats.special] as format}
+						<a
+							href={format.href}
+							class="btn {format.button_class} btn-lg w-full justify-between transition-all duration-300"
+							target="_blank"
+						>
+							{format.title}
+							<Arrow direction="up-right" class_names="h-5 w-5" />
+						</a>
+					{/each}
 				</div>
 			</div>
 		</div>
