@@ -2,12 +2,12 @@
 	import { page } from '$app/state';
 	import Logo from '$lib/components/logo.svelte';
 	import {
-		Arrow,
 		BarChart,
 		Calculator,
 		CheckCircle,
 		Clipboard,
 		Document,
+		ExternalLink,
 		GitHub,
 		Home,
 		Menu,
@@ -236,10 +236,7 @@
 								<link.icon class_names="h-4 w-4" />
 								{link.title}
 								{#if link.external}
-									<Arrow
-										direction="up-right"
-										class_names="h-3 w-3 opacity-60"
-									/>
+									<ExternalLink class_names="h-3 w-3 opacity-60" />
 								{/if}
 							</a>
 						</li>

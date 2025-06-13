@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Arrow } from '$lib/icons';
+	import { Arrow, ExternalLink } from '$lib/icons';
 	import type { Component } from 'svelte';
 
 	interface Props {
@@ -79,10 +79,11 @@
 					<ButtonIcon class_names={button_icon_classes} />
 					{button_text}
 					{#if !button_icon}
-						<Arrow
-							direction={is_external_url(href) ? 'up-right' : 'right'}
-							class_names="h-4 w-4"
-						/>
+						{#if is_external_url(href)}
+							<ExternalLink class_names="h-4 w-4" />
+						{:else}
+							<Arrow direction="right" class_names="h-4 w-4" />
+						{/if}
 					{/if}
 				</a>
 			{/if}

@@ -10,6 +10,7 @@
 		Clipboard,
 		Code,
 		Document,
+		ExternalLink,
 		Eye,
 		LightningBolt,
 		Settings,
@@ -446,7 +447,7 @@ vi.mock('$lib/heavy-computation', () => ({
 							target="_blank"
 						>
 							{format.title}
-							<Arrow direction="up-right" class_names="h-5 w-5" />
+							<ExternalLink class_names="h-5 w-5" />
 						</a>
 					{/each}
 				</div>

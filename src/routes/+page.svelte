@@ -3,7 +3,6 @@
 	import GitHubStatusPills from '$lib/components/github-status-pills.svelte';
 	import Logo from '$lib/components/logo.svelte';
 	import {
-		Arrow,
 		BarChart,
 		BookOpen,
 		Calculator,
@@ -11,6 +10,7 @@
 		CircleDot,
 		Clipboard,
 		Cursor,
+		ExternalLink,
 		GitHub,
 		GitHubFork,
 		Heart,
@@ -285,10 +285,7 @@
 						>
 							<GitHub class_names="h-6 w-6" />
 							Star on GitHub
-							<Arrow
-								direction="up-right"
-								class_names="h-4 w-4 opacity-60"
-							/>
+							<ExternalLink class_names="h-4 w-4 opacity-60" />
 						</a>
 						<a
 							href="https://github.com/spences10/sveltest/fork"
@@ -300,10 +297,7 @@
 						>
 							<GitHubFork class_names="h-6 w-6" />
 							Fork & Contribute
-							<Arrow
-								direction="up-right"
-								class_names="h-4 w-4 opacity-60"
-							/>
+							<ExternalLink class_names="h-4 w-4 opacity-60" />
 						</a>
 					</div>
 				</div>

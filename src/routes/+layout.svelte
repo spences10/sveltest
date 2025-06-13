@@ -6,7 +6,13 @@
 		PUBLIC_FATHOM_URL,
 	} from '$env/static/public';
 	import Nav from '$lib/components/nav.svelte';
-	import { Arrow, CircleDot, GitHub, Heart, Robot } from '$lib/icons';
+	import {
+		CircleDot,
+		ExternalLink,
+		GitHub,
+		Heart,
+		Robot,
+	} from '$lib/icons';
 	import * as Fathom from 'fathom-client';
 	import { onMount } from 'svelte';
 	import '../app.css';
@@ -79,10 +85,7 @@
 					>
 						<GitHub class_names="h-4 w-4" />
 						GitHub
-						<Arrow
-							direction="up-right"
-							class_names="h-3 w-3 opacity-60"
-						/>
+						<ExternalLink class_names="h-3 w-3 opacity-60" />
 					</a>
 					<a
 						href="https://github.com/spences10/sveltest/issues"
@@ -93,10 +96,7 @@
 					>
 						<CircleDot class_names="h-4 w-4" />
 						Report Issue
-						<Arrow
-							direction="up-right"
-							class_names="h-3 w-3 opacity-60"
-						/>
+						<ExternalLink class_names="h-3 w-3 opacity-60" />
 					</a>
 				</div>
 			</div>
