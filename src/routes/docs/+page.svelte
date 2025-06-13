@@ -438,11 +438,11 @@ vi.mock('$lib/heavy-computation', () => ({
 				</div>
 
 				<!-- Right side buttons -->
-				<div class="flex flex-col justify-between lg:w-1/4">
+				<div class="flex flex-col justify-around lg:w-1/4">
 					{#each [...llm_formats.standard, ...llm_formats.context, ...llm_formats.special] as format}
 						<a
 							href={format.href}
-							class="btn {format.button_class} btn-lg w-full justify-between transition-all duration-300"
+							class="btn {format.button_class} btn-sm w-full justify-between transition-all duration-300"
 							target="_blank"
 						>
 							{format.title}
