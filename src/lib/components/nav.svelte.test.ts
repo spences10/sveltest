@@ -20,6 +20,7 @@ vi.mock('$lib/icons', () => ({
 	CheckCircle: vi.fn(() => 'CheckCircle'),
 	Clipboard: vi.fn(() => 'Clipboard'),
 	Document: vi.fn(() => 'Document'),
+	ExternalLink: vi.fn(() => 'ExternalLink'),
 	GitHub: vi.fn(() => 'GitHub'),
 	Home: vi.fn(() => 'Home'),
 	Menu: vi.fn(() => 'Menu'),
@@ -48,6 +49,8 @@ describe('Nav Component', () => {
 			expect(vi.isMockFunction(icons.Clipboard)).toBe(true);
 			expect(icons.Document).toBeDefined();
 			expect(vi.isMockFunction(icons.Document)).toBe(true);
+			expect(icons.ExternalLink).toBeDefined();
+			expect(vi.isMockFunction(icons.ExternalLink)).toBe(true);
 			expect(icons.GitHub).toBeDefined();
 			expect(vi.isMockFunction(icons.GitHub)).toBe(true);
 			expect(icons.Home).toBeDefined();

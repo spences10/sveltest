@@ -49,6 +49,12 @@ vi.mock('$lib/icons', () => ({
 		$destroy: vi.fn(),
 		$on: vi.fn(),
 	})),
+	ExternalLink: vi.fn().mockImplementation(() => ({
+		$$: {},
+		$set: vi.fn(),
+		$destroy: vi.fn(),
+		$on: vi.fn(),
+	})),
 	GitHub: vi.fn().mockImplementation(() => ({
 		$$: {},
 		$set: vi.fn(),
