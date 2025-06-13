@@ -12,6 +12,7 @@ export { default as Clock } from './clock.svelte';
 export { default as Code } from './code.svelte';
 export { default as Cursor } from './cursor.svelte';
 export { default as Document } from './document.svelte';
+export { default as ExternalLink } from './external-link.svelte';
 export { default as EyeOff } from './eye-off.svelte';
 export { default as Eye } from './eye.svelte';
 export { default as Filter } from './filter.svelte';
