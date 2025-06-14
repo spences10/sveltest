@@ -1,13 +1,16 @@
 <script lang="ts">
-	interface Props {
-		type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
+	import type { Snippet } from 'svelte';
+	import type { HTMLInputAttributes } from 'svelte/elements';
+
+	interface Props
+		extends Omit<
+			HTMLInputAttributes,
+			'value' | 'size' | 'id' | 'prefix'
+		> {
+		// Custom props
 		value?: string | number;
-		placeholder?: string;
 		label?: string;
 		error?: string;
-		disabled?: boolean;
-		required?: boolean;
-		readonly?: boolean;
 		size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 		variant?:
 			| 'default'
@@ -19,26 +22,13 @@
 			| 'info'
 			| 'warning';
 		id?: string;
-		name?: string;
-		autocomplete?:
-			| 'on'
-			| 'off'
-			| 'name'
-			| 'email'
-			| 'username'
-			| 'current-password'
-			| 'new-password'
-			| 'tel'
-			| 'url'
-			| string;
-		maxlength?: number;
-		minlength?: number;
-		pattern?: string;
-		oninput?: (event: Event) => void;
-		onchange?: (event: Event) => void;
-		onfocus?: (event: FocusEvent) => void;
-		onblur?: (event: FocusEvent) => void;
+		// Support for additional content
+		prefix?: Snippet;
+		suffix?: Snippet;
 	}
+
+	// Generate SSR-safe unique ID at top level
+	const unique_id = $props.id();
 
 	let {
 		type = 'text',
@@ -51,40 +41,18 @@
 		readonly = false,
 		size = 'md',
 		variant = 'default',
-		id = '',
+		id,
 		name = '',
-		autocomplete = '',
+		autocomplete,
 		maxlength,
 		minlength,
 		pattern,
-		oninput,
-		onchange,
-		onfocus,
-		onblur,
-		...rest_props
+		prefix,
+		suffix,
+		...rest
 	}: Props = $props();
 
-	function handle_input(event: Event) {
-		const target = event.target as HTMLInputElement;
-		if (type === 'number') {
-			value = target.valueAsNumber || 0;
-		} else {
-			value = target.value;
-		}
-		oninput?.(event);
-	}
-
-	function handle_change(event: Event) {
-		onchange?.(event);
-	}
-
-	function handle_focus(event: FocusEvent) {
-		onfocus?.(event);
-	}
-
-	function handle_blur(event: FocusEvent) {
-		onblur?.(event);
-	}
+	const input_id = id || `input-${unique_id}`;
 
 	// DaisyUI classes
 	const base_classes = 'input w-full max-w-full';
@@ -108,21 +76,13 @@
 		error: 'input-error',
 	};
 
-	const computed_input_classes = [
-		base_classes,
-		size_classes[size],
-		variant_classes[error ? 'error' : variant],
-	]
-		.filter(Boolean)
-		.join(' ');
-
 	const label_classes = 'label';
 	const label_text_classes = 'label-text';
 	const error_classes = 'label-text-alt text-error';
 
-	// Generate unique ID if not provided
-	const input_id =
-		id || `input-${Math.random().toString(36).substr(2, 9)}`;
+	// Enhanced accessibility
+	const has_error = $derived(!!error);
+	const effective_variant = $derived(has_error ? 'error' : variant);
 </script>
 
 {#if label}
@@ -130,43 +90,64 @@
 		<span class={label_text_classes} data-testid="input-label">
 			{label}
 			{#if required}
-				<span class="text-error" data-testid="required-indicator"
-					>*</span
+				<span
+					class="text-error"
+					aria-label="required"
+					data-testid="required-indicator">*</span
 				>
 			{/if}
 		</span>
 	</label>
 {/if}
 
-<input
-	{type}
-	id={input_id}
-	{name}
-	{placeholder}
-	{disabled}
-	{readonly}
-	{required}
-	{maxlength}
-	{minlength}
-	{pattern}
-	class={computed_input_classes}
-	bind:value
-	oninput={handle_input}
-	onchange={handle_change}
-	onfocus={handle_focus}
-	onblur={handle_blur}
-	data-testid="input"
-	aria-invalid={error ? 'true' : 'false'}
-	aria-describedby={error ? `${input_id}-error` : undefined}
-	{...rest_props}
-/>
+<div class="relative flex items-center">
+	{#if prefix}
+		<div class="absolute left-3 z-10">
+			{@render prefix()}
+		</div>
+	{/if}
 
-{#if error}
+	<input
+		{type}
+		id={input_id}
+		{name}
+		{placeholder}
+		{disabled}
+		{readonly}
+		{required}
+		{maxlength}
+		{minlength}
+		{pattern}
+		{autocomplete}
+		class={[
+			base_classes,
+			size_classes[size],
+			variant_classes[effective_variant],
+			prefix ? 'pl-10' : '',
+			suffix ? 'pr-10' : '',
+		]}
+		bind:value
+		data-testid="input"
+		aria-invalid={has_error}
+		aria-describedby={has_error ? `${input_id}-error` : undefined}
+		{...rest}
+	/>
+
+	{#if suffix}
+		<div class="absolute right-3 z-10">
+			{@render suffix()}
+		</div>
+	{/if}
+</div>
+
+{#if has_error}
 	<div class={label_classes}>
 		<span
 			id="{input_id}-error"
 			class={error_classes}
 			data-testid="input-error"
+			role="alert"
+			aria-live="polite"
 		>
 			{error}
 		</span>
