@@ -192,6 +192,66 @@
 	</div>
 </div>
 
+<!-- Component Overview Grid -->
+<section class="px-4 py-24">
+	<div class="container mx-auto max-w-7xl">
+		<div class="mb-12 text-center">
+			<h2 class="mb-4 text-4xl font-bold">Component Overview</h2>
+			<p class="text-base-content/70 mx-auto max-w-2xl text-lg">
+				Quick reference for all available components with their key
+				features and test coverage.
+			</p>
+		</div>
+
+		<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+			{#each components as component}
+				<div
+					class="bg-base-200/30 border-base-300/50 flex flex-col rounded-xl border p-6 transition-all hover:shadow-lg"
+				>
+					<div class="mb-4 flex items-center gap-3">
+						<div
+							class="bg-{component.color}/10 border-{component.color}/20 flex h-10 w-10 items-center justify-center rounded-lg border"
+						>
+							<component.icon
+								class_names="text-{component.color} h-5 w-5"
+							/>
+						</div>
+						<h3 class="text-lg font-semibold">{component.name}</h3>
+					</div>
+
+					<p class="text-base-content/70 mb-4 text-sm">
+						{component.description}
+					</p>
+
+					<div class="mb-4 flex-grow">
+						<h4 class="mb-2 text-sm font-medium">Key Features:</h4>
+						<ul class="space-y-1">
+							{#each component.features.slice(0, 3) as feature}
+								<li class="flex items-center gap-2 text-xs">
+									<div
+										class="bg-success h-1.5 w-1.5 rounded-full"
+									></div>
+									<span>{feature}</span>
+								</li>
+							{/each}
+						</ul>
+					</div>
+
+					<div class="mt-auto flex items-center justify-between">
+						<a
+							href="#{component.id}"
+							class="btn btn-{component.color} btn-sm"
+						>
+							View Demo
+						</a>
+						<div class="text-success text-xs">✓ Tested</div>
+					</div>
+				</div>
+			{/each}
+		</div>
+	</div>
+</section>
+
 <!-- Component Showcase -->
 <div class="px-4 py-24">
 	<div class="container mx-auto max-w-7xl">
@@ -641,64 +701,6 @@
 						/>
 					</div>
 				</div>
-			</div>
-		</section>
-
-		<!-- Component Overview Grid -->
-		<section class="mb-24">
-			<div class="mb-12 text-center">
-				<h2 class="mb-4 text-4xl font-bold">Component Overview</h2>
-				<p class="text-base-content/70 mx-auto max-w-2xl text-lg">
-					Quick reference for all available components with their key
-					features and test coverage.
-				</p>
-			</div>
-
-			<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-				{#each components as component}
-					<div
-						class="bg-base-200/30 border-base-300/50 rounded-xl border p-6 transition-all hover:shadow-lg"
-					>
-						<div class="mb-4 flex items-center gap-3">
-							<div
-								class="bg-{component.color}/10 border-{component.color}/20 flex h-10 w-10 items-center justify-center rounded-lg border"
-							>
-								<component.icon
-									class_names="text-{component.color} h-5 w-5"
-								/>
-							</div>
-							<h3 class="text-lg font-semibold">{component.name}</h3>
-						</div>
-
-						<p class="text-base-content/70 mb-4 text-sm">
-							{component.description}
-						</p>
-
-						<div class="mb-4">
-							<h4 class="mb-2 text-sm font-medium">Key Features:</h4>
-							<ul class="space-y-1">
-								{#each component.features.slice(0, 3) as feature}
-									<li class="flex items-center gap-2 text-xs">
-										<div
-											class="bg-success h-1.5 w-1.5 rounded-full"
-										></div>
-										<span>{feature}</span>
-									</li>
-								{/each}
-							</ul>
-						</div>
-
-						<div class="flex items-center justify-between">
-							<a
-								href="#{component.id}"
-								class="btn btn-{component.color} btn-sm"
-							>
-								View Demo
-							</a>
-							<div class="text-success text-xs">✓ Tested</div>
-						</div>
-					</div>
-				{/each}
 			</div>
 		</section>
 	</div>

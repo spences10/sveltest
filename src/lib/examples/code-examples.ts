@@ -308,7 +308,7 @@ export const component_examples = {
   let show_modal = false;
 </script>
 
-<button on:click={() => show_modal = true}>
+<button onclick={() => show_modal = true}>
   Open Modal
 </button>
 
@@ -316,8 +316,8 @@ export const component_examples = {
   <h2 slot="title">Confirmation</h2>
   <p>Are you sure you want to continue?</p>
   <div slot="actions">
-    <button on:click={() => show_modal = false}>Cancel</button>
-    <button on:click={() => show_modal = false}>Confirm</button>
+    <button onclick={() => show_modal = false}>Cancel</button>
+    <button onclick={() => show_modal = false}>Confirm</button>
   </div>
 </Modal>`,
 
@@ -329,7 +329,7 @@ export const component_examples = {
   };
 </script>
 
-<Card clickable on:click={handle_click}>
+<Card clickable onclick={handle_click}>
   <h3>Interactive Card</h3>
   <p>Click me to see the interaction!</p>
 </Card>`,
