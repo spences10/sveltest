@@ -33,20 +33,16 @@
 		md: '',
 		lg: 'btn-lg',
 	};
-
-	const button_classes = [
-		base_classes,
-		variant_classes[variant],
-		size_classes[size],
-		class_names,
-	]
-		.filter(Boolean)
-		.join(' ');
 </script>
 
 <button
 	{type}
-	class={button_classes}
+	class={[
+		base_classes,
+		variant_classes[variant],
+		size_classes[size],
+		class_names,
+	]}
 	{disabled}
 	{onclick}
 	aria-disabled={disabled || loading}
