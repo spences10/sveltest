@@ -1,5 +1,6 @@
+import { z } from 'zod';
 import {
-	validate_field,
+	validate_with_schema,
 	type ValidationResult,
 	type ValidationRule,
 } from '../utils/validation.ts';
@@ -13,6 +14,44 @@ export interface FormField {
 
 export interface FormState {
 	[key: string]: FormField;
+}
+
+// Helper function to convert legacy rules to Zod schema
+function create_schema_from_rules(
+	rules: ValidationRule,
+): z.ZodSchema<any> {
+	if (rules.schema) {
+		return rules.schema;
+	}
+
+	// Convert legacy rules to Zod schema
+	let schema: z.ZodSchema<any> = z.string();
+
+	if (rules.required) {
+		schema = schema.min(1, 'This field is required');
+	} else {
+		schema = schema.optional().or(z.literal(''));
+	}
+
+	if (rules.min_length) {
+		schema = schema.min(
+			rules.min_length,
+			`Must be at least ${rules.min_length} characters`,
+		);
+	}
+
+	if (rules.max_length) {
+		schema = schema.max(
+			rules.max_length,
+			`Must be no more than ${rules.max_length} characters`,
+		);
+	}
+
+	if (rules.pattern) {
+		schema = schema.regex(rules.pattern, 'Invalid format');
+	}
+
+	return schema;
 }
 
 export function create_form_state(
@@ -42,9 +81,12 @@ export function create_form_state(
 
 		// Validate if rules exist
 		if (form_state[field_name].validation_rules) {
-			form_state[field_name].validation_result = validate_field(
-				value,
+			const schema = create_schema_from_rules(
 				form_state[field_name].validation_rules!,
+			);
+			form_state[field_name].validation_result = validate_with_schema(
+				schema,
+				value,
 			);
 		}
 	}
@@ -55,9 +97,12 @@ export function create_form_state(
 		for (const field_name of Object.keys(form_state)) {
 			const field = form_state[field_name];
 			if (field.validation_rules) {
-				field.validation_result = validate_field(
-					field.value,
+				const schema = create_schema_from_rules(
 					field.validation_rules,
+				);
+				field.validation_result = validate_with_schema(
+					schema,
+					field.value,
 				);
 				field.touched = true;
 

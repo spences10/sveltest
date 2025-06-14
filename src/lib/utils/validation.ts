@@ -1,9 +1,27 @@
+import { z } from 'zod';
+
+export const email_schema = z.string().email('Invalid email format');
+
+export const password_schema = z
+	.string()
+	.min(8, 'Password must be at least 8 characters')
+	.regex(
+		/[A-Z]/,
+		'Password must contain at least one uppercase letter',
+	)
+	.regex(
+		/[a-z]/,
+		'Password must contain at least one lowercase letter',
+	)
+	.regex(/[0-9]/, 'Password must contain at least one number');
+
+// Legacy ValidationRule interface for backward compatibility
 export interface ValidationRule {
+	schema?: z.ZodSchema<any>;
 	required?: boolean;
 	min_length?: number;
 	max_length?: number;
 	pattern?: RegExp;
-	custom?: (value: string) => string | null;
 }
 
 export interface ValidationResult {
@@ -11,96 +29,32 @@ export interface ValidationResult {
 	error_message: string;
 }
 
-export function validate_field(
-	value: string,
-	rules: ValidationRule,
+// Helper to convert Zod results to ValidationResult format
+export function validate_with_schema<T>(
+	schema: z.ZodSchema<T>,
+	value: unknown,
 ): ValidationResult {
-	// Required validation
-	if (rules.required && (!value || value.trim() === '')) {
-		return {
-			is_valid: false,
-			error_message: 'This field is required',
-		};
-	}
-
-	// Skip other validations if field is empty and not required
-	if (!value || value.trim() === '') {
-		return {
-			is_valid: true,
-			error_message: '',
-		};
-	}
-
-	// Min length validation
-	if (rules.min_length && value.length < rules.min_length) {
-		return {
-			is_valid: false,
-			error_message: `Must be at least ${rules.min_length} characters`,
-		};
-	}
-
-	// Max length validation
-	if (rules.max_length && value.length > rules.max_length) {
-		return {
-			is_valid: false,
-			error_message: `Must be no more than ${rules.max_length} characters`,
-		};
-	}
-
-	// Pattern validation
-	if (rules.pattern && !rules.pattern.test(value)) {
-		return {
-			is_valid: false,
-			error_message: 'Invalid format',
-		};
-	}
-
-	// Custom validation
-	if (rules.custom) {
-		const custom_error = rules.custom(value);
-		if (custom_error) {
-			return {
-				is_valid: false,
-				error_message: custom_error,
-			};
-		}
-	}
-
+	const result = schema.safeParse(value);
 	return {
-		is_valid: true,
-		error_message: '',
+		is_valid: result.success,
+		error_message: result.success
+			? ''
+			: result.error.issues[0]?.message || 'Invalid input',
 	};
 }
 
+// Simplified validation functions
 export function validate_email(email: string): ValidationResult {
-	const email_pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-	return validate_field(email, {
-		required: true,
-		pattern: email_pattern,
-	});
+	return validate_with_schema(email_schema, email);
 }
 
 export function validate_password(
 	password: string,
 ): ValidationResult {
-	return validate_field(password, {
-		required: true,
-		min_length: 8,
-		custom: (value) => {
-			if (!/[A-Z]/.test(value)) {
-				return 'Password must contain at least one uppercase letter';
-			}
-			if (!/[a-z]/.test(value)) {
-				return 'Password must contain at least one lowercase letter';
-			}
-			if (!/[0-9]/.test(value)) {
-				return 'Password must contain at least one number';
-			}
-			return null;
-		},
-	});
+	return validate_with_schema(password_schema, password);
 }
 
+// Utility functions (not validation-related)
 export function format_currency(
 	amount: number,
 	currency = 'USD',

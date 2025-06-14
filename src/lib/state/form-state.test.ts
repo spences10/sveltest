@@ -1,36 +1,13 @@
 import { flushSync, untrack } from 'svelte';
-import { describe, expect, test, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { create_form_state } from './form-state.svelte.ts';
 
-// Mock the validation utility
-vi.mock('../utils/validation.ts', () => ({
-	validate_field: vi.fn((value: string, rules: any) => {
-		// Mock validation logic for testing
-		if (rules.required && !value.trim()) {
-			return {
-				is_valid: false,
-				error_message: 'This field is required',
-			};
-		}
-		if (rules.min_length && value.length < rules.min_length) {
-			return {
-				is_valid: false,
-				error_message: `Minimum length is ${rules.min_length}`,
-			};
-		}
-		if (rules.pattern && !rules.pattern.test(value)) {
-			return {
-				is_valid: false,
-				error_message: 'Invalid format',
-			};
-		}
-		return { is_valid: true, error_message: '' };
-	}),
-}));
+// Mock the validation utility - no longer needed since we removed validate_field
+// The form state now uses validate_email and validate_password directly
 
 describe('create_form_state', () => {
 	describe('Initial State Creation', () => {
-		test('should create form state with default values', () => {
+		it('should create form state with default values', () => {
 			const form = create_form_state({
 				email: { value: 'test@example.com' },
 				password: { value: '' },
@@ -49,7 +26,7 @@ describe('create_form_state', () => {
 			).toBe(true);
 		});
 
-		test('should create form state with validation rules', () => {
+		it('should create form state with validation rules', () => {
 			const email_pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 			const form = create_form_state({
 				email: {
@@ -75,13 +52,13 @@ describe('create_form_state', () => {
 			});
 		});
 
-		test.skip('should handle complex validation rule configurations', () => {
+		it.skip('should handle complex validation rule configurations', () => {
 			// TODO: Test with nested validation rules, custom validators
 		});
 	});
 
 	describe('Field Updates', () => {
-		test('should update field value and mark as touched', () => {
+		it('should update field value and mark as touched', () => {
 			const form = create_form_state({
 				email: { value: '' },
 			});
@@ -92,7 +69,7 @@ describe('create_form_state', () => {
 			expect(form.form_state.email.touched).toBe(true);
 		});
 
-		test('should validate field on update when rules exist', () => {
+		it('should validate field on update when rules exist', () => {
 			const email_pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 			const form = create_form_state({
 				email: {
@@ -124,7 +101,7 @@ describe('create_form_state', () => {
 			);
 		});
 
-		test('should handle updates to non-existent fields gracefully', () => {
+		it('should handle updates to non-existent fields gracefully', () => {
 			const form = create_form_state({
 				email: { value: '' },
 			});
@@ -134,13 +111,13 @@ describe('create_form_state', () => {
 			}).not.toThrow();
 		});
 
-		test.skip('should handle concurrent field updates', () => {
+		it.skip('should handle concurrent field updates', () => {
 			// TODO: Test rapid successive updates, race conditions
 		});
 	});
 
 	describe('Form Validation', () => {
-		test('should validate all fields and return overall validity', () => {
+		it('should validate all fields and return overall validity', () => {
 			const email_pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 			const form = create_form_state({
 				email: {
@@ -169,7 +146,7 @@ describe('create_form_state', () => {
 			).toBe(false);
 		});
 
-		test('should return true when all fields are valid', () => {
+		it('should return true when all fields are valid', () => {
 			const email_pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 			const form = create_form_state({
 				email: {
@@ -196,7 +173,7 @@ describe('create_form_state', () => {
 			).toBe(true);
 		});
 
-		test('should handle fields without validation rules', () => {
+		it('should handle fields without validation rules', () => {
 			const form = create_form_state({
 				email: { value: 'test@example.com' },
 				optional_field: { value: 'any value' },
@@ -207,13 +184,13 @@ describe('create_form_state', () => {
 			expect(is_valid).toBe(true);
 		});
 
-		test.skip('should validate fields in correct order', () => {
+		it.skip('should validate fields in correct order', () => {
 			// TODO: Test validation order dependencies
 		});
 	});
 
 	describe('Form Reset', () => {
-		test('should reset all field values and states', () => {
+		it('should reset all field values and states', () => {
 			const form = create_form_state({
 				email: { value: 'initial@example.com' },
 				password: { value: 'initial' },
@@ -245,13 +222,13 @@ describe('create_form_state', () => {
 			).toBe('');
 		});
 
-		test.skip('should preserve validation rules after reset', () => {
+		it.skip('should preserve validation rules after reset', () => {
 			// TODO: Ensure validation rules remain intact after reset
 		});
 	});
 
 	describe('Form Data Extraction', () => {
-		test('should return current form values as plain object', () => {
+		it('should return current form values as plain object', () => {
 			const form = create_form_state({
 				email: { value: 'test@example.com' },
 				password: { value: 'password123' },
@@ -267,7 +244,7 @@ describe('create_form_state', () => {
 			});
 		});
 
-		test('should return updated values after field changes', () => {
+		it('should return updated values after field changes', () => {
 			const form = create_form_state({
 				email: { value: 'initial@example.com' },
 			});
@@ -279,13 +256,13 @@ describe('create_form_state', () => {
 			expect(data.email).toBe('updated@example.com');
 		});
 
-		test.skip('should handle special characters and encoding', () => {
+		it.skip('should handle special characters and encoding', () => {
 			// TODO: Test with special characters, unicode, etc.
 		});
 	});
 
 	describe('Derived State - Svelte 5 Runes', () => {
-		test('should track form validity reactively', () => {
+		it('should track form validity reactively', () => {
 			const email_pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 			const form = create_form_state({
 				email: {
@@ -319,7 +296,7 @@ describe('create_form_state', () => {
 			expect(untrack(() => is_form_valid())).toBe(false);
 		});
 
-		test('should track changes reactively', () => {
+		it('should track changes reactively', () => {
 			const form = create_form_state({
 				email: { value: 'initial@example.com' },
 			});
@@ -341,7 +318,7 @@ describe('create_form_state', () => {
 			expect(untrack(() => has_changes())).toBe(false);
 		});
 
-		test('should track field errors reactively', () => {
+		it('should track field errors reactively', () => {
 			const email_pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 			const form = create_form_state({
 				email: {
@@ -378,7 +355,7 @@ describe('create_form_state', () => {
 			expect(updated_errors.password).toBe('This field is required');
 		});
 
-		test('should handle fields without validation rules in derived state', () => {
+		it('should handle fields without validation rules in derived state', () => {
 			const form = create_form_state({
 				email: { value: 'test@example.com' },
 				optional: { value: 'any value' },
@@ -390,13 +367,13 @@ describe('create_form_state', () => {
 			expect(untrack(() => field_errors())).toEqual({});
 		});
 
-		test.skip('should optimize derived state calculations', () => {
+		it.skip('should optimize derived state calculations', () => {
 			// TODO: Test performance with large forms, memoization
 		});
 	});
 
 	describe('Edge Cases', () => {
-		test('should handle empty form configuration', () => {
+		it('should handle empty form configuration', () => {
 			const form = create_form_state({});
 
 			const is_form_valid = form.is_form_valid;
@@ -410,7 +387,7 @@ describe('create_form_state', () => {
 			expect(form.get_form_data()).toEqual({});
 		});
 
-		test('should handle undefined validation rules', () => {
+		it('should handle undefined validation rules', () => {
 			const form = create_form_state({
 				email: {
 					value: 'test@example.com',
@@ -425,21 +402,18 @@ describe('create_form_state', () => {
 			);
 		});
 
-		test.skip('should handle malformed validation rules', () => {
+		it.skip('should handle malformed validation rules', () => {
 			// TODO: Test with invalid rule configurations
 		});
 
-		test.skip('should handle extremely large form data', () => {
+		it.skip('should handle extremely large form data', () => {
 			// TODO: Test performance with many fields
 		});
 	});
 
 	describe('Integration with Validation Module', () => {
-		test('should call validation utility with correct parameters', async () => {
-			const { validate_field } = await import(
-				'../utils/validation.ts'
-			);
-
+		it('should integrate with validation utility correctly', () => {
+			// Test real integration - no mocking needed for validation functions
 			const email_pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 			const form = create_form_state({
 				email: {
@@ -451,19 +425,35 @@ describe('create_form_state', () => {
 				},
 			});
 
-			form.update_field('email', 'test@example.com');
-
-			expect(validate_field).toHaveBeenCalledWith(
-				'test@example.com',
-				{
-					required: true,
-					pattern: email_pattern,
-				},
+			// Test invalid input produces correct validation result
+			form.update_field('email', 'invalid-email');
+			expect(form.form_state.email.validation_result?.is_valid).toBe(
+				false,
 			);
+			expect(
+				form.form_state.email.validation_result?.error_message,
+			).toBe('Invalid format');
+
+			// Test valid input produces correct validation result
+			form.update_field('email', 'test@example.com');
+			expect(form.form_state.email.validation_result?.is_valid).toBe(
+				true,
+			);
+			expect(
+				form.form_state.email.validation_result?.error_message,
+			).toBe('');
 		});
 
-		test.skip('should handle validation utility errors gracefully', () => {
+		it.skip('should handle validation utility errors gracefully', () => {
 			// TODO: Test when validation utility throws errors
+		});
+
+		it.skip('should work with Zod schemas directly', () => {
+			// TODO: Test using { schema: email_schema } instead of legacy rules
+		});
+
+		it.skip('should handle complex validation combinations', () => {
+			// TODO: Test multiple validation rules, custom schemas
 		});
 	});
 });

@@ -8,109 +8,33 @@ import {
 } from 'vitest';
 import {
 	debounce,
+	email_schema,
 	format_currency,
 	validate_email,
-	validate_field,
 	validate_password,
-	type ValidationRule,
+	validate_with_schema,
 } from './validation';
 
 describe('Validation Utilities', () => {
-	describe('validate_field', () => {
-		it('should pass validation for valid input with all rules', () => {
-			const rules: ValidationRule = {
-				required: true,
-				min_length: 3,
-				max_length: 10,
-				pattern: /^[a-zA-Z]+$/,
-			};
-
-			const result = validate_field('hello', rules);
-
-			expect(result.is_valid).toBe(true);
-			expect(result.error_message).toBe('');
-		});
-
-		it('should fail validation when required field is empty', () => {
-			const rules: ValidationRule = { required: true };
-
-			const result = validate_field('', rules);
-
-			expect(result.is_valid).toBe(false);
-			expect(result.error_message).toBe('This field is required');
-		});
-
-		it('should fail validation when required field is only whitespace', () => {
-			const rules: ValidationRule = { required: true };
-
-			const result = validate_field('   ', rules);
-
-			expect(result.is_valid).toBe(false);
-			expect(result.error_message).toBe('This field is required');
-		});
-
-		it('should pass validation for empty non-required field', () => {
-			const rules: ValidationRule = { min_length: 5 };
-
-			const result = validate_field('', rules);
-
-			expect(result.is_valid).toBe(true);
-			expect(result.error_message).toBe('');
-		});
-
-		it('should fail validation when input is too short', () => {
-			const rules: ValidationRule = { min_length: 5 };
-
-			const result = validate_field('hi', rules);
-
-			expect(result.is_valid).toBe(false);
-			expect(result.error_message).toBe(
-				'Must be at least 5 characters',
+	describe('validate_with_schema', () => {
+		it('should return valid result for correct input', () => {
+			const result = validate_with_schema(
+				email_schema,
+				'test@example.com',
 			);
-		});
-
-		it('should fail validation when input is too long', () => {
-			const rules: ValidationRule = { max_length: 3 };
-
-			const result = validate_field('hello', rules);
-
-			expect(result.is_valid).toBe(false);
-			expect(result.error_message).toBe(
-				'Must be no more than 3 characters',
-			);
-		});
-
-		it('should fail validation when pattern does not match', () => {
-			const rules: ValidationRule = { pattern: /^\d+$/ };
-
-			const result = validate_field('abc123', rules);
-
-			expect(result.is_valid).toBe(false);
-			expect(result.error_message).toBe('Invalid format');
-		});
-
-		it('should fail validation when custom validation returns error', () => {
-			const rules: ValidationRule = {
-				custom: (value) =>
-					value === 'forbidden' ? 'This value is not allowed' : null,
-			};
-
-			const result = validate_field('forbidden', rules);
-
-			expect(result.is_valid).toBe(false);
-			expect(result.error_message).toBe('This value is not allowed');
-		});
-
-		it('should pass validation when custom validation returns null', () => {
-			const rules: ValidationRule = {
-				custom: (value) =>
-					value === 'forbidden' ? 'This value is not allowed' : null,
-			};
-
-			const result = validate_field('allowed', rules);
 
 			expect(result.is_valid).toBe(true);
 			expect(result.error_message).toBe('');
+		});
+
+		it('should return invalid result with error message', () => {
+			const result = validate_with_schema(
+				email_schema,
+				'invalid-email',
+			);
+
+			expect(result.is_valid).toBe(false);
+			expect(result.error_message).toBe('Invalid email format');
 		});
 
 		it.skip('should handle complex validation combinations', () => {
@@ -170,7 +94,7 @@ describe('Validation Utilities', () => {
 			const result = validate_email('');
 
 			expect(result.is_valid).toBe(false);
-			expect(result.error_message).toBe('This field is required');
+			expect(result.error_message).toBe('Invalid email format');
 		});
 
 		it.skip('should validate international domain names', () => {
@@ -206,7 +130,9 @@ describe('Validation Utilities', () => {
 			const result = validate_password('');
 
 			expect(result.is_valid).toBe(false);
-			expect(result.error_message).toBe('This field is required');
+			expect(result.error_message).toBe(
+				'Password must be at least 8 characters',
+			);
 		});
 
 		it('should require minimum 8 characters', () => {
@@ -214,7 +140,7 @@ describe('Validation Utilities', () => {
 
 			expect(result.is_valid).toBe(false);
 			expect(result.error_message).toBe(
-				'Must be at least 8 characters',
+				'Password must be at least 8 characters',
 			);
 		});
 
