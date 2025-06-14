@@ -722,6 +722,55 @@ describe('Navigation Integration', () => {
 
 ## SSR Testing Patterns
 
+### When to Add SSR Tests
+
+SSR tests ensure server-rendered HTML matches client expectations and
+prevent hydration mismatches.
+
+#### Always Add SSR Tests For:
+
+- **Form components** - Inputs, selects, textareas (progressive
+  enhancement critical)
+- **Navigation components** - Links, menus, breadcrumbs (SEO +
+  accessibility)
+- **Content components** - Cards, articles, headers (SEO critical)
+- **Layout components** - Page shells, grids (hydration mismatch
+  prone)
+
+#### Usually Add SSR Tests For:
+
+- **Components with complex CSS logic** - Conditional classes,
+  variants
+- **Components with ARIA attributes** - Screen reader compatibility
+- **Components that render different content server vs client**
+- **Components used in `+page.svelte` files** (always SSR'd)
+
+#### Rarely Need SSR Tests For:
+
+- **Pure interaction components** - Modals, dropdowns, tooltips
+- **Client-only components** - Charts, maps, rich editors
+- **Simple presentational components** - Icons, badges, dividers
+
+#### Red Flags That Require SSR Tests:
+
+- Hydration mismatches in browser console
+- Different appearance on first load vs after hydration
+- SEO issues with missing content
+- Accessibility tools can't find elements
+- Form doesn't work without JavaScript
+
+#### Quick Decision Framework:
+
+```
+Does it render different HTML server vs client? → SSR test
+Is it SEO critical? → SSR test
+Does it need to work without JS? → SSR test
+Is it just interactive behavior? → Skip SSR test
+```
+
+**Start with browser tests only, add SSR tests when you hit problems
+or have specific SSR requirements.**
+
 ### Basic SSR Pattern
 
 ```typescript
