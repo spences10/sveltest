@@ -98,9 +98,9 @@
 						A comprehensive collection of testing patterns and
 						examples
 						<br />
-						<span class="text-base-content/60 text-lg"
-							>for modern Svelte applications</span
-						>
+						<span class="text-base-content/60 text-xl">
+							for modern Svelte applications
+						</span>
 					</p>
 				</div>
 
@@ -125,68 +125,6 @@
 						<LightningBolt class_names="h-6 w-6" />
 						Explore Examples
 					</a>
-				</div>
-
-				<!-- Stats -->
-				<div class="pt-12">
-					<div
-						class="mx-auto grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-3"
-					>
-						<div
-							class="stat bg-base-100/60 border-base-300/30 rounded-2xl border p-6 shadow-lg backdrop-blur-sm"
-						>
-							<div class="stat-figure text-primary">
-								<CheckCircle class_names="h-8 w-8" />
-							</div>
-							<div class="stat-title text-base-content/60">
-								Test Coverage
-							</div>
-							<div
-								class="stat-value text-primary text-3xl font-black"
-							>
-								98%
-							</div>
-							<div class="stat-desc text-base-content/50">
-								Comprehensive testing
-							</div>
-						</div>
-
-						<div
-							class="stat bg-base-100/60 border-base-300/30 rounded-2xl border p-6 shadow-lg backdrop-blur-sm"
-						>
-							<div class="stat-figure text-secondary">
-								<LightningBolt class_names="h-8 w-8" />
-							</div>
-							<div class="stat-title text-base-content/60">
-								Performance
-							</div>
-							<div
-								class="stat-value text-secondary text-3xl font-black"
-							>
-								Fast
-							</div>
-							<div class="stat-desc text-base-content/50">
-								Lightning quick tests
-							</div>
-						</div>
-
-						<div
-							class="stat bg-base-100/60 border-base-300/30 rounded-2xl border p-6 shadow-lg backdrop-blur-sm"
-						>
-							<div class="stat-figure text-accent">
-								<Heart class_names="h-8 w-8" />
-							</div>
-							<div class="stat-title text-base-content/60">
-								Developer Experience
-							</div>
-							<div class="stat-value text-accent text-3xl font-black">
-								A+
-							</div>
-							<div class="stat-desc text-base-content/50">
-								Intuitive & powerful
-							</div>
-						</div>
-					</div>
 				</div>
 			</div>
 		</div>
