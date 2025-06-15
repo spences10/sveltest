@@ -1,0 +1,24 @@
+# Testing Documentation Navigation
+
+> A comprehensive guide to modern Svelte testing with vitest-browser-svelte, focused on real browser testing and the Client-Server Alignment Strategy.
+
+## Core Documentation
+- [Getting Started](./getting-started.md) - Essential setup and foundational patterns for testing Svelte 5 applications
+- [Testing Patterns](./testing-patterns.md) - Common testing patterns and best practices for components
+- [Best Practices](./best-practices.md) - Strategic approaches and proven patterns for reliable tests
+- [API Reference](./api-reference.md) - Complete reference for all testing utilities and assertions
+- [Troubleshooting](./troubleshooting.md) - Solutions for common issues and debugging strategies
+
+## Additional Resources
+- [Migration Guide](./migration-guide.md) - Step-by-step guide for migrating from @testing-library/svelte
+- [CI/CD](./ci-cd.md) - Production-ready testing pipeline configuration
+- [E2E Testing](./e2e-testing.md) - End-to-end testing patterns with Playwright
+- [About](./about.md) - Project background and philosophy
+
+## Available LLM Documentation Formats
+- Markdown - Human-readable format for direct consumption
+- Plain Text - Simple format for legacy systems
+- JSON - Structured format for programmatic use
+- HTML - Web-ready format for online viewing
+
+The documentation follows the Client-Server Alignment Strategy to ensure reliable full-stack testing through all stages of development.

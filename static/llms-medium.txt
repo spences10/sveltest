@@ -1,0 +1,161 @@
+# Sveltest Testing Documentation
+
+## Quick Start
+Configure browser testing in your Svelte project and learn essential patterns for reliable component tests.
+
+### Installation
+```bash
+# Add vitest browser and playwright
+pnpm add -D @vitest/browser vitest-browser-svelte playwright
+
+# Remove jsdom dependencies 
+pnpm un @testing-library/jest-dom @testing-library/svelte jsdom
+```
+
+### Configure Browser Testing
+```typescript
+// vite.config.ts
+export default defineConfig({
+  test: {
+    environment: 'browser',
+    browser: {
+      enabled: true,
+      provider: 'playwright',
+      name: 'chromium'
+    },
+    include: ['src/**/*.svelte.{test,spec}.{js,ts}'],
+    setupFiles: ['./vitest-setup-client.ts']
+  }
+})
+```
+
+### Write Your First Test
+```typescript
+import { describe, expect, it } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import { page } from '@vitest/browser/context';
+import MyButton from './my-button.svelte';
+
+describe('MyButton', () => {
+  it('should render with text', async () => {
+    render(MyButton, { children: 'Click me' });
+    
+    const button = page.getByRole('button', { name: 'Click me' });
+    await expect.element(button).toBeInTheDocument();
+  });
+
+  it('should handle clicks', async () => {
+    const click_handler = vi.fn();
+    render(MyButton, { onclick: click_handler });
+
+    await page.getByRole('button').click();
+    expect(click_handler).toHaveBeenCalled();
+  });
+});
+```
+
+## Core Patterns
+
+### Use Locators, Not Containers
+```typescript
+// ✅ DO: Use page locators (auto-retry)
+const button = page.getByRole('button');
+await button.click();
+
+// ❌ DON'T: Use containers
+const { container } = render(MyButton);
+const button = container.querySelector('button');
+```
+
+### Testing Forms
+```typescript 
+it('should handle form input', async () => {
+  render(MyForm);
+
+  const input = page.getByLabel('Email');
+  await input.fill('test@example.com');
+  await expect.element(input).toHaveValue('test@example.com');
+});
+```
+
+### Testing Svelte 5 Runes
+```typescript
+it('should handle reactive state', () => {
+  let count = $state(0);
+  let doubled = $derived(count * 2);
+
+  expect(untrack(() => doubled)).toBe(0);
+  
+  count = 5;
+  flushSync();
+  expect(untrack(() => doubled)).toBe(10);
+});
+```
+
+## Common Issues
+
+### Multiple Elements
+```typescript
+// ❌ Fails with multiple elements
+page.getByRole('link', { name: 'Home' });
+
+// ✅ Use .first(), .nth(), or .last()
+page.getByRole('link', { name: 'Home' }).first();
+```
+
+### Form Submissions
+```typescript 
+// ❌ Can hang with SvelteKit forms
+await submit_button.click();
+
+// ✅ Test form state directly
+render(MyForm, { errors: { email: 'Required' }});
+await expect.element(page.getByText('Required')).toBeInTheDocument();
+```
+
+### Role Confusion
+```typescript
+// ❌ Wrong: Looking for 'input' role
+page.getByRole('input');
+
+// ✅ Correct: Use 'textbox' for inputs
+page.getByRole('textbox', { name: 'Email' });
+```
+
+## Best Practices
+
+- Always use page locators, never containers
+- Await element assertions 
+- Use semantic roles for accessibility
+- Test user behavior, not implementation details
+- Handle multiple elements with .first()
+- Test form state directly rather than submitting
+- Use untrack() with $derived values
+
+## Quick Reference
+
+### Essential Imports
+```typescript
+import { describe, expect, it, vi } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import { page } from '@vitest/browser/context';
+import { createRawSnippet, untrack, flushSync } from 'svelte';
+```
+
+### Common Locators
+```typescript
+page.getByRole('button', { name: 'Submit' });
+page.getByLabel('Email');
+page.getByText('Welcome');
+page.getByTestId('submit-button');
+```
+
+### Assertions
+```typescript
+await expect.element(el).toBeInTheDocument();
+await expect.element(el).toHaveValue('test');
+await expect.element(el).toBeDisabled();
+await expect.element(el).toHaveClass('active');
+```
+
+This represents a more concise version focused on essential patterns while maintaining readability. Let me know if you would like me to adjust anything further.

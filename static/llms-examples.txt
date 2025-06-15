@@ -1,0 +1,151 @@
+# Sveltest Code Examples
+
+## Basic component tests
+
+```typescript
+// Example of testing a basic button component
+import { describe, expect, it, vi } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import { page } from '@vitest/browser/context';
+import Button from './Button.svelte';
+
+describe('Button', () => {
+  it('should render with default props', async () => {
+    render(Button, { label: 'Click me' });
+    const button = page.getByRole('button', { name: 'Click me' });
+    await expect.element(button).toBeInTheDocument();
+  });
+
+  it('should handle click events', async () => {
+    const handleClick = vi.fn();
+    render(Button, { label: 'Click me', onclick: handleClick });
+    const button = page.getByRole('button', { name: 'Click me' });
+    await button.click();
+    expect(handleClick).toHaveBeenCalledOnce();
+  });
+
+  it('should support disabled state', async () => {
+    render(Button, { label: 'Click me', disabled: true });
+    const button = page.getByRole('button', { name: 'Click me' });
+    await expect.element(button).toBeDisabled();
+  });
+});
+```
+
+## Form testing patterns
+
+```typescript
+// Example of testing a form component
+describe('LoginForm', () => {
+  it('should handle form submission', async () => {
+    const handleSubmit = vi.fn();
+    render(LoginForm, { onsubmit: handleSubmit });
+
+    const emailInput = page.getByRole('textbox', { name: 'Email' });
+    const passwordInput = page.getByLabelText('Password');
+    const submitButton = page.getByRole('button', { name: 'Login' });
+
+    await emailInput.fill('test@example.com');
+    await passwordInput.fill('password123');
+    await submitButton.click();
+
+    expect(handleSubmit).toHaveBeenCalledWith({
+      email: 'test@example.com',
+      password: 'password123'
+    });
+  });
+
+  it('should show validation errors', async () => {
+    render(LoginForm);
+    const submitButton = page.getByRole('button', { name: 'Login' });
+    await submitButton.click();
+
+    await expect.element(page.getByText('Email is required')).toBeInTheDocument();
+    await expect.element(page.getByText('Password is required')).toBeInTheDocument();
+  });
+});
+```
+
+## State testing with runes
+
+```typescript
+// Testing components with Svelte 5 runes
+import { untrack, flushSync } from 'svelte';
+
+describe('Counter with runes', () => {
+  it('should handle reactive state', () => {
+    let count = $state(0);
+    let doubled = $derived(count * 2);
+
+    expect(untrack(() => doubled)).toBe(0);
+
+    count = 5;
+    flushSync();
+    expect(untrack(() => doubled)).toBe(10);
+  });
+
+  it('should update derived values', () => {
+    let name = $state('');
+    let greeting = $derived(`Hello ${name}`);
+
+    name = 'John';
+    flushSync();
+    expect(untrack(() => greeting)).toBe('Hello John');
+  });
+});
+```
+
+## SSR testing examples
+
+```typescript
+import { render } from 'svelte/server';
+
+describe('SSR rendering', () => {
+  it('should render without errors', () => {
+    const { body } = render(Component, {
+      props: {
+        title: 'Hello'
+      }
+    });
+
+    expect(body).toContain('<h1>Hello</h1>');
+  });
+
+  it('should include meta information', () => {
+    const { head } = render(Component);
+    expect(head).toContain('<title>');
+    expect(head).toContain('meta name="description"');
+  });
+});
+```
+
+## Mocking examples
+
+```typescript
+// Mocking components and utilities
+describe('Component with dependencies', () => {
+  // Mock child component
+  vi.mock('./ChildComponent.svelte', () => ({
+    default: vi.fn().mockImplementation(() => ({
+      $$: {},
+      $set: vi.fn(),
+      $destroy: vi.fn()
+    }))
+  }));
+
+  // Mock utility functions
+  vi.mock('$lib/utils', () => ({
+    fetchData: vi.fn(() => Promise.resolve({ id: 1, name: 'Test' })),
+    validateInput: vi.fn(() => true)
+  }));
+
+  it('should render with mocked dependencies', async () => {
+    render(ParentComponent);
+    
+    const { fetchData } = await import('$lib/utils');
+    expect(fetchData).toHaveBeenCalledOnce();
+    
+    await expect.element(page.getByText('Test')).toBeInTheDocument();
+  });
+});
+```

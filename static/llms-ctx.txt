@@ -1,0 +1,101 @@
+I've processed the documentation and created a structured XML version focused on key concepts, code examples, and common errors for easy AI consumption. Here's the organized XML:
+
+```xml
+<documentation>
+  <core_concepts>
+    <concept name="testing_approach">
+      <principle>Use Client-Server Alignment Strategy for reliable full-stack testing</principle>
+      <principle>Focus on real browser testing over heavy mocking</principle>
+      <principle>Always use locators, never containers, for reliable element queries</principle>
+      <principle>Test user value, not implementation details</principle>
+    </concept>
+    
+    <concept name="test_structure">
+      <principle>Use Foundation First approach with describe and it.skip</principle>
+      <principle>Separate client, server, and SSR tests</principle>
+      <principle>Follow semantic query hierarchy (roles > labels > text > testids)</principle>
+    </concept>
+    
+    <concept name="runes_testing">
+      <principle>Always use untrack() when accessing $derived values</principle>
+      <principle>Test the full state lifecycle: valid → validate → invalid → fix → valid</principle>
+      <principle>Use flushSync() for synchronous updates in tests</principle>
+    </concept>
+  </core_concepts>
+
+  <code_examples>
+    <example name="basic_component_test">
+      <code>
+        import { describe, expect, it, vi } from 'vitest';
+        import { render } from 'vitest-browser-svelte';
+        import { page } from '@vitest/browser/context';
+        
+        describe('Component', () => {
+          it('should render correctly', async () => {
+            render(Component);
+            await expect.element(page.getByRole('button')).toBeInTheDocument();
+          });
+        });
+      </code>
+    </example>
+
+    <example name="runes_test">
+      <code>
+        test('derived state', () => {
+          let count = $state(0);
+          let doubled = $derived(count * 2);
+          
+          expect(untrack(() => doubled)).toBe(0);
+          
+          count = 5;
+          flushSync();
+          expect(untrack(() => doubled)).toBe(10);
+        });
+      </code>
+    </example>
+
+    <example name="form_test">
+      <code>
+        test('form submission', async () => {
+          render(Form);
+          await page.getByLabel('Email').fill('test@example.com');
+          await page.getByRole('button').click();
+          await expect.element(page.getByText('Success')).toBeInTheDocument();
+        });
+      </code>
+    </example>
+  </code_examples>
+
+  <common_errors>
+    <error name="strict_mode_violation">
+      <problem>Multiple elements match locator</problem>
+      <solution>Use .first(), .nth(), or .last() for multiple matches</solution>
+      <example>page.getByRole('button').first();</example>
+    </error>
+
+    <error name="untracked_derived">
+      <problem>Accessing $derived values without untrack()</problem>
+      <solution>Always wrap $derived access in untrack()</solution>
+      <example>expect(untrack(() => derived_value)).toBe(expected);</example>
+    </error>
+
+    <error name="container_usage">
+      <problem>Using container queries instead of locators</problem>
+      <solution>Use page.getBy*() locators for auto-retry functionality</solution>
+      <example>await page.getByRole('button').click();</example>
+    </error>
+
+    <error name="client_server_mismatch">
+      <problem>Client and server expecting different data formats</problem>
+      <solution>Use real FormData/Request objects in tests</solution>
+      <example>
+        const form_data = new FormData();
+        form_data.append('email', 'test@example.com');
+        const request = new Request('/api', { method: 'POST', body: form_data });
+      </example>
+    </error>
+  </common_errors>
+</documentation>
+```
+
+This XML structure captures the essential concepts, patterns, and solutions from the documentation in a format optimized for AI consumption, focusing on practical usage and common issues.

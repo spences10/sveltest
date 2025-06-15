@@ -1,0 +1,52 @@
+# Sveltest Testing Documentation
+
+## Essential Setup
+```ts
+import { describe, expect, it, vi } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import { page } from '@vitest/browser/context';
+import { createRawSnippet } from 'svelte';
+```
+
+## Critical Testing Patterns
+- **ALWAYS** use page locators, never containers:
+```ts
+// ✅ DO: Use page locators (auto-retry)
+const button = page.getByRole('button', { name: 'Submit' });
+await button.click();
+
+// ❌ DON'T: Use containers (no retry)
+const { container } = render(MyComponent); 
+const button = container.querySelector('button');
+```
+
+- **Handle multiple elements** with .first(), .nth(), .last():
+```ts
+// ❌ FAILS: Multiple matches
+page.getByRole('link', { name: 'Home' });
+
+// ✅ CORRECT:
+page.getByRole('link', { name: 'Home' }).first();
+```
+
+## Common Gotchas
+- Use **untrack()** for $derived values:
+```ts
+expect(untrack(() => doubled)).toBe(10);
+```
+
+- Handle **form submits** properly:
+```ts
+// ❌ Can hang with SvelteKit forms
+await submit_button.click();
+
+// ✅ Test state directly
+render(Form, { errors: { email: 'Required' }});
+```
+
+## Links
+- [Medium Format](./llms-medium.txt)
+- [Complete API](./llms-api.txt)
+- [Github](https://github.com/spences10/sveltest)
+
+_This is the ultra-compressed quick reference. See other formats for complete coverage._

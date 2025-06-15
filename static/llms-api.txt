@@ -1,0 +1,142 @@
+# Sveltest API Reference
+
+## Essential Imports
+
+```typescript
+import { describe, expect, it, vi } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import { page } from '@vitest/browser/context';
+import { createRawSnippet } from 'svelte';
+import { flushSync, untrack } from 'svelte';
+```
+
+## Locator Methods
+
+### Semantic Queries
+```typescript
+page.getByRole('button', { name: 'Submit' });
+page.getByRole('textbox', { name: 'Email' });
+page.getByRole('heading', { level: 1 });
+page.getByLabel('Email address');
+page.getByText('Welcome back');
+```
+
+### Multiple Element Handling
+```typescript
+page.getByRole('link').first();
+page.getByRole('listitem').nth(2);
+page.getByRole('button').last();
+```
+
+## Assertion Patterns
+
+### Element Assertions
+```typescript
+await expect.element(page.getByText('Success')).toBeInTheDocument();
+await expect.element(page.getByRole('button')).toBeVisible();
+await expect.element(page.getByRole('button')).toBeEnabled();
+await expect.element(page.getByRole('checkbox')).toBeChecked();
+```
+
+### Content & Attributes
+```typescript
+await expect.element(element).toHaveText('Welcome');
+await expect.element(element).toHaveValue('test@example.com');
+await expect.element(element).toHaveClass('btn-primary');
+await expect.element(element).toHaveAttribute('href', '/docs');
+```
+
+## User Interaction Methods
+
+### Click Events
+```typescript
+await page.getByRole('button').click();
+await page.getByRole('button').click({ force: true });
+await page.getByRole('button').click({ position: { x: 10, y: 20 } });
+```
+
+### Form Interactions
+```typescript
+await page.getByRole('textbox').fill('test@example.com');
+await page.getByRole('checkbox').check();
+await page.getByRole('combobox').selectOption('value');
+```
+
+### Keyboard Events
+```typescript
+await page.keyboard.press('Enter');
+await page.keyboard.type('Hello World');
+await page.getByRole('textbox').press('Enter');
+```
+
+## Mocking Patterns
+
+### Function Mocks
+```typescript
+vi.mock('$lib/utils', () => ({
+  validate_email: vi.fn(() => true),
+  fetch_data: vi.fn(() => Promise.resolve({ id: 1 }))
+}));
+```
+
+### Component Mocks
+```typescript
+vi.mock('./child-component.svelte', () => ({
+  default: vi.fn(() => ({
+    $$: {},
+    $set: vi.fn(),
+    $destroy: vi.fn()
+  }))
+}));
+```
+
+## Rendering Components
+
+### Basic Rendering
+```typescript
+render(Button, {
+  variant: 'primary',
+  onclick: vi.fn(),
+  children: 'Click me'
+});
+```
+
+### With Svelte 5 Snippets
+```typescript
+const children = createRawSnippet(() => ({
+  render: () => `<span>Custom content</span>`
+}));
+render(Modal, { children });
+```
+
+## Testing Runes
+
+### State Testing
+```typescript
+test('reactive state', () => {
+  let count = $state(0);
+  let doubled = $derived(count * 2);
+  
+  expect(untrack(() => doubled)).toBe(0);
+  
+  count = 5;
+  flushSync();
+  expect(untrack(() => doubled)).toBe(10);
+});
+```
+
+## SSR Testing
+
+```typescript
+import { render } from 'svelte/server';
+
+test('server rendering', () => {
+  const { body, head } = render(Component, {
+    props: { title: 'Test' }
+  });
+  
+  expect(body).toContain('<h1>Test</h1>');
+});
+```
+
+This API reference provides the core functionality of vitest-browser-svelte for testing Svelte components. Each section shows the primary methods and patterns you'll use in your tests.
