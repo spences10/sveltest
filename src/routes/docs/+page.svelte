@@ -292,9 +292,7 @@ vi.mock('$lib/heavy-computation', () => ({
 		</div>
 
 		<!-- Stats -->
-		<div
-			class="mx-auto grid max-w-4xl grid-cols-2 gap-8 md:grid-cols-4"
-		>
+		<div class="mx-auto mb-10 flex max-w-2xl justify-center gap-8">
 			<div class="text-center">
 				<div
 					class="text-primary text-3xl font-bold"
@@ -313,28 +311,10 @@ vi.mock('$lib/heavy-computation', () => ({
 				</div>
 				<div class="text-base-content/60 text-sm">Examples</div>
 			</div>
-			<div class="text-center">
-				<div
-					class="text-accent text-3xl font-bold"
-					data-testid="stat-coverage"
-				>
-					{docs_stats.coverage}%
-				</div>
-				<div class="text-base-content/60 text-sm">Coverage</div>
-			</div>
-			<div class="text-center">
-				<div
-					class="text-info text-3xl font-bold"
-					data-testid="stat-a11y"
-				>
-					{docs_stats.accessibility}
-				</div>
-				<div class="text-base-content/60 text-sm">Accessible</div>
-			</div>
 		</div>
 
 		<!-- Search Section -->
-		<div class="mx-auto mt-16 max-w-2xl">
+		<div class="mx-auto max-w-2xl">
 			<DocsSearch />
 		</div>
 	</div>

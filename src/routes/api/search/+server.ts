@@ -64,13 +64,9 @@ export const POST: RequestHandler = async () => {
 	const examples = full_search_index.items.filter(
 		(item) => item.type === 'example',
 	).length;
-	const coverage = 100;
-	const accessibility = 'A11y';
 
 	return json({
 		sections,
 		examples,
-		coverage,
-		accessibility,
 	});
 };

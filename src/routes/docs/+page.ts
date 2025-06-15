@@ -6,8 +6,6 @@ export const load: PageLoad = async ({ fetch }) => {
 	let docs_stats = {
 		sections: topics.length,
 		examples: 50, // fallback
-		coverage: 100,
-		accessibility: 'A11y',
 	};
 
 	try {
