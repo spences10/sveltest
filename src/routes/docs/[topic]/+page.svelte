@@ -17,7 +17,7 @@
 <!-- Fixed positioned TOC -->
 <DocsToc current_topic={data.slug} />
 
-<div class="container mx-auto max-w-4xl overflow-x-hidden px-4 py-6">
+<div class="container mx-auto max-w-4xl overflow-x-hidden px-4 py-34">
 	<!-- Main Content -->
 	<main class="max-w-full min-w-0">
 		{#key data.slug}
