@@ -1,11 +1,16 @@
 import { generate_llm_content, topics } from '$lib/server/llms';
 import type { RequestHandler } from './$types';
 
-export const GET: RequestHandler = async () => {
+export const GET: RequestHandler = async ({ params }) => {
+	const variant = params.variant;
+
+	// Handle the base case (llms.txt)
+	const fullVariant = variant === 'llms' ? 'llms' : `llms-${variant}`;
+
 	try {
 		const content = await generate_llm_content({
 			topics,
-			variant: 'llms',
+			variant: fullVariant,
 		});
 
 		return new Response(content, {
@@ -15,8 +20,8 @@ export const GET: RequestHandler = async () => {
 			},
 		});
 	} catch (error) {
-		console.error('Error generating llms.txt:', error);
-		return new Response('Error generating llms.txt', {
+		console.error(`Error generating ${fullVariant}:`, error);
+		return new Response(`Error generating ${fullVariant}`, {
 			status: 500,
 		});
 	}

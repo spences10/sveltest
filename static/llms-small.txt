@@ -1,0 +1,159 @@
+# Sveltest Testing Documentation
+
+## Essential Setup
+
+```typescript
+import { describe, expect, it, vi } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import { page } from '@vitest/browser/context';
+import { createRawSnippet } from 'svelte';
+import { flushSync, untrack } from 'svelte';
+```
+
+## Critical Rule: Always Use Locators
+
+```typescript
+// ❌ NEVER - No auto-retry, manual queries
+const { container } = render(MyComponent);
+const button = container.querySelector('[data-testid="submit"]');
+
+// ✅ ALWAYS - Auto-retry, semantic queries
+render(MyComponent);
+const button = page.getByTestId('submit');
+await button.click();
+```
+
+## Handle Multiple Elements (Strict Mode)
+
+```typescript
+// ❌ FAILS: "strict mode violation" 
+page.getByRole('link', { name: 'Home' });
+
+// ✅ CORRECT: Use .first(), .nth(), .last()
+page.getByRole('link', { name: 'Home' }).first();
+page.getByRole('listitem').nth(1); // Zero-indexed
+page.getByRole('button').last();
+```
+
+## Essential Locator Patterns
+
+```typescript
+// ✅ Semantic queries (preferred)
+page.getByRole('button', { name: 'Submit' });
+page.getByRole('textbox', { name: 'Email' }); // NOT 'input'
+page.getByLabelText('Password');
+page.getByText('Welcome');
+
+// ✅ Test IDs (fallback)
+page.getByTestId('complex-widget');
+```
+
+## Basic Component Test
+
+```typescript
+describe('Button Component', () => {
+  it('should render and handle clicks', async () => {
+    const click_handler = vi.fn();
+    const children = createRawSnippet(() => ({
+      render: () => `<span>Click me</span>`
+    }));
+
+    render(Button, { onclick: click_handler, children });
+
+    const button = page.getByRole('button', { name: 'Click me' });
+    await expect.element(button).toBeInTheDocument();
+    
+    await button.click();
+    expect(click_handler).toHaveBeenCalledOnce();
+  });
+});
+```
+
+## Form Testing Patterns
+
+```typescript
+it('should handle form validation lifecycle', async () => {
+  render(LoginForm);
+
+  const email = page.getByLabelText('Email');
+  const submit = page.getByRole('button', { name: 'Submit' });
+
+  // Initially valid (no validation run)
+  await expect.element(submit).toBeEnabled();
+
+  // Trigger validation with invalid data
+  await email.fill('invalid-email');
+  await email.blur();
+
+  // Error should appear
+  await expect.element(page.getByText('Invalid format')).toBeInTheDocument();
+});
+```
+
+## Svelte 5 Runes Testing
+
+```typescript
+it('should test $derived values with untrack', () => {
+  let count = $state(0);
+  let doubled = $derived(count * 2);
+
+  // ✅ CRITICAL: Always use untrack() for $derived
+  expect(untrack(() => doubled)).toBe(0);
+
+  count = 5;
+  flushSync();
+  expect(untrack(() => doubled)).toBe(10);
+});
+```
+
+## Assertions (Always Await)
+
+```typescript
+// ✅ Always await element assertions
+await expect.element(page.getByText('Success')).toBeInTheDocument();
+await expect.element(page.getByRole('button')).toBeDisabled();
+await expect.element(page.getByRole('textbox')).toHaveValue('test@example.com');
+```
+
+## Common Gotchas & Fixes
+
+### Role Confusion
+```typescript
+// ❌ WRONG: Input role doesn't exist
+page.getByRole('input', { name: 'Email' });
+
+// ✅ CORRECT: Use textbox for input elements
+page.getByRole('textbox', { name: 'Email' });
+```
+
+### Form Submit Hangs
+```typescript
+// ❌ Can hang with SvelteKit enhance
+await submit_button.click();
+
+// ✅ Test form state directly
+render(MyForm, { errors: { email: 'Required' } });
+await expect.element(page.getByText('Required')).toBeInTheDocument();
+```
+
+### Animation Issues
+```typescript
+// ✅ Use force: true for elements that may be animating
+await button.click({ force: true });
+```
+
+## Quick Reference
+
+- Use `page.getBy*()` locators - never containers
+- Always `await expect.element()` for assertions  
+- Use `.first()`, `.nth()`, `.last()` for multiple elements
+- Use `untrack()` for `$derived` values
+- Use `force: true` for animations
+- Test form validation lifecycle: valid → validate → invalid → fix → valid
+
+## Links to More Details
+
+- [Complete Documentation](https://github.com/spences10/sveltest) - Full patterns and examples
+- [Migration Guide](docs/migration-guide.md) - From @testing-library/svelte
+- [Best Practices](docs/best-practices.md) - Foundation First approach
+- [API Reference](docs/api-reference.md) - Complete testing utilities
