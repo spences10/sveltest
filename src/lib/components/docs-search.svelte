@@ -132,7 +132,7 @@
 <div class="relative w-full">
 	<!-- Search Input -->
 	<div class="form-control w-full">
-		<label class="label" for="docs-search">
+		<label class="label mb-2" for="docs-search">
 			<span class="label-text text-lg font-medium">
 				Search Documentation
 			</span>
