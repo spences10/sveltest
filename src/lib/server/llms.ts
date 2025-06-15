@@ -163,20 +163,9 @@ const VARIANT_PROMPTS: Record<string, string> = {
 		- <core_concepts> with principles and examples
 		- <code_examples> with working patterns
 		- <common_errors> with solutions
-		
-		Do NOT include <references> section (that's for llms-ctx-full).
-		Keep content concise but structured for AI consumption.
-	`,
-
-	'llms-ctx-full': `
-		Create complete XML-structured content for Claude and similar models.
-		
-		Same as llms-ctx but include:
 		- <references> section with links to other formats
-		- More comprehensive examples
-		- Additional context and details
 		
-		This is the full XML version for maximum AI utility.
+		Keep content structured for AI consumption.
 	`,
 };
 

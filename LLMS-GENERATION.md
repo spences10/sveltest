@@ -84,7 +84,6 @@ export const ANTHROPIC_CONFIG = {
 | `llms-api`      | API reference    | Medium       | Technical reference    |
 | `llms-examples` | Code examples    | Medium       | Copy-paste patterns    |
 | `llms-ctx`      | XML for Claude   | Medium       | AI consumption         |
-| `llms-ctx-full` | Full XML         | Large        | Complete AI context    |
 
 ## Generation
 
@@ -144,7 +143,7 @@ curl -X POST http://localhost:5173/api/llm-txt-gen \
 
 ```bash
 # Generate all variants with progress tracking
-for variant in llms llms-medium llms-small llms-api llms-examples llms-ctx llms-ctx-full; do
+for variant in llms llms-medium llms-small llms-api llms-examples llms-ctx; do
   echo "Generating $variant..."
   curl -X POST localhost:5173/api/llm-txt-gen \
     -H "Content-Type: application/json" \

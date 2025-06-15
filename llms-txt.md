@@ -50,14 +50,6 @@ Instant)
 - Excludes optional URLs for focused context
 - Optimized for reasoning and analysis tasks
 
-### 4. `/llms-ctx-full.txt` - Complete Context Format
-
-**Purpose**: Full XML-structured documentation
-
-- Includes all URLs and references
-- Complete content in XML format
-- For comprehensive analysis and code generation
-
 ### 5. `/llms-api.txt` - API-Focused Documentation
 
 **Purpose**: Testing API reference and patterns only
@@ -121,7 +113,6 @@ interface GenerateLlmContentOptions {
 		| 'medium'
 		| 'small'
 		| 'ctx'
-		| 'ctx-full'
 		| 'api'
 		| 'examples';
 	minimize?: {
@@ -219,7 +210,7 @@ Create `/llms-directory.txt` following the convention:
 
 ## XML Context Files
 - [Context Format](/llms-ctx.txt): XML structure without optional content
-- [Full Context Format](/llms-ctx-full.txt): Complete XML structure
+
 ```
 
 ## CLI Tool Implementation

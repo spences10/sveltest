@@ -1,24 +1,68 @@
-# Testing Documentation Navigation
+# Sveltest Testing Documentation
 
-> A comprehensive guide to modern Svelte testing with vitest-browser-svelte, focused on real browser testing and the Client-Server Alignment Strategy.
+> The complete guide to modern Svelte 5 testing with vitest-browser-svelte, demonstrating production-ready patterns for real browser testing and the Client-Server Alignment Strategy.
 
-## Core Documentation
-- [Getting Started](./getting-started.md) - Essential setup and foundational patterns for testing Svelte 5 applications
-- [Testing Patterns](./testing-patterns.md) - Common testing patterns and best practices for components
-- [Best Practices](./best-practices.md) - Strategic approaches and proven patterns for reliable tests
-- [API Reference](./api-reference.md) - Complete reference for all testing utilities and assertions
-- [Troubleshooting](./troubleshooting.md) - Solutions for common issues and debugging strategies
+## Core Testing Documentation
+
+### Getting Started
+- **Complete Setup Guide** - Environment configuration, dependencies, and your first test with vitest-browser-svelte
+- **Client-Server Alignment Strategy** - Multi-project setup supporting browser, SSR, and server testing
+- **Foundation First Approach** - Strategic test planning with `describe` and `it.skip` patterns
+
+### Testing Patterns
+- **Essential Locator Patterns** - Always use `page.getBy*()` locators, handle strict mode violations
+- **Component Testing** - Button, input, modal, dropdown patterns with real browser interactions
+- **Svelte 5 Runes Testing** - `$state`, `$derived` with `untrack()`, form validation lifecycle
+- **Integration Testing** - Form submission, todo management, navigation patterns
+
+### Best Practices
+- **Foundation First Methodology** - Complete test structure planning before implementation
+- **Accessibility-First Testing** - Semantic queries, ARIA testing, keyboard navigation
+- **Real vs Mock Guidelines** - When to mock external services vs keeping data contracts real
+- **Performance Patterns** - Animation handling, large datasets, debounced inputs
+
+### API Reference
+- **Complete API Documentation** - All vitest-browser-svelte APIs with working examples
+- **Locator Reference** - Semantic queries, form interactions, element states
+- **Assertion Patterns** - Element presence, content validation, attribute checking
+- **Svelte 5 Integration** - Runes testing, SSR rendering, component lifecycle
 
 ## Additional Resources
-- [Migration Guide](./migration-guide.md) - Step-by-step guide for migrating from @testing-library/svelte
-- [CI/CD](./ci-cd.md) - Production-ready testing pipeline configuration
-- [E2E Testing](./e2e-testing.md) - End-to-end testing patterns with Playwright
-- [About](./about.md) - Project background and philosophy
+
+### Migration Guide
+- **Step-by-Step Migration** - Moving from @testing-library/svelte to vitest-browser-svelte
+- **Pattern Transformations** - Query, assertion, and event handling updates
+- **Common Pitfalls** - Troubleshooting migration issues and anti-patterns
+
+### CI/CD
+- **Production Pipelines** - GitHub Actions workflows with Playwright containers
+- **Environment Configuration** - Container strategies, caching, version synchronization
+- **Deployment Integration** - Automated testing in production environments
+
+### E2E Testing
+- **Complete User Journeys** - End-to-end testing patterns completing the testing strategy
+- **Client-Server Integration** - Full-stack validation with real network requests
+
+### Troubleshooting
+- **Common Error Solutions** - Client-server mismatches, element queries, test hangs
+- **Performance Issues** - Memory optimization, slow tests, flaky test fixes
+- **Debugging Strategies** - Visual debugging, console logging, step-by-step analysis
 
 ## Available LLM Documentation Formats
-- Markdown - Human-readable format for direct consumption
-- Plain Text - Simple format for legacy systems
-- JSON - Structured format for programmatic use
-- HTML - Web-ready format for online viewing
 
-The documentation follows the Client-Server Alignment Strategy to ensure reliable full-stack testing through all stages of development.
+### Primary Documentation Formats
+- **[Getting Started](./getting-started.md)** - Complete setup and first test tutorial for new users
+- **[Testing Patterns](./testing-patterns.md)** - Comprehensive component and integration testing patterns
+- **[Best Practices](./best-practices.md)** - Foundation First approach and production-ready methodologies
+- **[API Reference](./api-reference.md)** - Complete technical reference for all testing APIs
+
+### Migration and Advanced Topics
+- **[Migration Guide](./migration-guide.md)** - Step-by-step migration from @testing-library/svelte
+- **[CI/CD](./ci-cd.md)** - Production pipeline configuration and deployment strategies
+- **[E2E Testing](./e2e-testing.md)** - End-to-end testing patterns for complete validation
+- **[Troubleshooting](./troubleshooting.md)** - Solutions for common issues and debugging techniques
+
+### Project Context
+- **[About](./about.md)** - Project background, philosophy, and community contribution guidelines
+
+Each format serves specific use cases: Getting Started for onboarding, Testing Patterns for daily development, Best Practices for team standards, API Reference for technical lookup, and specialized guides for migration, deployment, and troubleshooting.
