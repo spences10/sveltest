@@ -2,7 +2,7 @@ import {
 	ANTHROPIC_API_KEY,
 	LLM_GEN_SECRET,
 } from '$env/static/private';
-import { VARIANT_PROMPTS } from '$lib/server/llms';
+import { ANTHROPIC_CONFIG, VARIANT_PROMPTS } from '$lib/server/llms';
 import { Anthropic } from '@anthropic-ai/sdk';
 import { json } from '@sveltejs/kit';
 import { readFile } from 'node:fs/promises';
@@ -301,8 +301,8 @@ async function read_variant_file(variant: string): Promise<string> {
 
 async function run_evaluation(prompt: string): Promise<any> {
 	const message = await anthropic.messages.create({
-		model: 'claude-sonnet-4-20250514',
-		max_tokens: 4000,
+		model: ANTHROPIC_CONFIG.model,
+		max_tokens: ANTHROPIC_CONFIG.evaluation.max_tokens,
 		messages: [
 			{
 				role: 'user',

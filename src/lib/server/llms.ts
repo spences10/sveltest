@@ -3,6 +3,19 @@ import { topics } from '$lib/data/topics';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
+// Centralized Anthropic configuration
+export const ANTHROPIC_CONFIG = {
+	model: 'claude-sonnet-4-20250514',
+	generation: {
+		max_tokens: 32000,
+		stream: true,
+	},
+	evaluation: {
+		max_tokens: 32000,
+		stream: true,
+	},
+} as const;
+
 interface GenerateLlmContentOptions {
 	topics: Topic[];
 	variant?: string;

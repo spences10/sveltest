@@ -2,11 +2,15 @@ import {
 	ANTHROPIC_API_KEY,
 	LLM_GEN_SECRET,
 } from '$env/static/private';
-import { VARIANT_PROMPTS, topics } from '$lib/server/llms';
+import {
+	ANTHROPIC_CONFIG,
+	VARIANT_PROMPTS,
+	topics,
+} from '$lib/server/llms';
 import { Anthropic } from '@anthropic-ai/sdk';
 import { json } from '@sveltejs/kit';
-import { writeFile } from 'fs/promises';
-import { join } from 'path';
+import { writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import type { RequestHandler } from './$types';
 
 const anthropic = new Anthropic({
@@ -33,7 +37,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		// Load all markdown content
 		const markdown_content = await load_all_markdown();
 
-		// Generate content with Anthropic
+		// Generate content with Anthropic using centralized config
 		const prompt = `${VARIANT_PROMPTS[variant]}
 
 Documentation to process:
@@ -41,9 +45,9 @@ Documentation to process:
 ${markdown_content}`;
 
 		const stream = await anthropic.messages.create({
-			model: 'claude-sonnet-4-20250514',
-			max_tokens: 32000,
-			stream: true,
+			model: ANTHROPIC_CONFIG.model,
+			max_tokens: ANTHROPIC_CONFIG.generation.max_tokens,
+			stream: ANTHROPIC_CONFIG.generation.stream,
 			messages: [
 				{
 					role: 'user',
