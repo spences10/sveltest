@@ -47,12 +47,6 @@ const mock_data = {
 			description: 'Common issues and solutions',
 		},
 	],
-	docs_stats: {
-		sections: 6,
-		examples: 50,
-		coverage: 100,
-		accessibility: 'A11y',
-	},
 };
 
 describe('Documentation Page SSR', () => {
@@ -73,18 +67,6 @@ describe('Documentation Page SSR', () => {
 			expect(body).toContain(
 				'Master modern testing with Svelte 5 and vitest-browser-svelte',
 			);
-		});
-
-		test('should render documentation statistics', () => {
-			const { body } = render(DocsPage, {
-				props: { data: mock_data },
-			});
-
-			// Check stats content
-			expect(body).toContain('6'); // Sections
-			expect(body).toContain('50+'); // Examples
-			expect(body).toContain('100%'); // Coverage
-			expect(body).toContain('A11y'); // Accessibility
 		});
 
 		test('should render quick start section', () => {

@@ -37,12 +37,6 @@ const mock_data = {
 			description: 'Common issues and solutions',
 		},
 	],
-	docs_stats: {
-		sections: 6,
-		examples: 50,
-		coverage: 100,
-		accessibility: 'A11y',
-	},
 };
 
 /**
@@ -67,24 +61,6 @@ describe('Documentation Page', () => {
 						name: /Testing Documentation/,
 					}),
 				)
-				.toBeInTheDocument();
-		});
-
-		test('should display documentation statistics', async () => {
-			render(DocsPage, { data: mock_data });
-
-			// Use test IDs to avoid conflicts
-			await expect
-				.element(page.getByTestId('stat-sections'))
-				.toBeInTheDocument();
-			await expect
-				.element(page.getByTestId('stat-examples'))
-				.toBeInTheDocument();
-			await expect
-				.element(page.getByTestId('stat-coverage'))
-				.toBeInTheDocument();
-			await expect
-				.element(page.getByTestId('stat-a11y'))
 				.toBeInTheDocument();
 		});
 

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { GET, POST } from './+server';
+import { GET } from './+server';
 
 describe('/api/search', () => {
 	describe('GET - Full-text search functionality', () => {
@@ -109,35 +109,6 @@ describe('/api/search', () => {
 				expect(data.results[0]).toHaveProperty('excerpt');
 				expect(typeof data.results[0].excerpt).toBe('string');
 			}
-		});
-	});
-
-	describe('POST - Stats functionality', () => {
-		test('should return valid stats', async () => {
-			const response = await POST({} as any);
-			const stats = await response.json();
-
-			expect(stats).toHaveProperty('sections');
-			expect(stats).toHaveProperty('examples');
-			expect(stats).toHaveProperty('coverage');
-			expect(stats).toHaveProperty('accessibility');
-
-			expect(typeof stats.sections).toBe('number');
-			expect(typeof stats.examples).toBe('number');
-			expect(stats.sections).toBeGreaterThan(0);
-			expect(stats.examples).toBeGreaterThan(0);
-			expect(stats.coverage).toBe(100);
-			expect(stats.accessibility).toBe('A11y');
-		});
-
-		test('should have reasonable number of examples', async () => {
-			const response = await POST({} as any);
-			const stats = await response.json();
-
-			// Should have at least 20 examples across all categories
-			expect(stats.examples).toBeGreaterThanOrEqual(20);
-			// Should not be unreasonably high
-			expect(stats.examples).toBeLessThan(200);
 		});
 	});
 });
