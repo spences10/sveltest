@@ -15,7 +15,7 @@
 	import { github_status } from '$lib/state/github-status.svelte';
 	import * as Fathom from 'fathom-client';
 
-	const main_links = [
+	const nav_links = [
 		{ href: '/', title: 'Home', icon: Home, color: 'primary' },
 		{
 			href: '/docs',
@@ -23,9 +23,6 @@
 			icon: Document,
 			color: 'secondary',
 		},
-	];
-
-	const other_links = [
 		{
 			href: '/components',
 			title: 'Components',
@@ -38,9 +35,6 @@
 			icon: BarChart,
 			color: 'accent',
 		},
-	];
-
-	const testing_links = [
 		{
 			href: '/examples/unit',
 			title: 'Unit Tests',
@@ -53,9 +47,6 @@
 			icon: Document,
 			color: 'success',
 		},
-	];
-
-	const settings_links = [
 		{
 			href: '/todos',
 			title: 'Todo Manager',
@@ -69,6 +60,9 @@
 			external: true,
 		},
 	];
+
+	// Main nav items (shown in desktop navbar center)
+	const main_nav_items = nav_links.slice(0, 2); // Home, Docs
 
 	const is_active = (path: string) => {
 		// Handle SSR case where page might not be available
@@ -109,7 +103,7 @@
 		<div class="navbar-center hidden lg:flex">
 			<ul class="menu menu-horizontal gap-1 px-1" role="menubar">
 				<!-- Main Navigation Links -->
-				{#each main_links as link}
+				{#each main_nav_items as link}
 					<li role="none">
 						<a
 							href={link.href}
@@ -148,68 +142,7 @@
 					role="menu"
 					aria-label="Navigation menu"
 				>
-					<!-- Main Navigation -->
-					<li class="menu-title" role="none">
-						<span>Main</span>
-					</li>
-					{#each main_links as link}
-						<li role="none">
-							<a
-								href={link.href}
-								class="gap-2 {is_active(link.href)
-									? `bg-${link.color}/10 text-${link.color}`
-									: ''}"
-								role="menuitem"
-							>
-								<link.icon class_names="h-4 w-4" />
-								{link.title}
-							</a>
-						</li>
-					{/each}
-
-					<!-- Other Navigation Links -->
-					<li class="menu-title" role="none">
-						<span>Navigation</span>
-					</li>
-					{#each other_links as link}
-						<li role="none">
-							<a
-								href={link.href}
-								class="gap-2 {is_active(link.href)
-									? `bg-${link.color}/10 text-${link.color}`
-									: ''}"
-								role="menuitem"
-							>
-								<link.icon class_names="h-4 w-4" />
-								{link.title}
-							</a>
-						</li>
-					{/each}
-
-					<!-- Testing Section -->
-					<li class="menu-title" role="none">
-						<span>Testing</span>
-					</li>
-					{#each testing_links as link}
-						<li role="none">
-							<a
-								href={link.href}
-								class="gap-2 {is_active(link.href)
-									? `bg-${link.color}/10 text-${link.color}`
-									: ''}"
-								role="menuitem"
-							>
-								<link.icon class_names="h-4 w-4" />
-								{link.title}
-							</a>
-						</li>
-					{/each}
-
-					<!-- Settings Links -->
-					<li class="menu-title" role="none">
-						<span>Settings</span>
-					</li>
-					{#each settings_links as link}
+					{#each nav_links as link}
 						<li role="none">
 							<a
 								href={link.href}
@@ -346,7 +279,7 @@
 		class="dock bg-primary rounded-box mx-auto mb-4 max-w-[95vw] shadow-xl"
 		role="tablist"
 	>
-		{#each main_links as link}
+		{#each main_nav_items as link}
 			<a
 				href={link.href}
 				class="text-primary-content flex flex-col items-center gap-1 {is_active(

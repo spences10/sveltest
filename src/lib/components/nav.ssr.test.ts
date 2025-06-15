@@ -330,12 +330,13 @@ describe('Nav Component SSR', () => {
 			expect(body).toContain('navbar-end'); // Status and actions
 		});
 
-		test('should render testing dropdown structure', () => {
+		test('should render navigation dropdown structure', () => {
 			const { body } = render(Nav);
 
-			expect(body).toContain('Testing');
 			expect(body).toContain('dropdown');
 			expect(body).toContain('menu');
+			expect(body).toContain('Unit Tests');
+			expect(body).toContain('Form Actions');
 		});
 
 		test('should render proper menu structure', () => {
