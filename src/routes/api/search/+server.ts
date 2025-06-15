@@ -1,4 +1,3 @@
-import { topics } from '$lib/data/topics';
 import {
 	generate_search_index,
 	search_full_text,
@@ -51,22 +50,5 @@ export const GET: RequestHandler = async ({ url }) => {
 		filter,
 		results: api_results,
 		total: api_results.length,
-	});
-};
-
-// Stats endpoint for documentation page
-export const POST: RequestHandler = async () => {
-	if (!full_search_index) {
-		full_search_index = await generate_search_index();
-	}
-
-	const sections = topics.length;
-	const examples = full_search_index.items.filter(
-		(item) => item.type === 'example',
-	).length;
-
-	return json({
-		sections,
-		examples,
 	});
 };

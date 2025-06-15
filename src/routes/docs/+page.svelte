@@ -16,7 +16,7 @@
 		Settings,
 	} from '$lib/icons';
 	const { data } = $props();
-	const { topics, docs_stats } = data;
+	const { topics } = data;
 
 	// Icon mapping for topics
 	const icon_map = {
@@ -289,28 +289,6 @@ vi.mock('$lib/heavy-computation', () => ({
 				guide covers everything you need to build reliable,
 				well-tested applications.
 			</p>
-		</div>
-
-		<!-- Stats -->
-		<div class="mx-auto mb-10 flex max-w-2xl justify-center gap-8">
-			<div class="text-center">
-				<div
-					class="text-primary text-3xl font-bold"
-					data-testid="stat-sections"
-				>
-					{docs_stats.sections}
-				</div>
-				<div class="text-base-content/60 text-sm">Sections</div>
-			</div>
-			<div class="text-center">
-				<div
-					class="text-secondary text-3xl font-bold"
-					data-testid="stat-examples"
-				>
-					{docs_stats.examples}+
-				</div>
-				<div class="text-base-content/60 text-sm">Examples</div>
-			</div>
 		</div>
 
 		<!-- Search Section -->
