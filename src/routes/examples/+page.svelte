@@ -27,7 +27,7 @@
 <div class="min-h-screen px-4 py-8">
 	<div class="container mx-auto max-w-7xl">
 		<!-- Hero Section -->
-		<div class="mb-16 text-center">
+		<div class="my-16 text-center">
 			<div
 				class="bg-primary/10 mb-6 inline-flex items-center gap-2 rounded-full px-4 py-2"
 			>

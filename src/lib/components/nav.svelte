@@ -77,17 +77,12 @@
 			? page.url.pathname === '/'
 			: page.url.pathname.startsWith(path);
 	};
-
-	// Reactive status values using Svelte 5 runes
-	$: status_message = github_status.status_message;
-	$: status_color = github_status.status_color;
-	$: overall_status = github_status.overall_status;
 </script>
 
 <!-- Desktop Navigation -->
-<header>
+<header class="sticky top-0 z-10 w-full md:h-0">
 	<nav
-		class="navbar bg-base-100/90 border-base-300/50 sticky top-0 z-40 border-b shadow-lg backdrop-blur-md"
+		class="navbar bg-base-100/60 border-base-300/50 h-16 border-b shadow-lg backdrop-blur-md"
 		aria-label="Main navigation"
 	>
 		<!-- Navbar Start - Brand -->

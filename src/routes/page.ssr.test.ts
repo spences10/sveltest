@@ -19,10 +19,9 @@ describe('/+page.svelte SSR', () => {
 		expect(body).toContain('href="/todos"');
 		expect(body).toContain('Try Todo Manager');
 
-		// Test that feature stats are rendered
-		expect(body).toContain('Test Coverage');
-		expect(body).toContain('Performance');
-		expect(body).toContain('Developer Experience');
+		// Test that feature content is rendered
+		expect(body).toContain('Everything You Need');
+		expect(body).toContain('Comprehensive testing tools');
 
 		// Test badge content
 		expect(body).toContain('Battle-Tested in Production');
@@ -64,14 +63,14 @@ describe('/+page.svelte SSR', () => {
 		expect(body).toContain('min-h-screen');
 	});
 
-	test('should render stats section', () => {
+	test('should render feature sections', () => {
 		const { body } = render(Page);
 
-		// Test stats content
-		expect(body).toContain('98%');
-		expect(body).toContain('Fast');
-		expect(body).toContain('A+');
-		expect(body).toContain('stat');
+		// Test feature content that actually exists
+		expect(body).toContain('Testing Types');
+		expect(body).toContain('Best Practices');
+		expect(body).toContain('Real-world Examples');
+		expect(body).toContain('card');
 	});
 
 	test('should render without props (static page)', () => {

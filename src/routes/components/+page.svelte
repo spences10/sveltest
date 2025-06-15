@@ -165,30 +165,6 @@
 				built with Svelte 5 runes for optimal performance.
 			</p>
 		</div>
-
-		<!-- Stats -->
-		<div
-			class="mx-auto grid max-w-4xl grid-cols-2 gap-8 md:grid-cols-4"
-		>
-			<div class="text-center">
-				<div class="text-primary text-3xl font-bold">
-					{components.length}
-				</div>
-				<div class="text-base-content/60 text-sm">Components</div>
-			</div>
-			<div class="text-center">
-				<div class="text-secondary text-3xl font-bold">100%</div>
-				<div class="text-base-content/60 text-sm">Test Coverage</div>
-			</div>
-			<div class="text-center">
-				<div class="text-accent text-3xl font-bold">A11y</div>
-				<div class="text-base-content/60 text-sm">Accessible</div>
-			</div>
-			<div class="text-center">
-				<div class="text-info text-3xl font-bold">TS</div>
-				<div class="text-base-content/60 text-sm">TypeScript</div>
-			</div>
-		</div>
 	</div>
 </div>
 

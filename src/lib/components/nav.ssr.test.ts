@@ -290,7 +290,7 @@ describe('Nav Component SSR', () => {
 			const { body } = render(Nav);
 
 			expect(body).toContain('navbar');
-			expect(body).toContain('bg-base-100/90');
+			expect(body).toContain('bg-base-100/60');
 			expect(body).toContain('sticky');
 			expect(body).toContain('top-0');
 		});
