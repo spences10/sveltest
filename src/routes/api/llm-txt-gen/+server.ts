@@ -1,4 +1,7 @@
-import { ANTHROPIC_API_KEY, LLM_GEN_SECRET } from '$env/static/private';
+import {
+	ANTHROPIC_API_KEY,
+	LLM_GEN_SECRET,
+} from '$env/static/private';
 import { VARIANT_PROMPTS, topics } from '$lib/server/llms';
 import { Anthropic } from '@anthropic-ai/sdk';
 import { json } from '@sveltejs/kit';
@@ -37,9 +40,10 @@ Documentation to process:
 
 ${markdown_content}`;
 
-		const message = await anthropic.messages.create({
-			model: 'claude-3-5-sonnet-20241022',
-			max_tokens: 8000,
+		const stream = await anthropic.messages.create({
+			model: 'claude-sonnet-4-20250514',
+			max_tokens: 32000,
+			stream: true,
 			messages: [
 				{
 					role: 'user',
@@ -48,10 +52,15 @@ ${markdown_content}`;
 			],
 		});
 
-		const generated_content =
-			message.content[0].type === 'text'
-				? message.content[0].text
-				: '';
+		let generated_content = '';
+		for await (const chunk of stream) {
+			if (
+				chunk.type === 'content_block_delta' &&
+				chunk.delta.type === 'text_delta'
+			) {
+				generated_content += chunk.delta.text;
+			}
+		}
 
 		// Write to static directory for serving
 		const filename = `${variant}.txt`;

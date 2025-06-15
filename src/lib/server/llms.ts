@@ -15,13 +15,17 @@ const VARIANT_PROMPTS: Record<string, string> = {
 	llms: `
 		Create an index/navigation file for this testing documentation.
 		
-		Format as markdown with:
-		- H1 title
-		- Brief description in blockquote
-		- H2 sections with bullet lists of links and descriptions
-		- Include "Available LLM Documentation Formats" section listing all variants
+		CRITICAL: You must return ONLY the actual navigation documentation content as markdown. Do NOT include any meta-commentary or explanations.
 		
-		Keep it concise but comprehensive for navigation.
+		Format as markdown with:
+		- H1 title: "# Sveltest Testing Documentation"
+		- Brief description in blockquote explaining this is for vitest-browser-svelte testing
+		- H2 "Core Testing Documentation" section with bullet lists of main topics and descriptions
+		- H2 "Additional Resources" section with supplementary topics
+		- H2 "Available LLM Documentation Formats" section listing all variants with brief descriptions of each format's purpose
+		- Include cross-references and links where appropriate
+		
+		Keep it concise but comprehensive for navigation. Focus on being a useful index that helps users find what they need.
 	`,
 
 	'llms-full': `
@@ -39,11 +43,18 @@ const VARIANT_PROMPTS: Record<string, string> = {
 	'llms-medium': `
 		Create a compressed version for medium context windows by processing the provided documentation.
 		
-		IMPORTANT: Return the actual compressed documentation content, NOT a description of what you did.
+		CRITICAL: You must return ONLY the actual compressed documentation content as markdown. Do NOT include any meta-commentary, explanations of what you did, or descriptions of the process.
 		
 		Context: This works alongside llms-small.txt (essentials) and llms-api.txt (API only).
 		
-		Your role: Provide comprehensive but compressed content.
+		Your role: Provide comprehensive but compressed content that includes:
+		- Complete setup and installation instructions
+		- Core testing patterns with DO/DON'T examples
+		- Essential imports and basic test structure
+		- Form testing patterns and common pitfalls
+		- SSR testing basics
+		- Error handling and troubleshooting
+		- Cross-references to other documentation formats
 		
 		Processing requirements:
 		- Remove legacy sections and detailed notes
@@ -52,6 +63,8 @@ const VARIANT_PROMPTS: Record<string, string> = {
 		- Remove playground links and note blocks
 		- Normalize excessive whitespace
 		- Combine related sections where appropriate
+		- Include async/await patterns and loading states
+		- Add brief mocking examples
 		
 		Target: ~50% of full content while keeping essential information.
 		
@@ -61,17 +74,19 @@ const VARIANT_PROMPTS: Record<string, string> = {
 	'llms-small': `
 		Create ultra-compressed essentials for small context windows.
 		
-		IMPORTANT: Return the actual compressed documentation content, NOT a description of what you did.
+		CRITICAL: You must return ONLY the actual compressed documentation content as markdown. Do NOT include any meta-commentary, explanations of what you did, or descriptions of the process.
 		
 		Context: Other formats available are llms-medium.txt (detailed) and llms-api.txt (complete API).
 		
 		Your role: Absolute essentials only.
 		
 		Include ONLY:
-		- Core imports and basic setup
-		- Essential testing patterns (locators vs containers)
-		- Critical gotchas and common errors
-		- Basic code examples
+		- Core imports and basic setup (describe/test structure)
+		- Essential testing patterns (locators vs containers with clear examples)
+		- Critical gotchas and common errors with solutions
+		- Basic code examples for first component test
+		- Form testing warnings and patterns
+		- Basic assertions (expect.element syntax)
 		- Links to other formats
 		
 		Target: <10% of full content, maximum utility.
@@ -82,18 +97,22 @@ const VARIANT_PROMPTS: Record<string, string> = {
 	'llms-api': `
 		Extract only API reference content from the provided documentation.
 		
-		IMPORTANT: Return the actual API reference content, NOT a description of what you did.
+		CRITICAL: You must return ONLY the actual API reference content as markdown. Do NOT include any meta-commentary or explanations of what you did.
 		
 		Focus on:
-		- Essential imports and functions
-		- Locator methods and queries
-		- Assertion patterns
-		- User interaction methods
-		- Mocking patterns
-		- Code examples for each API
+		- Essential imports and functions with exact syntax
+		- Locator methods and queries (getByRole, getByText, etc.)
+		- Assertion patterns (expect.element syntax)
+		- User interaction methods (click, fill, etc.)
+		- Mocking patterns and setup
+		- SSR testing methods
+		- Code examples for each API method
+		- Common error handling patterns
+		- Setup and teardown patterns
 		
 		Format as API reference with clear sections and code blocks.
 		Remove conceptual explanations, keep technical reference.
+		Include parameter types and return values where relevant.
 		
 		Start with "# Sveltest API Reference" and provide the actual markdown content.
 	`,
@@ -101,17 +120,24 @@ const VARIANT_PROMPTS: Record<string, string> = {
 	'llms-examples': `
 		Extract and curate code examples only from the provided documentation.
 		
-		IMPORTANT: Return the actual code examples content, NOT a description of what you did.
+		CRITICAL: You must return ONLY the actual code examples content as markdown. Do NOT include any meta-commentary or explanations of what you did.
 		
-		Create sections:
-		- Basic component tests
-		- Form testing patterns
-		- State testing with runes
-		- SSR testing examples
-		- Mocking examples
+		Create sections with complete, runnable examples:
+		- Basic component tests (render, click, assertions)
+		- Form testing patterns (input filling, validation, submission)
+		- State testing with runes ($state, $derived, untrack)
+		- SSR testing examples (server-side rendering)
+		- Mocking examples (utilities, components, context)
+		- Error handling and troubleshooting examples
+		- Async testing patterns
 		
-		Each example should be complete and runnable.
-		Include brief context but focus on the code.
+		Each example should be complete and runnable with:
+		- Necessary imports
+		- Full test structure (describe/test blocks)
+		- Clear assertions
+		- Brief context explaining the scenario
+		
+		Focus on practical, copy-paste ready code examples.
 		
 		Start with "# Sveltest Code Examples" and provide the actual markdown content.
 	`,

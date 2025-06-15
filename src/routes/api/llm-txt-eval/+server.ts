@@ -1,4 +1,7 @@
-import { ANTHROPIC_API_KEY, LLM_GEN_SECRET } from '$env/static/private';
+import {
+	ANTHROPIC_API_KEY,
+	LLM_GEN_SECRET,
+} from '$env/static/private';
 import { VARIANT_PROMPTS } from '$lib/server/llms';
 import { Anthropic } from '@anthropic-ai/sdk';
 import { json } from '@sveltejs/kit';
@@ -97,19 +100,19 @@ export const POST: RequestHandler = async ({ request }) => {
 
 		switch (type) {
 			case 'completeness':
-				results = await evaluateCompleteness(variants);
+				results = await evaluate_completeness(variants);
 				break;
 			case 'consistency':
-				results = await evaluateConsistency(variants);
+				results = await evaluate_consistency(variants);
 				break;
 			case 'usability':
-				results = await evaluateUsability(variants);
+				results = await evaluate_usability(variants);
 				break;
 			case 'compression':
-				results = await evaluateCompression(variants);
+				results = await evaluate_compression(variants);
 				break;
 			case 'full_suite':
-				results = await runFullEvalSuite(variants);
+				results = await run_full_eval_suite(variants);
 				break;
 			default:
 				return json(
@@ -132,25 +135,25 @@ export const POST: RequestHandler = async ({ request }) => {
 	}
 };
 
-async function evaluateCompleteness(variants: string[]) {
-	const results = {};
+async function evaluate_completeness(variants: string[]) {
+	const results: Record<string, any> = {};
 
 	for (const variant of variants) {
 		try {
-			const content = await readVariantFile(variant);
-			const originalPrompt =
+			const content = await read_variant_file(variant);
+			const original_prompt =
 				VARIANT_PROMPTS[variant] || 'No prompt found';
 
 			const prompt = EVAL_PROMPTS.completeness
 				.replace('{variant}', variant)
-				.replace('{originalPrompt}', originalPrompt)
+				.replace('{originalPrompt}', original_prompt)
 				.replace('{content}', content);
 
-			const evaluation = await runEvaluation(prompt);
+			const evaluation = await run_evaluation(prompt);
 			results[variant] = evaluation;
 		} catch (error) {
 			results[variant] = {
-				error: `Failed to evaluate ${variant}: ${error.message}`,
+				error: `Failed to evaluate ${variant}: ${error instanceof Error ? error.message : 'Unknown error'}`,
 			};
 		}
 	}
@@ -158,31 +161,31 @@ async function evaluateCompleteness(variants: string[]) {
 	return results;
 }
 
-async function evaluateConsistency(variants: string[]) {
-	const results = {};
+async function evaluate_consistency(variants: string[]) {
+	const results: Record<string, any> = {};
 
 	// Compare each pair of variants
 	for (let i = 0; i < variants.length; i++) {
 		for (let j = i + 1; j < variants.length; j++) {
-			const variantA = variants[i];
-			const variantB = variants[j];
-			const pairKey = `${variantA}_vs_${variantB}`;
+			const variant_a = variants[i];
+			const variant_b = variants[j];
+			const pair_key = `${variant_a}_vs_${variant_b}`;
 
 			try {
-				const contentA = await readVariantFile(variantA);
-				const contentB = await readVariantFile(variantB);
+				const content_a = await read_variant_file(variant_a);
+				const content_b = await read_variant_file(variant_b);
 
 				const prompt = EVAL_PROMPTS.consistency
-					.replace('{variantA}', variantA)
-					.replace('{variantB}', variantB)
-					.replace('{contentA}', contentA)
-					.replace('{contentB}', contentB);
+					.replace('{variantA}', variant_a)
+					.replace('{variantB}', variant_b)
+					.replace('{contentA}', content_a)
+					.replace('{contentB}', content_b);
 
-				const evaluation = await runEvaluation(prompt);
-				results[pairKey] = evaluation;
+				const evaluation = await run_evaluation(prompt);
+				results[pair_key] = evaluation;
 			} catch (error) {
-				results[pairKey] = {
-					error: `Failed to compare: ${error.message}`,
+				results[pair_key] = {
+					error: `Failed to compare: ${error instanceof Error ? error.message : 'Unknown error'}`,
 				};
 			}
 		}
@@ -191,22 +194,22 @@ async function evaluateConsistency(variants: string[]) {
 	return results;
 }
 
-async function evaluateUsability(variants: string[]) {
-	const results = {};
+async function evaluate_usability(variants: string[]) {
+	const results: Record<string, any> = {};
 
 	for (const variant of variants) {
 		try {
-			const content = await readVariantFile(variant);
+			const content = await read_variant_file(variant);
 
 			const prompt = EVAL_PROMPTS.usability
 				.replace('{variant}', variant)
 				.replace('{content}', content);
 
-			const evaluation = await runEvaluation(prompt);
+			const evaluation = await run_evaluation(prompt);
 			results[variant] = evaluation;
 		} catch (error) {
 			results[variant] = {
-				error: `Failed to evaluate ${variant}: ${error.message}`,
+				error: `Failed to evaluate ${variant}: ${error instanceof Error ? error.message : 'Unknown error'}`,
 			};
 		}
 	}
@@ -214,13 +217,13 @@ async function evaluateUsability(variants: string[]) {
 	return results;
 }
 
-async function evaluateCompression(variants: string[]) {
-	const results = {};
+async function evaluate_compression(variants: string[]) {
+	const results: Record<string, any> = {};
 
 	// Get full content for comparison
-	let fullContent = '';
+	let full_content = '';
 	try {
-		fullContent = await readVariantFile('llms-full');
+		full_content = await read_variant_file('llms-full');
 	} catch {
 		return {
 			error:
@@ -228,31 +231,37 @@ async function evaluateCompression(variants: string[]) {
 		};
 	}
 
-	const fullLength = fullContent.length;
+	const full_length = full_content.length;
 
 	for (const variant of variants) {
 		if (variant === 'llms-full') continue; // Skip the full version
 
 		try {
-			const content = await readVariantFile(variant);
-			const compressedLength = content.length;
-			const ratio = Math.round((compressedLength / fullLength) * 100);
+			const content = await read_variant_file(variant);
+			const compressed_length = content.length;
+			const ratio = Math.round(
+				(compressed_length / full_length) * 100,
+			);
 
 			const prompt = EVAL_PROMPTS.compression_quality
-				.replace('{fullLength}', fullLength.toString())
-				.replace('{compressedLength}', compressedLength.toString())
+				.replace('{fullLength}', full_length.toString())
+				.replace('{compressedLength}', compressed_length.toString())
 				.replace('{ratio}', ratio.toString())
 				.replace('{variant}', variant)
 				.replace('{content}', content);
 
-			const evaluation = await runEvaluation(prompt);
+			const evaluation = await run_evaluation(prompt);
 			results[variant] = {
 				...evaluation,
-				stats: { fullLength, compressedLength, ratio },
+				stats: {
+					fullLength: full_length,
+					compressedLength: compressed_length,
+					ratio,
+				},
 			};
 		} catch (error) {
 			results[variant] = {
-				error: `Failed to evaluate ${variant}: ${error.message}`,
+				error: `Failed to evaluate ${variant}: ${error instanceof Error ? error.message : 'Unknown error'}`,
 			};
 		}
 	}
@@ -260,8 +269,8 @@ async function evaluateCompression(variants: string[]) {
 	return results;
 }
 
-async function runFullEvalSuite(variants?: string[]) {
-	const defaultVariants = [
+async function run_full_eval_suite(variants?: string[]) {
+	const default_variants = [
 		'llms',
 		'llms-full',
 		'llms-medium',
@@ -269,15 +278,15 @@ async function runFullEvalSuite(variants?: string[]) {
 		'llms-api',
 		'llms-examples',
 	];
-	const targetVariants = variants || defaultVariants;
+	const target_variants = variants || default_variants;
 
 	const results = {
-		completeness: await evaluateCompleteness(targetVariants),
-		consistency: await evaluateConsistency(targetVariants),
-		usability: await evaluateUsability(targetVariants),
-		compression: await evaluateCompression(targetVariants),
+		completeness: await evaluate_completeness(target_variants),
+		consistency: await evaluate_consistency(target_variants),
+		usability: await evaluate_usability(target_variants),
+		compression: await evaluate_compression(target_variants),
 		summary: {
-			evaluated_variants: targetVariants,
+			evaluated_variants: target_variants,
 			timestamp: new Date().toISOString(),
 		},
 	};
@@ -285,15 +294,15 @@ async function runFullEvalSuite(variants?: string[]) {
 	return results;
 }
 
-async function readVariantFile(variant: string): Promise<string> {
-	const filePath = join(process.cwd(), 'static', `${variant}.txt`);
-	return await readFile(filePath, 'utf-8');
+async function read_variant_file(variant: string): Promise<string> {
+	const file_path = join(process.cwd(), 'static', `${variant}.txt`);
+	return await readFile(file_path, 'utf-8');
 }
 
-async function runEvaluation(prompt: string): Promise<any> {
+async function run_evaluation(prompt: string): Promise<any> {
 	const message = await anthropic.messages.create({
-		model: 'claude-3-5-sonnet-20241022',
-		max_tokens: 2000,
+		model: 'claude-sonnet-4-20250514',
+		max_tokens: 4000,
 		messages: [
 			{
 				role: 'user',
@@ -308,8 +317,8 @@ async function runEvaluation(prompt: string): Promise<any> {
 			: 'No evaluation returned';
 
 	// Try to parse score if it follows the expected format
-	const scoreMatch = evaluation.match(/Score:\s*(\d+(?:\.\d+)?)/i);
-	const score = scoreMatch ? parseFloat(scoreMatch[1]) : null;
+	const score_match = evaluation.match(/Score:\s*(\d+(?:\.\d+)?)/i);
+	const score = score_match ? parseFloat(score_match[1]) : null;
 
 	return {
 		evaluation,
