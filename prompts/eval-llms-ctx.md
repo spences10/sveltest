@@ -5,19 +5,66 @@ VARIANT: XML Structured Format
 
 EVALUATION CRITERIA:
 
-1. Proper XML structure with <documentation> root
-2. <core_concepts> section with principles
-3. <code_examples> section with working patterns
-4. <common_errors> section with solutions
-5. <references> section with links
-6. Well-formed XML for AI consumption
+1. XML STRUCTURE: Must follow exact required format
+2. REQUIRED SECTIONS: All four mandatory sections present
+3. XML VALIDATION: Well-formed and properly structured
+4. CODE EXAMPLES: Complete with CDATA sections
+5. AI OPTIMIZATION: Flat structures for easy parsing
+
+QUANTITATIVE CHECKS:
+
+- ✅/❌ XML declaration present with version and encoding
+- ✅/❌ Root <documentation> element present
+- ✅/❌ <core_concepts> section with content
+- ✅/❌ <code_examples> section with CDATA
+- ✅/❌ <common_errors> section with solutions
+- ✅/❌ <references> section with links
+- ✅/❌ Code examples have id attributes and titles
+- ✅/❌ Proper XML indentation and formatting
+
+SCORING SYSTEM (deduct points as specified):
+
+- DEDUCT 3 points: Missing XML declaration or root element
+- DEDUCT 2 points: Each missing required section
+- DEDUCT 2 points: Code examples not in CDATA sections
+- DEDUCT 1 point: Missing id/title attributes on examples
+- DEDUCT 1 point: Poor XML formatting or validation errors
+- DEDUCT 1 point: Deeply nested hierarchies instead of flat structure
+
+REQUIRED XML STRUCTURE:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<documentation>
+  <core_concepts>...</core_concepts>
+  <code_examples>...</code_examples>
+  <common_errors>...</common_errors>
+  <references>...</references>
+</documentation>
+```
+
+MANDATORY SECTIONS:
+
+- core_concepts: Fundamental testing principles
+- code_examples: Complete patterns with CDATA wrapping
+- common_errors: Error scenarios with solutions
+- references: External links and resources
+
+XML QUALITY REQUIREMENTS:
+
+- Proper escaping of special characters
+- Consistent indentation (2 spaces)
+- Semantic tag names for AI consumption
+- No deeply nested hierarchies
+- Well-formed XML that validates
 
 Please evaluate the following content and provide:
 
-1. SCORE: Rate 1-10 for overall quality and requirement adherence
-2. STRENGTHS: What the content does well
-3. ISSUES: What needs improvement
-4. MISSING: Required elements that are missing
-5. RECOMMENDATIONS: Specific suggestions for improvement
+1. XML VALIDATION RESULTS: Structure compliance checklist
+2. CALCULATED SCORE: Base 10, minus deductions (minimum 1)
+3. STRENGTHS: What the XML structure does well
+4. ISSUES: Specific XML problems with examples
+5. MISSING: Required sections or attributes that are missing
+6. RECOMMENDATIONS: Specific XML improvements needed
 
-Be specific and constructive in your feedback.
+Be specific and provide exact XML validation feedback.
