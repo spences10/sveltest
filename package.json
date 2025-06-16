@@ -27,7 +27,9 @@
 		"test:ssr": "vitest --project=ssr",
 		"test": "npm run test:unit -- --run && npm run test:e2e",
 		"test:e2e": "playwright test",
-		"coverage": "vitest --run --coverage"
+		"coverage": "vitest --run --coverage",
+		"generate:llm-docs": "tsx scripts/generate-llm-docs.ts",
+		"evaluate:llm-docs": "tsx scripts/evaluate-llm-docs.ts"
 	},
 	"devDependencies": {
 		"@anthropic-ai/sdk": "^0.54.0",
@@ -63,12 +65,13 @@
 		"svelte": "^5.34.3",
 		"svelte-check": "^4.2.1",
 		"tailwindcss": "^4.1.10",
+		"tsx": "^4.20.3",
 		"typescript": "^5.8.3",
-		"typescript-eslint": "^8.34.0",
+		"typescript-eslint": "^8.34.1",
 		"vite": "^6.3.5",
 		"vitest": "^3.2.3",
 		"vitest-browser-svelte": "^0.1.0",
-		"zod": "^3.25.64"
+		"zod": "^3.25.65"
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [

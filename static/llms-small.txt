@@ -10,150 +10,159 @@ import { createRawSnippet } from 'svelte';
 import { flushSync, untrack } from 'svelte';
 ```
 
-## Critical Rule: Always Use Locators
+## Vitest Browser Config
 
 ```typescript
-// ❌ NEVER - No auto-retry, manual queries
-const { container } = render(MyComponent);
-const button = container.querySelector('[data-testid="submit"]');
+export default defineConfig({
+  test: {
+    projects: [{
+      name: 'client',
+      environment: 'browser',
+      browser: { enabled: true, provider: 'playwright' },
+      include: ['src/**/*.svelte.{test,spec}.{js,ts}'],
+    }],
+  },
+});
+```
 
-// ✅ ALWAYS - Auto-retry, semantic queries
+## CRITICAL: Always Use Locators
+
+```typescript
+// ❌ NEVER use containers - no auto-retry
+const { container } = render(MyComponent);
+const button = container.querySelector('button');
+
+// ✅ ALWAYS use locators - auto-retry built-in
 render(MyComponent);
-const button = page.getByTestId('submit');
+const button = page.getByRole('button');
 await button.click();
 ```
+
+## Locator Hierarchy
+
+1. **Semantic**: `page.getByRole('button', { name: 'Submit' })`
+2. **Labels**: `page.getByLabel('Email address')`
+3. **Text**: `page.getByText('Welcome back')`
+4. **Test IDs**: `page.getByTestId('submit-button')`
 
 ## Handle Multiple Elements (Strict Mode)
 
 ```typescript
-// ❌ FAILS: "strict mode violation" 
+// ❌ FAILS: "strict mode violation"
 page.getByRole('link', { name: 'Home' });
 
 // ✅ CORRECT: Use .first(), .nth(), .last()
 page.getByRole('link', { name: 'Home' }).first();
 page.getByRole('listitem').nth(1); // Zero-indexed
-page.getByRole('button').last();
 ```
 
-## Essential Locator Patterns
+## Essential Patterns
 
+### Button Component
 ```typescript
-// ✅ Semantic queries (preferred)
-page.getByRole('button', { name: 'Submit' });
-page.getByRole('textbox', { name: 'Email' }); // NOT 'input'
-page.getByLabelText('Password');
-page.getByText('Welcome');
-
-// ✅ Test IDs (fallback)
-page.getByTestId('complex-widget');
-```
-
-## Basic Component Test
-
-```typescript
-describe('Button Component', () => {
-  it('should render and handle clicks', async () => {
-    const click_handler = vi.fn();
-    const children = createRawSnippet(() => ({
-      render: () => `<span>Click me</span>`
-    }));
-
-    render(Button, { onclick: click_handler, children });
-
-    const button = page.getByRole('button', { name: 'Click me' });
-    await expect.element(button).toBeInTheDocument();
-    
-    await button.click();
-    expect(click_handler).toHaveBeenCalledOnce();
-  });
+it('should handle click events', async () => {
+  const click_handler = vi.fn();
+  render(Button, { onclick: click_handler, children: 'Click me' });
+  
+  await page.getByRole('button', { name: 'Click me' }).click();
+  expect(click_handler).toHaveBeenCalledOnce();
 });
 ```
 
-## Form Testing Patterns
-
+### Form Input
 ```typescript
-it('should handle form validation lifecycle', async () => {
-  render(LoginForm);
-
-  const email = page.getByLabelText('Email');
-  const submit = page.getByRole('button', { name: 'Submit' });
-
-  // Initially valid (no validation run)
-  await expect.element(submit).toBeEnabled();
-
-  // Trigger validation with invalid data
-  await email.fill('invalid-email');
-  await email.blur();
-
-  // Error should appear
-  await expect.element(page.getByText('Invalid format')).toBeInTheDocument();
+it('should handle user input', async () => {
+  render(Input, { type: 'email', label: 'Email' });
+  
+  const input = page.getByLabelText('Email');
+  await input.fill('user@example.com');
+  
+  await expect.element(input).toHaveValue('user@example.com');
 });
 ```
 
 ## Svelte 5 Runes Testing
 
 ```typescript
-it('should test $derived values with untrack', () => {
-  let count = $state(0);
-  let doubled = $derived(count * 2);
+// ✅ $state - direct testing
+let count = $state(0);
+expect(count).toBe(0);
 
-  // ✅ CRITICAL: Always use untrack() for $derived
-  expect(untrack(() => doubled)).toBe(0);
+// ✅ $derived - ALWAYS use untrack()
+let doubled = $derived(count * 2);
+expect(untrack(() => doubled)).toBe(0);
 
-  count = 5;
-  flushSync();
-  expect(untrack(() => doubled)).toBe(10);
-});
+count = 5;
+flushSync(); // Force update
+expect(untrack(() => doubled)).toBe(10);
 ```
 
 ## Assertions (Always Await)
 
 ```typescript
-// ✅ Always await element assertions
+// ✅ Element assertions
 await expect.element(page.getByText('Success')).toBeInTheDocument();
 await expect.element(page.getByRole('button')).toBeDisabled();
-await expect.element(page.getByRole('textbox')).toHaveValue('test@example.com');
+await expect.element(page.getByRole('textbox')).toHaveValue('test');
+
+// ✅ Regular assertions
+expect(click_handler).toHaveBeenCalledOnce();
+expect(untrack(() => derived_value)).toBe(expected);
 ```
 
-## Common Gotchas & Fixes
+## Form Validation Lifecycle
+
+```typescript
+// ✅ CORRECT: Forms start valid → validate → invalid → fix → valid
+expect(untrack(() => form_state.is_form_valid())).toBe(true); // Initially
+form_state.validate_all_fields();
+expect(untrack(() => form_state.is_form_valid())).toBe(false); // Invalid
+form_state.update_field('email', 'valid@example.com');
+expect(untrack(() => form_state.is_form_valid())).toBe(true); // Fixed
+```
+
+## Common Gotchas & Solutions
+
+### "strict mode violation"
+```typescript
+// ❌ Multiple elements match
+page.getByRole('link', { name: 'Home' });
+// ✅ Use .first()
+page.getByRole('link', { name: 'Home' }).first();
+```
 
 ### Role Confusion
 ```typescript
-// ❌ WRONG: Input role doesn't exist
+// ❌ Input role doesn't exist
 page.getByRole('input', { name: 'Email' });
-
-// ✅ CORRECT: Use textbox for input elements
+// ✅ Use textbox for inputs
 page.getByRole('textbox', { name: 'Email' });
 ```
 
-### Form Submit Hangs
+### SvelteKit Form Hangs
 ```typescript
 // ❌ Can hang with SvelteKit enhance
 await submit_button.click();
-
-// ✅ Test form state directly
-render(MyForm, { errors: { email: 'Required' } });
-await expect.element(page.getByText('Required')).toBeInTheDocument();
+// ✅ Test state directly or use force
+await submit_button.click({ force: true });
 ```
 
 ### Animation Issues
 ```typescript
-// ✅ Use force: true for elements that may be animating
-await button.click({ force: true });
+// ✅ Use force for animated elements
+await page.getByRole('button').click({ force: true });
 ```
 
-## Quick Reference
+## Anti-Patterns to Avoid
 
-- Use `page.getBy*()` locators - never containers
-- Always `await expect.element()` for assertions  
-- Use `.first()`, `.nth()`, `.last()` for multiple elements
-- Use `untrack()` for `$derived` values
-- Use `force: true` for animations
-- Test form validation lifecycle: valid → validate → invalid → fix → valid
+- ❌ Never use `const { container } = render()`
+- ❌ Don't test SVG path data: `M9 12l2 2 4-4...`
+- ❌ Don't ignore strict mode violations
+- ❌ Don't click SvelteKit form submits without force
+- ❌ Don't access `$derived` without `untrack()`
 
-## Links to More Details
+## Quick Reference Links
 
-- [Complete Documentation](https://github.com/spences10/sveltest) - Full patterns and examples
-- [Migration Guide](docs/migration-guide.md) - From @testing-library/svelte
-- [Best Practices](docs/best-practices.md) - Foundation First approach
-- [API Reference](docs/api-reference.md) - Complete testing utilities
+- **Detailed Guide**: [llms-medium.txt](llms-medium.txt)
+- **Complete API**: [llms-api.txt](llms-api.txt)
+- **GitHub**: [spences10/sveltest](https://github.com/spences10/sveltest)

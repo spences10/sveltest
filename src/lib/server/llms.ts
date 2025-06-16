@@ -1,9 +1,15 @@
-import { dev } from '$app/environment';
-import type { Topic } from '$lib/data/topics';
 import { topics } from '$lib/data/topics';
 
-// Only use Node.js modules in development
-const has_node_modules = dev;
+// Import all markdown files using Vite's ?raw imports
+import getting_started from '../copy/getting-started.md?raw';
+import testing_patterns from '../copy/testing-patterns.md?raw';
+import e2e_testing from '../copy/e2e-testing.md?raw';
+import api_reference from '../copy/api-reference.md?raw';
+import migration_guide from '../copy/migration-guide.md?raw';
+import best_practices from '../copy/best-practices.md?raw';
+import ci_cd from '../copy/ci-cd.md?raw';
+import troubleshooting from '../copy/troubleshooting.md?raw';
+import about from '../copy/about.md?raw';
 
 // Centralized Anthropic configuration
 export const ANTHROPIC_CONFIG = {
@@ -18,12 +24,40 @@ export const ANTHROPIC_CONFIG = {
 	},
 } as const;
 
-interface GenerateLlmContentOptions {
-	topics: Topic[];
-	variant?: string;
-}
-
 export { topics };
+
+// Content map using the imported markdown
+const content_map: Record<string, string> = {
+	'getting-started': getting_started,
+	'testing-patterns': testing_patterns,
+	'e2e-testing': e2e_testing,
+	'api-reference': api_reference,
+	'migration-guide': migration_guide,
+	'best-practices': best_practices,
+	'ci-cd': ci_cd,
+	troubleshooting: troubleshooting,
+	about: about,
+};
+
+// Function to load full content from preloaded markdown (no async needed!)
+export function load_full_content(): string {
+	let content = '# Sveltest Testing Documentation\n\n';
+	content +=
+		'> Comprehensive vitest-browser-svelte testing patterns for modern Svelte 5 applications. Real-world examples demonstrating client-server alignment, component testing in actual browsers, SSR validation, and migration from @testing-library/svelte.\n\n';
+
+	for (const topic of topics) {
+		const md_content = content_map[topic.slug];
+		if (md_content) {
+			content += `\n# ${topic.title}\n\n`;
+			content += md_content;
+			content += '\n';
+		} else {
+			console.warn(`No content found for topic: ${topic.slug}`);
+		}
+	}
+
+	return content;
+}
 
 // Prompts for each variant
 export const VARIANT_PROMPTS: Record<string, string> = {
@@ -170,95 +204,3 @@ export const VARIANT_PROMPTS: Record<string, string> = {
 		Keep content structured for AI consumption.
 	`,
 };
-
-export async function generate_llm_content(
-	options: GenerateLlmContentOptions,
-): Promise<string> {
-	const variant = options.variant || 'llms';
-
-	// In production, all content should be pre-generated in static/
-	// Return a message indicating the static files should be used
-	if (!has_node_modules) {
-		return `# ${variant.toUpperCase()} - Static File Available
-
-> This content is available as a pre-generated static file at \`/static/${variant}.txt\`
-
-The LLM generation APIs are disabled in production. All documentation variants 
-have been pre-generated and are served as static files.
-
-Available formats:
-- /static/llms.txt - Navigation index
-- /static/llms-full.txt - Complete documentation  
-- /static/llms-medium.txt - Compressed version
-- /static/llms-small.txt - Essential content only
-- /static/llms-api.txt - API reference
-- /static/llms-examples.txt - Code examples
-- /static/llms-ctx.txt - XML structured format
-`;
-	}
-
-	// In development, try to read static file first, then fall back to dynamic generation
-	if (has_node_modules) {
-		try {
-			// Dynamic import to avoid Node.js modules in production bundle
-			const { readFile } = await import('node:fs/promises');
-			const { join } = await import('node:path');
-
-			const static_path = join(
-				process.cwd(),
-				'static',
-				`${variant}.txt`,
-			);
-			const static_content = await readFile(static_path, 'utf-8');
-			return static_content;
-		} catch {
-			// File doesn't exist, continue with dynamic generation
-		}
-	}
-
-	if (variant === 'llms-full') {
-		// For full version, combine all markdown files
-		return await generate_full_content_from_markdown(options.topics);
-	}
-
-	// For other variants, return a placeholder that indicates generation is needed
-	return `# ${variant.toUpperCase()} - Generation Required
-
-> This content needs to be generated using the AI generation endpoint.
-
-To generate this content:
-\`\`\`bash
-curl -X POST /api/llm-txt-gen \\
-  -H "Content-Type: application/json" \\
-  -d '{"variant": "${variant}", "auth": "YOUR_SECRET"}'
-\`\`\`
-
-Or use the admin interface to generate all variants.
-`;
-}
-
-async function generate_full_content_from_markdown(
-	topics: Topic[],
-): Promise<string> {
-	let content = '# Sveltest Testing Documentation\n\n';
-	content +=
-		'> Comprehensive vitest-browser-svelte testing patterns for modern Svelte 5 applications. Real-world examples demonstrating client-server alignment, component testing in actual browsers, SSR validation, and migration from @testing-library/svelte.\n\n';
-
-	for (const topic of topics) {
-		try {
-			const markdown_module = await import(
-				`../../copy/${topic.slug}.md?raw`
-			);
-			content += `\n# ${topic.title}\n\n`;
-			content += markdown_module.default;
-			content += '\n';
-		} catch (error) {
-			console.warn(
-				`Could not load content for ${topic.slug}:`,
-				error,
-			);
-		}
-	}
-
-	return content;
-}
