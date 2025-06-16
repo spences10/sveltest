@@ -21,6 +21,12 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
+    env:
+      API_SECRET: ${{ secrets.API_SECRET }}
+      PUBLIC_FATHOM_ID: ${{ secrets.PUBLIC_FATHOM_ID }}
+      PUBLIC_FATHOM_URL: ${{ secrets.PUBLIC_FATHOM_URL }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      LLM_GEN_SECRET: ${{ secrets.LLM_GEN_SECRET }}
 
     steps:
       - name: Checkout repository
@@ -79,14 +85,6 @@ jobs:
 
       - name: Build application
         run: pnpm build
-        env:
-          API_SECRET: ${{ secrets.API_SECRET }}
-          PUBLIC_FATHOM_ID: ${{ secrets.PUBLIC_FATHOM_ID }}
-          PUBLIC_FATHOM_URL: ${{ secrets.PUBLIC_FATHOM_URL }}
 
       - name: Run E2E tests
         run: pnpm test:e2e
-        env:
-          API_SECRET: ${{ secrets.API_SECRET }}
-          PUBLIC_FATHOM_ID: ${{ secrets.PUBLIC_FATHOM_ID }}
-          PUBLIC_FATHOM_URL: ${{ secrets.PUBLIC_FATHOM_URL }}
