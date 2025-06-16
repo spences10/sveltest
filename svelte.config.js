@@ -5,6 +5,10 @@ import autolinkHeadings from 'rehype-autolink-headings';
 import rehypeExternalLinks from 'rehype-external-links';
 import slugPlugin from 'rehype-slug';
 
+// Determine if we're building for Cloudflare
+const is_cloudflare_pages =
+	process.env.CF_PAGES === '1' || process.env.CLOUDFLARE === '1';
+
 const config = {
 	preprocess: [
 		vitePreprocess(),
@@ -26,7 +30,15 @@ const config = {
 			],
 		}),
 	],
-	kit: { adapter: adapter() },
+	kit: {
+		adapter: adapter(),
+		// Exclude LLM API routes when building for Cloudflare
+		...(is_cloudflare_pages && {
+			routes: {
+				exclude: ['/api/llm-txt-gen/**', '/api/llm-txt-eval/**'],
+			},
+		}),
+	},
 	extensions: ['.svelte', '.md'],
 };
 

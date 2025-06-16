@@ -1,3 +1,4 @@
+import { dev } from '$app/environment';
 import {
 	ANTHROPIC_API_KEY,
 	LLM_GEN_SECRET,
@@ -5,13 +6,25 @@ import {
 import { ANTHROPIC_CONFIG, VARIANT_PROMPTS } from '$lib/server/llms';
 import { Anthropic } from '@anthropic-ai/sdk';
 import { json } from '@sveltejs/kit';
-import { readFile } from 'node:fs/promises';
-import { join } from 'node:path';
 import type { RequestHandler } from './$types';
 
-const anthropic = new Anthropic({
-	apiKey: ANTHROPIC_API_KEY,
-});
+// Only allow this route in development or when explicitly enabled
+const is_llm_api_enabled =
+	dev || process.env.ENABLE_LLM_API === 'true';
+
+// Use dynamic imports only when needed (avoids Node.js modules in production)
+const read_file = is_llm_api_enabled
+	? (await import('node:fs/promises')).readFile
+	: null;
+const join = is_llm_api_enabled
+	? (await import('node:path')).join
+	: null;
+
+const anthropic = ANTHROPIC_API_KEY
+	? new Anthropic({
+			apiKey: ANTHROPIC_API_KEY,
+		})
+	: null;
 
 const EVAL_PROMPTS = {
 	completeness: `
@@ -88,6 +101,25 @@ const EVAL_PROMPTS = {
 };
 
 export const POST: RequestHandler = async ({ request }) => {
+	// Block in production unless explicitly enabled
+	if (!is_llm_api_enabled) {
+		return json(
+			{
+				error: 'LLM evaluation API is disabled in production',
+				message: 'This API is only available in development mode',
+			},
+			{ status: 404 },
+		);
+	}
+
+	// Ensure we have the required dependencies
+	if (!read_file || !join || !anthropic) {
+		return json(
+			{ error: 'LLM API dependencies not available' },
+			{ status: 500 },
+		);
+	}
+
 	try {
 		const { type, variants, auth } = await request.json();
 
@@ -295,12 +327,12 @@ async function run_full_eval_suite(variants?: string[]) {
 }
 
 async function read_variant_file(variant: string): Promise<string> {
-	const file_path = join(process.cwd(), 'static', `${variant}.txt`);
-	return await readFile(file_path, 'utf-8');
+	const file_path = join!(process.cwd(), 'static', `${variant}.txt`);
+	return await read_file!(file_path, 'utf-8');
 }
 
 async function run_evaluation(prompt: string): Promise<any> {
-	const message = await anthropic.messages.create({
+	const message = await anthropic!.messages.create({
 		model: ANTHROPIC_CONFIG.model,
 		max_tokens: ANTHROPIC_CONFIG.evaluation.max_tokens,
 		messages: [

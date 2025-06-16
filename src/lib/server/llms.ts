@@ -1,7 +1,9 @@
+import { dev } from '$app/environment';
 import type { Topic } from '$lib/data/topics';
 import { topics } from '$lib/data/topics';
-import { readFile } from 'node:fs/promises';
-import { join } from 'node:path';
+
+// Only use Node.js modules in development
+const has_node_modules = dev;
 
 // Centralized Anthropic configuration
 export const ANTHROPIC_CONFIG = {
@@ -24,7 +26,7 @@ interface GenerateLlmContentOptions {
 export { topics };
 
 // Prompts for each variant
-const VARIANT_PROMPTS: Record<string, string> = {
+export const VARIANT_PROMPTS: Record<string, string> = {
 	llms: `
 		Create an index/navigation file for this testing documentation.
 		
@@ -174,17 +176,44 @@ export async function generate_llm_content(
 ): Promise<string> {
 	const variant = options.variant || 'llms';
 
-	// Check for pre-generated static file first
-	try {
-		const static_path = join(
-			process.cwd(),
-			'static',
-			`${variant}.txt`,
-		);
-		const static_content = await readFile(static_path, 'utf-8');
-		return static_content;
-	} catch {
-		// File doesn't exist, continue with dynamic generation
+	// In production, all content should be pre-generated in static/
+	// Return a message indicating the static files should be used
+	if (!has_node_modules) {
+		return `# ${variant.toUpperCase()} - Static File Available
+
+> This content is available as a pre-generated static file at \`/static/${variant}.txt\`
+
+The LLM generation APIs are disabled in production. All documentation variants 
+have been pre-generated and are served as static files.
+
+Available formats:
+- /static/llms.txt - Navigation index
+- /static/llms-full.txt - Complete documentation  
+- /static/llms-medium.txt - Compressed version
+- /static/llms-small.txt - Essential content only
+- /static/llms-api.txt - API reference
+- /static/llms-examples.txt - Code examples
+- /static/llms-ctx.txt - XML structured format
+`;
+	}
+
+	// In development, try to read static file first, then fall back to dynamic generation
+	if (has_node_modules) {
+		try {
+			// Dynamic import to avoid Node.js modules in production bundle
+			const { readFile } = await import('node:fs/promises');
+			const { join } = await import('node:path');
+
+			const static_path = join(
+				process.cwd(),
+				'static',
+				`${variant}.txt`,
+			);
+			const static_content = await readFile(static_path, 'utf-8');
+			return static_content;
+		} catch {
+			// File doesn't exist, continue with dynamic generation
+		}
 	}
 
 	if (variant === 'llms-full') {
@@ -198,18 +227,13 @@ export async function generate_llm_content(
 > This content needs to be generated using the AI generation endpoint.
 
 To generate this content:
+\`\`\`bash
+curl -X POST /api/llm-txt-gen \\
+  -H "Content-Type: application/json" \\
+  -d '{"variant": "${variant}", "auth": "YOUR_SECRET"}'
+\`\`\`
 
-1. Set LLM_GEN_SECRET environment variable
-2. POST to /api/llm-txt-gen with:
-   \`\`\`json
-   {
-     "variant": "${variant}",
-     "auth": "your-secret-here"
-   }
-   \`\`\`
-
-Variant: ${variant}
-Available prompts: ${Object.keys(VARIANT_PROMPTS).join(', ')}
+Or use the admin interface to generate all variants.
 `;
 }
 
@@ -238,6 +262,3 @@ async function generate_full_content_from_markdown(
 
 	return content;
 }
-
-// Export prompts for the generation endpoint
-export { VARIANT_PROMPTS };

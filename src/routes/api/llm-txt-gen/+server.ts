@@ -1,3 +1,4 @@
+import { dev } from '$app/environment';
 import {
 	ANTHROPIC_API_KEY,
 	LLM_GEN_SECRET,
@@ -9,15 +10,47 @@ import {
 } from '$lib/server/llms';
 import { Anthropic } from '@anthropic-ai/sdk';
 import { json } from '@sveltejs/kit';
-import { writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
 import type { RequestHandler } from './$types';
 
-const anthropic = new Anthropic({
-	apiKey: ANTHROPIC_API_KEY,
-});
+// Only allow this route in development or when explicitly enabled
+const is_llm_api_enabled =
+	dev || process.env.ENABLE_LLM_API === 'true';
+
+// Use dynamic imports only when needed (avoids Node.js modules in production)
+const write_file = is_llm_api_enabled
+	? (await import('node:fs/promises')).writeFile
+	: null;
+const join = is_llm_api_enabled
+	? (await import('node:path')).join
+	: null;
+
+const anthropic = ANTHROPIC_API_KEY
+	? new Anthropic({
+			apiKey: ANTHROPIC_API_KEY,
+		})
+	: null;
 
 export const POST: RequestHandler = async ({ request }) => {
+	// Block in production unless explicitly enabled
+	if (!is_llm_api_enabled) {
+		return json(
+			{
+				error: 'LLM generation API is disabled in production',
+				message:
+					'The generated files are served statically from /static/',
+			},
+			{ status: 404 },
+		);
+	}
+
+	// Ensure we have the required dependencies
+	if (!write_file || !join || !anthropic) {
+		return json(
+			{ error: 'LLM API dependencies not available' },
+			{ status: 500 },
+		);
+	}
+
 	try {
 		const { variant, auth } = await request.json();
 
@@ -51,7 +84,7 @@ export const POST: RequestHandler = async ({ request }) => {
 			// Write to static directory for serving
 			const filename = `${variant}.txt`;
 			const filepath = join(process.cwd(), 'static', filename);
-			await writeFile(filepath, generated_content, 'utf-8');
+			await write_file(filepath, generated_content, 'utf-8');
 
 			return json({
 				success: true,
@@ -104,7 +137,7 @@ ${markdown_content}`;
 		// Write to static directory for serving
 		const filename = `${variant}.txt`;
 		const filepath = join(process.cwd(), 'static', filename);
-		await writeFile(filepath, generated_content, 'utf-8');
+		await write_file(filepath, generated_content, 'utf-8');
 
 		return json({
 			success: true,
