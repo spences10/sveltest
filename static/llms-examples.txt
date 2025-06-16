@@ -70,91 +70,7 @@ describe('MyButton', () => {
 });
 ```
 
-### Modal Component Testing
-
-```typescript
-describe('Modal Component', () => {
-	it('should handle focus management', async () => {
-		render(Modal, { open: true, children: 'Modal content' });
-
-		const modal = page.getByRole('dialog');
-		await expect.element(modal).toBeInTheDocument();
-
-		// Test focus trap
-		await page.keyboard.press('Tab');
-		const close_button = page.getByRole('button', { name: 'Close' });
-		await expect.element(close_button).toBeFocused();
-	});
-
-	it('should close on escape key', async () => {
-		const close_handler = vi.fn();
-		render(Modal, { open: true, onclose: close_handler });
-
-		await page.keyboard.press('Escape');
-		expect(close_handler).toHaveBeenCalledOnce();
-	});
-
-	it('should prevent background scroll when open', async () => {
-		render(Modal, { open: true });
-
-		const body = page.locator('body');
-		await expect.element(body).toHaveClass('modal-open');
-	});
-});
-```
-
-### Dropdown Component Testing
-
-```typescript
-describe('Dropdown Component', () => {
-	it('should open and close on click', async () => {
-		const options = [
-			{ value: 'option1', label: 'Option 1' },
-			{ value: 'option2', label: 'Option 2' },
-		];
-		render(Dropdown, { options, label: 'Choose option' });
-
-		const trigger = page.getByRole('button', {
-			name: 'Choose option',
-		});
-		await trigger.click();
-
-		// Dropdown should be open
-		const option1 = page.getByRole('option', { name: 'Option 1' });
-		await expect.element(option1).toBeInTheDocument();
-
-		// Select an option
-		await option1.click();
-
-		// Dropdown should close and show selected value
-		await expect.element(trigger).toHaveTextContent('Option 1');
-	});
-
-	it('should support keyboard navigation', async () => {
-		const options = [
-			{ value: 'option1', label: 'Option 1' },
-			{ value: 'option2', label: 'Option 2' },
-		];
-		render(Dropdown, { options, label: 'Choose option' });
-
-		const trigger = page.getByRole('button', {
-			name: 'Choose option',
-		});
-		await trigger.focus();
-		await page.keyboard.press('Enter');
-
-		// Navigate with arrow keys
-		await page.keyboard.press('ArrowDown');
-		await page.keyboard.press('Enter');
-
-		await expect.element(trigger).toHaveTextContent('Option 1');
-	});
-});
-```
-
-## Form Testing Patterns
-
-### Basic Form Input Testing
+### Input Component Testing
 
 ```typescript
 describe('Input Component', () => {
@@ -193,7 +109,42 @@ describe('Input Component', () => {
 });
 ```
 
-### Form Submission Testing
+### Modal Component Testing
+
+```typescript
+describe('Modal Component', () => {
+	it('should handle focus management', async () => {
+		render(Modal, { open: true, children: 'Modal content' });
+
+		const modal = page.getByRole('dialog');
+		await expect.element(modal).toBeInTheDocument();
+
+		// Test focus trap
+		await page.keyboard.press('Tab');
+		const close_button = page.getByRole('button', { name: 'Close' });
+		await expect.element(close_button).toBeFocused();
+	});
+
+	it('should close on escape key', async () => {
+		const close_handler = vi.fn();
+		render(Modal, { open: true, onclose: close_handler });
+
+		await page.keyboard.press('Escape');
+		expect(close_handler).toHaveBeenCalledOnce();
+	});
+
+	it('should prevent background scroll when open', async () => {
+		render(Modal, { open: true });
+
+		const body = page.locator('body');
+		await expect.element(body).toHaveClass('modal-open');
+	});
+});
+```
+
+## Form Testing Patterns
+
+### Contact Form Testing
 
 ```typescript
 describe('Contact Form Integration', () => {
@@ -253,31 +204,35 @@ describe('Contact Form Integration', () => {
 });
 ```
 
-### Form Validation Lifecycle Testing
+### Login Form Validation
 
 ```typescript
-describe('Form Validation Component', () => {
-	it('should follow validation lifecycle', () => {
-		const form_state = create_form_state({
-			email: {
-				value: '',
-				validation_rules: { required: true },
-			},
-		});
+describe('Form Validation Lifecycle', () => {
+	it('should follow validation lifecycle', async () => {
+		render(LoginForm);
 
-		// ✅ CORRECT: Forms typically start valid (not validated yet)
-		const is_form_valid = form_state.is_form_valid;
-		expect(untrack(() => is_form_valid())).toBe(true);
+		const email_input = page.getByLabelText('Email');
+		const submit_button = page.getByRole('button', { name: 'Submit' });
 
-		// Trigger validation - now should be invalid
-		form_state.validate_all_fields();
-		flushSync();
-		expect(untrack(() => is_form_valid())).toBe(false);
+		// Initially valid (no validation triggered)
+		await expect.element(submit_button).toBeEnabled();
 
-		// Fix the field - should become valid again
-		form_state.update_field('email', 'valid@example.com');
-		flushSync();
-		expect(untrack(() => is_form_valid())).toBe(true);
+		// Trigger validation with invalid data
+		await email_input.fill('invalid-email');
+		await submit_button.click({ force: true });
+
+		// Now invalid with error message
+		const error_message = page.getByText(
+			'Please enter a valid email address',
+		);
+		await expect.element(error_message).toBeVisible();
+
+		// Fix the error
+		await email_input.fill('valid@example.com');
+		await submit_button.click();
+
+		// Back to valid state
+		await expect.element(error_message).not.toBeVisible();
 	});
 
 	it('should handle field-level validation', async () => {
@@ -313,7 +268,7 @@ describe('Form Validation Component', () => {
 
 ## State Testing with Runes
 
-### Basic State Testing
+### $state and $derived Testing
 
 ```typescript
 import { flushSync, untrack } from 'svelte';
@@ -362,7 +317,7 @@ describe('Reactive State Component', () => {
 });
 ```
 
-### Complex Derived State Testing
+### Complex Form State Testing
 
 ```typescript
 describe('Form State Derived Values', () => {
@@ -393,10 +348,10 @@ describe('Form State Derived Values', () => {
 });
 ```
 
-### Creating Derived State in Tests
+### Untrack Usage Validation
 
 ```typescript
-// From untrack-validation.test.svelte.ts - PROVEN WORKING PATTERN
+// From .test.svelte.ts file - PROVEN WORKING PATTERN
 describe('Untrack Usage Validation', () => {
 	it('should access $derived values using untrack', () => {
 		// ✅ Create reactive state directly in test (.test.svelte.ts file)
@@ -454,7 +409,7 @@ describe('Untrack Usage Validation', () => {
 
 ## SSR Testing Examples
 
-### Basic SSR Pattern
+### Basic SSR Testing
 
 ```typescript
 import { render } from 'svelte/server';
@@ -521,30 +476,6 @@ describe('Layout SSR', () => {
 
 ## Mocking Examples
 
-### Component Mocking
-
-```typescript
-// Mock child components to isolate testing
-vi.mock('./child-component.svelte', () => ({
-	default: vi.fn().mockImplementation(() => ({
-		$$: {},
-		$set: vi.fn(),
-		$destroy: vi.fn(),
-		$on: vi.fn(),
-	})),
-}));
-
-describe('Parent Component', () => {
-	it('should render with mocked child', async () => {
-		render(ParentComponent);
-
-		// Test parent functionality without child complexity
-		const parent_element = page.getByTestId('parent');
-		await expect.element(parent_element).toBeInTheDocument();
-	});
-});
-```
-
 ### Utility Function Mocking
 
 ```typescript
@@ -574,7 +505,7 @@ describe('User Profile Component', () => {
 
 	it('should verify mocks are working correctly', async () => {
 		const { fetch_user_data } = await import(
-			'$lib/utils/api'
+			'$lib/utils/data-fetcher'
 		);
 
 		expect(fetch_user_data).toBeDefined();
@@ -582,10 +513,34 @@ describe('User Profile Component', () => {
 
 		const result = await fetch_user_data('123');
 		expect(result).toEqual({
-			id: 1,
-			name: 'John Doe',
-			email: 'john@example.com',
+			id: '1',
+			name: 'Test User',
+			email: 'test@example.com',
 		});
+	});
+});
+```
+
+### Component Mocking
+
+```typescript
+// Mock child components to isolate testing
+vi.mock('./child-component.svelte', () => ({
+	default: vi.fn().mockImplementation(() => ({
+		$$: {},
+		$set: vi.fn(),
+		$destroy: vi.fn(),
+		$on: vi.fn(),
+	})),
+}));
+
+describe('Parent Component', () => {
+	it('should render with mocked child', async () => {
+		render(ParentComponent);
+
+		// Test parent functionality without child complexity
+		const parent_element = page.getByTestId('parent');
+		await expect.element(parent_element).toBeInTheDocument();
 	});
 });
 ```
@@ -616,7 +571,7 @@ describe('User Dashboard', () => {
 });
 ```
 
-## Error Handling and Troubleshooting Examples
+## Error Handling and Troubleshooting
 
 ### Async Error Handling
 
@@ -681,7 +636,7 @@ describe('Form Error Handling', () => {
 });
 ```
 
-### Component Error Boundaries
+### Component Error Testing
 
 ```typescript
 describe('Error Handling', () => {
@@ -708,15 +663,7 @@ describe('Error Handling', () => {
 
 		console_error.mockRestore();
 	});
-});
-```
 
-## Async Testing Patterns
-
-### Network Request Testing
-
-```typescript
-describe('Data Loading Component', () => {
 	it('should handle network failures', async () => {
 		// Mock fetch to simulate network error
 		vi.spyOn(global, 'fetch').mockRejectedValueOnce(
@@ -732,27 +679,10 @@ describe('Data Loading Component', () => {
 			.element(page.getByRole('button', { name: 'Retry' }))
 			.toBeInTheDocument();
 	});
-
-	it('should show loading states', async () => {
-		// Mock slow API response
-		vi.spyOn(global, 'fetch').mockResolvedValueOnce(
-			new Promise(resolve => setTimeout(() => resolve(new Response('{"data": "test"}')), 100))
-		);
-
-		render(DataComponent);
-
-		// Initially shows loading
-		await expect
-			.element(page.getByText('Loading...'))
-			.toBeInTheDocument();
-
-		// Eventually shows data
-		await expect
-			.element(page.getByText('test'))
-			.toBeInTheDocument();
-	});
 });
 ```
+
+## Async Testing Patterns
 
 ### Debounced Input Testing
 
@@ -782,42 +712,88 @@ describe('Search Input Performance', () => {
 });
 ```
 
-### Todo List Complete Integration
+### API Integration Testing
 
 ```typescript
-describe('Todo List Integration', () => {
-	it('should handle complete todo lifecycle', async () => {
-		render(TodoManager);
+describe('API Route', () => {
+	it('should handle GET requests', async () => {
+		// ✅ Real Request object - catches URL/header issues
+		const request = new Request('http://localhost/api/todos');
+		const response = await GET({ request });
 
-		// Add todo
-		const input = page.getByLabelText('New todo');
-		await input.fill('Buy groceries');
+		expect(response.status).toBe(200);
 
-		const add_button = page.getByRole('button', { name: 'Add Todo' });
-		await add_button.click();
+		const data = await response.json();
+		expect(data).toHaveProperty('todos');
+		expect(Array.isArray(data.todos)).toBe(true);
+	});
 
-		// Verify todo appears
-		const todo_item = page.getByText('Buy groceries');
-		await expect.element(todo_item).toBeInTheDocument();
-
-		// Complete todo
-		const checkbox = page.getByRole('checkbox', {
-			name: 'Mark Buy groceries as complete',
+	it('should handle POST requests with validation', async () => {
+		// ✅ Real Request with JSON body - tests actual parsing
+		const request = new Request('http://localhost/api/todos', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ title: 'New todo', completed: false }),
 		});
-		await checkbox.check();
 
-		// Verify completion styling
-		await expect.element(checkbox).toBeChecked();
-		await expect.element(todo_item).toHaveClass('todo-completed');
+		const response = await POST({ request });
+		expect(response.status).toBe(201);
 
-		// Delete todo
-		const delete_button = page.getByRole('button', {
-			name: 'Delete Buy groceries',
+		const data = await response.json();
+		expect(data.todo.title).toBe('New todo');
+	});
+
+	it('should handle FormData submissions', async () => {
+		// ✅ Real FormData - catches field name mismatches
+		const form_data = new FormData();
+		form_data.append('email', 'user@example.com');
+		form_data.append('password', 'secure123');
+
+		const request = new Request('http://localhost/api/register', {
+			method: 'POST',
+			body: form_data,
 		});
-		await delete_button.click();
 
-		// Verify removal
-		await expect.element(todo_item).not.toBeInTheDocument();
+		// Only mock external services, not data structures
+		vi.mocked(database.users.create).mockResolvedValue({
+			id: '123',
+			email: 'user@example.com',
+		});
+
+		const response = await POST({ request });
+		expect(response.status).toBe(201);
+
+		const data = await response.json();
+		expect(data.user.email).toBe('user@example.com');
+	});
+});
+```
+
+### Large List Performance
+
+```typescript
+describe('Large List Performance', () => {
+	it('should handle large datasets', async () => {
+		const large_dataset = Array.from({ length: 1000 }, (_, i) => ({
+			id: i,
+			name: `Item ${i}`,
+		}));
+
+		render(VirtualizedList, { items: large_dataset });
+
+		// Should render without hanging
+		await expect
+			.element(page.getByText('Item 0'))
+			.toBeInTheDocument();
+
+		// Should support scrolling
+		const list_container = page.getByTestId('list-container');
+		await list_container.scroll({ top: 5000 });
+
+		// Should render items further down
+		await expect
+			.element(page.getByText('Item 50'))
+			.toBeInTheDocument();
 	});
 });
 ```

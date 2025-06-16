@@ -2,7 +2,7 @@
 
 ## Essential Imports
 
-### Basic Testing Setup
+### Core Testing Setup
 
 ```typescript
 import { describe, expect, it, vi } from 'vitest';
@@ -10,7 +10,7 @@ import { render } from 'vitest-browser-svelte';
 import { page } from '@vitest/browser/context';
 ```
 
-### Svelte 5 Runes & Advanced Testing
+### Svelte 5 Runes & SSR
 
 ```typescript
 import { createRawSnippet } from 'svelte';
@@ -151,7 +151,10 @@ await expect.element(page.getByRole('listitem')).toHaveCount(3);
 // Range counts
 await expect
 	.element(page.getByRole('button'))
-	.toHaveCount({ min: 1, max: 5 });
+	.toHaveCount({ min: 1 });
+await expect
+	.element(page.getByRole('button'))
+	.toHaveCount({ max: 5 });
 ```
 
 ## User Interactions
@@ -253,7 +256,7 @@ render(Button, {
 
 // Svelte 5 snippets (limited support)
 const children = createRawSnippet(() => ({
-	render: () => `<span>Custom content</span>`,
+	render: () => `<span>Custom content</span>`, // Must return HTML
 }));
 render(Modal, { children });
 
@@ -358,21 +361,15 @@ expect(body).toContain('aria-label="Navigation"');
 expect(head).toContain('<title>Page Title</title>');
 expect(head).toContain('<meta name="description"');
 
-// Test semantic structure
+// ❌ AVOID: Testing exact SVG paths or implementation details
+// expect(body).toContain('M9 12l2 2 4-4m6 2a9'); // Brittle!
+
+// ✅ BETTER: Test semantic structure
 expect(body).toContain('<svg');
 expect(body).toContain('text-success');
 ```
 
-## Mocking Patterns
-
-### Component Mocking Decision Tree
-
-```
-Is component EXTERNAL? → Mock it
-Is component STATELESS/PRESENTATIONAL? → Mock it
-Does component have COMPLEX LOGIC? → Mock for unit, render for integration
-DEFAULT → Render the component
-```
+## Mocking (Minimal - Real Browser Testing)
 
 ### Function & Module Mocking
 
@@ -395,7 +392,7 @@ vi.mock('$lib/api', () => ({
 const validate_spy = vi.spyOn(utils, 'validate_email');
 ```
 
-### Component Mocking
+### Component Mocking Decision Tree
 
 ```typescript
 // Mock EXTERNAL components (third-party libraries)
@@ -451,7 +448,7 @@ await page.waitForResponse('**/api/user-data');
 await page.waitForTimeout(1000);
 ```
 
-## Error Handling Patterns
+## Error Handling & Edge Cases
 
 ### Form Validation Testing
 
@@ -495,7 +492,7 @@ await expect
 	.toBeInTheDocument();
 ```
 
-## Custom Test Helpers
+## Custom Utilities
 
 ### Test Helpers
 
@@ -523,78 +520,22 @@ const wait_for_loading_complete = async () => {
 };
 ```
 
-## Configuration Reference
-
-### Vitest Browser Config
-
-```typescript
-// vite.config.ts
-export default defineConfig({
-	test: {
-		projects: [
-			{
-				test: {
-					name: 'client',
-					environment: 'browser',
-					testTimeout: 2000,
-					browser: {
-						enabled: true,
-						provider: 'playwright',
-						instances: [{ browser: 'chromium' }],
-					},
-					include: ['src/**/*.svelte.{test,spec}.{js,ts}'],
-					setupFiles: ['./vitest-setup-client.ts'],
-				},
-			},
-			{
-				test: {
-					name: 'ssr',
-					environment: 'node',
-					include: ['src/**/*.ssr.{test,spec}.{js,ts}'],
-				},
-			},
-		],
-	},
-});
-```
-
-### Test Environment Setup
-
-```typescript
-// Environment variables
-process.env.NODE_ENV = 'test';
-process.env.API_URL = 'http://localhost:3000';
-
-// Custom timeouts
-test(
-	'slow integration test',
-	async () => {
-		// Test implementation
-	},
-	{ timeout: 30000 },
-);
-
-// Test-specific configuration
-test.concurrent('parallel test', async () => {
-	// Runs in parallel with other concurrent tests
-});
-```
-
-## Essential Patterns Checklist
-
-- ✅ Use `page.getBy*()` locators - never containers
-- ✅ Always `await expect.element()` for assertions
-- ✅ Use `.first()`, `.nth()`, `.last()` for multiple elements
-- ✅ Use `untrack()` for `$derived` values
-- ✅ Use `force: true` for animations
-- ✅ Use snake_case for variables/functions
-- ✅ Test form validation lifecycle
-- ✅ Handle strict mode violations properly
-
 ## Common Fixes
 
-- **"strict mode violation"**: Use `.first()`, `.nth()`, `.last()`
-- **Role confusion**: Links with `role="button"` are buttons
-- **Input elements**: Use `getByRole('textbox')`, not `getByRole('input')`
-- **Derived values**: Always use `untrack(() => derived_value)`
-- **Form validation**: Test initial valid → validate → invalid → fix → valid
+### "strict mode violation"
+Use `.first()`, `.nth()`, `.last()` for multiple elements
+
+### Role confusion
+Links with `role="button"` are buttons, use `getByRole('button')`
+
+### Input elements
+Use `getByRole('textbox')`, not `getByRole('input')`
+
+### Derived values
+Always use `untrack(() => derived_value)`
+
+### Form validation
+Test initial valid → validate → invalid → fix → valid lifecycle
+
+### Animation issues
+Use `force: true` for click events on animated elements

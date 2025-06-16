@@ -4,38 +4,27 @@
 
 ## Core Testing Documentation
 
-- **[Getting Started](./getting-started.md)** - Essential setup guide for vitest-browser-svelte with Svelte 5. Learn the Foundation First approach, Client-Server Alignment Strategy, and write your first browser-based component tests.
-
-- **[Testing Patterns](./testing-patterns.md)** - Specific, actionable testing patterns for common Svelte scenarios. Covers locator usage, component testing, Svelte 5 runes, form validation, and integration testing with real examples.
-
-- **[Best Practices](./best-practices.md)** - Strategic testing approaches including the Foundation First methodology and Client-Server Alignment Strategy. Learn to avoid brittle tests, test user value over implementation details, and handle Svelte 5 runes properly.
-
-- **[API Reference](./api-reference.md)** - Complete reference for vitest-browser-svelte APIs. Covers locators, assertions, component rendering, Svelte 5 runes testing, SSR patterns, and critical anti-patterns to avoid.
-
-- **[Migration Guide](./migration-guide.md)** - Comprehensive step-by-step guide for migrating from @testing-library/svelte to vitest-browser-svelte. Includes phase-by-phase approach, pattern transformations, and common pitfall solutions.
+- **[Getting Started](./getting-started.md)** - Essential setup, configuration, and your first test with vitest-browser-svelte
+- **[Testing Patterns](./testing-patterns.md)** - Complete reference for component, SSR, and server testing patterns
+- **[Best Practices](./best-practices.md)** - Foundation First approach and Client-Server Alignment Strategy
+- **[Migration Guide](./migration-guide.md)** - Step-by-step migration from @testing-library/svelte
+- **[API Reference](./api-reference.md)** - Complete reference for all testing utilities and patterns
+- **[Troubleshooting](./troubleshooting.md)** - Common errors, solutions, and debugging strategies
 
 ## Additional Resources
 
-- **[E2E Testing](./e2e-testing.md)** - End-to-end testing patterns that complete the Client-Server Alignment Strategy by validating full user journeys from browser to server and back.
-
-- **[CI/CD](./ci-cd.md)** - Production-ready testing pipelines with Playwright containers, automatic version synchronization, optimized caching, and workflow separation for reliable automation.
-
-- **[Troubleshooting](./troubleshooting.md)** - Solutions for common issues including client-server mismatches, element not found errors, test hangs, browser environment problems, and performance issues.
-
-- **[About](./about.md)** - Learn about Sveltest's evolution from weekend project to production-tested patterns, its community-driven development approach, and how to contribute to the growing ecosystem.
+- **[E2E Testing](./e2e-testing.md)** - End-to-end testing patterns for complete user workflows
+- **[CI/CD](./ci-cd.md)** - Production-ready testing pipelines with Playwright containers
+- **[About](./about.md)** - Project background, community contributions, and development story
 
 ## Available LLM Documentation Formats
 
-The Sveltest documentation is optimized for AI assistants and available in multiple specialized formats:
-
-- **Comprehensive Rules** - Complete testing methodology with examples for AI assistants
-- **Quick Reference Cards** - Condensed pattern summaries for rapid AI consultation  
-- **Pattern Libraries** - Focused collections of specific testing scenarios
-- **Migration Helpers** - Step-by-step transformation guides for automated assistance
-- **Best Practice Enforcement** - Rules for maintaining code quality and consistency
-
-These formats ensure AI assistants can provide accurate, context-aware guidance for modern Svelte testing workflows, helping teams maintain consistent patterns and avoid common pitfalls.
+- **sveltest-testing-lld.mdc** - Complete low-level documentation with all patterns, examples, and troubleshooting
+- **sveltest-testing-rules.mdc** - AI assistant rules for Cursor, Windsurf, and other LLM-powered editors
+- **sveltest-testing-patterns.mdc** - Focused pattern library for quick reference and implementation
+- **sveltest-testing-migration.mdc** - Dedicated migration guide from @testing-library/svelte
+- **sveltest-testing-troubleshooting.mdc** - Comprehensive error resolution and debugging guide
 
 ---
 
-*Cross-reference: All documentation supports the [Client-Server Alignment Strategy](./best-practices.md#client-server-alignment-strategy) and [Foundation First approach](./best-practices.md#foundation-first-approach) for reliable, maintainable testing.*
+*For the latest examples and to contribute, visit the [GitHub repository](https://github.com/spences10/sveltest)*

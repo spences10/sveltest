@@ -4,15 +4,49 @@ import Anthropic from '@anthropic-ai/sdk';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import {
-	ANTHROPIC_CONFIG,
-	topics,
-	VARIANT_PROMPTS,
-} from '../src/lib/server/llms.js';
+import { ANTHROPIC_CONFIG } from '../src/config/anthropic';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = join(__dirname, '..');
 const STATIC_DIR = join(ROOT_DIR, 'static');
+const PROMPTS_DIR = join(ROOT_DIR, 'prompts');
+
+// Topics list (avoiding Vite imports)
+const topics = [
+	{ title: 'Getting Started', slug: 'getting-started' },
+	{ title: 'Testing Patterns', slug: 'testing-patterns' },
+	{ title: 'Best Practices', slug: 'best-practices' },
+	{ title: 'API Reference', slug: 'api-reference' },
+	{ title: 'Migration Guide', slug: 'migration-guide' },
+	{ title: 'E2E Testing', slug: 'e2e-testing' },
+	{ title: 'CI/CD', slug: 'ci-cd' },
+	{ title: 'Troubleshooting', slug: 'troubleshooting' },
+	{ title: 'About', slug: 'about' },
+];
+
+// Load prompts from markdown files
+async function load_prompts(): Promise<Record<string, string>> {
+	const variants = [
+		'llms',
+		'llms-medium',
+		'llms-small',
+		'llms-api',
+		'llms-examples',
+		'llms-ctx',
+	];
+	const prompts: Record<string, string> = {};
+
+	for (const variant of variants) {
+		try {
+			const prompt_path = join(PROMPTS_DIR, `${variant}.md`);
+			prompts[variant] = await readFile(prompt_path, 'utf-8');
+		} catch (error) {
+			console.warn(`Could not load prompt for ${variant}:`, error);
+		}
+	}
+
+	return prompts;
+}
 
 // Initialize Anthropic client
 const anthropic = new Anthropic({
@@ -105,18 +139,21 @@ async function call_anthropic_streaming(
 async function generate_variant(
 	variant: string,
 	source_content: string,
+	prompts: Record<string, string>,
 ): Promise<string> {
 	if (variant === 'llms-full') {
-		// Full version is just the complete source content
+		// Full version is just the complete source content - NO API CALL
 		console.log(
 			`📄 Using full source content for ${variant} (${source_content.length} chars)`,
 		);
 		return source_content;
 	}
 
-	const prompt = VARIANT_PROMPTS[variant];
+	const prompt = prompts[variant];
 	if (!prompt) {
-		throw new Error(`Unknown variant: ${variant}`);
+		throw new Error(
+			`Unknown variant: ${variant} - available: ${Object.keys(prompts).join(', ')}`,
+		);
 	}
 
 	return await call_anthropic_streaming(
@@ -131,14 +168,18 @@ async function main() {
 		console.log('🔧 Setting up directories...');
 		await mkdir(STATIC_DIR, { recursive: true });
 
+		console.log('📝 Loading prompts...');
+		const prompts = await load_prompts();
+		console.log(`✅ Loaded ${Object.keys(prompts).length} prompts`);
+
 		console.log('📚 Loading markdown content...');
 		const source_content = await load_markdown_content(topics);
 		console.log(
 			`✅ Loaded ${source_content.length} characters from ${topics.length} topics`,
 		);
 
-		// Generate all variants
-		const variants = Object.keys(VARIANT_PROMPTS);
+		// Generate all variants (including llms-full which needs no API call)
+		const variants = [...Object.keys(prompts), 'llms-full'];
 		console.log(
 			`\n🎯 Generating ${variants.length} variants: ${variants.join(', ')}\n`,
 		);
@@ -154,6 +195,7 @@ async function main() {
 				const generated_content = await generate_variant(
 					variant,
 					source_content,
+					prompts,
 				);
 				const duration = ((Date.now() - start_time) / 1000).toFixed(
 					1,

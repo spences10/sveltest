@@ -10,22 +10,38 @@ import { createRawSnippet } from 'svelte';
 import { flushSync, untrack } from 'svelte';
 ```
 
-## Vitest Browser Config
+### Vitest Browser Config
 
 ```typescript
+// vite.config.ts
 export default defineConfig({
   test: {
-    projects: [{
-      name: 'client',
-      environment: 'browser',
-      browser: { enabled: true, provider: 'playwright' },
-      include: ['src/**/*.svelte.{test,spec}.{js,ts}'],
-    }],
+    environment: 'browser',
+    testTimeout: 2000,
+    browser: {
+      enabled: true,
+      provider: 'playwright',
+      instances: [{ browser: 'chromium' }],
+    },
   },
 });
 ```
 
-## CRITICAL: Always Use Locators
+## Core Testing Pattern
+
+```typescript
+describe('MyComponent', () => {
+  it('should render and handle interactions', async () => {
+    render(MyComponent, { variant: 'primary' });
+    
+    const button = page.getByRole('button', { name: 'Click me' });
+    await expect.element(button).toBeInTheDocument();
+    await button.click();
+  });
+});
+```
+
+## Critical: Always Use Locators
 
 ```typescript
 // ❌ NEVER use containers - no auto-retry
@@ -38,131 +54,128 @@ const button = page.getByRole('button');
 await button.click();
 ```
 
-## Locator Hierarchy
-
-1. **Semantic**: `page.getByRole('button', { name: 'Submit' })`
-2. **Labels**: `page.getByLabel('Email address')`
-3. **Text**: `page.getByText('Welcome back')`
-4. **Test IDs**: `page.getByTestId('submit-button')`
-
 ## Handle Multiple Elements (Strict Mode)
 
 ```typescript
-// ❌ FAILS: "strict mode violation"
+// ❌ FAILS: "strict mode violation" if multiple elements
 page.getByRole('link', { name: 'Home' });
 
 // ✅ CORRECT: Use .first(), .nth(), .last()
 page.getByRole('link', { name: 'Home' }).first();
-page.getByRole('listitem').nth(1); // Zero-indexed
+page.getByRole('button').nth(1); // Zero-indexed
 ```
 
-## Essential Patterns
+## Essential Form Testing
 
-### Button Component
 ```typescript
-it('should handle click events', async () => {
-  const click_handler = vi.fn();
-  render(Button, { onclick: click_handler, children: 'Click me' });
+it('should handle form validation', async () => {
+  render(LoginForm);
   
-  await page.getByRole('button', { name: 'Click me' }).click();
-  expect(click_handler).toHaveBeenCalledOnce();
+  const email = page.getByLabelText('Email');
+  const submit = page.getByRole('button', { name: 'Submit' });
+  
+  // Test validation lifecycle: valid → invalid → valid
+  await email.fill('invalid-email');
+  await submit.click();
+  
+  await expect.element(page.getByText('Invalid email')).toBeInTheDocument();
+  
+  await email.fill('valid@example.com');
+  await expect.element(page.getByText('Invalid email')).not.toBeInTheDocument();
 });
 ```
 
-### Form Input
-```typescript
-it('should handle user input', async () => {
-  render(Input, { type: 'email', label: 'Email' });
-  
-  const input = page.getByLabelText('Email');
-  await input.fill('user@example.com');
-  
-  await expect.element(input).toHaveValue('user@example.com');
-});
-```
+⚠️ **Form Warning**: Don't click SvelteKit form submits - test state directly!
 
 ## Svelte 5 Runes Testing
 
 ```typescript
-// ✅ $state - direct testing
-let count = $state(0);
-expect(count).toBe(0);
-
-// ✅ $derived - ALWAYS use untrack()
-let doubled = $derived(count * 2);
-expect(untrack(() => doubled)).toBe(0);
-
-count = 5;
-flushSync(); // Force update
-expect(untrack(() => doubled)).toBe(10);
+it('should handle reactive state', () => {
+  let count = $state(0);
+  let doubled = $derived(count * 2);
+  
+  // ✅ CRITICAL: Always use untrack() for $derived
+  expect(untrack(() => doubled)).toBe(0);
+  
+  count = 5;
+  flushSync();
+  expect(untrack(() => doubled)).toBe(10);
+});
 ```
 
-## Assertions (Always Await)
+## Common Gotchas & Fixes
+
+**"strict mode violation"**
+```typescript
+// Use .first(), .nth(), .last()
+page.getByRole('link').first();
+```
+
+**Role confusion**
+```typescript
+// ❌ Wrong: Input role doesn't exist
+page.getByRole('input');
+// ✅ Correct: Use textbox
+page.getByRole('textbox');
+```
+
+**Animation issues**
+```typescript
+await button.click({ force: true });
+```
+
+**Mock function signatures**
+```typescript
+// ❌ Wrong signature
+vi.mock('$lib/utils', () => ({ fn: vi.fn() }));
+// ✅ Correct signature
+vi.mock('$lib/utils', () => ({ fn: vi.fn((param: string) => 'result') }));
+```
+
+## Essential Assertions
 
 ```typescript
-// ✅ Element assertions
+// Always await element assertions
 await expect.element(page.getByText('Success')).toBeInTheDocument();
-await expect.element(page.getByRole('button')).toBeDisabled();
+await expect.element(page.getByRole('button')).toBeEnabled();
 await expect.element(page.getByRole('textbox')).toHaveValue('test');
-
-// ✅ Regular assertions
-expect(click_handler).toHaveBeenCalledOnce();
-expect(untrack(() => derived_value)).toBe(expected);
+await expect.element(page.getByRole('button')).toHaveClass('btn-primary');
 ```
 
-## Form Validation Lifecycle
+## Quick Component Test
 
 ```typescript
-// ✅ CORRECT: Forms start valid → validate → invalid → fix → valid
-expect(untrack(() => form_state.is_form_valid())).toBe(true); // Initially
-form_state.validate_all_fields();
-expect(untrack(() => form_state.is_form_valid())).toBe(false); // Invalid
-form_state.update_field('email', 'valid@example.com');
-expect(untrack(() => form_state.is_form_valid())).toBe(true); // Fixed
-```
+// Create src/lib/components/my-button.svelte
+<script lang="ts">
+  let { variant = 'primary', onclick, children } = $props();
+</script>
+<button class="btn btn-{variant}" {onclick}>{@render children()}</button>
 
-## Common Gotchas & Solutions
-
-### "strict mode violation"
-```typescript
-// ❌ Multiple elements match
-page.getByRole('link', { name: 'Home' });
-// ✅ Use .first()
-page.getByRole('link', { name: 'Home' }).first();
-```
-
-### Role Confusion
-```typescript
-// ❌ Input role doesn't exist
-page.getByRole('input', { name: 'Email' });
-// ✅ Use textbox for inputs
-page.getByRole('textbox', { name: 'Email' });
-```
-
-### SvelteKit Form Hangs
-```typescript
-// ❌ Can hang with SvelteKit enhance
-await submit_button.click();
-// ✅ Test state directly or use force
-await submit_button.click({ force: true });
-```
-
-### Animation Issues
-```typescript
-// ✅ Use force for animated elements
-await page.getByRole('button').click({ force: true });
+// Test: src/lib/components/my-button.svelte.test.ts
+describe('MyButton', () => {
+  it('should render with variant', async () => {
+    const children = createRawSnippet(() => ({
+      render: () => `<span>Click me</span>`
+    }));
+    
+    render(MyButton, { variant: 'secondary', children });
+    
+    const button = page.getByRole('button', { name: 'Click me' });
+    await expect.element(button).toHaveClass('btn-secondary');
+  });
+});
 ```
 
 ## Anti-Patterns to Avoid
 
-- ❌ Never use `const { container } = render()`
-- ❌ Don't test SVG path data: `M9 12l2 2 4-4...`
+- ❌ Never use containers: `const { container } = render()`
 - ❌ Don't ignore strict mode violations
-- ❌ Don't click SvelteKit form submits without force
-- ❌ Don't access `$derived` without `untrack()`
+- ❌ Don't test SVG paths: `expect(body).toContain('M9 12l2...')`
+- ❌ Don't assume element roles - verify with dev tools
+- ❌ Don't click SvelteKit form submits
 
-## Quick Reference Links
+## Further Reading
 
-- **Detailed Guide**: [llms-medium.txt](llms-medium.txt)
-- **Complete API**: [llms-api.txt](llms-api.txt)
-- **GitHub**: [spences10/sveltest](https://github.com/spences10/sveltest)
+- **Complete Guide**: llms-medium.txt (detailed patterns)
+- **Full API**: llms-api.txt (comprehensive reference)
+- **GitHub**: https://github.com/spences10/sveltest

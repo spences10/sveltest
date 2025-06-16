@@ -1,12 +1,12 @@
 # Sveltest Testing Documentation
 
-> Comprehensive vitest-browser-svelte testing patterns for modern Svelte 5 applications. Real-world examples demonstrating client-server alignment, component testing in actual browsers, SSR validation, and migration from @testing-library/svelte.
+Comprehensive vitest-browser-svelte testing patterns for modern Svelte 5 applications. Real-world examples demonstrating client-server alignment, component testing in actual browsers, SSR validation, and migration from @testing-library/svelte.
 
 ## Getting Started
 
 ### Learn Modern Svelte Testing
 
-This guide demonstrates testing Svelte 5 applications using the experimental `vitest-browser-svelte` - the modern testing solution that runs tests in real browsers instead of simulated environments.
+This guide covers testing Svelte 5 applications using the experimental `vitest-browser-svelte` - the modern testing solution that runs tests in real browsers instead of simulated environments.
 
 **You'll learn:**
 - Essential testing patterns that work in real browsers
@@ -14,36 +14,45 @@ This guide demonstrates testing Svelte 5 applications using the experimental `vi
 - How to avoid common pitfalls and write reliable tests
 - The **Client-Server Alignment Strategy** for reliable full-stack testing
 
+### What is Sveltest?
+
+Sveltest is a **reference guide and example project** that demonstrates real-world testing patterns with `vitest-browser-svelte`. You don't install Sveltest - you learn from it and apply these patterns to your own Svelte applications.
+
 ### Setup Your Own Project
 
-Create a new SvelteKit project with browser testing:
+```bash
+# Create a new SvelteKit project
+pnpm dlx sv@latest create my-testing-app
+```
+
+#### Install Browser Testing Dependencies
 
 ```bash
-# Create project
-pnpm dlx sv@latest create my-testing-app
-
-# Install browser testing dependencies
 cd my-testing-app
+# Add vitest browser, Svelte testing and playwright
 pnpm install -D @vitest/browser vitest-browser-svelte playwright
 
-# Remove old dependencies
+# remove testing library and jsdom
 pnpm un @testing-library/jest-dom @testing-library/svelte jsdom
 ```
 
-### Configure Vitest Browser Mode
+#### Configure Vitest Browser Mode
 
-Update `vite.config.ts` for multi-project browser testing:
+Update your `vite.config.ts` to use the official Vitest Browser configuration:
 
 ```typescript
-import { defineConfig } from 'vite';
+import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
-	plugins: [sveltekit()],
+	plugins: [tailwindcss(), sveltekit()],
+
 	test: {
 		projects: [
 			{
 				// Client-side tests (Svelte components)
+				extends: './vite.config.ts',
 				test: {
 					name: 'client',
 					environment: 'browser',
@@ -54,11 +63,16 @@ export default defineConfig({
 						instances: [{ browser: 'chromium' }],
 					},
 					include: ['src/**/*.svelte.{test,spec}.{js,ts}'],
+					exclude: [
+						'src/lib/server/**',
+						'src/**/*.ssr.{test,spec}.{js,ts}',
+					],
 					setupFiles: ['./vitest-setup-client.ts'],
 				},
 			},
 			{
-				// SSR tests
+				// SSR tests (Server-side rendering)
+				extends: './vite.config.ts',
 				test: {
 					name: 'ssr',
 					environment: 'node',
@@ -66,12 +80,16 @@ export default defineConfig({
 				},
 			},
 			{
-				// Server-side tests
+				// Server-side tests (Node.js utilities)
+				extends: './vite.config.ts',
 				test: {
 					name: 'server',
 					environment: 'node',
 					include: ['src/**/*.{test,spec}.{js,ts}'],
-					exclude: ['src/**/*.svelte.{test,spec}.{js,ts}'],
+					exclude: [
+						'src/**/*.svelte.{test,spec}.{js,ts}',
+						'src/**/*.ssr.{test,spec}.{js,ts}',
+					],
 				},
 			},
 		],
@@ -79,16 +97,48 @@ export default defineConfig({
 });
 ```
 
-### Setup File
+#### Edit Setup File
 
-Create `vitest-setup-client.ts`:
+Replace the contents of the `vitest-setup-client.ts` with:
 
 ```typescript
 /// <reference types="@vitest/browser/matchers" />
 /// <reference types="@vitest/browser/providers/playwright" />
 ```
 
+### Understanding the Client-Server Alignment Strategy
+
+The **Client-Server Alignment Strategy** guides this testing approach:
+
+#### The Four-Layer Approach
+
+1. **Shared Validation Logic**: Use the same validation functions on both client and server
+2. **Real FormData/Request Objects**: Server tests use real web APIs, not mocks
+3. **TypeScript Contracts**: Shared interfaces catch mismatches at compile time
+4. **E2E Tests**: Final safety net for complete integration validation
+
+#### Why This Matters
+
+Traditional testing with heavy mocking can pass while production fails due to client-server mismatches:
+
+```typescript
+// ❌ BRITTLE: Heavy mocking hides real issues
+const mock_request = { formData: vi.fn().mockResolvedValue(...) };
+
+// ✅ ROBUST: Real FormData catches field name mismatches
+const form_data = new FormData();
+form_data.append('email', 'user@example.com');
+const request = new Request('http://localhost/api/register', {
+	method: 'POST',
+	body: form_data,
+});
+```
+
 ### Write Your First Test
+
+Create a simple button component and test it:
+
+#### Step 1: Create a Simple Component
 
 Create `src/lib/components/my-button.svelte`:
 
@@ -101,13 +151,25 @@ Create `src/lib/components/my-button.svelte`:
 		children: any;
 	}
 
-	let { variant = 'primary', disabled = false, onclick, children }: Props = $props();
+	let {
+		variant = 'primary',
+		disabled = false,
+		onclick,
+		children,
+	}: Props = $props();
 </script>
 
-<button class="btn btn-{variant}" {disabled} {onclick}>
+<button
+	class="btn btn-{variant}"
+	{disabled}
+	{onclick}
+	data-testid="my-button"
+>
 	{@render children()}
 </button>
 ```
+
+#### Step 2: Write Your First Test
 
 Create `src/lib/components/my-button.svelte.test.ts`:
 
@@ -146,9 +208,79 @@ describe('MyButton', () => {
 });
 ```
 
+#### Step 3: Run Your Test
+
+```bash
+pnpm run test:unit
+```
+
+## Understanding the Test Structure
+
+### Essential Imports
+
+```typescript
+import { describe, expect, it, vi } from 'vitest'; // Test framework
+import { render } from 'vitest-browser-svelte'; // Svelte rendering
+import { page } from '@vitest/browser/context'; // Browser interactions
+import { createRawSnippet } from 'svelte'; // Svelte 5 snippets
+```
+
+### The Golden Rule: Always Use Locators
+
+Following the official Vitest Browser documentation, **always use locators** for reliable, auto-retrying queries:
+
+```typescript
+// ✅ DO: Use page locators (auto-retry, semantic)
+const button = page.getByRole('button', { name: 'Click me' });
+await button.click();
+
+// ❌ DON'T: Use containers (no auto-retry, manual queries)
+const { container } = render(MyButton);
+const button = container.querySelector('button');
+```
+
+### Locator Hierarchy (Use in This Order)
+
+1. **Semantic roles** (best for accessibility):
+   ```typescript
+   page.getByRole('button', { name: 'Submit' });
+   page.getByRole('textbox', { name: 'Email' });
+   ```
+
+2. **Labels** (good for forms):
+   ```typescript
+   page.getByLabel('Email address');
+   ```
+
+3. **Text content** (good for unique text):
+   ```typescript
+   page.getByText('Welcome back');
+   ```
+
+4. **Test IDs** (fallback for complex cases):
+   ```typescript
+   page.getByTestId('submit-button');
+   ```
+
+### Critical: Handle Multiple Elements
+
+Vitest Browser operates in **strict mode** - if multiple elements match, you'll get an error:
+
+```typescript
+// ❌ FAILS: "strict mode violation" if multiple elements match
+page.getByRole('link', { name: 'Home' });
+
+// ✅ CORRECT: Use .first(), .nth(), .last() for multiple elements
+page.getByRole('link', { name: 'Home' }).first();
+page.getByRole('link', { name: 'Home' }).nth(1); // Second element (0-indexed)
+page.getByRole('link', { name: 'Home' }).last();
+```
+
 ## Testing Patterns
 
 ### Essential Setup Pattern
+
+Every component test file should start with this setup:
 
 ```typescript
 import { describe, expect, it, vi } from 'vitest';
@@ -158,37 +290,7 @@ import { createRawSnippet } from 'svelte';
 import { flushSync, untrack } from 'svelte';
 ```
 
-### Locator Patterns - Always Use Locators
-
-**CRITICAL**: Always use locators, never containers. Locators have automatic waiting and retrying.
-
-```typescript
-// ✅ DO: Use page locators (auto-retry, semantic)
-const button = page.getByRole('button', { name: 'Submit' });
-await button.click();
-
-// ❌ DON'T: Use containers (no auto-retry, manual queries)
-const { container } = render(MyButton);
-const button = container.querySelector('button');
-```
-
-### Handling Multiple Elements (Strict Mode)
-
-vitest-browser-svelte operates in strict mode - if multiple elements match, you must specify which one:
-
-```typescript
-// ❌ FAILS: Strict mode violation if multiple elements match
-page.getByRole('link', { name: 'Home' });
-
-// ✅ CORRECT: Use .first(), .nth(), .last()
-page.getByRole('link', { name: 'Home' }).first();
-page.getByRole('link', { name: 'Home' }).nth(1);
-page.getByRole('link', { name: 'Home' }).last();
-```
-
-### Component Testing Patterns
-
-#### Button Component
+### Button Component Pattern
 
 ```typescript
 describe('Button Component', () => {
@@ -196,10 +298,21 @@ describe('Button Component', () => {
 		render(Button, { variant: 'primary', children: 'Click me' });
 
 		const button = page.getByRole('button', { name: 'Click me' });
+		await expect.element(button).toBeInTheDocument();
 		await expect.element(button).toHaveClass('btn-primary');
 	});
 
-	it('should handle disabled state', async () => {
+	it('should handle click events', async () => {
+		const click_handler = vi.fn();
+		render(Button, { onclick: click_handler, children: 'Click me' });
+
+		const button = page.getByRole('button', { name: 'Click me' });
+		await button.click();
+
+		expect(click_handler).toHaveBeenCalledOnce();
+	});
+
+	it('should support disabled state', async () => {
 		render(Button, { disabled: true, children: 'Disabled' });
 
 		const button = page.getByRole('button', { name: 'Disabled' });
@@ -208,88 +321,102 @@ describe('Button Component', () => {
 });
 ```
 
-#### Form Component
+### Form Testing Pattern
 
 ```typescript
-it('should handle form validation lifecycle', async () => {
-	render(LoginForm);
+describe('Input Component', () => {
+	it('should handle user input', async () => {
+		render(Input, { type: 'text', label: 'Full Name' });
 
-	const email_input = page.getByLabelText('Email');
-	const submit_button = page.getByRole('button', { name: 'Submit' });
+		const input = page.getByLabelText('Full Name');
+		await input.fill('John Doe');
 
-	// Initially valid (no validation triggered)
-	await expect.element(submit_button).toBeEnabled();
+		await expect.element(input).toHaveValue('John Doe');
+	});
 
-	// Trigger validation with invalid data
-	await email_input.fill('invalid-email');
-	await submit_button.click({ force: true });
+	it('should display validation errors', async () => {
+		render(Input, {
+			type: 'email',
+			label: 'Email',
+			error: 'Invalid email format',
+		});
 
-	// Now invalid with error message
-	await expect.element(page.getByText('Invalid email format')).toBeVisible();
+		const error_message = page.getByText('Invalid email format');
+		await expect.element(error_message).toBeInTheDocument();
+	});
 });
 ```
 
 ### Svelte 5 Runes Testing
 
 ```typescript
-describe('Reactive State', () => {
-	it('should handle $state and $derived correctly', () => {
+describe('Reactive State Component', () => {
+	it('should handle $state updates', async () => {
+		render(CounterComponent);
+
+		const count_display = page.getByTestId('count');
+		const increment_button = page.getByRole('button', {
+			name: 'Increment',
+		});
+
+		// Initial state
+		await expect.element(count_display).toHaveTextContent('0');
+
+		// Update state
+		await increment_button.click();
+		await expect.element(count_display).toHaveTextContent('1');
+	});
+
+	it('should handle $derived values with untrack', () => {
 		let count = $state(0);
 		let doubled = $derived(count * 2);
 
-		// ✅ Always use untrack() for $derived values
+		// ✅ Always use untrack() when accessing $derived values
 		expect(untrack(() => doubled)).toBe(0);
 
 		count = 5;
-		flushSync(); // Ensure derived state updates
+		flushSync(); // Ensure derived state is evaluated
+
 		expect(untrack(() => doubled)).toBe(10);
 	});
 });
 ```
 
-## Form Testing
-
-### Form Submission Pattern
+### Form Validation Lifecycle Pattern
 
 ```typescript
-it('should handle complete form submission flow', async () => {
-	const submit_handler = vi.fn();
-	render(ContactForm, { onsubmit: submit_handler });
+describe('Form Validation Component', () => {
+	it('should follow validation lifecycle', () => {
+		const form_state = create_form_state({
+			email: {
+				value: '',
+				validation_rules: { required: true },
+			},
+		});
 
-	// Fill out form
-	await page.getByLabelText('Name').fill('John Doe');
-	await page.getByLabelText('Email').fill('john@example.com');
-	await page.getByLabelText('Message').fill('Hello world');
+		// ✅ CORRECT: Forms typically start valid (not validated yet)
+		expect(untrack(() => form_state.is_form_valid())).toBe(true);
 
-	// Submit form
-	await page.getByRole('button', { name: 'Send Message' }).click();
+		// Trigger validation - now should be invalid
+		form_state.validate_all_fields();
+		flushSync();
+		expect(untrack(() => form_state.is_form_valid())).toBe(false);
 
-	// Verify submission
-	expect(submit_handler).toHaveBeenCalledWith({
-		name: 'John Doe',
-		email: 'john@example.com',
-		message: 'Hello world',
+		// Fix the field - should become valid again
+		form_state.update_field('email', 'valid@example.com');
+		flushSync();
+		expect(untrack(() => form_state.is_form_valid())).toBe(true);
 	});
 });
 ```
 
-### Avoid SvelteKit Form Submit Hangs
-
-```typescript
-// ❌ Can cause hangs with SvelteKit enhance
-await submit_button.click();
-
-// ✅ Test form state directly
-render(MyForm, { errors: { email: 'Required' } });
-await expect.element(page.getByText('Required')).toBeInTheDocument();
-```
-
-## SSR Testing
+## SSR Testing Patterns
 
 ### Basic SSR Pattern
 
 ```typescript
 import { render } from 'svelte/server';
+import { describe, expect, test } from 'vitest';
 
 describe('Component SSR', () => {
 	it('should render without errors', () => {
@@ -300,120 +427,192 @@ describe('Component SSR', () => {
 
 	it('should render essential content for SEO', () => {
 		const { body } = render(ComponentName, {
-			props: { title: 'Page Title' },
+			props: { title: 'Page Title', description: 'Page description' },
 		});
 
 		expect(body).toContain('<h1>Page Title</h1>');
+		expect(body).toContain('Page description');
 		expect(body).toContain('href="/important-link"');
 	});
 });
 ```
 
-## Mocking Patterns
+## Server Testing Patterns
 
-### Utility Function Mocking
-
-```typescript
-// Mock utility functions with realistic return values
-vi.mock('$lib/utils/api', () => ({
-	fetch_user_data: vi.fn(() =>
-		Promise.resolve({
-			id: 1,
-			name: 'John Doe',
-			email: 'john@example.com',
-		}),
-	),
-	validate_email: vi.fn((email: string) => email.includes('@')),
-}));
-```
-
-### Component Mocking (Only When Necessary)
+### API Route Pattern
 
 ```typescript
-// Mock heavy external components
-vi.mock('@external/heavy-chart', () => ({
-	default: vi.fn(() => ({
-		$$: {},
-		$set: vi.fn(),
-		$destroy: vi.fn(),
-	})),
-}));
-```
+describe('API Route', () => {
+	it('should handle POST requests with validation', async () => {
+		// ✅ Real Request with FormData - tests actual parsing
+		const form_data = new FormData();
+		form_data.append('email', 'user@example.com');
+		form_data.append('password', 'secure123');
 
-## Error Handling
+		const request = new Request('http://localhost/api/register', {
+			method: 'POST',
+			body: form_data,
+		});
 
-### Async Error Testing
+		// Only mock external services, not data structures
+		vi.mocked(database.users.create).mockResolvedValue({
+			id: '123',
+			email: 'user@example.com',
+		});
 
-```typescript
-it('should handle loading states', async () => {
-	render(AsyncDataComponent);
+		const response = await POST({ request });
+		expect(response.status).toBe(201);
 
-	// Should show loading initially
-	await expect.element(page.getByText('Loading...')).toBeInTheDocument();
-
-	// Wait for data to load
-	await expect.element(page.getByText('Data loaded')).toBeInTheDocument();
+		const data = await response.json();
+		expect(data.user.email).toBe('user@example.com');
+	});
 });
 ```
 
-## Client-Server Alignment Strategy
+## Migration Guide
 
-### The Problem with Heavy Mocking
+### From @testing-library/svelte
 
-Server tests with heavy mocking can pass while production fails due to client-server mismatches.
+#### Update Dependencies
+
+```bash
+# Install vitest-browser-svelte
+pnpm add -D @vitest/browser vitest-browser-svelte playwright
+
+# Remove old testing library
+pnpm remove @testing-library/svelte @testing-library/jest-dom jsdom
+```
+
+#### Essential Import Changes
 
 ```typescript
-// ❌ BRITTLE: Heavy mocking hides client-server mismatches
-const mock_request = {
-	formData: vi.fn().mockResolvedValue({
-		get: vi.fn().mockReturnValue('test@example.com'),
-	}),
-};
+// BEFORE: @testing-library/svelte
+import { render, screen } from '@testing-library/svelte';
+import userEvent from '@testing-library/user-event';
 
-// ✅ ROBUST: Real FormData catches actual mismatches
-const form_data = new FormData();
-form_data.append('email', 'test@example.com');
-const request = new Request('http://localhost/register', {
-	method: 'POST',
-	body: form_data,
+// AFTER: vitest-browser-svelte
+import { render } from 'vitest-browser-svelte';
+import { page } from '@vitest/browser/context';
+```
+
+#### Component Rendering Migration
+
+```typescript
+// BEFORE: @testing-library/svelte
+test('button renders with correct variant', () => {
+	render(Button, { variant: 'primary' });
+	const button = screen.getByRole('button');
+	expect(button).toBeInTheDocument();
+});
+
+// AFTER: vitest-browser-svelte
+test('button renders with correct variant', async () => {
+	render(Button, { variant: 'primary' });
+	const button = page.getByRole('button');
+	await expect.element(button).toBeInTheDocument();
 });
 ```
 
-### What to Mock vs Keep Real
-
-#### ✅ Mock External Dependencies
+#### User Interaction Migration
 
 ```typescript
-// Database operations
-vi.mock('$lib/database', () => ({
-	users: { create: vi.fn(), find_by_email: vi.fn() },
-}));
+// BEFORE: @testing-library/svelte
+test('form submission', async () => {
+	const user = userEvent.setup();
+	render(LoginForm);
 
-// External APIs
-vi.mock('$lib/email-service', () => ({
-	send_welcome_email: vi.fn(),
-}));
+	await user.type(screen.getByLabelText('Email'), 'test@example.com');
+	await user.click(screen.getByRole('button', { name: 'Login' }));
+});
+
+// AFTER: vitest-browser-svelte
+test('form submission', async () => {
+	render(LoginForm);
+
+	await page.getByLabelText('Email').fill('test@example.com');
+	await page.getByRole('button', { name: 'Login' }).click();
+});
 ```
 
-#### ❌ Keep Data Contracts Real
+## Best Practices
+
+### Foundation First Approach
+
+Start with complete test structure using `describe` and `it.skip`:
 
 ```typescript
-// ✅ Real FormData objects
-const form_data = new FormData();
-form_data.append('email', 'test@example.com');
+describe('TodoManager Component', () => {
+	describe('Initial Rendering', () => {
+		it('should render empty state', async () => {
+			render(TodoManager);
+			await expect
+				.element(page.getByText('No todos yet'))
+				.toBeInTheDocument();
+		});
 
-// ✅ Real Request/Response objects
-const request = new Request('http://localhost/api/users', {
-	method: 'POST',
-	body: form_data,
+		it.skip('should render with initial todos', async () => {
+			// TODO: Test with pre-populated data
+		});
+	});
+
+	describe('User Interactions', () => {
+		it('should add new todo', async () => {
+			render(TodoManager);
+
+			const input = page.getByLabelText('New todo');
+			const add_button = page.getByRole('button', { name: 'Add Todo' });
+
+			await input.fill('Buy groceries');
+			await add_button.click();
+
+			await expect
+				.element(page.getByText('Buy groceries'))
+				.toBeInTheDocument();
+		});
+
+		it.skip('should edit existing todo', async () => {
+			// TODO: Test inline editing
+		});
+	});
+
+	describe('Edge Cases', () => {
+		it.skip('should handle network failures gracefully', async () => {
+			// TODO: Test offline scenarios
+		});
+	});
 });
+```
+
+### Always Use Locators, Never Containers
+
+```typescript
+// ❌ NEVER use containers - no auto-retry, manual DOM queries
+const { container } = render(MyComponent);
+const button = container.querySelector('[data-testid="submit"]');
+
+// ✅ ALWAYS use locators - auto-retry, semantic queries
+render(MyComponent);
+const button = page.getByTestId('submit');
+await button.click();
+```
+
+### Avoid Testing Implementation Details
+
+```typescript
+// ❌ BRITTLE - Tests exact SVG path data
+expect(body).toContain('M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z');
+
+// ✅ ROBUST - Tests user-visible behavior
+await expect
+	.element(page.getByRole('img', { name: /success/i }))
+	.toBeInTheDocument();
 ```
 
 ## Common Issues & Solutions
 
 ### "strict mode violation: getByRole() resolved to X elements"
 
-Most common issue. Multiple elements match your locator:
+Multiple elements match your locator:
 
 ```typescript
 // ❌ FAILS: Multiple nav links (desktop + mobile)
@@ -423,7 +622,7 @@ page.getByRole('link', { name: 'Home' });
 page.getByRole('link', { name: 'Home' }).first();
 ```
 
-### Role Confusion
+### Role Confusion Fixes
 
 ```typescript
 // ❌ WRONG: Input role doesn't exist
@@ -433,18 +632,17 @@ page.getByRole('input', { name: 'Email' });
 page.getByRole('textbox', { name: 'Email' });
 ```
 
-### Mock Function Signature Errors
+### Test Hangs
+
+Usually caused by clicking form submit buttons with SvelteKit enhance:
 
 ```typescript
-// ❌ Wrong signature
-vi.mock('$lib/utils', () => ({
-	my_function: vi.fn(),
-}));
+// ❌ Can hang with SvelteKit forms
+await submit_button.click();
 
-// ✅ Correct signature
-vi.mock('$lib/utils', () => ({
-	my_function: vi.fn((param1: string, param2: number) => 'result'),
-}));
+// ✅ Test the state directly
+render(MyForm, { errors: { email: 'Required' } });
+await expect.element(page.getByText('Required')).toBeInTheDocument();
 ```
 
 ## Quick Reference
@@ -455,8 +653,8 @@ vi.mock('$lib/utils', () => ({
 - ✅ Always `await expect.element()` for assertions
 - ✅ Use `.first()`, `.nth()`, `.last()` for multiple elements
 - ✅ Use `untrack()` for `$derived` values
-- ✅ Use `force: true` for animations: `await element.click({ force: true })`
-- ✅ Test form validation lifecycle: initial (valid) → validate → fix
+- ✅ Use `force: true` for animations
+- ✅ Test form validation lifecycle
 - ✅ Handle strict mode violations properly
 
 ### Common Fixes
@@ -465,12 +663,4 @@ vi.mock('$lib/utils', () => ({
 - **Role confusion**: Links with `role="button"` are buttons
 - **Input elements**: Use `getByRole('textbox')`, not `getByRole('input')`
 - **Form hangs**: Don't click SvelteKit form submits - test state directly
-- **Animation issues**: Use `force: true` for click events
-
-### Anti-Patterns to Avoid
-
-- ❌ Never use containers: `const { container } = render()`
-- ❌ Don't ignore strict mode violations
-- ❌ Don't test SVG paths or implementation details
-- ❌ Don't expect forms to be invalid initially
-- ❌ Don't click SvelteKit form submits in tests
+- **Derived values**: Always use `untrack(() => derived_value)`
