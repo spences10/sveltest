@@ -1,15 +1,15 @@
 import { topics } from '$lib/data/topics';
 
 // Import all markdown files using Vite's ?raw imports
-import getting_started from '../copy/getting-started.md?raw';
-import testing_patterns from '../copy/testing-patterns.md?raw';
-import e2e_testing from '../copy/e2e-testing.md?raw';
-import api_reference from '../copy/api-reference.md?raw';
-import migration_guide from '../copy/migration-guide.md?raw';
-import best_practices from '../copy/best-practices.md?raw';
-import ci_cd from '../copy/ci-cd.md?raw';
-import troubleshooting from '../copy/troubleshooting.md?raw';
-import about from '../copy/about.md?raw';
+import getting_started from '../../copy/getting-started.md?raw';
+import testing_patterns from '../../copy/testing-patterns.md?raw';
+import e2e_testing from '../../copy/e2e-testing.md?raw';
+import api_reference from '../../copy/api-reference.md?raw';
+import migration_guide from '../../copy/migration-guide.md?raw';
+import best_practices from '../../copy/best-practices.md?raw';
+import ci_cd from '../../copy/ci-cd.md?raw';
+import troubleshooting from '../../copy/troubleshooting.md?raw';
+import about from '../../copy/about.md?raw';
 
 // Centralized Anthropic configuration
 export const ANTHROPIC_CONFIG = {
