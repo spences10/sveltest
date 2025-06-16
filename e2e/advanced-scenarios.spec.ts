@@ -55,7 +55,7 @@ test.describe('Advanced E2E Scenarios', () => {
 				).toBeVisible({ timeout: 5000 });
 			} catch (error) {
 				console.log('Todos page failed to load, skipping state test');
-				test.skip(true, 'Todos page is not accessible');
+				test.skip();
 			}
 		});
 
@@ -125,7 +125,7 @@ test.describe('Advanced E2E Scenarios', () => {
 			const errors = [];
 			page.on('console', (msg) => {
 				if (msg.type() === 'error') {
-					errors.push(msg.text());
+					errors.push(msg.text() as never);
 				}
 			});
 
@@ -235,7 +235,7 @@ test.describe('Advanced E2E Scenarios', () => {
 				).toBeVisible();
 
 				// Check that content is accessible at this viewport
-				const mainContent = page.locator('main, .hero').first();
+				const mainContent = page.getByRole('main').first();
 				await expect(mainContent).toBeVisible();
 			});
 		}

@@ -9,26 +9,25 @@ test.describe('Accessibility Tests', () => {
 		});
 
 		await test.step('Check semantic landmarks', async () => {
-			// Verify main landmarks exist - use first() to avoid multiple matches
-			const mainLandmark = page.locator('main, .hero').first();
-			await expect(mainLandmark).toBeVisible();
+			// Verify main landmarks exist using semantic query
+			await expect(page.getByRole('main').first()).toBeVisible();
 
-			// Check for header if it exists
+			// Check for semantic structure (not visibility - responsive design may hide elements)
 			const header = page.locator('header');
 			if ((await header.count()) > 0) {
-				await expect(header.first()).toBeVisible();
+				await expect(header.first()).toBeAttached();
 			}
 
 			// Check for navigation if it exists
 			const nav = page.locator('nav');
 			if ((await nav.count()) > 0) {
-				await expect(nav.first()).toBeVisible();
+				await expect(nav.first()).toBeAttached();
 			}
 
 			// Check for footer if it exists
 			const footer = page.locator('footer');
 			if ((await footer.count()) > 0) {
-				await expect(footer.first()).toBeVisible();
+				await expect(footer.first()).toBeAttached();
 			}
 		});
 
@@ -477,7 +476,7 @@ test.describe('Accessibility Tests', () => {
 				}
 
 				// Check for proper document structure
-				await expect(page.locator('main').first()).toBeVisible({
+				await expect(page.getByRole('main').first()).toBeVisible({
 					timeout: 5000,
 				});
 
@@ -498,7 +497,7 @@ test.describe('Accessibility Tests', () => {
 				).toBeVisible({ timeout: 3000 });
 
 				// Check for proper document structure
-				await expect(page.locator('main').first()).toBeVisible({
+				await expect(page.getByRole('main').first()).toBeVisible({
 					timeout: 3000,
 				});
 
