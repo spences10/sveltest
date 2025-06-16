@@ -1,0 +1,148 @@
+import {
+	ANTHROPIC_API_KEY,
+	LLM_GEN_SECRET,
+} from '$env/static/private';
+import {
+	ANTHROPIC_CONFIG,
+	VARIANT_PROMPTS,
+	topics,
+} from '$lib/server/llms';
+import { Anthropic } from '@anthropic-ai/sdk';
+import { json } from '@sveltejs/kit';
+import { writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
+import type { RequestHandler } from './$types';
+
+const anthropic = new Anthropic({
+	apiKey: ANTHROPIC_API_KEY,
+});
+
+export const POST: RequestHandler = async ({ request }) => {
+	try {
+		const { variant, auth } = await request.json();
+
+		// Security check
+		if (auth !== LLM_GEN_SECRET) {
+			return json({ error: 'Unauthorized' }, { status: 401 });
+		}
+
+		// Handle llms-full separately (no LLM needed - just concatenate markdown)
+		if (variant === 'llms-full') {
+			let generated_content = '# Sveltest Testing Documentation\n\n';
+			generated_content +=
+				'> Comprehensive vitest-browser-svelte testing patterns for modern Svelte 5 applications. Real-world examples demonstrating client-server alignment, component testing in actual browsers, SSR validation, and migration from @testing-library/svelte.\n\n';
+
+			for (const topic of topics) {
+				try {
+					const markdown_module = await import(
+						`../../../copy/${topic.slug}.md?raw`
+					);
+					generated_content += `\n# ${topic.title}\n\n`;
+					generated_content += markdown_module.default;
+					generated_content += '\n';
+				} catch (error) {
+					console.warn(
+						`Could not load content for ${topic.slug}:`,
+						error,
+					);
+				}
+			}
+
+			// Write to static directory for serving
+			const filename = `${variant}.txt`;
+			const filepath = join(process.cwd(), 'static', filename);
+			await writeFile(filepath, generated_content, 'utf-8');
+
+			return json({
+				success: true,
+				variant,
+				filename,
+				length: generated_content.length,
+			});
+		}
+
+		// Validate variant
+		if (!VARIANT_PROMPTS[variant]) {
+			return json(
+				{ error: `Unknown variant: ${variant}` },
+				{ status: 400 },
+			);
+		}
+
+		// Load all markdown content
+		const markdown_content = await load_all_markdown();
+
+		// Generate content with Anthropic using centralized config
+		const prompt = `${VARIANT_PROMPTS[variant]}
+
+Documentation to process:
+
+${markdown_content}`;
+
+		const stream = await anthropic.messages.create({
+			model: ANTHROPIC_CONFIG.model,
+			max_tokens: ANTHROPIC_CONFIG.generation.max_tokens,
+			stream: ANTHROPIC_CONFIG.generation.stream,
+			messages: [
+				{
+					role: 'user',
+					content: prompt,
+				},
+			],
+		});
+
+		let generated_content = '';
+		for await (const chunk of stream) {
+			if (
+				chunk.type === 'content_block_delta' &&
+				chunk.delta.type === 'text_delta'
+			) {
+				generated_content += chunk.delta.text;
+			}
+		}
+
+		// Write to static directory for serving
+		const filename = `${variant}.txt`;
+		const filepath = join(process.cwd(), 'static', filename);
+		await writeFile(filepath, generated_content, 'utf-8');
+
+		return json({
+			success: true,
+			variant,
+			filename,
+			length: generated_content.length,
+		});
+	} catch (error) {
+		console.error('Generation error:', error);
+		return json(
+			{
+				error: 'Generation failed',
+				details:
+					error instanceof Error ? error.message : 'Unknown error',
+			},
+			{ status: 500 },
+		);
+	}
+};
+
+async function load_all_markdown(): Promise<string> {
+	let content = '';
+
+	for (const topic of topics) {
+		try {
+			const markdown_module = await import(
+				`../../../copy/${topic.slug}.md?raw`
+			);
+			content += `\n# ${topic.title}\n\n`;
+			content += markdown_module.default;
+			content += '\n\n---\n\n';
+		} catch (error) {
+			console.warn(
+				`Could not load content for ${topic.slug}:`,
+				error,
+			);
+		}
+	}
+
+	return content;
+}

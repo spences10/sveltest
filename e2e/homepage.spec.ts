@@ -26,8 +26,8 @@ test.describe('Homepage', () => {
 		});
 
 		await test.step('Verify page structure', async () => {
-			// Check for main content area - use first() to avoid strict mode violation
-			await expect(page.locator('main, .hero').first()).toBeVisible();
+			// Check for main content using semantic query
+			await expect(page.getByRole('main').first()).toBeVisible();
 		});
 	});
 

@@ -45,7 +45,7 @@ test.describe('Smoke Tests', () => {
 			).toBeVisible();
 
 			// Check for examples-specific content
-			await expect(page.locator('main')).toBeVisible();
+			await expect(page.getByRole('main').first()).toBeVisible();
 		});
 	});
 
@@ -100,7 +100,7 @@ test.describe('Smoke Tests', () => {
 			await expect(mainHeading).toBeVisible();
 
 			// Check for proper document structure - use first() to avoid multiple matches
-			await expect(page.locator('main').first()).toBeVisible();
+			await expect(page.getByRole('main').first()).toBeVisible();
 		});
 	});
 
@@ -143,9 +143,7 @@ test.describe('Smoke Tests', () => {
 				).toBeVisible();
 
 				// Each page should have proper document structure
-				await expect(
-					page.locator('main, .hero').first(),
-				).toBeVisible();
+				await expect(page.getByRole('main').first()).toBeVisible();
 			});
 		}
 
@@ -157,9 +155,9 @@ test.describe('Smoke Tests', () => {
 				await expect(
 					page.getByRole('heading', { name: 'Todo Manager' }),
 				).toBeVisible({ timeout: 5000 });
-				await expect(page.locator('main, .hero').first()).toBeVisible(
-					{ timeout: 5000 },
-				);
+				await expect(page.getByRole('main').first()).toBeVisible({
+					timeout: 5000,
+				});
 			} catch (error) {
 				console.log(
 					'Todos page navigation test skipped due to loading issues',

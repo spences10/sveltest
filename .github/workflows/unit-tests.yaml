@@ -83,6 +83,8 @@ jobs:
           API_SECRET: ${{ secrets.API_SECRET }}
           PUBLIC_FATHOM_ID: ${{ secrets.PUBLIC_FATHOM_ID }}
           PUBLIC_FATHOM_URL: ${{ secrets.PUBLIC_FATHOM_URL }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          LLM_GEN_SECRET: ${{ secrets.LLM_GEN_SECRET }}
 
       - name: Coverage
         run: pnpm test:unit --run --coverage
