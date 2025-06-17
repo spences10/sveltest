@@ -29,7 +29,9 @@
 		"test:e2e": "playwright test",
 		"coverage": "vitest --run --coverage",
 		"generate:llm-docs": "tsx scripts/generate-llm-docs.ts",
-		"evaluate:llm-docs": "tsx scripts/evaluate-llm-docs.ts"
+		"evaluate:llm-docs": "tsx scripts/evaluate-llm-docs.ts",
+		"generate:ai-rules": "tsx scripts/generate-ai-rules.ts",
+		"test:ai-rules": "tsx scripts/generate-ai-rules.ts --dry-run"
 	},
 	"devDependencies": {
 		"@anthropic-ai/sdk": "^0.54.0",
