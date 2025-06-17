@@ -1,181 +1,165 @@
 # Sveltest Testing Documentation
 
-## Essential Setup
+Ultra-compressed essentials for small context windows.
+
+## Quick Setup
 
 ```typescript
 import { describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import { page } from '@vitest/browser/context';
 import { createRawSnippet } from 'svelte';
-import { flushSync, untrack } from 'svelte';
 ```
 
-### Vitest Browser Config
+## Essential Testing Pattern
 
 ```typescript
-// vite.config.ts
-export default defineConfig({
-  test: {
-    environment: 'browser',
-    testTimeout: 2000,
-    browser: {
-      enabled: true,
-      provider: 'playwright',
-      instances: [{ browser: 'chromium' }],
-    },
-  },
-});
-```
-
-## Core Testing Pattern
-
-```typescript
-describe('MyComponent', () => {
-  it('should render and handle interactions', async () => {
-    render(MyComponent, { variant: 'primary' });
+describe('Component', () => {
+  it('should render correctly', async () => {
+    render(Component, { variant: 'primary' });
     
-    const button = page.getByRole('button', { name: 'Click me' });
+    const button = page.getByRole('button', { name: 'Submit' });
     await expect.element(button).toBeInTheDocument();
     await button.click();
   });
 });
 ```
 
-## Critical: Always Use Locators
+## Locators (ALWAYS Use These)
 
 ```typescript
-// ❌ NEVER use containers - no auto-retry
-const { container } = render(MyComponent);
-const button = container.querySelector('button');
+// ✅ Semantic queries (preferred)
+page.getByRole('button', { name: 'Submit' });
+page.getByRole('textbox', { name: 'Email' });
+page.getByLabelText('Password');
+page.getByText('Welcome');
 
-// ✅ ALWAYS use locators - auto-retry built-in
-render(MyComponent);
-const button = page.getByRole('button');
-await button.click();
+// ✅ Multiple elements - MUST specify which one
+page.getByRole('link', { name: 'Home' }).first();
+page.getByRole('button').nth(1);
+page.getByRole('listitem').last();
+
+// ❌ NEVER use containers
+const { container } = render(Component); // NO!
 ```
 
-## Handle Multiple Elements (Strict Mode)
+## Critical Gotchas
 
+### 1. Strict Mode Violations
 ```typescript
-// ❌ FAILS: "strict mode violation" if multiple elements
+// ❌ FAILS: Multiple elements match
 page.getByRole('link', { name: 'Home' });
 
 // ✅ CORRECT: Use .first(), .nth(), .last()
 page.getByRole('link', { name: 'Home' }).first();
-page.getByRole('button').nth(1); // Zero-indexed
 ```
 
-## Essential Form Testing
-
+### 2. Form Testing Warnings
 ```typescript
-it('should handle form validation', async () => {
-  render(LoginForm);
-  
-  const email = page.getByLabelText('Email');
-  const submit = page.getByRole('button', { name: 'Submit' });
-  
-  // Test validation lifecycle: valid → invalid → valid
-  await email.fill('invalid-email');
-  await submit.click();
-  
-  await expect.element(page.getByText('Invalid email')).toBeInTheDocument();
-  
-  await email.fill('valid@example.com');
-  await expect.element(page.getByText('Invalid email')).not.toBeInTheDocument();
-});
+// ❌ Can hang with SvelteKit forms
+await submit_button.click();
+
+// ✅ Test state directly
+render(Form, { errors: { email: 'Required' } });
+await expect.element(page.getByText('Required')).toBeInTheDocument();
 ```
 
-⚠️ **Form Warning**: Don't click SvelteKit form submits - test state directly!
-
-## Svelte 5 Runes Testing
-
+### 3. Role Confusion
 ```typescript
-it('should handle reactive state', () => {
-  let count = $state(0);
-  let doubled = $derived(count * 2);
-  
-  // ✅ CRITICAL: Always use untrack() for $derived
-  expect(untrack(() => doubled)).toBe(0);
-  
-  count = 5;
-  flushSync();
-  expect(untrack(() => doubled)).toBe(10);
-});
+// ❌ WRONG roles
+page.getByRole('input'); // doesn't exist
+page.getByRole('link'); // when element has role="button"
+
+// ✅ CORRECT roles  
+page.getByRole('textbox'); // for inputs
+page.getByRole('button'); // check actual role attribute
 ```
 
-## Common Gotchas & Fixes
-
-**"strict mode violation"**
-```typescript
-// Use .first(), .nth(), .last()
-page.getByRole('link').first();
-```
-
-**Role confusion**
-```typescript
-// ❌ Wrong: Input role doesn't exist
-page.getByRole('input');
-// ✅ Correct: Use textbox
-page.getByRole('textbox');
-```
-
-**Animation issues**
-```typescript
-await button.click({ force: true });
-```
-
-**Mock function signatures**
-```typescript
-// ❌ Wrong signature
-vi.mock('$lib/utils', () => ({ fn: vi.fn() }));
-// ✅ Correct signature
-vi.mock('$lib/utils', () => ({ fn: vi.fn((param: string) => 'result') }));
-```
-
-## Essential Assertions
+## Basic Assertions
 
 ```typescript
-// Always await element assertions
+// ✅ Always await element assertions
 await expect.element(page.getByText('Success')).toBeInTheDocument();
 await expect.element(page.getByRole('button')).toBeEnabled();
 await expect.element(page.getByRole('textbox')).toHaveValue('test');
 await expect.element(page.getByRole('button')).toHaveClass('btn-primary');
 ```
 
-## Quick Component Test
+## Svelte 5 Runes Testing
 
 ```typescript
-// Create src/lib/components/my-button.svelte
-<script lang="ts">
-  let { variant = 'primary', onclick, children } = $props();
-</script>
-<button class="btn btn-{variant}" {onclick}>{@render children()}</button>
+import { flushSync, untrack } from 'svelte';
 
-// Test: src/lib/components/my-button.svelte.test.ts
-describe('MyButton', () => {
-  it('should render with variant', async () => {
+// ✅ CRITICAL: Always use untrack() for $derived
+let count = $state(0);
+let doubled = $derived(count * 2);
+
+expect(untrack(() => doubled)).toBe(0);
+
+count = 5;
+flushSync();
+expect(untrack(() => doubled)).toBe(10);
+```
+
+## Complete Component Test Example
+
+```typescript
+import { describe, expect, it, vi } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import { page } from '@vitest/browser/context';
+import { createRawSnippet } from 'svelte';
+import Button from './button.svelte';
+
+describe('Button Component', () => {
+  it('should handle click events', async () => {
+    const click_handler = vi.fn();
     const children = createRawSnippet(() => ({
-      render: () => `<span>Click me</span>`
+      render: () => `<span>Click me</span>`,
     }));
     
-    render(MyButton, { variant: 'secondary', children });
+    render(Button, { onclick: click_handler, children });
     
     const button = page.getByRole('button', { name: 'Click me' });
-    await expect.element(button).toHaveClass('btn-secondary');
+    await button.click();
+    
+    expect(click_handler).toHaveBeenCalledOnce();
+  });
+  
+  it('should apply variant styling', async () => {
+    render(Button, { variant: 'primary' });
+    
+    const button = page.getByRole('button');
+    await expect.element(button).toHaveClass('btn-primary');
   });
 });
 ```
 
-## Anti-Patterns to Avoid
+## Form Testing Pattern
 
-- ❌ Never use containers: `const { container } = render()`
-- ❌ Don't ignore strict mode violations
-- ❌ Don't test SVG paths: `expect(body).toContain('M9 12l2...')`
-- ❌ Don't assume element roles - verify with dev tools
-- ❌ Don't click SvelteKit form submits
+```typescript
+it('should handle form input', async () => {
+  render(LoginForm);
+  
+  const email_input = page.getByLabelText('Email');
+  const password_input = page.getByLabelText('Password');
+  
+  await email_input.fill('user@example.com');
+  await password_input.fill('password123');
+  
+  await expect.element(email_input).toHaveValue('user@example.com');
+});
+```
 
-## Further Reading
+## Quick Fixes
 
-- **Complete Guide**: llms-medium.txt (detailed patterns)
-- **Full API**: llms-api.txt (comprehensive reference)
-- **GitHub**: https://github.com/spences10/sveltest
+- **"strict mode violation"**: Use `.first()`, `.nth()`, `.last()`
+- **Test hangs**: Avoid clicking SvelteKit form submits
+- **"Expected 2 arguments"**: Fix mock function signatures
+- **Role not found**: Use `textbox` not `input`, check actual `role` attributes
+- **Form initially invalid**: Forms typically start valid, become invalid after validation
+
+## Links to Full Documentation
+
+- **llms-medium.txt**: Detailed patterns and examples
+- **llms-api.txt**: Complete API reference
+- **Full docs**: [sveltest.com](https://sveltest.com)

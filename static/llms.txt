@@ -4,27 +4,54 @@
 
 ## Core Testing Documentation
 
-- **[Getting Started](./getting-started.md)** - Essential setup, configuration, and your first test with vitest-browser-svelte
-- **[Testing Patterns](./testing-patterns.md)** - Complete reference for component, SSR, and server testing patterns
-- **[Best Practices](./best-practices.md)** - Foundation First approach and Client-Server Alignment Strategy
-- **[Migration Guide](./migration-guide.md)** - Step-by-step migration from @testing-library/svelte
-- **[API Reference](./api-reference.md)** - Complete reference for all testing utilities and patterns
-- **[Troubleshooting](./troubleshooting.md)** - Common errors, solutions, and debugging strategies
+### Getting Started
+- **Setup & Installation** - Configure vitest-browser-svelte with multi-project setup supporting the Client-Server Alignment Strategy
+- **First Component Test** - Write your first test with locators, event handling, and proper assertions
+- **Essential Patterns** - Foundation First approach, always use locators (never containers), handle strict mode violations
+- **Common Issues** - Resolve "strict mode violation" errors, role confusion, and form submission hangs
+
+### Testing Patterns
+- **Component Testing** - Button, input, modal, dropdown patterns with Svelte 5 runes support
+- **Locator Strategies** - Semantic queries (preferred), handling multiple elements, role confusion fixes
+- **Form Validation** - Complete lifecycle testing (valid → validate → invalid → fix → valid)
+- **Integration Testing** - Form submission flows, todo lists, navigation patterns
+- **Svelte 5 Runes** - Testing $state, $derived with untrack(), effect patterns
+- **SSR Testing** - When to add SSR tests, basic patterns, layout and content validation
+- **Server Testing** - API routes with real FormData/Request objects (Client-Server Alignment)
+
+### Best Practices  
+- **Foundation First Approach** - Strategic test planning with describe/it.skip structure
+- **Client-Server Alignment Strategy** - Four-layer testing approach minimizing mocking for reliable integration
+- **Accessibility Testing** - Semantic queries priority, ARIA testing, keyboard navigation
+- **Error Handling** - Robust error testing, edge cases, performance patterns
+- **Mocking Strategy** - Smart mocking (external services) vs keeping data contracts real
 
 ## Additional Resources
 
-- **[E2E Testing](./e2e-testing.md)** - End-to-end testing patterns for complete user workflows
-- **[CI/CD](./ci-cd.md)** - Production-ready testing pipelines with Playwright containers
-- **[About](./about.md)** - Project background, community contributions, and development story
+### Migration & Setup
+- **Migration Guide** - Step-by-step migration from @testing-library/svelte with common pitfalls and solutions
+- **API Reference** - Complete reference for locators, assertions, interactions, and configuration
+- **Troubleshooting** - Common errors, browser issues, mocking problems, and debugging strategies
+
+### Advanced Topics
+- **E2E Testing** - Complete user journey validation as final safety net for Client-Server Alignment
+- **CI/CD** - Production-ready pipelines with Playwright containers, caching, and environment configuration
+
+### Project Information
+- **About** - Community-driven development, battle-tested production patterns, AI assistant rules
 
 ## Available LLM Documentation Formats
 
-- **sveltest-testing-lld.mdc** - Complete low-level documentation with all patterns, examples, and troubleshooting
-- **sveltest-testing-rules.mdc** - AI assistant rules for Cursor, Windsurf, and other LLM-powered editors
-- **sveltest-testing-patterns.mdc** - Focused pattern library for quick reference and implementation
-- **sveltest-testing-migration.mdc** - Dedicated migration guide from @testing-library/svelte
-- **sveltest-testing-troubleshooting.mdc** - Comprehensive error resolution and debugging guide
+### Primary Documentation
+- **Markdown Documentation** - Complete human-readable guides with examples and best practices
+- **Testing Rules (MDC)** - Comprehensive AI assistant rules for consistent team adoption across Cursor, Windsurf, and other AI editors
 
----
+### Code Examples
+- **Live Component Examples** - Working Svelte components with accompanying test files demonstrating real-world patterns
+- **Reference Implementations** - Production-ready code patterns you can copy and adapt
 
-*For the latest examples and to contribute, visit the [GitHub repository](https://github.com/spences10/sveltest)*
+### Configuration Templates  
+- **Vitest Configuration** - Multi-project setup supporting client, server, and SSR testing strategies
+- **CI/CD Workflows** - GitHub Actions workflows with Playwright containers and proper caching
+
+Cross-references: [Getting Started](./getting-started.md) → [Testing Patterns](./testing-patterns.md) → [Best Practices](./best-practices.md) → [Migration Guide](./migration-guide.md) → [API Reference](./api-reference.md)

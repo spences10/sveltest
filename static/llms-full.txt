@@ -4981,7 +4981,7 @@ export default defineConfig({
 # About
 
 # About Sveltest
-somethign changed
+
 ## Built for Teams, Battle-Tested in Production
 
 Sveltest began as a simple weekend project - just a collection of

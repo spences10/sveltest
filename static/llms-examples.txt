@@ -2,798 +2,1874 @@
 
 ## Basic Component Tests
 
-### Button Component Testing
-
+### Simple Button Component Testing
 ```typescript
-import { describe, expect, it, vi } from 'vitest';
+// Testing a primary button component
+import { describe, expect, test } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import { page } from '@vitest/browser/context';
 import { createRawSnippet } from 'svelte';
-import MyButton from './my-button.svelte';
+import Button from './Button.svelte';
 
-describe('MyButton', () => {
-	it('should render with correct text', async () => {
-		const children = createRawSnippet(() => ({
-			render: () => `<span>Click me</span>`,
-		}));
+describe('Button Component', () => {
+  test('should render with correct text', async () => {
+    const children = createRawSnippet(() => ({
+      render: () => `<span>Click me</span>`,
+    }));
 
-		render(MyButton, { children });
+    render(Button, { children });
 
-		const button = page.getByRole('button', { name: 'Click me' });
-		await expect.element(button).toBeInTheDocument();
-	});
+    const button = page.getByRole('button', { name: 'Click me' });
+    await expect.element(button).toBeInTheDocument();
+  });
 
-	it('should handle click events', async () => {
-		const click_handler = vi.fn();
-		const children = createRawSnippet(() => ({
-			render: () => `<span>Click me</span>`,
-		}));
+  test('should handle click events', async () => {
+    const click_handler = vi.fn();
+    const children = createRawSnippet(() => ({
+      render: () => `<span>Submit</span>`,
+    }));
 
-		render(MyButton, { onclick: click_handler, children });
+    render(Button, { onclick: click_handler, children });
 
-		const button = page.getByRole('button', { name: 'Click me' });
-		await button.click();
+    const button = page.getByRole('button', { name: 'Submit' });
+    await button.click();
 
-		expect(click_handler).toHaveBeenCalledOnce();
-	});
+    expect(click_handler).toHaveBeenCalledOnce();
+  });
 
-	it('should apply correct variant class', async () => {
-		const children = createRawSnippet(() => ({
-			render: () => `<span>Secondary</span>`,
-		}));
+  test('should apply variant styling', async () => {
+    const children = createRawSnippet(() => ({
+      render: () => `<span>Primary Button</span>`,
+    }));
 
-		render(MyButton, { variant: 'secondary', children });
+    render(Button, { variant: 'primary', children });
 
-		const button = page.getByTestId('my-button');
-		await expect.element(button).toHaveClass('btn-secondary');
-	});
+    const button = page.getByRole('button', { name: 'Primary Button' });
+    await expect.element(button).toHaveClass('btn-primary');
+  });
 
-	it('should support disabled state', async () => {
-		render(Button, { disabled: true, children: 'Disabled' });
+  test('should support disabled state', async () => {
+    const children = createRawSnippet(() => ({
+      render: () => `<span>Disabled</span>`,
+    }));
 
-		const button = page.getByRole('button', { name: 'Disabled' });
-		await expect.element(button).toBeDisabled();
-		await expect.element(button).toHaveClass('btn-disabled');
-	});
+    render(Button, { disabled: true, children });
 
-	it('should handle animations with force click', async () => {
-		render(AnimatedButton, { children: 'Animated' });
+    const button = page.getByRole('button', { name: 'Disabled' });
+    await expect.element(button).toBeDisabled();
+    await expect.element(button).toHaveClass('btn-disabled');
+  });
 
-		const button = page.getByRole('button', { name: 'Animated' });
-		// Use force: true for elements that may be animating
-		await button.click({ force: true });
+  test('should handle multiple button variants', async () => {
+    const variants = ['primary', 'secondary', 'danger'] as const;
+    
+    for (const variant of variants) {
+      const children = createRawSnippet(() => ({
+        render: () => `<span>${variant} button</span>`,
+      }));
 
-		await expect
-			.element(page.getByText('Animation complete'))
-			.toBeInTheDocument();
-	});
+      render(Button, { variant, children });
+      
+      const button = page.getByRole('button', { name: `${variant} button` });
+      await expect.element(button).toHaveClass(`btn-${variant}`);
+    }
+  });
 });
 ```
 
-### Input Component Testing
-
+### Icon Component Testing
 ```typescript
-describe('Input Component', () => {
-	it('should handle user input', async () => {
-		render(Input, { type: 'text', label: 'Full Name' });
+// Testing an icon component with different states
+import { describe, expect, test } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import { page } from '@vitest/browser/context';
+import Icon from './Icon.svelte';
 
-		const input = page.getByLabelText('Full Name');
-		await input.fill('John Doe');
+describe('Icon Component', () => {
+  test('should render with semantic attributes', async () => {
+    render(Icon, { name: 'check', label: 'Success' });
 
-		await expect.element(input).toHaveValue('John Doe');
-	});
+    const icon = page.getByRole('img', { name: 'Success' });
+    await expect.element(icon).toBeInTheDocument();
+    await expect.element(icon).toHaveAttribute('aria-label', 'Success');
+  });
 
-	it('should display validation errors', async () => {
-		render(Input, {
-			type: 'email',
-			label: 'Email',
-			error: 'Invalid email format',
-		});
+  test('should apply size variants', async () => {
+    render(Icon, { name: 'star', size: 'lg' });
 
-		const input = page.getByLabelText('Email');
-		const error_message = page.getByText('Invalid email format');
+    const icon = page.getByTestId('icon');
+    await expect.element(icon).toHaveClass('h-6 w-6');
+  });
 
-		await expect.element(error_message).toBeInTheDocument();
-		await expect
-			.element(input)
-			.toHaveAttribute('aria-invalid', 'true');
-		await expect.element(input).toHaveClass('input-error');
-	});
+  test('should handle color variants', async () => {
+    render(Icon, { name: 'warning', color: 'amber' });
 
-	it('should support different input types', async () => {
-		render(Input, { type: 'password', label: 'Password' });
+    const icon = page.getByTestId('icon');
+    await expect.element(icon).toHaveClass('text-amber-500');
+  });
 
-		const input = page.getByLabelText('Password');
-		await expect.element(input).toHaveAttribute('type', 'password');
-	});
+  test('should render different icon types', async () => {
+    const icons = ['check', 'warning', 'info', 'error'];
+    
+    for (const icon_name of icons) {
+      render(Icon, { name: icon_name, label: `${icon_name} icon` });
+      
+      const icon = page.getByRole('img', { name: `${icon_name} icon` });
+      await expect.element(icon).toBeInTheDocument();
+    }
+  });
 });
 ```
 
 ### Modal Component Testing
-
 ```typescript
+// Testing a modal dialog component
+import { describe, expect, test, vi } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import { page } from '@vitest/browser/context';
+import { createRawSnippet } from 'svelte';
+import Modal from './Modal.svelte';
+
 describe('Modal Component', () => {
-	it('should handle focus management', async () => {
-		render(Modal, { open: true, children: 'Modal content' });
+  test('should render when open', async () => {
+    const children = createRawSnippet(() => ({
+      render: () => `<p>Modal content</p>`,
+    }));
 
-		const modal = page.getByRole('dialog');
-		await expect.element(modal).toBeInTheDocument();
+    render(Modal, { open: true, title: 'Settings', children });
 
-		// Test focus trap
-		await page.keyboard.press('Tab');
-		const close_button = page.getByRole('button', { name: 'Close' });
-		await expect.element(close_button).toBeFocused();
-	});
+    const modal = page.getByRole('dialog');
+    await expect.element(modal).toBeInTheDocument();
+    await expect.element(modal).toHaveAttribute('aria-modal', 'true');
+    
+    const title = page.getByRole('heading', { level: 2 });
+    await expect.element(title).toHaveText('Settings');
+  });
 
-	it('should close on escape key', async () => {
-		const close_handler = vi.fn();
-		render(Modal, { open: true, onclose: close_handler });
+  test('should not render when closed', async () => {
+    const children = createRawSnippet(() => ({
+      render: () => `<p>Modal content</p>`,
+    }));
 
-		await page.keyboard.press('Escape');
-		expect(close_handler).toHaveBeenCalledOnce();
-	});
+    render(Modal, { open: false, title: 'Settings', children });
 
-	it('should prevent background scroll when open', async () => {
-		render(Modal, { open: true });
+    const modal = page.getByRole('dialog');
+    await expect.element(modal).not.toBeInTheDocument();
+  });
 
-		const body = page.locator('body');
-		await expect.element(body).toHaveClass('modal-open');
-	});
+  test('should handle close events', async () => {
+    const close_handler = vi.fn();
+    const children = createRawSnippet(() => ({
+      render: () => `<p>Content</p>`,
+    }));
+
+    render(Modal, { open: true, title: 'Test', onclose: close_handler, children });
+
+    const close_button = page.getByRole('button', { name: 'Close' });
+    await close_button.click();
+
+    expect(close_handler).toHaveBeenCalledOnce();
+  });
+
+  test('should close on escape key', async () => {
+    const close_handler = vi.fn();
+    const children = createRawSnippet(() => ({
+      render: () => `<p>Content</p>`,
+    }));
+
+    render(Modal, { open: true, title: 'Test', onclose: close_handler, children });
+
+    await page.keyboard.press('Escape');
+    expect(close_handler).toHaveBeenCalledOnce();
+  });
+
+  test('should manage focus correctly', async () => {
+    const children = createRawSnippet(() => ({
+      render: () => `<button>Action</button>`,
+    }));
+
+    render(Modal, { open: true, title: 'Focus Test', children });
+
+    const close_button = page.getByRole('button', { name: 'Close' });
+    await expect.element(close_button).toBeFocused();
+
+    // Test tab navigation
+    await page.keyboard.press('Tab');
+    const action_button = page.getByRole('button', { name: 'Action' });
+    await expect.element(action_button).toBeFocused();
+  });
 });
 ```
 
 ## Form Testing Patterns
 
-### Contact Form Testing
-
+### Input Component Testing
 ```typescript
-describe('Contact Form Integration', () => {
-	it('should handle complete form submission flow', async () => {
-		const submit_handler = vi.fn();
-		render(ContactForm, { onsubmit: submit_handler });
+// Testing form input components with validation
+import { describe, expect, test, vi } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import { page } from '@vitest/browser/context';
+import Input from './Input.svelte';
 
-		// Fill out form
-		const name_input = page.getByLabelText('Name');
-		const email_input = page.getByLabelText('Email');
-		const message_input = page.getByLabelText('Message');
+describe('Input Component', () => {
+  test('should render with label', async () => {
+    render(Input, { type: 'text', label: 'Full Name', value: '' });
 
-		await name_input.fill('John Doe');
-		await email_input.fill('john@example.com');
-		await message_input.fill('Hello world');
+    const input = page.getByLabelText('Full Name');
+    await expect.element(input).toBeInTheDocument();
+    await expect.element(input).toHaveAttribute('type', 'text');
+  });
 
-		// Submit form
-		const submit_button = page.getByRole('button', {
-			name: 'Send Message',
-		});
-		await submit_button.click();
+  test('should handle user input', async () => {
+    const input_handler = vi.fn();
+    render(Input, { 
+      type: 'email', 
+      label: 'Email Address', 
+      value: '',
+      oninput: input_handler 
+    });
 
-		// Verify submission
-		expect(submit_handler).toHaveBeenCalledWith({
-			name: 'John Doe',
-			email: 'john@example.com',
-			message: 'Hello world',
-		});
+    const input = page.getByLabelText('Email Address');
+    await input.fill('john@example.com');
 
-		// Verify success message
-		await expect
-			.element(page.getByText('Message sent successfully'))
-			.toBeInTheDocument();
-	});
+    await expect.element(input).toHaveValue('john@example.com');
+    expect(input_handler).toHaveBeenCalled();
+  });
 
-	it('should prevent submission with invalid data', async () => {
-		const submit_handler = vi.fn();
-		render(ContactForm, { onsubmit: submit_handler });
+  test('should display validation errors', async () => {
+    render(Input, {
+      type: 'email',
+      label: 'Email',
+      value: 'invalid-email',
+      error: 'Please enter a valid email address'
+    });
 
-		// Try to submit empty form
-		const submit_button = page.getByRole('button', {
-			name: 'Send Message',
-		});
-		await submit_button.click();
+    const input = page.getByLabelText('Email');
+    const error_message = page.getByText('Please enter a valid email address');
 
-		// Should show validation errors
-		await expect
-			.element(page.getByText('Name is required'))
-			.toBeInTheDocument();
-		await expect
-			.element(page.getByText('Email is required'))
-			.toBeInTheDocument();
+    await expect.element(error_message).toBeInTheDocument();
+    await expect.element(input).toHaveAttribute('aria-invalid', 'true');
+    await expect.element(input).toHaveClass('input-error');
+  });
 
-		// Should not call submit handler
-		expect(submit_handler).not.toHaveBeenCalled();
-	});
+  test('should support required fields', async () => {
+    render(Input, {
+      type: 'text',
+      label: 'Required Field',
+      value: '',
+      required: true
+    });
+
+    const input = page.getByLabelText('Required Field');
+    await expect.element(input).toHaveAttribute('required');
+    await expect.element(input).toHaveAttribute('aria-required', 'true');
+  });
+
+  test('should handle different input types', async () => {
+    const input_types = ['text', 'email', 'password', 'tel', 'url'];
+    
+    for (const type of input_types) {
+      render(Input, { type, label: `${type} input`, value: '' });
+      
+      const input = page.getByLabelText(`${type} input`);
+      await expect.element(input).toHaveAttribute('type', type);
+    }
+  });
+
+  test('should handle disabled state', async () => {
+    render(Input, {
+      type: 'text',
+      label: 'Disabled Input',
+      value: 'Cannot edit',
+      disabled: true
+    });
+
+    const input = page.getByLabelText('Disabled Input');
+    await expect.element(input).toBeDisabled();
+    await expect.element(input).toHaveClass('input-disabled');
+  });
 });
 ```
 
-### Login Form Validation
-
+### Contact Form Testing
 ```typescript
-describe('Form Validation Lifecycle', () => {
-	it('should follow validation lifecycle', async () => {
-		render(LoginForm);
+// Testing a complete contact form with validation
+import { describe, expect, test, vi } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import { page } from '@vitest/browser/context';
+import ContactForm from './ContactForm.svelte';
 
-		const email_input = page.getByLabelText('Email');
-		const submit_button = page.getByRole('button', { name: 'Submit' });
+describe('ContactForm', () => {
+  test('should render form fields', async () => {
+    render(ContactForm);
 
-		// Initially valid (no validation triggered)
-		await expect.element(submit_button).toBeEnabled();
+    await expect.element(page.getByLabelText('Name')).toBeInTheDocument();
+    await expect.element(page.getByLabelText('Email')).toBeInTheDocument();
+    await expect.element(page.getByLabelText('Message')).toBeInTheDocument();
+    await expect.element(page.getByRole('button', { name: 'Send Message' })).toBeInTheDocument();
+  });
 
-		// Trigger validation with invalid data
-		await email_input.fill('invalid-email');
-		await submit_button.click({ force: true });
+  test('should submit form with valid data', async () => {
+    const submit_handler = vi.fn();
+    render(ContactForm, { onsubmit: submit_handler });
 
-		// Now invalid with error message
-		const error_message = page.getByText(
-			'Please enter a valid email address',
-		);
-		await expect.element(error_message).toBeVisible();
+    // Fill out form
+    await page.getByLabelText('Name').fill('John Doe');
+    await page.getByLabelText('Email').fill('john@example.com');
+    await page.getByLabelText('Message').fill('Hello, this is a test message.');
 
-		// Fix the error
-		await email_input.fill('valid@example.com');
-		await submit_button.click();
+    // Submit form
+    await page.getByRole('button', { name: 'Send Message' }).click();
 
-		// Back to valid state
-		await expect.element(error_message).not.toBeVisible();
-	});
+    expect(submit_handler).toHaveBeenCalledWith({
+      name: 'John Doe',
+      email: 'john@example.com',
+      message: 'Hello, this is a test message.'
+    });
+  });
 
-	it('should handle field-level validation', async () => {
-		render(FormComponent);
+  test('should show validation errors for empty fields', async () => {
+    const submit_handler = vi.fn();
+    render(ContactForm, { onsubmit: submit_handler });
 
-		const email_input = page.getByLabelText('Email');
+    // Try to submit empty form
+    await page.getByRole('button', { name: 'Send Message' }).click();
 
-		// Initially no error
-		await expect
-			.element(page.getByText('Email is required'))
-			.not.toBeInTheDocument();
+    // Should show validation errors
+    await expect.element(page.getByText('Name is required')).toBeInTheDocument();
+    await expect.element(page.getByText('Email is required')).toBeInTheDocument();
+    await expect.element(page.getByText('Message is required')).toBeInTheDocument();
 
-		// Trigger validation by focusing and blurring
-		await email_input.focus();
-		await email_input.blur();
+    // Should not call submit handler
+    expect(submit_handler).not.toHaveBeenCalled();
+  });
 
-		// Error should appear
-		await expect
-			.element(page.getByText('Email is required'))
-			.toBeInTheDocument();
+  test('should validate email format', async () => {
+    render(ContactForm);
 
-		// Fix the error
-		await email_input.fill('valid@example.com');
-		await email_input.blur();
+    const email_input = page.getByLabelText('Email');
+    await email_input.fill('invalid-email');
+    await email_input.blur();
 
-		// Error should disappear
-		await expect
-			.element(page.getByText('Email is required'))
-			.not.toBeInTheDocument();
-	});
+    await expect.element(page.getByText('Please enter a valid email address')).toBeInTheDocument();
+  });
+
+  test('should clear form after successful submission', async () => {
+    const submit_handler = vi.fn();
+    render(ContactForm, { onsubmit: submit_handler });
+
+    // Fill and submit form
+    await page.getByLabelText('Name').fill('Jane Doe');
+    await page.getByLabelText('Email').fill('jane@example.com');
+    await page.getByLabelText('Message').fill('Test message');
+    await page.getByRole('button', { name: 'Send Message' }).click();
+
+    // Form should be cleared
+    await expect.element(page.getByLabelText('Name')).toHaveValue('');
+    await expect.element(page.getByLabelText('Email')).toHaveValue('');
+    await expect.element(page.getByLabelText('Message')).toHaveValue('');
+
+    // Success message should appear
+    await expect.element(page.getByText('Message sent successfully!')).toBeInTheDocument();
+  });
+
+  test('should handle form submission loading state', async () => {
+    const submit_handler = vi.fn(() => new Promise(resolve => setTimeout(resolve, 1000)));
+    render(ContactForm, { onsubmit: submit_handler });
+
+    await page.getByLabelText('Name').fill('Test User');
+    await page.getByLabelText('Email').fill('test@example.com');
+    await page.getByLabelText('Message').fill('Test message');
+    
+    const submit_button = page.getByRole('button', { name: 'Send Message' });
+    await submit_button.click();
+
+    // Button should show loading state
+    await expect.element(page.getByRole('button', { name: 'Sending...' })).toBeInTheDocument();
+    await expect.element(submit_button).toBeDisabled();
+  });
+});
+```
+
+### Login Form Testing
+```typescript
+// Testing authentication form with complete validation flow
+import { describe, expect, test, vi } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import { page } from '@vitest/browser/context';
+import LoginForm from './LoginForm.svelte';
+
+describe('LoginForm', () => {
+  test('should handle successful login', async () => {
+    const login_handler = vi.fn(() => Promise.resolve({ success: true }));
+    render(LoginForm, { onlogin: login_handler });
+
+    await page.getByLabelText('Email').fill('user@example.com');
+    await page.getByLabelText('Password').fill('password123');
+    await page.getByRole('button', { name: 'Sign In' }).click();
+
+    expect(login_handler).toHaveBeenCalledWith({
+      email: 'user@example.com',
+      password: 'password123'
+    });
+
+    await expect.element(page.getByText('Welcome back!')).toBeInTheDocument();
+  });
+
+  test('should display server error messages', async () => {
+    const login_handler = vi.fn(() => 
+      Promise.reject({ message: 'Invalid credentials' })
+    );
+    render(LoginForm, { onlogin: login_handler });
+
+    await page.getByLabelText('Email').fill('wrong@example.com');
+    await page.getByLabelText('Password').fill('wrongpassword');
+    await page.getByRole('button', { name: 'Sign In' }).click();
+
+    await expect.element(page.getByText('Invalid credentials')).toBeInTheDocument();
+  });
+
+  test('should validate form fields on blur', async () => {
+    render(LoginForm);
+
+    // Test email validation
+    const email_input = page.getByLabelText('Email');
+    await email_input.fill('invalid-email');
+    await email_input.blur();
+    
+    await expect.element(page.getByText('Please enter a valid email')).toBeInTheDocument();
+
+    // Test password validation
+    const password_input = page.getByLabelText('Password');
+    await password_input.fill('123');
+    await password_input.blur();
+    
+    await expect.element(page.getByText('Password must be at least 8 characters')).toBeInTheDocument();
+  });
+
+  test('should toggle password visibility', async () => {
+    render(LoginForm);
+
+    const password_input = page.getByLabelText('Password');
+    const toggle_button = page.getByRole('button', { name: 'Show password' });
+
+    await expect.element(password_input).toHaveAttribute('type', 'password');
+
+    await toggle_button.click();
+    await expect.element(password_input).toHaveAttribute('type', 'text');
+    await expect.element(page.getByRole('button', { name: 'Hide password' })).toBeInTheDocument();
+  });
+
+  test('should handle remember me checkbox', async () => {
+    const login_handler = vi.fn();
+    render(LoginForm, { onlogin: login_handler });
+
+    const remember_checkbox = page.getByRole('checkbox', { name: 'Remember me' });
+    await remember_checkbox.check();
+    
+    await page.getByLabelText('Email').fill('user@example.com');
+    await page.getByLabelText('Password').fill('password123');
+    await page.getByRole('button', { name: 'Sign In' }).click();
+
+    expect(login_handler).toHaveBeenCalledWith({
+      email: 'user@example.com',
+      password: 'password123',
+      remember: true
+    });
+  });
 });
 ```
 
 ## State Testing with Runes
 
-### $state and $derived Testing
-
+### Basic State Management Testing
 ```typescript
+// Testing Svelte 5 $state and $derived values
+import { describe, expect, test } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import { page } from '@vitest/browser/context';
 import { flushSync, untrack } from 'svelte';
+import Counter from './Counter.svelte';
 
-describe('Reactive State Component', () => {
-	it('should handle $state updates', async () => {
-		render(CounterComponent);
+describe('Counter Component State', () => {
+  test('should handle $state updates', async () => {
+    render(Counter, { initial_count: 0 });
 
-		const count_display = page.getByTestId('count');
-		const increment_button = page.getByRole('button', {
-			name: 'Increment',
-		});
+    const count_display = page.getByTestId('count');
+    const increment_button = page.getByRole('button', { name: 'Increment' });
+    const decrement_button = page.getByRole('button', { name: 'Decrement' });
 
-		// Initial state
-		await expect.element(count_display).toHaveTextContent('0');
+    // Initial state
+    await expect.element(count_display).toHaveTextContent('0');
 
-		// Update state
-		await increment_button.click();
-		await expect.element(count_display).toHaveTextContent('1');
-	});
+    // Increment
+    await increment_button.click();
+    await expect.element(count_display).toHaveTextContent('1');
 
-	it('should handle $derived values with untrack', () => {
-		let count = $state(0);
-		let doubled = $derived(count * 2);
+    // Decrement
+    await decrement_button.click();
+    await expect.element(count_display).toHaveTextContent('0');
+  });
 
-		// ✅ Always use untrack() when accessing $derived values
-		expect(untrack(() => doubled)).toBe(0);
+  test('should handle $derived values with untrack', () => {
+    let count = $state(0);
+    let doubled = $derived(count * 2);
+    let is_even = $derived(count % 2 === 0);
 
-		count = 5;
-		flushSync(); // Ensure derived state is evaluated
+    // Test initial values
+    expect(untrack(() => doubled)).toBe(0);
+    expect(untrack(() => is_even)).toBe(true);
 
-		expect(untrack(() => doubled)).toBe(10);
-	});
+    // Update state
+    count = 5;
+    flushSync();
 
-	it('should handle $derived from object getters', () => {
-		const state_object = {
-			get computed_value() {
-				return $derived(() => some_calculation());
-			},
-		};
+    // Test derived values
+    expect(untrack(() => doubled)).toBe(10);
+    expect(untrack(() => is_even)).toBe(false);
+  });
 
-		// ✅ Get the $derived function first, then use untrack
-		const derived_fn = state_object.computed_value;
-		expect(untrack(() => derived_fn())).toBe(expected_value);
-	});
+  test('should handle complex derived state', () => {
+    let items = $state([]);
+    let total_count = $derived(items.length);
+    let has_items = $derived(items.length > 0);
+    let first_item = $derived(items.length > 0 ? items[0] : null);
+
+    // Initially empty
+    expect(untrack(() => total_count)).toBe(0);
+    expect(untrack(() => has_items)).toBe(false);
+    expect(untrack(() => first_item)).toBe(null);
+
+    // Add items
+    items = ['apple', 'banana', 'cherry'];
+    flushSync();
+
+    expect(untrack(() => total_count)).toBe(3);
+    expect(untrack(() => has_items)).toBe(true);
+    expect(untrack(() => first_item)).toBe('apple');
+  });
 });
 ```
 
-### Complex Form State Testing
-
+### Form State Management Testing
 ```typescript
-describe('Form State Derived Values', () => {
-	it('should validate form state correctly', () => {
-		const form = create_form_state({
-			email: { value: '', validation_rules: { required: true } },
-			password: {
-				value: '',
-				validation_rules: { required: true, min_length: 8 },
-			},
-		});
+// Testing complex form state with validation
+import { describe, expect, test } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import { page } from '@vitest/browser/context';
+import { flushSync, untrack } from 'svelte';
+import { create_form_state } from '$lib/utils/form-state';
 
-		// Test initial state
-		expect(untrack(() => form.is_form_valid())).toBe(true);
-		expect(untrack(() => form.has_changes())).toBe(false);
-		expect(untrack(() => form.field_errors())).toEqual({});
+describe('Form State Management', () => {
+  test('should validate form state correctly', () => {
+    const form = create_form_state({
+      email: { value: '', validation_rules: { required: true } },
+      password: { value: '', validation_rules: { required: true, min_length: 8 } }
+    });
 
-		// Update field and test derived state changes
-		form.update_field('email', 'invalid');
-		flushSync();
+    // Test initial state - should be valid (no validation run)
+    expect(untrack(() => form.is_form_valid())).toBe(true);
+    expect(untrack(() => form.has_changes())).toBe(false);
+    expect(untrack(() => form.field_errors())).toEqual({});
 
-		expect(untrack(() => form.is_form_valid())).toBe(false);
-		expect(untrack(() => form.has_changes())).toBe(true);
+    // Update field with invalid data
+    form.update_field('email', 'invalid');
+    flushSync();
 
-		const errors = untrack(() => form.field_errors());
-		expect(errors.email).toBe('Invalid format');
-	});
+    expect(untrack(() => form.has_changes())).toBe(true);
+    
+    // Trigger validation
+    form.validate_all_fields();
+    flushSync();
+
+    expect(untrack(() => form.is_form_valid())).toBe(false);
+    const errors = untrack(() => form.field_errors());
+    expect(errors.email).toBe('Invalid email format');
+    expect(errors.password).toBe('Password is required');
+  });
+
+  test('should handle field-level validation lifecycle', () => {
+    let email = $state('');
+    let email_touched = $state(false);
+    let submit_attempted = $state(false);
+
+    const email_validation = $derived(() => {
+      if (!email) return { is_valid: false, error: 'Email is required' };
+      const email_regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!email_regex.test(email)) return { is_valid: false, error: 'Invalid email format' };
+      return { is_valid: true, error: '' };
+    });
+
+    const show_email_error = $derived(submit_attempted || email_touched);
+    const email_error = $derived(() => {
+      const validation = email_validation();
+      return show_email_error && !validation.is_valid ? validation.error : '';
+    });
+
+    // Initially no errors shown
+    expect(untrack(() => show_email_error)).toBe(false);
+    expect(untrack(() => email_error())).toBe('');
+
+    // Touch field with invalid email
+    email = 'invalid';
+    email_touched = true;
+    flushSync();
+
+    expect(untrack(() => show_email_error)).toBe(true);
+    expect(untrack(() => email_error())).toBe('Invalid email format');
+
+    // Fix email
+    email = 'user@example.com';
+    flushSync();
+
+    expect(untrack(() => email_error())).toBe('');
+    expect(untrack(() => email_validation().is_valid)).toBe(true);
+  });
+
+  test('should handle form submission state', () => {
+    let email = $state('');
+    let password = $state('');
+    let is_submitting = $state(false);
+    let submit_attempted = $state(false);
+
+    const form_is_valid = $derived(() => {
+      return email.includes('@') && password.length >= 8;
+    });
+
+    const can_submit = $derived(() => {
+      return untrack(() => form_is_valid()) && !is_submitting;
+    });
+
+    // Initially cannot submit
+    expect(untrack(() => can_submit())).toBe(false);
+
+    // Fill valid data
+    email = 'test@example.com';
+    password = 'validpassword';
+    flushSync();
+
+    expect(untrack(() => can_submit())).toBe(true);
+
+    // Start submitting
+    is_submitting = true;
+    flushSync();
+
+    expect(untrack(() => can_submit())).toBe(false);
+  });
 });
 ```
 
-### Untrack Usage Validation
-
+### Shopping Cart State Testing
 ```typescript
-// From .test.svelte.ts file - PROVEN WORKING PATTERN
-describe('Untrack Usage Validation', () => {
-	it('should access $derived values using untrack', () => {
-		// ✅ Create reactive state directly in test (.test.svelte.ts file)
-		let email = $state('');
-		const email_validation = $derived(validate_email(email));
+// Testing complex state management with multiple derived values
+import { describe, expect, test } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import { page } from '@vitest/browser/context';
+import { flushSync, untrack } from 'svelte';
+import ShoppingCart from './ShoppingCart.svelte';
 
-		// Test invalid email
-		email = 'invalid-email';
-		flushSync();
+describe('Shopping Cart State', () => {
+  test('should manage cart items correctly', async () => {
+    render(ShoppingCart);
 
-		// ✅ CORRECT: Use untrack to access $derived value
-		const result = untrack(() => email_validation);
-		expect(result.is_valid).toBe(false);
-		expect(result.error_message).toBe('Invalid format');
+    // Initially empty
+    const empty_message = page.getByText('Your cart is empty');
+    await expect.element(empty_message).toBeInTheDocument();
 
-		// Test valid email
-		email = 'test@example.com';
-		flushSync();
+    // Add item
+    const add_button = page.getByRole('button', { name: 'Add Apple to cart' });
+    await add_button.click();
 
-		const valid_result = untrack(() => email_validation);
-		expect(valid_result.is_valid).toBe(true);
-		expect(valid_result.error_message).toBe('');
-	});
+    const cart_item = page.getByText('Apple');
+    await expect.element(cart_item).toBeInTheDocument();
+    await expect.element(empty_message).not.toBeInTheDocument();
+  });
 
-	it('should handle complex derived logic', () => {
-		// ✅ Recreate component logic in test
-		let email = $state('');
-		let submit_attempted = $state(false);
-		let email_touched = $state(false);
+  test('should calculate totals correctly', () => {
+    let cart_items = $state([]);
+    
+    const total_quantity = $derived(
+      cart_items.reduce((sum, item) => sum + item.quantity, 0)
+    );
+    
+    const total_price = $derived(
+      cart_items.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+    );
+    
+    const has_items = $derived(cart_items.length > 0);
 
-		const email_validation = $derived(validate_email(email));
-		const show_email_error = $derived(
-			submit_attempted || email_touched,
-		);
-		const email_error = $derived(
-			show_email_error && !email_validation.is_valid
-				? email_validation.error_message
-				: '',
-		);
+    // Initially empty
+    expect(untrack(() => total_quantity)).toBe(0);
+    expect(untrack(() => total_price)).toBe(0);
+    expect(untrack(() => has_items)).toBe(false);
 
-		// Initially no errors shown
-		expect(untrack(() => show_email_error)).toBe(false);
-		expect(untrack(() => email_error)).toBe('');
+    // Add items
+    cart_items = [
+      { id: 1, name: 'Apple', price: 1.50, quantity: 2 },
+      { id: 2, name: 'Banana', price: 0.75, quantity: 3 }
+    ];
+    flushSync();
 
-		// After touching field with invalid email
-		email = 'invalid';
-		email_touched = true;
-		flushSync();
+    expect(untrack(() => total_quantity)).toBe(5);
+    expect(untrack(() => total_price)).toBe(5.25); // (1.50 * 2) + (0.75 * 3)
+    expect(untrack(() => has_items)).toBe(true);
+  });
 
-		expect(untrack(() => show_email_error)).toBe(true);
-		expect(untrack(() => email_error)).toBe('Invalid format');
-	});
+  test('should handle item quantity updates', () => {
+    let cart_items = $state([
+      { id: 1, name: 'Apple', price: 1.00, quantity: 1 }
+    ]);
+
+    const update_quantity = (item_id, new_quantity) => {
+      cart_items = cart_items.map(item =>
+        item.id === item_id ? { ...item, quantity: new_quantity } : item
+      );
+    };
+
+    const remove_item = (item_id) => {
+      cart_items = cart_items.filter(item => item.id !== item_id);
+    };
+
+    const total_items = $derived(cart_items.length);
+    const total_quantity = $derived(
+      cart_items.reduce((sum, item) => sum + item.quantity, 0)
+    );
+
+    // Initial state
+    expect(untrack(() => total_items)).toBe(1);
+    expect(untrack(() => total_quantity)).toBe(1);
+
+    // Update quantity
+    update_quantity(1, 5);
+    flushSync();
+
+    expect(untrack(() => total_items)).toBe(1);
+    expect(untrack(() => total_quantity)).toBe(5);
+
+    // Remove item
+    remove_item(1);
+    flushSync();
+
+    expect(untrack(() => total_items)).toBe(0);
+    expect(untrack(() => total_quantity)).toBe(0);
+  });
 });
 ```
 
 ## SSR Testing Examples
 
-### Basic SSR Testing
-
+### Component SSR Rendering
 ```typescript
+// Testing server-side rendering of components
 import { render } from 'svelte/server';
 import { describe, expect, test } from 'vitest';
+import HomePage from './HomePage.svelte';
+import UserCard from './UserCard.svelte';
+import Navigation from './Navigation.svelte';
 
-describe('Component SSR', () => {
-	it('should render without errors', () => {
-		expect(() => {
-			render(ComponentName);
-		}).not.toThrow();
-	});
+describe('HomePage SSR', () => {
+  test('should render without errors', () => {
+    expect(() => {
+      render(HomePage);
+    }).not.toThrow();
+  });
 
-	it('should render essential content for SEO', () => {
-		const { body } = render(ComponentName, {
-			props: { title: 'Page Title', description: 'Page description' },
-		});
+  test('should render essential content for SEO', () => {
+    const { body } = render(HomePage, {
+      props: { 
+        title: 'Welcome to Our Site',
+        description: 'The best place for amazing content'
+      }
+    });
 
-		expect(body).toContain('<h1>Page Title</h1>');
-		expect(body).toContain('Page description');
-		expect(body).toContain('href="/important-link"');
-	});
+    expect(body).toContain('<h1>Welcome to Our Site</h1>');
+    expect(body).toContain('The best place for amazing content');
+    expect(body).toContain('<main');
+    expect(body).toContain('role="main"');
+  });
 
-	it('should render meta information', () => {
-		const { head } = render(ComponentName, {
-			props: { title: 'Page Title' },
-		});
+  test('should render meta information', () => {
+    const { head } = render(HomePage, {
+      props: { 
+        title: 'Amazing Site',
+        description: 'Site description for SEO'
+      }
+    });
 
-		expect(head).toContain('<title>Page Title</title>');
-		expect(head).toContain('meta name="description"');
-	});
+    expect(head).toContain('<title>Amazing Site</title>');
+    expect(head).toContain('meta name="description"');
+    expect(head).toContain('Site description for SEO');
+  });
+
+  test('should include structured data', () => {
+    const { head } = render(HomePage, {
+      props: {
+        structured_data: {
+          '@type': 'Organization',
+          name: 'Test Company'
+        }
+      }
+    });
+
+    expect(head).toContain('application/ld+json');
+    expect(head).toContain('Test Company');
+  });
+});
+
+describe('UserCard SSR', () => {
+  test('should render user information', () => {
+    const user = {
+      id: '123',
+      name: 'John Doe',
+      email: 'john@example.com',
+      avatar: '/images/john.jpg',
+      role: 'Developer'
+    };
+
+    const { body } = render(UserCard, { props: { user } });
+
+    expect(body).toContain('John Doe');
+    expect(body).toContain('john@example.com');
+    expect(body).toContain('Developer');
+    expect(body).toContain('src="/images/john.jpg"');
+    expect(body).toContain('alt="John Doe"');
+  });
+
+  test('should handle missing user data gracefully', () => {
+    const { body } = render(UserCard, { 
+      props: { user: null } 
+    });
+
+    expect(body).toContain('User not found');
+    expect(body).not.toContain('undefined');
+    expect(body).not.toContain('null');
+  });
+
+  test('should render accessibility attributes', () => {
+    const user = {
+      id: '456',
+      name: 'Jane Smith',
+      email: 'jane@example.com'
+    };
+
+    const { body } = render(UserCard, { props: { user } });
+
+    expect(body).toContain('role="article"');
+    expect(body).toContain('aria-label');
+    expect(body).toContain('itemscope');
+    expect(body).toContain('itemtype="http://schema.org/Person"');
+  });
+});
+
+describe('Navigation SSR', () => {
+  test('should render navigation structure', () => {
+    const { body } = render(Navigation, {
+      props: {
+        current_path: '/docs'
+      }
+    });
+
+    expect(body).toContain('<nav');
+    expect(body).toContain('role="navigation"');
+    expect(body).toContain('aria-label="Main navigation"');
+    expect(body).toContain('href="/docs"');
+    expect(body).toContain('href="/examples"');
+    expect(body).toContain('href="/about"');
+  });
+
+  test('should highlight active navigation item', () => {
+    const { body } = render(Navigation, {
+      props: {
+        current_path: '/examples'
+      }
+    });
+
+    expect(body).toContain('aria-current="page"');
+    expect(body).toContain('nav-active');
+  });
+
+  test('should include skip navigation link', () => {
+    const { body } = render(Navigation);
+
+    expect(body).toContain('href="#main-content"');
+    expect(body).toContain('Skip to main content');
+    expect(body).toContain('sr-only');
+  });
 });
 ```
 
 ### Layout SSR Testing
-
 ```typescript
+// Testing layout components for SSR compatibility
+import { render } from 'svelte/server';
+import { describe, expect, test } from 'vitest';
+import Layout from './Layout.svelte';
+import Footer from './Footer.svelte';
+import Header from './Header.svelte';
+
 describe('Layout SSR', () => {
-	it('should render navigation structure', () => {
-		const { body } = render(Layout);
+  test('should render complete page structure', () => {
+    const { body } = render(Layout, {
+      props: {
+        title: 'Test Page',
+        description: 'Test description'
+      }
+    });
 
-		expect(body).toContain('<nav');
-		expect(body).toContain('aria-label="Main navigation"');
-		expect(body).toContain('href="/docs"');
-		expect(body).toContain('href="/examples"');
-	});
+    expect(body).toContain('<!DOCTYPE html>');
+    expect(body).toContain('<html lang="en"');
+    expect(body).toContain('<head>');
+    expect(body).toContain('<body>');
+    expect(body).toContain('<header>');
+    expect(body).toContain('<main>');
+    expect(body).toContain('<footer>');
+  });
 
-	it('should include accessibility features', () => {
-		const { body } = render(Layout);
+  test('should include essential meta tags', () => {
+    const { head } = render(Layout, {
+      props: {
+        title: 'SEO Test Page',
+        description: 'This is a test page for SEO',
+        canonical_url: 'https://example.com/test'
+      }
+    });
 
-		expect(body).toContain('role="main"');
-		expect(body).toContain('aria-label');
-		expect(body).toContain('skip-to-content');
-	});
+    expect(head).toContain('<title>SEO Test Page</title>');
+    expect(head).toContain('name="description" content="This is a test page for SEO"');
+    expect(head).toContain('name="viewport" content="width=device-width, initial-scale=1"');
+    expect(head).toContain('rel="canonical" href="https://example.com/test"');
+  });
 
-	it('should render footer information', () => {
-		const { body } = render(Layout);
+  test('should render Open Graph tags', () => {
+    const { head } = render(Layout, {
+      props: {
+        title: 'Social Share Test',
+        description: 'Test for social sharing',
+        og_image: '/images/social-share.jpg'
+      }
+    });
 
-		expect(body).toContain('<footer');
-		expect(body).toContain('© 2024');
-		expect(body).toContain('Privacy Policy');
-	});
+    expect(head).toContain('property="og:title" content="Social Share Test"');
+    expect(head).toContain('property="og:description" content="Test for social sharing"');
+    expect(head).toContain('property="og:image" content="/images/social-share.jpg"');
+    expect(head).toContain('property="og:type" content="website"');
+  });
+
+  test('should include accessibility features', () => {
+    const { body } = render(Layout);
+
+    expect(body).toContain('role="banner"'); // Header
+    expect(body).toContain('role="main"'); // Main content
+    expect(body).toContain('role="contentinfo"'); // Footer
+    expect(body).toContain('skip-link');
+    expect(body).toContain('aria-label');
+  });
+});
+
+describe('Header SSR', () => {
+  test('should render site branding', () => {
+    const { body } = render(Header, {
+      props: {
+        site_name: 'Test Site',
+        logo_url: '/logo.svg'
+      }
+    });
+
+    expect(body).toContain('Test Site');
+    expect(body).toContain('src="/logo.svg"');
+    expect(body).toContain('alt="Test Site"');
+  });
+
+  test('should render navigation menu', () => {
+    const navigation_items = [
+      { href: '/home', label: 'Home' },
+      { href: '/about', label: 'About' },
+      { href: '/contact', label: 'Contact' }
+    ];
+
+    const { body } = render(Header, {
+      props: { navigation_items }
+    });
+
+    expect(body).toContain('href="/home"');
+    expect(body).toContain('href="/about"');
+    expect(body).toContain('href="/contact"');
+    expect(body).toContain('>Home<');
+    expect(body).toContain('>About<');
+    expect(body).toContain('>Contact<');
+  });
+});
+
+describe('Footer SSR', () => {
+  test('should render footer information', () => {
+    const { body } = render(Footer, {
+      props: {
+        company_name: 'Test Company',
+        copyright_year: 2024
+      }
+    });
+
+    expect(body).toContain('<footer');
+    expect(body).toContain('© 2024 Test Company');
+    expect(body).toContain('role="contentinfo"');
+  });
+
+  test('should render footer links', () => {
+    const footer_links = [
+      { href: '/privacy', label: 'Privacy Policy' },
+      { href: '/terms', label: 'Terms of Service' },
+      { href: '/contact', label: 'Contact Us' }
+    ];
+
+    const { body } = render(Footer, {
+      props: { footer_links }
+    });
+
+    expect(body).toContain('href="/privacy"');
+    expect(body).toContain('Privacy Policy');
+    expect(body).toContain('href="/terms"');
+    expect(body).toContain('Terms of Service');
+  });
+
+  test('should include social media links', () => {
+    const social_links = [
+      { platform: 'twitter', url: 'https://twitter.com/testcompany' },
+      { platform: 'github', url: 'https://github.com/testcompany' }
+    ];
+
+    const { body } = render(Footer, {
+      props: { social_links }
+    });
+
+    expect(body).toContain('https://twitter.com/testcompany');
+    expect(body).toContain('https://github.com/testcompany');
+    expect(body).toContain('aria-label="Twitter"');
+    expect(body).toContain('aria-label="GitHub"');
+  });
 });
 ```
 
 ## Mocking Examples
 
 ### Utility Function Mocking
-
 ```typescript
-// Mock utility functions with realistic return values
+// Mocking utility functions with realistic return values
+import { describe, expect, test, vi } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import { page } from '@vitest/browser/context';
+import UserProfile from './UserProfile.svelte';
+
+// Mock API utilities
 vi.mock('$lib/utils/api', () => ({
-	fetch_user_data: vi.fn(() =>
-		Promise.resolve({
-			id: 1,
-			name: 'John Doe',
-			email: 'john@example.com',
-		}),
-	),
-	validate_email: vi.fn((email: string) => email.includes('@')),
+  fetch_user_data: vi.fn(() =>
+    Promise.resolve({
+      id: '123',
+      name: 'John Doe',
+      email: 'john@example.com',
+      avatar: '/images/john.jpg',
+      status: 'active'
+    })
+  ),
+  update_user_profile: vi.fn(() =>
+    Promise.resolve({ success: true, message: 'Profile updated' })
+  )
 }));
 
-describe('User Profile Component', () => {
-	it('should load user data on mount', async () => {
-		render(UserProfile, { user_id: 1 });
+// Mock validation utilities
+vi.mock('$lib/utils/validation', () => ({
+  validate_email: vi.fn((email: string) => ({
+    is_valid: email.includes('@'),
+    error_message: email.includes('@') ? '' : 'Invalid email format'
+  })),
+  validate_password: vi.fn((password: string) => ({
+    is_valid: password.length >= 8,
+    error_message: password.length >= 8 ? '' : 'Password must be at least 8 characters'
+  }))
+}));
 
-		await expect
-			.element(page.getByText('John Doe'))
-			.toBeInTheDocument();
-		await expect
-			.element(page.getByText('john@example.com'))
-			.toBeInTheDocument();
-	});
+describe('UserProfile with Mocked Utilities', () => {
+  test('should load user data on mount', async () => {
+    render(UserProfile, { user_id: '123' });
 
-	it('should verify mocks are working correctly', async () => {
-		const { fetch_user_data } = await import(
-			'$lib/utils/data-fetcher'
-		);
+    // Wait for async data loading
+    await expect.element(page.getByText('John Doe')).toBeInTheDocument();
+    await expect.element(page.getByText('john@example.com')).toBeInTheDocument();
+    
+    const { fetch_user_data } = await import('$lib/utils/api');
+    expect(fetch_user_data).toHaveBeenCalledWith('123');
+  });
 
-		expect(fetch_user_data).toBeDefined();
-		expect(vi.isMockFunction(fetch_user_data)).toBe(true);
+  test('should validate email input', async () => {
+    render(UserProfile, { user_id: '123' });
 
-		const result = await fetch_user_data('123');
-		expect(result).toEqual({
-			id: '1',
-			name: 'Test User',
-			email: 'test@example.com',
-		});
-	});
+    const email_input = page.getByLabelText('Email');
+    await email_input.fill('invalid-email');
+    await email_input.blur();
+
+    const { validate_email } = await import('$lib/utils/validation');
+    expect(validate_email).toHaveBeenCalledWith('invalid-email');
+    
+    await expect.element(page.getByText('Invalid email format')).toBeInTheDocument();
+  });
+
+  test('should handle profile update', async () => {
+    render(UserProfile, { user_id: '123' });
+
+    await page.getByLabelText('Name').fill('Jane Doe');
+    await page.getByLabelText('Email').fill('jane@example.com');
+    await page.getByRole('button', { name: 'Save Changes' }).click();
+
+    const { update_user_profile } = await import('$lib/utils/api');
+    expect(update_user_profile).toHaveBeenCalledWith('123', {
+      name: 'Jane Doe',
+      email: 'jane@example.com'
+    });
+
+    await expect.element(page.getByText('Profile updated')).toBeInTheDocument();
+  });
+
+  test('should verify mocks are working correctly', async () => {
+    const { fetch_user_data, update_user_profile } = await import('$lib/utils/api');
+    const { validate_email, validate_password } = await import('$lib/utils/validation');
+
+    // Verify all functions are mocked
+    expect(vi.isMockFunction(fetch_user_data)).toBe(true);
+    expect(vi.isMockFunction(update_user_profile)).toBe(true);
+    expect(vi.isMockFunction(validate_email)).toBe(true);
+    expect(vi.isMockFunction(validate_password)).toBe(true);
+
+    // Test mock return values
+    const user_data = await fetch_user_data('test-id');
+    expect(user_data).toEqual({
+      id: '123',
+      name: 'John Doe',
+      email: 'john@example.com',
+      avatar: '/images/john.jpg',
+      status: 'active'
+    });
+
+    const email_validation = validate_email('test@example.com');
+    expect(email_validation).toEqual({
+      is_valid: true,
+      error_message: ''
+    });
+  });
 });
 ```
 
 ### Component Mocking
-
 ```typescript
-// Mock child components to isolate testing
-vi.mock('./child-component.svelte', () => ({
-	default: vi.fn().mockImplementation(() => ({
-		$$: {},
-		$set: vi.fn(),
-		$destroy: vi.fn(),
-		$on: vi.fn(),
-	})),
+// Mocking child components to isolate testing
+import { describe, expect, test, vi } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import { page } from '@vitest/browser/context';
+import Dashboard from './Dashboard.svelte';
+
+// Mock heavy chart component
+vi.mock('$lib/components/Chart.svelte', () => ({
+  default: vi.fn().mockImplementation(() => ({
+    $$: {},
+    $set: vi.fn(),
+    $destroy: vi.fn(),
+    $on: vi.fn()
+  }))
 }));
 
-describe('Parent Component', () => {
-	it('should render with mocked child', async () => {
-		render(ParentComponent);
+// Mock data table component
+vi.mock('$lib/components/DataTable.svelte', () => ({
+  default: vi.fn().mockImplementation(() => ({
+    $$: {},
+    $set: vi.fn(),
+    $destroy: vi.fn(),
+    $on: vi.fn()
+  }))
+}));
 
-		// Test parent functionality without child complexity
-		const parent_element = page.getByTestId('parent');
-		await expect.element(parent_element).toBeInTheDocument();
-	});
+describe('Dashboard with Mocked Components', () => {
+  test('should render dashboard layout without heavy components', async () => {
+    render(Dashboard, {
+      user_data: { name: 'Test User' },
+      dashboard_data: { metrics: [], charts: [] }
+    });
+
+    // Test dashboard structure without loading heavy components
+    await expect.element(page.getByText('Dashboard')).toBeInTheDocument();
+    await expect.element(page.getByText('Welcome, Test User')).toBeInTheDocument();
+    await expect.element(page.getByTestId('dashboard-header')).toBeInTheDocument();
+  });
+
+  test('should handle dashboard actions', async () => {
+    const refresh_handler = vi.fn();
+    render(Dashboard, {
+      user_data: { name: 'Test User' },
+      onrefresh: refresh_handler
+    });
+
+    const refresh_button = page.getByRole('button', { name: 'Refresh Data' });
+    await refresh_button.click();
+
+    expect(refresh_handler).toHaveBeenCalledOnce();
+  });
+
+  test('should show loading state', async () => {
+    render(Dashboard, {
+      user_data: { name: 'Test User' },
+      is_loading: true
+    });
+
+    await expect.element(page.getByText('Loading dashboard...')).toBeInTheDocument();
+    await expect.element(page.getByTestId('loading-spinner')).toBeInTheDocument();
+  });
 });
 ```
 
 ### Store Mocking
-
 ```typescript
-// Mock Svelte stores
+// Mocking Svelte stores for predictable test state
+import { describe, expect, test, vi } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import { page } from '@vitest/browser/context';
+import UserDashboard from './UserDashboard.svelte';
+
+// Mock user store
 vi.mock('$lib/stores/user', () => ({
-	user_store: {
-		subscribe: vi.fn((callback) => {
-			callback({ id: 1, name: 'Test User' });
-			return () => {}; // Unsubscribe function
-		}),
-		set: vi.fn(),
-		update: vi.fn(),
-	},
+  user_store: {
+    subscribe: vi.fn((callback) => {
+      callback({
+        id: '123',
+        name: 'Test User',
+        email: 'test@example.com',
+        role: 'admin',
+        preferences: { theme: 'dark' }
+      });
+      return vi.fn(); // Unsubscribe function
+    }),
+    set: vi.fn(),
+    update: vi.fn()
+  }
 }));
 
-describe('User Dashboard', () => {
-	it('should display user information from store', async () => {
-		render(UserDashboard);
+// Mock notifications store
+vi.mock('$lib/stores/notifications', () => ({
+  notifications_store: {
+    subscribe: vi.fn((callback) => {
+      callback([
+        { id: '1', message: 'Welcome back!', type: 'success' },
+        { id: '2', message: 'You have 3 new messages', type: 'info' }
+      ]);
+      return vi.fn();
+    }),
+    add: vi.fn(),
+    remove: vi.fn(),
+    clear: vi.fn()
+  }
+}));
 
-		await expect
-			.element(page.getByText('Test User'))
-			.toBeInTheDocument();
-	});
+describe('UserDashboard with Mocked Stores', () => {
+  test('should display user information from store', async () => {
+    render(UserDashboard);
+
+    await expect.element(page.getByText('Test User')).toBeInTheDocument();
+    await expect.element(page.getByText('test@example.com')).toBeInTheDocument();
+    await expect.element(page.getByText('admin')).toBeInTheDocument();
+  });
+
+  test('should display notifications from store', async () => {
+    render(UserDashboard);
+
+    await expect.element(page.getByText('Welcome back!')).toBeInTheDocument();
+    await expect.element(page.getByText('You have 3 new messages')).toBeInTheDocument();
+  });
+
+  test('should handle theme preference', async () => {
+    render(UserDashboard);
+
+    const dashboard = page.getByTestId('user-dashboard');
+    await expect.element(dashboard).toHaveClass('theme-dark');
+  });
+
+  test('should handle notification actions', async () => {
+    render(UserDashboard);
+
+    const close_button = page.getByRole('button', { name: 'Close notification' }).first();
+    await close_button.click();
+
+    const { notifications_store } = await import('$lib/stores/notifications');
+    expect(notifications_store.remove).toHaveBeenCalledWith('1');
+  });
 });
 ```
 
-## Error Handling and Troubleshooting
+## Error Handling and Troubleshooting Examples
 
 ### Async Error Handling
-
 ```typescript
-describe('Async Component', () => {
-	it('should handle loading states', async () => {
-		render(AsyncDataComponent);
+// Testing components with async operations and error states
+import { describe, expect, test, vi } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import { page } from '@vitest/browser/context';
+import AsyncDataComponent from './AsyncDataComponent.svelte';
 
-		// Should show loading initially
-		await expect
-			.element(page.getByText('Loading...'))
-			.toBeInTheDocument();
+describe('Async Error Handling', () => {
+  test('should handle loading states', async () => {
+    // Mock slow API call
+    vi.mock('$lib/api', () => ({
+      fetch_data: vi.fn(() => new Promise(resolve => 
+        setTimeout(() => resolve({ data: 'test' }), 1000)
+      ))
+    }));
 
-		// Wait for data to load
-		await expect
-			.element(page.getByText('Data loaded'))
-			.toBeInTheDocument();
-		await expect
-			.element(page.getByText('Loading...'))
-			.not.toBeInTheDocument();
-	});
+    render(AsyncDataComponent, { data_id: '123' });
 
-	it('should handle error states', async () => {
-		// Mock API to throw error
-		vi.mocked(fetch_data).mockRejectedValueOnce(
-			new Error('API Error'),
-		);
+    // Should show loading initially
+    await expect.element(page.getByText('Loading...')).toBeInTheDocument();
+    await expect.element(page.getByTestId('loading-spinner')).toBeInTheDocument();
 
-		render(AsyncDataComponent);
+    // Wait for data to load
+    await expect.element(page.getByText('Data loaded successfully')).toBeInTheDocument();
+    await expect.element(page.getByText('Loading...')).not.toBeInTheDocument();
+  });
 
-		await expect
-			.element(page.getByText('Error: API Error'))
-			.toBeInTheDocument();
-	});
+  test('should handle API errors gracefully', async () => {
+    // Mock API to throw error
+    vi.mock('$lib/api', () => ({
+      fetch_data: vi.fn(() => Promise.reject(new Error('Network error')))
+    }));
+
+    render(AsyncDataComponent, { data_id: '123' });
+
+    await expect.element(page.getByText('Error: Network error')).toBeInTheDocument();
+    await expect.element(page.getByRole('button', { name: 'Retry' })).toBeInTheDocument();
+  });
+
+  test('should handle retry functionality', async () => {
+    let call_count = 0;
+    vi.mock('$lib/api', () => ({
+      fetch_data: vi.fn(() => {
+        call_count++;
+        if (call_count === 1) {
+          return Promise.reject(new Error('Temporary error'));
+        }
+        return Promise.resolve({ data: 'success' });
+      })
+    }));
+
+    render(AsyncDataComponent, { data_id: '123' });
+
+    // First call fails
+    await expect.element(page.getByText('Error: Temporary error')).toBeInTheDocument();
+
+    // Retry succeeds
+    const retry_button = page.getByRole('button', { name: 'Retry' });
+    await retry_button.click();
+
+    await expect.element(page.getByText('Data loaded successfully')).toBeInTheDocument();
+    await expect.element(page.getByText('Error: Temporary error')).not.toBeInTheDocument();
+  });
+
+  test('should handle timeout errors', async () => {
+    vi.mock('$lib/api', () => ({
+      fetch_data: vi.fn(() => new Promise((resolve, reject) => {
+        setTimeout(() => reject(new Error('Request timeout')), 5000);
+      }))
+    }));
+
+    render(AsyncDataComponent, { data_id: '123', timeout: 1000 });
+
+    await expect.element(page.getByText('Request timeout')).toBeInTheDocument();
+  });
 });
 ```
 
 ### Form Error Handling
-
 ```typescript
+// Testing form components with various error scenarios
+import { describe, expect, test, vi } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import { page } from '@vitest/browser/context';
+import RegistrationForm from './RegistrationForm.svelte';
+
 describe('Form Error Handling', () => {
-	it('should display server errors', async () => {
-		const submit_handler = vi.fn().mockRejectedValueOnce({
-			message: 'Server error',
-			field_errors: { email: 'Email already exists' },
-		});
+  test('should display client-side validation errors', async () => {
+    render(RegistrationForm);
 
-		render(RegistrationForm, { onsubmit: submit_handler });
+    const email_input = page.getByLabelText('Email');
+    const password_input = page.getByLabelText('Password');
+    const submit_button = page.getByRole('button', { name: 'Register' });
 
-		const submit_button = page.getByRole('button', {
-			name: 'Register',
-		});
-		await submit_button.click();
+    // Fill invalid data
+    await email_input.fill('invalid-email');
+    await password_input.fill('123');
+    await submit_button.click();
 
-		await expect
-			.element(page.getByText('Server error'))
-			.toBeInTheDocument();
-		await expect
-			.element(page.getByText('Email already exists'))
-			.toBeInTheDocument();
-	});
+    // Should show validation errors
+    await expect.element(page.getByText('Please enter a valid email address')).toBeInTheDocument();
+    await expect.element(page.getByText('Password must be at least 8 characters')).toBeInTheDocument();
+  });
+
+  test('should display server errors', async () => {
+    const submit_handler = vi.fn().mockRejectedValueOnce({
+      message: 'Registration failed',
+      field_errors: { 
+        email: 'Email already exists',
+        username: 'Username is taken'
+      }
+    });
+
+    render(RegistrationForm, { onsubmit: submit_handler });
+
+    await page.getByLabelText('Email').fill('existing@example.com');
+    await page.getByLabelText('Username').fill('taken_username');
+    await page.getByLabelText('Password').fill('validpassword');
+    await page.getByRole('button', { name: 'Register' }).click();
+
+    // Should show server errors
+    await expect.element(page.getByText('Registration failed')).toBeInTheDocument();
+    await expect.element(page.getByText('Email already exists')).toBeInTheDocument();
+    await expect.element(page.getByText('Username is taken')).toBeInTheDocument();
+  });
+
+  test('should handle network errors', async () => {
+    const submit_handler = vi.fn().mockRejectedValueOnce(
+      new Error('Network connection failed')
+    );
+
+    render(RegistrationForm, { onsubmit: submit_handler });
+
+    await page.getByLabelText('Email').fill('user@example.com');
+    await page.getByLabelText('Password').fill('password123');
+    await page.getByRole('button', { name: 'Register' }).click();
+
+    await expect.element(page.getByText('Network connection failed')).toBeInTheDocument();
+    await expect.element(page.getByText('Please check your internet connection and try again')).toBeInTheDocument();
+  });
+
+  test('should clear errors when user corrects input', async () => {
+    render(RegistrationForm);
+
+    const email_input = page.getByLabelText('Email');
+    const submit_button = page.getByRole('button', { name: 'Register' });
+
+    // Trigger validation error
+    await email_input.fill('invalid');
+    await submit_button.click();
+    await expect.element(page.getByText('Please enter a valid email address')).toBeInTheDocument();
+
+    // Fix the error
+    await email_input.clear();
+    await email_input.fill('valid@example.com');
+    await email_input.blur();
+
+    // Error should be cleared
+    await expect.element(page.getByText('Please enter a valid email address')).not.toBeInTheDocument();
+  });
+
+  test('should handle form submission timeout', async () => {
+    const submit_handler = vi.fn(() => new Promise(() => {})); // Never resolves
+
+    render(RegistrationForm, { onsubmit: submit_handler, timeout: 2000 });
+
+    await page.getByLabelText('Email').fill('user@example.com');
+    await page.getByLabelText('Password').fill('password123');
+    await page.getByRole('button', { name: 'Register' }).click();
+
+    // Should show timeout error
+    await expect.element(page.getByText('Request timed out')).toBeInTheDocument();
+    await expect.element(page.getByText('Please try again')).toBeInTheDocument();
+  });
 });
 ```
 
-### Component Error Testing
-
+### Component Error Boundaries
 ```typescript
-describe('Error Handling', () => {
-	it('should handle component errors gracefully', async () => {
-		// Mock console.error to avoid test noise
-		const console_error = vi
-			.spyOn(console, 'error')
-			.mockImplementation(() => {});
+// Testing error boundary components and error recovery
+import { describe, expect, test, vi } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import { page } from '@vitest/browser/context';
+import { createRawSnippet } from 'svelte';
+import ErrorBoundary from './ErrorBoundary.svelte';
 
-		render(ErrorBoundary, {
-			children: createRawSnippet(() => ({
-				render: () => {
-					throw new Error('Component crashed!');
-				},
-			})),
-		});
+describe('Error Boundary Handling', () => {
+  test('should catch and display component errors', async () => {
+    // Mock console.error to avoid test noise
+    const console_error = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-		await expect
-			.element(page.getByText('Something went wrong'))
-			.toBeInTheDocument();
-		await expect
-			.element(page.getByRole('button', { name: 'Try again' }))
-			.toBeInTheDocument();
+    const failing_component = createRawSnippet(() => ({
+      render: () => {
+        throw new Error('Component crashed!');
+      }
+    }));
 
-		console_error.mockRestore();
-	});
+    render(ErrorBoundary, { children: failing_component });
 
-	it('should handle network failures', async () => {
-		// Mock fetch to simulate network error
-		vi.spyOn(global, 'fetch').mockRejectedValueOnce(
-			new Error('Network error'),
-		);
+    await expect.element(page.getByText('Something went wrong')).toBeInTheDocument();
+    await expect.element(page.getByText('Component crashed!')).toBeInTheDocument();
+    await expect.element(page.getByRole('button', { name: 'Try again' })).toBeInTheDocument();
 
-		render(DataComponent);
+    console_error.mockRestore();
+  });
 
-		await expect
-			.element(page.getByText('Failed to load data'))
-			.toBeInTheDocument();
-		await expect
-			.element(page.getByRole('button', { name: 'Retry' }))
-			.toBeInTheDocument();
-	});
+  test('should handle error recovery', async () => {
+    let should_fail = true;
+    const console_error = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const sometimes_failing_component = createRawSnippet(() => ({
+      render: () => {
+        if (should_fail) {
+          throw new Error('Temporary failure');
+        }
+        return '<p>Component working!</p>';
+      }
+    }));
+
+    render(ErrorBoundary, { children: sometimes_failing_component });
+
+    // Should show error initially
+    await expect.element(page.getByText('Something went wrong')).toBeInTheDocument();
+
+    // Fix the component and retry
+    should_fail = false;
+    const retry_button = page.getByRole('button', { name: 'Try again' });
+    await retry_button.click();
+
+    // Should show working component
+    await expect.element(page.getByText('Component working!')).toBeInTheDocument();
+    await expect.element(page.getByText('Something went wrong')).not.toBeInTheDocument();
+
+    console_error.mockRestore();
+  });
+
+  test('should log errors for debugging', async () => {
+    const console_error = vi.spyOn(console, 'error').mockImplementation(() => {});
+    
+    const failing_component = createRawSnippet(() => ({
+      render: () => {
+        throw new Error('Test error for logging');
+      }
+    }));
+
+    render(ErrorBoundary, { children: failing_component });
+
+    expect(console_error).toHaveBeenCalledWith(
+      expect.stringContaining('Test error for logging')
+    );
+
+    console_error.mockRestore();
+  });
 });
 ```
 
 ## Async Testing Patterns
 
-### Debounced Input Testing
-
+### Promise-based Operations
 ```typescript
-describe('Search Input Performance', () => {
-	it('should debounce search queries', async () => {
-		const search_handler = vi.fn();
-		render(SearchInput, { onsearch: search_handler });
+// Testing components with async operations and promises
+import { describe, expect, test, vi } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import { page } from '@vitest/browser/context';
+import DataFetcher from './DataFetcher.svelte';
 
-		const input = page.getByLabelText('Search');
+describe('Async Promise Operations', () => {
+  test('should handle successful async data loading', async () => {
+    const mock_data = {
+      users: [
+        { id: 1, name: 'John Doe' },
+        { id: 2, name: 'Jane Smith' }
+      ]
+    };
 
-		// Type quickly
-		await input.fill('a');
-		await input.fill('ab');
-		await input.fill('abc');
+    vi.mock('$lib/api', () => ({
+      fetch_users: vi.fn(() => Promise.resolve(mock_data))
+    }));
 
-		// Should not call handler immediately
-		expect(search_handler).not.toHaveBeenCalled();
+    render(DataFetcher, { endpoint: 'users' });
 
-		// Wait for debounce
-		await new Promise((resolve) => setTimeout(resolve, 500));
+    // Initially shows loading
+    await expect.element(page.getByText('Loading users...')).toBeInTheDocument();
 
-		// Should call handler once with final value
-		expect(search_handler).toHaveBeenCalledOnce();
-		expect(search_handler).toHaveBeenCalledWith('abc');
-	});
+    // Wait for data to load
+    await expect.element(page.getByText('John Doe')).toBeInTheDocument();
+    await expect.element(page.getByText('Jane Smith')).toBeInTheDocument();
+    await expect.element(page.getByText('Loading users...')).not.toBeInTheDocument();
+  });
+
+  test('should handle async operation failures', async () => {
+    vi.mock('$lib/api', () => ({
+      fetch_users: vi.fn(() => Promise.reject(new Error('API Error')))
+    }));
+
+    render(DataFetcher, { endpoint: 'users' });
+
+    await expect.element(page.getByText('Error loading users: API Error')).toBeInTheDocument();
+    await expect.element(page.getByRole('button', { name: 'Retry' })).toBeInTheDocument();
+  });
+
+  test('should handle multiple async operations', async () => {
+    vi.mock('$lib/api', () => ({
+      fetch_users: vi.fn(() => Promise.resolve({ users: [] })),
+      fetch_posts: vi.fn(() => Promise.resolve({ posts: [] })),
+      fetch_comments: vi.fn(() => Promise.resolve({ comments: [] }))
+    }));
+
+    render(DataFetcher, { 
+      endpoints: ['users', 'posts', 'comments'] 
+    });
+
+    // Should show loading for all endpoints
+    await expect.element(page.getByText('Loading 3 data sources...')).toBeInTheDocument();
+
+    // Wait for all to complete
+    await expect.element(page.getByText('All data loaded successfully')).toBeInTheDocument();
+
+    // Verify all API calls were made
+    const { fetch_users, fetch_posts, fetch_comments } = await import('$lib/api');
+    expect(fetch_users).toHaveBeenCalled();
+    expect(fetch_posts).toHaveBeenCalled();
+    expect(fetch_comments).toHaveBeenCalled();
+  });
+
+  test('should handle partial failures in multiple async operations', async () => {
+    vi.mock('$lib/api', () => ({
+      fetch_users: vi.fn(() => Promise.resolve({ users: [{ id: 1, name: 'John' }] })),
+      fetch_posts: vi.fn(() => Promise.reject(new Error('Posts failed'))),
+      fetch_comments: vi.fn(() => Promise.resolve({ comments: [] }))
+    }));
+
+    render(DataFetcher, { 
+      endpoints: ['users', 'posts', 'comments'] 
+    });
+
+    await expect.element(page.getByText('John')).toBeInTheDocument();
+    await expect.element(page.getByText('Error loading posts: Posts failed')).toBeInTheDocument();
+    await expect.element(page.getByText('Comments: 0')).toBeInTheDocument();
+  });
 });
 ```
 
-### API Integration Testing
-
+### Real-time Data Updates
 ```typescript
-describe('API Route', () => {
-	it('should handle GET requests', async () => {
-		// ✅ Real Request object - catches URL/header issues
-		const request = new Request('http://localhost/api/todos');
-		const response = await GET({ request });
+// Testing components with WebSocket or real-time updates
+import { describe, expect, test, vi } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import { page } from '@vitest/browser/context';
+import LiveDataComponent from './LiveDataComponent.svelte';
 
-		expect(response.status).toBe(200);
+describe('Real-time Data Updates', () => {
+  test('should handle WebSocket connection and updates', async () => {
+    // Mock WebSocket
+    const mock_ws = {
+      send: vi.fn(),
+      close: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn()
+    };
 
-		const data = await response.json();
-		expect(data).toHaveProperty('todos');
-		expect(Array.isArray(data.todos)).toBe(true);
-	});
+    global.WebSocket = vi.fn(() => mock_ws);
 
-	it('should handle POST requests with validation', async () => {
-		// ✅ Real Request with JSON body - tests actual parsing
-		const request = new Request('http://localhost/api/todos', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ title: 'New todo', completed: false }),
-		});
+    render(LiveDataComponent, { url: 'ws://localhost:8080' });
 
-		const response = await POST({ request });
-		expect(response.status).toBe(201);
+    // Should show connecting state
+    await expect.element(page.getByText('Connecting...')).toBeInTheDocument();
 
-		const data = await response.json();
-		expect(data.todo.title).toBe('New todo');
-	});
+    // Simulate connection opened
+    const connect_handler = mock_ws.addEventListener.mock.calls
+      .find(call => call[0] === 'open')?.[1];
+    connect_handler?.();
 
-	it('should handle FormData submissions', async () => {
-		// ✅ Real FormData - catches field name mismatches
-		const form_data = new FormData();
-		form_data.append('email', 'user@example.com');
-		form_data.append('password', 'secure123');
+    await expect.element(page.getByText('Connected')).toBeInTheDocument();
+    await expect.element(page.getByText('Connecting...')).not.toBeInTheDocument();
+  });
 
-		const request = new Request('http://localhost/api/register', {
-			method: 'POST',
-			body: form_data,
-		});
+  test('should handle incoming WebSocket messages', async () => {
+    const mock_ws = {
+      send: vi.fn(),
+      close: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn()
+    };
 
-		// Only mock external services, not data structures
-		vi.mocked(database.users.create).mockResolvedValue({
-			id: '123',
-			email: 'user@example.com',
-		});
+    global.WebSocket = vi.fn(() => mock_ws);
 
-		const response = await POST({ request });
-		expect(response.status).toBe(201);
+    render(LiveDataComponent, { url: 'ws://localhost:8080' });
 
-		const data = await response.json();
-		expect(data.user.email).toBe('user@example.com');
-	});
+    // Simulate message received
+    const message_handler = mock_ws.addEventListener.mock.calls
+      .find(call => call[0] === 'message')?.[1];
+    
+    message_handler?.({
+      data: JSON.stringify({
+        type: 'update',
+        payload: { count: 42, status: 'active' }
+      })
+    });
+
+    await expect.element(page.getByText('Count: 42')).toBeInTheDocument();
+    await expect.element(page.getByText('Status: active')).toBeInTheDocument();
+  });
+
+  test('should handle WebSocket connection errors', async () => {
+    const mock_ws = {
+      send: vi.fn(),
+      close: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn()
+    };
+
+    global.WebSocket = vi.fn(() => mock_ws);
+
+    render(LiveDataComponent, { url: 'ws://localhost:8080' });
+
+    // Simulate connection error
+    const error_handler = mock_ws.addEventListener.mock.calls
+      .find(call => call[0] === 'error')?.[1];
+    error_handler?.();
+
+    await expect.element(page.getByText('Connection failed')).toBeInTheDocument();
+    await expect.element(page.getByRole('button', { name: 'Reconnect' })).toBeInTheDocument();
+  });
+
+  test('should handle automatic reconnection', async () => {
+    const mock_ws = {
+      send: vi.fn(),
+      close: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn()
+    };
+
+    global.WebSocket = vi.fn(() => mock_ws);
+
+    render(LiveDataComponent, { 
+      url: 'ws://localhost:8080',
+      auto_reconnect: true,
+      reconnect_interval: 100
+    });
+
+    // Simulate connection lost
+    const close_handler = mock_ws.addEventListener.mock.calls
+      .find(call => call[0] === 'close')?.[1];
+    close_handler?.();
+
+    await expect.element(page.getByText('Reconnecting...')).toBeInTheDocument();
+
+    // Wait for reconnection attempt
+    await new Promise(resolve => setTimeout(resolve, 150));
+    
+    expect(global.WebSocket).toHaveBeenCalledTimes(2);
+  });
 });
 ```
 
-### Large List Performance
-
+### Async Form Submissions
 ```typescript
-describe('Large List Performance', () => {
-	it('should handle large datasets', async () => {
-		const large_dataset = Array.from({ length: 1000 }, (_, i) => ({
-			id: i,
-			name: `Item ${i}`,
-		}));
+// Testing forms with async submission and validation
+import { describe, expect, test, vi } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import { page } from '@vitest/browser/context';
+import AsyncForm from './AsyncForm.svelte';
 
-		render(VirtualizedList, { items: large_dataset });
+describe('Async Form Submissions', () => {
+  test('should handle successful async form submission', async () => {
+    const submit_handler = vi.fn(() => 
+      Promise.resolve({ success: true, message: 'Data saved successfully' })
+    );
 
-		// Should render without hanging
-		await expect
-			.element(page.getByText('Item 0'))
-			.toBeInTheDocument();
+    render(AsyncForm, { onsubmit: submit_handler });
 
-		// Should support scrolling
-		const list_container = page.getByTestId('list-container');
-		await list_container.scroll({ top: 5000 });
+    await page.getByLabelText('Title').fill('Test Title');
+    await page.getByLabelText('Description').fill('Test Description');
+    
+    const submit_button = page.getByRole('button', { name: 'Save' });
+    await submit_button.click();
 
-		// Should render items further down
-		await expect
-			.element(page.getByText('Item 50'))
-			.toBeInTheDocument();
-	});
+    // Should show loading state
+    await expect.element(page.getByText('Saving...')).toBeInTheDocument();
+    await expect.element(submit_button).toBeDisabled();
+
+    // Wait for success
+    await expect.element(page.getByText('Data saved successfully')).toBeInTheDocument();
+    await expect.element(page.getByText('Saving...')).not.toBeInTheDocument();
+    await expect.element(submit_button).toBeEnabled();
+  });
+
+  test('should handle async validation during submission', async () => {
+    const validate_async = vi.fn(() => 
+      Promise.resolve({ valid: false, errors: { title: 'Title already exists' } })
+    );
+
+    const submit_handler = vi.fn();
+
+    render(AsyncForm, { 
+      onsubmit: submit_handler,
+      async_validation: validate_async
+    });
+
+    await page.getByLabelText('Title').fill('Duplicate Title');
+    await page.getByRole('button', { name: 'Save' }).click();
+
+    // Should show validating state
+    await expect.element(page.getByText('Validating...')).toBeInTheDocument();
+
+    // Should show validation error
+    await expect.element(page.getByText('Title already exists')).toBeInTheDocument();
+    
+    // Should not call submit handler
+    expect(submit_handler).not.toHaveBeenCalled();
+  });
+
+  test('should handle concurrent form submissions', async () => {
+    let resolve_first_submit;
+    const first_submit = new Promise(resolve => {
+      resolve_first_submit = resolve;
+    });
+
+    const submit_handler = vi.fn(() => first_submit);
+
+    render(AsyncForm, { onsubmit: submit_handler });
+
+    await page.getByLabelText('Title').fill('Test');
+    
+    const submit_button = page.getByRole('button', { name: 'Save' });
+    
+    // Start first submission
+    await submit_button.click();
+    await expect.element(submit_button).toBeDisabled();
+
+    // Try to submit again (should be prevented)
+    await submit_button.click({ force: true });
+    
+    // Should only be called once
+    expect(submit_handler).toHaveBeenCalledTimes(1);
+
+    // Complete first submission
+    resolve_first_submit({ success: true });
+    await expect.element(submit_button).toBeEnabled();
+  });
+
+  test('should handle async file upload', async () => {
+    const upload_handler = vi.fn(() => 
+      Promise.resolve({ success: true, file_url: '/uploads/test.jpg' })
+    );
+
+    render(AsyncForm, { 
+      onsubmit: upload_handler,
+      supports_file_upload: true
+    });
+
+    // Mock file input
+    const file_input = page.getByLabelText('Upload File');
+    await file_input.setInputFiles([
+      new File(['test'], 'test.jpg', { type: 'image/jpeg' })
+    ]);
+
+    await page.getByRole('button', { name: 'Upload' }).click();
+
+    // Should show upload progress
+    await expect.element(page.getByText('Uploading...')).toBeInTheDocument();
+    await expect.element(page.getByRole('progressbar')).toBeInTheDocument();
+
+    // Should show success
+    await expect.element(page.getByText('File uploaded successfully')).toBeInTheDocument();
+    await expect.element(page.getByText('/uploads/test.jpg')).toBeInTheDocument();
+  });
 });
 ```
