@@ -133,7 +133,7 @@ export default defineConfig({
 						'src/lib/server/**',
 						'src/**/*.ssr.{test,spec}.{js,ts}',
 					],
-					setupFiles: ['./vitest-setup-client.ts'],
+					setupFiles: ['./src/vitest-setup-client.ts'],
 				},
 			},
 			{
@@ -165,7 +165,7 @@ export default defineConfig({
 
 ### Edit Setup File
 
-Replace the contents of the `vitest-setup-client.ts` with this:
+Replace the contents of the `src/vitest-setup-client.ts` with this:
 
 ```typescript
 /// <reference types="@vitest/browser/matchers" />
@@ -3474,7 +3474,7 @@ export default defineConfig({
 						'src/lib/server/**',
 						'src/**/*.ssr.{test,spec}.{js,ts}',
 					],
-					setupFiles: ['./vitest-setup-client.ts'],
+					setupFiles: ['./src/vitest-setup-client.ts'],
 				},
 			},
 			{
@@ -3506,11 +3506,11 @@ export default defineConfig({
 
 ### Step 3: Update Setup Files
 
-Remove jsdom-specific polyfills in `vitest-setup-client.ts` since
+Remove jsdom-specific polyfills in `src/vitest-setup-client.ts` since
 you're now using real browsers:
 
 ```typescript
-// BEFORE: vitest-setup-client.ts (remove these)
+// BEFORE: src/vitest-setup-client.ts (remove these)
 import '@testing-library/jest-dom';
 
 // Mock matchMedia for jsdom
@@ -3523,7 +3523,7 @@ Object.defineProperty(window, 'matchMedia', {
 	})),
 });
 
-// AFTER: vitest-setup-client.ts (minimal setup)
+// AFTER: src/vitest-setup-client.ts (minimal setup)
 /// <reference types="@vitest/browser/matchers" />
 /// <reference types="@vitest/browser/providers/playwright" />
 ```
@@ -5090,4 +5090,3 @@ next developer._
 **Ready to contribute?** Visit the
 [GitHub repository](https://github.com/spences10/sveltest) to get
 started.
-
