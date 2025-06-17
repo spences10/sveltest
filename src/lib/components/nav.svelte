@@ -74,7 +74,7 @@
 </script>
 
 <!-- Desktop Navigation -->
-<header class="sticky top-0 z-10 w-full md:h-0">
+<header class="sticky top-0 z-60 w-full md:h-0">
 	<nav
 		class="navbar bg-base-100/60 border-base-300/50 h-16 border-b shadow-lg backdrop-blur-md"
 		aria-label="Main navigation"
@@ -103,7 +103,7 @@
 		<div class="navbar-center hidden lg:flex">
 			<ul class="menu menu-horizontal gap-1 px-1" role="menubar">
 				<!-- Main Navigation Links -->
-				{#each main_nav_items as link}
+				{#each main_nav_items as link (link.href)}
 					<li role="none">
 						<a
 							href={link.href}
@@ -135,14 +135,13 @@
 				>
 					<Menu class_names="h-5 w-5" />
 				</div>
-				<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 				<ul
 					tabindex="0"
 					class="dropdown-content menu bg-base-100/95 rounded-box border-base-300/50 z-50 w-64 border p-2 shadow-xl backdrop-blur-sm"
 					role="menu"
 					aria-label="Navigation menu"
 				>
-					{#each nav_links as link}
+					{#each nav_links as link (link.href)}
 						<li role="none">
 							<a
 								href={link.href}
@@ -279,7 +278,7 @@
 		class="dock bg-primary rounded-box mx-auto mb-4 max-w-[95vw] shadow-xl"
 		role="tablist"
 	>
-		{#each main_nav_items as link}
+		{#each main_nav_items as link (link.href)}
 			<a
 				href={link.href}
 				class="text-primary-content flex flex-col items-center gap-1 {is_active(
