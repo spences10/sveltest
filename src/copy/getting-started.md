@@ -126,7 +126,7 @@ export default defineConfig({
 						'src/lib/server/**',
 						'src/**/*.ssr.{test,spec}.{js,ts}',
 					],
-					setupFiles: ['./vitest-setup-client.ts'],
+					setupFiles: ['./src/vitest-setup-client.ts'],
 				},
 			},
 			{
@@ -158,7 +158,7 @@ export default defineConfig({
 
 ### Edit Setup File
 
-Replace the contents of the `vitest-setup-client.ts` with this:
+Replace the contents of the `src/vitest-setup-client.ts` with this:
 
 ```typescript
 /// <reference types="@vitest/browser/matchers" />

@@ -76,7 +76,7 @@ export default defineConfig({
 						'src/lib/server/**',
 						'src/**/*.ssr.{test,spec}.{js,ts}',
 					],
-					setupFiles: ['./vitest-setup-client.ts'],
+					setupFiles: ['./src/vitest-setup-client.ts'],
 				},
 			},
 			{
@@ -108,11 +108,11 @@ export default defineConfig({
 
 ### Step 3: Update Setup Files
 
-Remove jsdom-specific polyfills in `vitest-setup-client.ts` since
+Remove jsdom-specific polyfills in `src/vitest-setup-client.ts` since
 you're now using real browsers:
 
 ```typescript
-// BEFORE: vitest-setup-client.ts (remove these)
+// BEFORE: src/vitest-setup-client.ts (remove these)
 import '@testing-library/jest-dom';
 
 // Mock matchMedia for jsdom
@@ -125,7 +125,7 @@ Object.defineProperty(window, 'matchMedia', {
 	})),
 });
 
-// AFTER: vitest-setup-client.ts (minimal setup)
+// AFTER: src/vitest-setup-client.ts (minimal setup)
 /// <reference types="@vitest/browser/matchers" />
 /// <reference types="@vitest/browser/providers/playwright" />
 ```

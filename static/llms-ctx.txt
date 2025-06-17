@@ -70,7 +70,7 @@
 </configuration>
 
 <setup_file>
-<file>vitest-setup-client.ts</file>
+<file>src/vitest-setup-client.ts</file>
 <content>
 /// <reference types="@vitest/browser/matchers" />
 /// <reference types="@vitest/browser/providers/playwright" />

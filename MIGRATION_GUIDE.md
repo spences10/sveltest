@@ -105,7 +105,7 @@ export default defineConfig({
 						'src/lib/server/**',
 						'src/**/*.ssr.{test,spec}.{js,ts}',
 					],
-					setupFiles: ['./vitest-setup-client.ts'],
+					setupFiles: ['./src/vitest-setup-client.ts'],
 				},
 			},
 			{
@@ -150,9 +150,9 @@ Changes:
 
 ## 🔧 Phase 2: Test Environment Setup
 
-### Step 4: Update `vitest-setup-client.ts`
+### Step 4: Update `src/vitest-setup-client.ts`
 
-Remove jsdom-specific polyfills from `vitest-setup-client.ts` since
+Remove jsdom-specific polyfills from `src/vitest-setup-client.ts` since
 you're now using real browsers:
 
 ```typescript
@@ -174,7 +174,7 @@ Object.defineProperty(window, 'matchMedia', {
 	})),
 });
 
-// AFTER: vitest-setup-client.ts (minimal setup)
+// AFTER: src/vitest-setup-client.ts (minimal setup)
 /// <reference types="@vitest/browser/matchers" />
 /// <reference types="@vitest/browser/providers/playwright" />
 ```
@@ -182,7 +182,7 @@ Object.defineProperty(window, 'matchMedia', {
 Commit the cleanup:
 
 ```bash
-git add test-setup.js vitest-setup-client.ts
+git add test-setup.js src/vitest-setup-client.ts
 git commit -m "config: update vitest setup for browser environment
 
 Changes:

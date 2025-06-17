@@ -30,7 +30,7 @@ export default defineConfig({
 						'src/lib/server/**',
 						'src/**/*.ssr.{test,spec}.{js,ts}',
 					],
-					setupFiles: ['./vitest-setup-client.ts'],
+					setupFiles: ['./src/vitest-setup-client.ts'],
 				},
 			},
 			{
