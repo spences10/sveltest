@@ -28,8 +28,7 @@
 		"test": "npm run test:unit -- --run && npm run test:e2e",
 		"test:e2e": "playwright test",
 		"coverage": "vitest --run --coverage",
-		"generate:llm-docs": "tsx scripts/generate-llm-docs.ts",
-		"evaluate:llm-docs": "tsx scripts/evaluate-llm-docs.ts",
+		"generate:llms": "tsx scripts/generate-llms.ts",
 		"generate:ai-rules": "tsx scripts/generate-ai-rules.ts",
 		"test:ai-rules": "tsx scripts/generate-ai-rules.ts --dry-run"
 	},
