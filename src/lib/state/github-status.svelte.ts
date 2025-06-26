@@ -138,8 +138,8 @@ export class GitHubStatusManager {
 				const data: GitHubStatus = await response.json();
 
 				this.state.data = data;
-				this.state.loading = false;
 				this.state.last_updated = Date.now();
+				this.state.loading = false;
 
 				// Set error state for 500 responses but still use the data
 				if (response.status === 500) {
