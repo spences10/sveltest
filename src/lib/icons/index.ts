@@ -7,6 +7,7 @@ export { default as CheckCircle } from './check-circle.svelte';
 export { default as Check } from './check.svelte';
 export { default as Chevron } from './chevron.svelte';
 export { default as CircleDot } from './circle-dot.svelte';
+export { default as Claude } from './claude.svelte';
 export { default as Clipboard } from './clipboard.svelte';
 export { default as Clock } from './clock.svelte';
 export { default as Code } from './code.svelte';

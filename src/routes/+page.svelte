@@ -8,6 +8,7 @@
 		Calculator,
 		CheckCircle,
 		CircleDot,
+		Claude,
 		Clipboard,
 		Cursor,
 		ExternalLink,
@@ -267,7 +268,9 @@
 		</div>
 
 		<!-- AI Testing Rules Row -->
-		<div class="mb-12 grid grid-cols-1 gap-8 md:grid-cols-2">
+		<div
+			class="mb-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
+		>
 			<!-- Cursor Rules Card -->
 			<FeatureCard
 				icon={Cursor}
@@ -298,6 +301,22 @@
 				button_icon_classes="h-5 w-5"
 				onclick_event={() =>
 					Fathom.trackEvent('windsurf_rules_clicked')}
+			/>
+
+			<!-- Claude Code Rules Card -->
+			<FeatureCard
+				icon={Claude}
+				title="Claude Code Guide"
+				description="Comprehensive guidance for Claude Code with personas, testing patterns, and project-specific rules for optimal AI assistance"
+				href="https://github.com/spences10/sveltest/blob/main/CLAUDE.md"
+				button_text="View Claude Guide"
+				color_scheme="info"
+				button_icon={GitHub}
+				button_size="btn-lg"
+				button_classes="w-full text-lg"
+				button_icon_classes="h-5 w-5"
+				onclick_event={() =>
+					Fathom.trackEvent('claude_guide_clicked')}
 			/>
 		</div>
 
