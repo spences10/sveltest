@@ -104,7 +104,7 @@ export default defineConfig({
 		projects: [
 			{
 				// Client-side tests (Svelte components)
-				extends: './vite.config.ts',
+				extends: true,
 				test: {
 					name: 'client',
 					environment: 'browser',
@@ -131,7 +131,7 @@ export default defineConfig({
 			},
 			{
 				// SSR tests (Server-side rendering)
-				extends: './vite.config.ts',
+				extends: true,
 				test: {
 					name: 'ssr',
 					environment: 'node',
@@ -140,7 +140,7 @@ export default defineConfig({
 			},
 			{
 				// Server-side tests (Node.js utilities)
-				extends: './vite.config.ts',
+				extends: true,
 				test: {
 					name: 'server',
 					environment: 'node',
@@ -152,9 +152,20 @@ export default defineConfig({
 				},
 			},
 		],
+		coverage: {
+			include: ['src'],
+			// Improved performance: Vitest only checks files in src/
+			// instead of scanning the entire project
+		},
 	},
 });
 ```
+
+> **Performance Note**: The simplified `extends: true` configuration
+> automatically inherits settings from the same file, and using
+> `coverage.include: ['src']` improves performance by limiting
+> coverage scanning to your source directory instead of the entire
+> project.
 
 ### Edit Setup File
 

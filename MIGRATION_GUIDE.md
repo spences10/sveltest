@@ -85,7 +85,7 @@ export default defineConfig({
 		projects: [
 			{
 				// Client-side tests (Svelte components)
-				extends: './vite.config.ts',
+				extends: true,
 				test: {
 					name: 'client',
 					environment: 'browser',
@@ -110,7 +110,7 @@ export default defineConfig({
 			},
 			{
 				// SSR tests (Server-side rendering)
-				extends: './vite.config.ts',
+				extends: true,
 				test: {
 					name: 'ssr',
 					environment: 'node',
@@ -119,7 +119,7 @@ export default defineConfig({
 			},
 			{
 				// Server-side tests (Node.js utilities)
-				extends: './vite.config.ts',
+				extends: true,
 				test: {
 					name: 'server',
 					environment: 'node',

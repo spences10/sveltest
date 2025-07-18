@@ -62,7 +62,7 @@ describe('Untrack Usage Validation', () => {
 		it('should handle complex derived logic', () => {
 			// Recreate login form logic in test
 			let email = $state('');
-			let submit_attempted = $state(false);
+			const submit_attempted = $state(false);
 			let email_touched = $state(false);
 
 			const email_validation = $derived(validate_email(email));
@@ -121,7 +121,7 @@ describe('Untrack Usage Validation', () => {
 	describe('Why untrack is necessary', () => {
 		it('should demonstrate untrack prevents reactive dependencies', () => {
 			let count = $state(0);
-			let doubled = $derived(count * 2);
+			const doubled = $derived(count * 2);
 
 			// ✅ Use untrack to read without creating dependencies
 			expect(untrack(() => doubled)).toBe(0);

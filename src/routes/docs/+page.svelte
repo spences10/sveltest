@@ -695,11 +695,11 @@ vi.mock('$lib/heavy-computation', () => ({
 										<td><code>await element.click()</code></td>
 									</tr>
 									<tr>
-										<td
-											><code
-												>render(Component, {'{'} props {'}'})</code
-											></td
-										>
+										<td>
+											<code>
+												render(Component, {'{'} props })
+											</code>
+										</td>
 										<td><code>render(Component, props)</code></td>
 									</tr>
 								</tbody>
