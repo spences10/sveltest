@@ -152,8 +152,8 @@ Changes:
 
 ### Step 4: Update `src/vitest-setup-client.ts`
 
-Remove jsdom-specific polyfills from `src/vitest-setup-client.ts` since
-you're now using real browsers:
+Remove jsdom-specific polyfills from `src/vitest-setup-client.ts`
+since you're now using real browsers:
 
 ```typescript
 // BEFORE: test-setup.js (remove these)
