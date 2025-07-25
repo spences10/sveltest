@@ -127,7 +127,7 @@ importers:
         version: 1.0.0(@vitest/browser@3.2.4)(svelte@5.36.13)(vitest@3.2.4)
       zod:
         specifier: ^4.0.5
-        version: 4.0.5
+        version: 4.0.10
 
 packages:
 
@@ -2293,8 +2293,8 @@ packages:
   zimmerframe@1.1.2:
     resolution: {integrity: sha512-rAbqEGa8ovJy4pyBxZM70hg4pE6gDgaQ0Sl9M3enG3I0d6H4XSAM3GeNGLKnsBpuijUow064sf7ww1nutC5/3w==}
 
-  zod@4.0.5:
-    resolution: {integrity: sha512-/5UuuRPStvHXu7RS+gmvRf4NXrNxpSllGwDnCBcJZtQsKrviYXm54yDGV2KYNLT5kq0lHGcl7lqWJLgSaG+tgA==}
+  zod@4.0.10:
+    resolution: {integrity: sha512-3vB+UU3/VmLL2lvwcY/4RV2i9z/YU0DTV/tDuYjrwmx5WeJ7hwy+rGEEx8glHp6Yxw7ibRbKSaIFBgReRPe5KA==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
@@ -4354,6 +4354,6 @@ snapshots:
 
   zimmerframe@1.1.2: {}
 
-  zod@4.0.5: {}
+  zod@4.0.10: {}
 
   zwitch@2.0.4: {}
