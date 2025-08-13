@@ -142,11 +142,13 @@ test.describe('Performance Tests', () => {
 			// Check for successful resource loading, but exclude external API calls
 			// External APIs (like GitHub) can be rate-limited in CI environments
 			// Also exclude internal API endpoints that depend on external services
+			// Also exclude analytics services that may be blocked in test environments
 			const failedResources = resourceSizes.filter(
 				(r) =>
 					r.status >= 400 &&
 					!r.url.includes('api.github.com') &&
-					!r.url.includes('/api/github-status'),
+					!r.url.includes('/api/github-status') &&
+					!r.url.includes('cdn.usefathom.com'),
 			);
 			expect(failedResources.length).toBe(0);
 		});
