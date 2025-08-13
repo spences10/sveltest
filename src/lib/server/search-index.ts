@@ -78,6 +78,18 @@ export async function generate_search_index(): Promise<SearchIndex> {
 		}
 	}
 
+	// Mapping of documentation examples to their specific page sections
+	const documentation_example_urls: Record<string, string> = {
+		essential_imports: '/docs/getting-started#essential-imports',
+		first_test: '/docs/getting-started#step-2-write-your-first-test',
+		component_testing:
+			'/docs/getting-started#common-patterns-youll-use-daily',
+		form_testing: '/docs/getting-started#testing-form-inputs',
+		state_testing: '/docs/getting-started#testing-svelte-5-runes',
+		ssr_testing: '/docs/testing-patterns#ssr-testing',
+		server_testing: '/docs/testing-patterns#server-testing',
+	};
+
 	// Add code examples with full content
 	const example_categories = [
 		{
@@ -99,11 +111,6 @@ export async function generate_search_index(): Promise<SearchIndex> {
 			examples: component_examples,
 			category: 'Components',
 			base_url: '/components',
-		},
-		{
-			examples: documentation_examples,
-			category: 'Quick Start',
-			base_url: '/docs',
 		},
 	];
 
@@ -128,6 +135,33 @@ export async function generate_search_index(): Promise<SearchIndex> {
 				excerpt,
 				keywords,
 			});
+		});
+	});
+
+	// Add documentation examples with specific URLs
+	Object.entries(documentation_examples).forEach(([key, code]) => {
+		const title = key
+			.replace(/_/g, ' ')
+			.replace(/\b\w/g, (l) => l.toUpperCase());
+
+		const full_code = typeof code === 'string' ? code : '';
+		const keywords = extract_keywords(full_code);
+		const excerpt = create_code_excerpt(full_code);
+
+		// Use specific URL if available, otherwise fallback to base docs
+		const specific_url =
+			documentation_example_urls[key] || '/docs/getting-started';
+
+		items.push({
+			id: `example-quick-start-${key}`,
+			title,
+			description: `Quick Start example: ${title}`,
+			url: specific_url,
+			type: 'example',
+			category: 'Quick Start',
+			content: full_code,
+			excerpt,
+			keywords,
 		});
 	});
 
