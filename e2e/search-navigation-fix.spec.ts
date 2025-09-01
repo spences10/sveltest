@@ -19,9 +19,6 @@ test.describe('Search Navigation Fix - Issue #522', () => {
 		await searchInput.fill('form');
 
 		// Wait for search results to appear
-		await page.waitForTimeout(500);
-
-		// Verify search results are displayed
 		const searchResults = page.getByTestId('search-results');
 		await expect(searchResults).toBeVisible();
 
@@ -91,7 +88,6 @@ test.describe('Search Navigation Fix - Issue #522', () => {
 
 		// Search for "form" which should return results with hash fragments
 		await searchInput.fill('form');
-		await page.waitForTimeout(500);
 
 		const searchResults = page.getByTestId('search-results');
 		await expect(searchResults).toBeVisible();
@@ -117,7 +113,6 @@ test.describe('Search Navigation Fix - Issue #522', () => {
 		// Verify we can navigate back and search still works
 		await page.goto('/docs');
 		await searchInput.fill('component');
-		await page.waitForTimeout(500);
 
 		// Should show results for component search
 		await expect(searchResults).toBeVisible();
@@ -132,7 +127,6 @@ test.describe('Search Navigation Fix - Issue #522', () => {
 
 		// Search for form
 		await searchInput.fill('form');
-		await page.waitForTimeout(500);
 
 		// Click on the Form Testing result
 		const formResult = page.getByTestId(
@@ -140,9 +134,6 @@ test.describe('Search Navigation Fix - Issue #522', () => {
 		);
 		await expect(formResult).toBeVisible();
 		await formResult.click();
-
-		// Wait for navigation
-		await page.waitForTimeout(500);
 
 		// Verify we navigated to the correct page
 		await expect(page).toHaveURL(
@@ -158,7 +149,6 @@ test.describe('Search Navigation Fix - Issue #522', () => {
 
 		// Try another search
 		await searchInputAfterNav.fill('component');
-		await page.waitForTimeout(500);
 
 		// Results should appear
 		const newResults = page.getByTestId('search-results');
@@ -174,19 +164,16 @@ test.describe('Search Navigation Fix - Issue #522', () => {
 
 		// Test empty search
 		await searchInput.fill('');
-		await page.waitForTimeout(300);
 
 		const noResults = page.getByTestId('search-results');
 		await expect(noResults).not.toBeVisible();
 
 		// Test search with special characters
 		await searchInput.fill('form#test');
-		await page.waitForTimeout(500);
 
 		// Should handle gracefully without breaking
 		// Test search with very long query
 		await searchInput.fill('a'.repeat(100));
-		await page.waitForTimeout(500);
 
 		// Should handle gracefully
 
@@ -195,11 +182,11 @@ test.describe('Search Navigation Fix - Issue #522', () => {
 		await searchInput.fill('fo');
 		await searchInput.fill('for');
 		await searchInput.fill('form');
-		await page.waitForTimeout(600); // Wait for debounce
 
-		// Should show results for final query
-		if (await page.getByTestId('search-results').isVisible()) {
-			await expect(page.getByTestId('search-results')).toBeVisible();
+		// Should show results for final query after debounce
+		const searchResults = page.getByTestId('search-results');
+		if (await searchResults.isVisible({ timeout: 1000 })) {
+			await expect(searchResults).toBeVisible();
 		}
 	});
 });

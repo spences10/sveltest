@@ -136,13 +136,12 @@ describe('Components Page', () => {
 			});
 			await openModalButton.click();
 
-			// Check modal is opened
-			await expect
-				.element(page.getByTestId('modal'))
-				.toBeInTheDocument();
-			await expect
-				.element(page.getByTestId('modal-title'))
-				.toBeInTheDocument();
+			// Check modal is opened - wait for it to appear
+			const modal = page.getByTestId('modal');
+			await expect.element(modal).toBeInTheDocument();
+
+			const modalTitle = page.getByTestId('modal-title');
+			await expect.element(modalTitle).toBeInTheDocument();
 		});
 
 		test('should show modal features list', async () => {

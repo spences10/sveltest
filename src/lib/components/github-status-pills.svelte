@@ -2,7 +2,7 @@
 	import { github_status } from '$lib/state/github-status.svelte.ts';
 </script>
 
-{#if github_status.data}
+{#if github_status.data && github_status.data.unit_tests && github_status.data.e2e_tests}
 	<div class="flex flex-wrap items-center justify-center gap-3">
 		<!-- Unit Tests Status -->
 		<div
