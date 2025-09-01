@@ -19,7 +19,7 @@
 </script>
 
 <aside
-	class="bg-base-100 fixed top-42 right-4 z-10 my-3 hidden max-h-[50vh] w-[250px] rounded-lg p-3 text-base leading-7 shadow-lg xl:right-[calc((100vw-1280px)/2-270px)] xl:block"
+	class="bg-base-100 fixed top-42 right-4 z-10 my-3 hidden max-h-[50vh] w-[250px] rounded-lg p-3 text-base leading-7 shadow-lg lg:block"
 >
 	<div>
 		<h3 class="mb-4 flex items-center gap-2 text-lg font-bold">
