@@ -22,7 +22,7 @@ importers:
         version: 5.2.6
       '@fontsource-variable/victor-mono':
         specifier: ^5.2.6
-        version: 5.2.6
+        version: 5.2.7
       '@playwright/test':
         specifier: ^1.55.0
         version: 1.55.0
@@ -405,8 +405,8 @@ packages:
   '@fontsource-variable/inter@5.2.6':
     resolution: {integrity: sha512-jks/bficUPQ9nn7GvXvHtlQIPudW7Wx8CrlZoY8bhxgeobNxlQan8DclUJuYF2loYRrGpfrhCIZZspXYysiVGg==}
 
-  '@fontsource-variable/victor-mono@5.2.6':
-    resolution: {integrity: sha512-0UPLrQzT67pcuxeRSz9UAmSTKkjNUE6WJp90U6h+q0t9QC2+/kVHCj83nqdst6fKqUftgXrYn5Izpu+nzQ4tpw==}
+  '@fontsource-variable/victor-mono@5.2.7':
+    resolution: {integrity: sha512-XEO+ThmDqfBQ2kzLK8BN6WRl/OWNU06gdgwv2p9csYSE4XMNtIBf2yFoFjT2tp385ym4i8NcBSDmKIeKDU0hYw==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -2506,7 +2506,7 @@ snapshots:
 
   '@fontsource-variable/inter@5.2.6': {}
 
-  '@fontsource-variable/victor-mono@5.2.6': {}
+  '@fontsource-variable/victor-mono@5.2.7': {}
 
   '@humanfs/core@0.19.1': {}
 
