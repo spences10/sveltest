@@ -59,7 +59,7 @@ describe('/+page.svelte SSR', () => {
 
 		// Test hero section structure
 		expect(body).toContain('hero');
-		expect(body).toContain('bg-gradient-to-br');
+		expect(body).toContain('bg-linear-to-br');
 		expect(body).toContain('min-h-screen');
 	});
 

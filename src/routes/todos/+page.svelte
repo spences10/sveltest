@@ -19,7 +19,7 @@
 
 <!-- Modern gradient background with glass morphism -->
 <div
-	class="from-primary/10 via-secondary/5 to-accent/10 min-h-screen bg-gradient-to-br"
+	class="from-primary/10 via-secondary/5 to-accent/10 min-h-screen bg-linear-to-br"
 >
 	<div class="container mx-auto max-w-6xl px-4 py-8">
 		<!-- Hero Section with Glass Effect -->
@@ -40,7 +40,7 @@
 					</div>
 
 					<h1
-						class="from-primary via-primary/80 to-primary/60 mb-6 bg-gradient-to-r bg-clip-text text-6xl leading-normal font-black text-transparent"
+						class="from-primary via-primary/80 to-primary/60 mb-6 bg-linear-to-r bg-clip-text text-6xl leading-normal font-black text-transparent"
 					>
 						Todo Manager
 					</h1>

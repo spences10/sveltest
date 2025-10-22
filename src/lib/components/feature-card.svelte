@@ -50,7 +50,7 @@
 	>
 		<div class="card-body p-8">
 			<div
-				class="from-{color_scheme}/20 to-{color_scheme}/10 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br transition-transform duration-300 group-hover:scale-110"
+				class="from-{color_scheme}/20 to-{color_scheme}/10 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br transition-transform duration-300 group-hover:scale-110"
 			>
 				<Icon class_names="text-{color_scheme} h-8 w-8" />
 			</div>

@@ -19,7 +19,7 @@
 				class="bg-base-100/80 border-base-300/50 mb-8 inline-flex items-center gap-3 rounded-full border px-6 py-3 shadow-lg backdrop-blur-sm"
 			>
 				<div
-					class="from-success to-success/70 flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br"
+					class="from-success to-success/70 flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-br"
 				>
 					<Document class_names="text-success-content h-4 w-4" />
 				</div>
@@ -31,7 +31,7 @@
 			</div>
 
 			<h1
-				class="from-success via-success/80 to-success/60 mb-4 bg-gradient-to-r bg-clip-text text-5xl leading-normal font-black text-transparent"
+				class="from-success via-success/80 to-success/60 mb-4 bg-linear-to-r bg-clip-text text-5xl leading-normal font-black text-transparent"
 			>
 				Form Actions Testing
 			</h1>
