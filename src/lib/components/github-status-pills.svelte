@@ -6,7 +6,7 @@
 	<div class="flex flex-wrap items-center justify-center gap-3">
 		<!-- Unit Tests Status -->
 		<div
-			class="from-primary/10 via-base-100/80 to-primary/10 border-primary/20 inline-flex items-center gap-2 rounded-full border bg-gradient-to-r px-4 py-2 shadow-lg backdrop-blur-sm"
+			class="from-primary/10 via-base-100/80 to-primary/10 border-primary/20 inline-flex items-center gap-2 rounded-full border bg-linear-to-r px-4 py-2 shadow-lg backdrop-blur-sm"
 		>
 			<div
 				class="h-2 w-2 animate-pulse rounded-full {github_status.data
@@ -25,7 +25,7 @@
 
 		<!-- E2E Tests Status -->
 		<div
-			class="from-primary/10 via-base-100/80 to-primary/10 border-primary/20 inline-flex items-center gap-2 rounded-full border bg-gradient-to-r px-4 py-2 shadow-lg backdrop-blur-sm"
+			class="from-primary/10 via-base-100/80 to-primary/10 border-primary/20 inline-flex items-center gap-2 rounded-full border bg-linear-to-r px-4 py-2 shadow-lg backdrop-blur-sm"
 		>
 			<div
 				class="h-2 w-2 animate-pulse rounded-full {github_status.data

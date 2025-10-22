@@ -5,8 +5,8 @@
 @import 'tailwindcss';
 
 /* Plugin configurations */
-@plugin "@tailwindcss/typography";
-@plugin "daisyui";
+@plugin '@tailwindcss/typography';
+@plugin 'daisyui';
 
 @theme {
 	--font-sans: 'Inter Variable', sans-serif;
@@ -18,7 +18,7 @@
 	/* Structure: <h1><a>content</a></h1> */
 	.prose h1 a,
 	.prose h1 {
-		@apply from-primary via-secondary to-accent bg-gradient-to-r bg-clip-text leading-normal font-black tracking-wide text-transparent drop-shadow-lg;
+		@apply from-primary via-secondary to-accent bg-linear-to-r bg-clip-text leading-normal font-black tracking-wide text-transparent drop-shadow-lg;
 	}
 
 	.prose h2 a,

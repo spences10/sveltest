@@ -1,5 +1,6 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
+import { playwright } from '@vitest/browser-playwright';
 import { defineConfig } from 'vite';
 import { coverageConfigDefaults } from 'vitest/config';
 
@@ -13,12 +14,11 @@ export default defineConfig({
 				extends: true,
 				test: {
 					name: 'client',
-					environment: 'browser',
 					// Timeout for browser tests - prevent hanging on element lookups
 					testTimeout: 2000,
 					browser: {
 						enabled: true,
-						provider: 'playwright',
+						provider: playwright(),
 						instances: [
 							{ browser: 'chromium' },
 							// { browser: 'firefox' },
@@ -57,10 +57,9 @@ export default defineConfig({
 			},
 		],
 		coverage: {
-			all: true,
 			reporter: ['text-summary', 'html'],
 			provider: 'v8',
-			include: ['src'],
+			include: ['src/**/*'],
 			exclude: [
 				...coverageConfigDefaults.exclude,
 				'**/+page.svelte',

@@ -10,7 +10,7 @@ plan comprehensively:
 ```typescript
 import { describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
-import { page } from '@vitest/browser/context';
+import { page } from 'vitest/browser';
 
 describe('TodoManager Component', () => {
 	describe('Initial Rendering', () => {

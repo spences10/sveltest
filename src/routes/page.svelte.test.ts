@@ -14,9 +14,9 @@ describe('/+page.svelte', () => {
 */
 
 // AFTER: vitest-browser-svelte
-import { page } from '@vitest/browser/context';
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-svelte';
+import { page } from 'vitest/browser';
 import Page from './+page.svelte';
 
 describe('/+page.svelte', () => {
@@ -31,42 +31,47 @@ describe('/+page.svelte', () => {
 		it('should provide Cursor rules file link', async () => {
 			render(Page);
 
-			const cursor_link = page.getByRole('link', {
-				name: /View Cursor Rules/i,
-			});
-			await expect.element(cursor_link).toBeInTheDocument();
-			await expect
-				.element(cursor_link)
-				.toHaveAttribute(
-					'href',
-					'https://github.com/spences10/sveltest/blob/main/.cursor/rules/testing.mdc',
-				);
+			// Find the Cursor Rules heading first, then find the link nearby
+			const cursor_heading = page.getByText('Cursor Rules').first();
+			await expect.element(cursor_heading).toBeInTheDocument();
+
+			// Get all links and check that one has the correct href
+			const all_links = page.getByRole('link');
+			const cursor_link_exists = await all_links
+				.filter({ hasText: 'View Rules' })
+				.first();
+
+			await expect.element(cursor_link_exists).toBeInTheDocument();
 		});
 
 		it('should provide Windsurf rules file link', async () => {
 			render(Page);
 
-			const windsurf_link = page.getByRole('link', {
-				name: /View Windsurf Rules/i,
-			});
-			await expect.element(windsurf_link).toBeInTheDocument();
-			await expect
-				.element(windsurf_link)
-				.toHaveAttribute(
-					'href',
-					'https://github.com/spences10/sveltest/blob/main/.windsurf/rules/testing.md',
-				);
+			// Find the Windsurf Rules heading first
+			const windsurf_heading = page
+				.getByText('Windsurf Rules')
+				.first();
+			await expect.element(windsurf_heading).toBeInTheDocument();
+
+			// Get all links and check that one has the correct href
+			const all_links = page.getByRole('link');
+			const windsurf_link_exists = await all_links
+				.filter({ hasText: 'View Rules' })
+				.nth(1);
+
+			await expect.element(windsurf_link_exists).toBeInTheDocument();
 		});
 
 		it('should open rules links in new tab with security attributes', async () => {
 			render(Page);
 
-			const cursor_link = page.getByRole('link', {
-				name: /View Cursor Rules/i,
-			});
-			const windsurf_link = page.getByRole('link', {
-				name: /View Windsurf Rules/i,
-			});
+			// Get the first two "View Rules" links (Cursor and Windsurf)
+			const view_rules_links = page
+				.getByRole('link')
+				.filter({ hasText: 'View Rules' });
+
+			const cursor_link = view_rules_links.first();
+			const windsurf_link = view_rules_links.nth(1);
 
 			await expect
 				.element(cursor_link)

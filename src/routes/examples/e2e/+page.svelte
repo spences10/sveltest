@@ -194,7 +194,7 @@
 				</span>
 			</div>
 			<h1
-				class="from-accent via-primary to-secondary mb-4 bg-gradient-to-r bg-clip-text text-6xl leading-normal font-black text-transparent"
+				class="from-accent via-primary to-secondary mb-4 bg-linear-to-r bg-clip-text text-6xl leading-normal font-black text-transparent"
 			>
 				E2E Testing
 			</h1>
@@ -217,7 +217,7 @@
 						>
 							<div class="card-body p-6">
 								<div
-									class="from-{category.color}/20 to-{category.color}/10 mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br transition-transform duration-300 group-hover:scale-110"
+									class="from-{category.color}/20 to-{category.color}/10 mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br transition-transform duration-300 group-hover:scale-110"
 								>
 									<category.icon
 										class_names="text-{category.color} h-6 w-6"
@@ -434,7 +434,7 @@
 						<div class="card-body p-6">
 							<div class="mb-4 flex items-center gap-3">
 								<div
-									class="from-accent/20 to-accent/10 flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br"
+									class="from-accent/20 to-accent/10 flex h-10 w-10 items-center justify-center rounded-lg bg-linear-to-br"
 								>
 									<Calculator class_names="text-accent h-5 w-5" />
 								</div>
@@ -474,7 +474,7 @@
 					>
 						<div class="card-body p-6 text-center">
 							<div
-								class="from-primary/20 to-primary/10 mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br"
+								class="from-primary/20 to-primary/10 mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br"
 							>
 								<practice.icon class_names="text-primary h-6 w-6" />
 							</div>
@@ -502,7 +502,7 @@
 					<div class="card-body p-8">
 						<div class="mb-4 flex items-center gap-3">
 							<div
-								class="from-primary/20 to-primary/10 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br"
+								class="from-primary/20 to-primary/10 flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br"
 							>
 								<Clock class_names="text-primary h-6 w-6" />
 							</div>
@@ -526,7 +526,7 @@
 					<div class="card-body p-8">
 						<div class="mb-4 flex items-center gap-3">
 							<div
-								class="from-secondary/20 to-secondary/10 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br"
+								class="from-secondary/20 to-secondary/10 flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br"
 							>
 								<Settings class_names="text-secondary h-6 w-6" />
 							</div>

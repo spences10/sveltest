@@ -92,7 +92,7 @@
 					class_names="mr-2 text-primary"
 				/>
 				<span
-					class="from-primary to-secondary bg-gradient-to-r bg-clip-text text-transparent"
+					class="from-primary to-secondary bg-linear-to-r bg-clip-text text-transparent"
 				>
 					Sveltest
 				</span>

@@ -3,6 +3,14 @@ import { render } from 'svelte/server';
 import { describe, expect, test, vi } from 'vitest';
 import Layout from './+layout.svelte';
 
+// Mock the $app/environment module for SSR testing
+vi.mock('$app/environment', () => ({
+	browser: false,
+	building: false,
+	dev: true,
+	version: '1.0.0',
+}));
+
 // Mock the $app/state module for SSR testing
 vi.mock('$app/state', () => ({
 	page: {
@@ -174,7 +182,7 @@ describe('+layout.svelte SSR', () => {
 				props: { children: mock_children },
 			});
 
-			expect(body).toContain('bg-gradient-to-br');
+			expect(body).toContain('bg-linear-to-br');
 		});
 
 		test('should include Tailwind utility classes', () => {
@@ -193,7 +201,7 @@ describe('+layout.svelte SSR', () => {
 			});
 
 			// Check for proper layout structure
-			expect(body).toContain('bg-gradient-to-br');
+			expect(body).toContain('bg-linear-to-br');
 			expect(body).toContain('navbar');
 			expect(body).toContain('<main');
 		});

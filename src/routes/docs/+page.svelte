@@ -215,13 +215,13 @@ vi.mock('$lib/heavy-computation', () => ({
 
 <!-- Hero Section -->
 <section
-	class="from-primary/10 via-secondary/5 to-accent/10 bg-gradient-to-br px-4 py-24"
+	class="from-primary/10 via-secondary/5 to-accent/10 bg-linear-to-br px-4 py-24"
 >
 	<div class="container mx-auto max-w-7xl text-center">
 		<div class="mb-8">
 			<h1 class="mb-6 text-6xl font-black tracking-tight">
 				<span
-					class="from-primary to-secondary bg-gradient-to-r bg-clip-text text-transparent"
+					class="from-primary to-secondary bg-linear-to-r bg-clip-text text-transparent"
 				>
 					Testing Documentation
 				</span>
@@ -245,12 +245,12 @@ vi.mock('$lib/heavy-computation', () => ({
 
 <!-- Documentation Navigation - Prominent Section -->
 <section
-	class="from-primary/5 to-secondary/5 bg-gradient-to-br px-4 py-24"
+	class="from-primary/5 to-secondary/5 bg-linear-to-br px-4 py-24"
 >
 	<div class="container mx-auto max-w-7xl">
 		<div class="mb-16 text-center">
 			<h2
-				class="from-primary to-secondary mb-4 bg-gradient-to-r bg-clip-text text-5xl font-bold text-transparent"
+				class="from-primary to-secondary mb-4 bg-linear-to-r bg-clip-text text-5xl font-bold text-transparent"
 			>
 				Documentation Guide
 			</h2>
@@ -279,7 +279,7 @@ vi.mock('$lib/heavy-computation', () => ({
 
 		<!-- Quick Access Bar -->
 		<div
-			class="from-primary/5 via-secondary/5 to-accent/5 border-base-300/50 rounded-2xl border bg-gradient-to-br p-8 shadow-lg backdrop-blur-sm"
+			class="from-primary/5 via-secondary/5 to-accent/5 border-base-300/50 rounded-2xl border bg-linear-to-br p-8 shadow-lg backdrop-blur-sm"
 		>
 			<div class="flex flex-col gap-6">
 				<!-- Content -->
@@ -349,7 +349,7 @@ vi.mock('$lib/heavy-computation', () => ({
 
 <!-- Documentation Navigation - Prominent Section -->
 <section
-	class="from-primary/10 to-secondary/10 bg-gradient-to-r px-4 py-20"
+	class="from-primary/10 to-secondary/10 bg-linear-to-r px-4 py-20"
 >
 	<div class="container mx-auto max-w-7xl">
 		<div class="mb-12 text-center">

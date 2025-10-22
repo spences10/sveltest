@@ -36,7 +36,7 @@
 				>
 			</div>
 			<h1
-				class="from-info via-primary to-secondary mb-4 bg-gradient-to-r bg-clip-text text-6xl leading-normal font-black text-transparent"
+				class="from-info via-primary to-secondary mb-4 bg-linear-to-r bg-clip-text text-6xl leading-normal font-black text-transparent"
 			>
 				Unit Testing Examples
 			</h1>
@@ -291,7 +291,7 @@
 		<!-- Best Practices -->
 		<div class="mb-16">
 			<div
-				class="card from-primary/10 via-secondary/5 to-accent/10 border-primary/20 border bg-gradient-to-br shadow-2xl backdrop-blur-sm"
+				class="card from-primary/10 via-secondary/5 to-accent/10 border-primary/20 border bg-linear-to-br shadow-2xl backdrop-blur-sm"
 			>
 				<div class="card-body p-8">
 					<div class="mb-6 flex items-center gap-3">

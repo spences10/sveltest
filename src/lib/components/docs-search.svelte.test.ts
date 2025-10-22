@@ -1,4 +1,4 @@
-import { page } from '@vitest/browser/context';
+import { page } from 'vitest/browser';
 import { describe, expect, test, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import DocsSearch from './docs-search.svelte';

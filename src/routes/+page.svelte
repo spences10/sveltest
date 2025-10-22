@@ -37,7 +37,7 @@
 <div class="relative overflow-hidden">
 	<!-- Background decorative elements -->
 	<div
-		class="from-primary/10 via-secondary/5 to-accent/10 absolute inset-0 bg-gradient-to-br"
+		class="from-primary/10 via-secondary/5 to-accent/10 absolute inset-0 bg-linear-to-br"
 	></div>
 	<div
 		class="bg-primary/5 absolute top-0 left-1/4 h-96 w-96 rounded-full blur-3xl"
@@ -52,7 +52,7 @@
 				<!-- Badge and Status Pills -->
 				<div class="space-y-3">
 					<div
-						class="from-success/10 via-base-100/80 to-success/10 border-success/20 inline-flex items-center gap-3 rounded-full border bg-gradient-to-r px-6 py-3 shadow-lg backdrop-blur-sm"
+						class="from-success/10 via-base-100/80 to-success/10 border-success/20 inline-flex items-center gap-3 rounded-full border bg-linear-to-r px-6 py-3 shadow-lg backdrop-blur-sm"
 					>
 						<CheckCircle class_names="h-4 w-4 text-success" />
 						<span
@@ -75,7 +75,7 @@
 							class_names="text-primary"
 						/>
 						<h1
-							class="from-primary via-secondary to-accent bg-gradient-to-r bg-clip-text text-6xl leading-tight font-black text-transparent"
+							class="from-primary via-secondary to-accent bg-linear-to-r bg-clip-text text-6xl leading-tight font-black text-transparent"
 						>
 							Sveltest
 						</h1>
@@ -83,7 +83,7 @@
 
 					<!-- Desktop layout: Logo beside text -->
 					<h1
-						class="from-primary via-secondary to-accent hidden items-center justify-center gap-4 bg-gradient-to-r bg-clip-text text-7xl leading-tight font-black text-transparent sm:flex lg:text-8xl"
+						class="from-primary via-secondary to-accent hidden items-center justify-center gap-4 bg-linear-to-r bg-clip-text text-7xl leading-tight font-black text-transparent sm:flex lg:text-8xl"
 					>
 						Sveltest
 						<Logo
@@ -145,7 +145,7 @@
 				>
 			</div>
 			<h2
-				class="from-base-content to-base-content/70 mb-4 bg-gradient-to-r bg-clip-text text-5xl leading-normal font-black text-transparent"
+				class="from-base-content to-base-content/70 mb-4 bg-linear-to-r bg-clip-text text-5xl leading-normal font-black text-transparent"
 			>
 				Community Driven
 			</h2>
@@ -199,7 +199,7 @@
 		<!-- GitHub Stats -->
 		<div class="mt-16">
 			<div
-				class="card from-base-100/60 to-base-100/40 border-base-300/50 mx-auto max-w-4xl border bg-gradient-to-br shadow-xl backdrop-blur-sm"
+				class="card from-base-100/60 to-base-100/40 border-base-300/50 mx-auto max-w-4xl border bg-linear-to-br shadow-xl backdrop-blur-sm"
 			>
 				<div class="card-body p-8">
 					<div class="mb-6 text-center">
@@ -257,7 +257,7 @@
 				<span class="text-primary text-sm font-medium">Features</span>
 			</div>
 			<h2
-				class="from-base-content to-base-content/70 mb-4 bg-gradient-to-r bg-clip-text text-5xl leading-normal font-black text-transparent"
+				class="from-base-content to-base-content/70 mb-4 bg-linear-to-r bg-clip-text text-5xl leading-normal font-black text-transparent"
 			>
 				Everything You Need
 			</h2>
@@ -269,7 +269,7 @@
 
 		<!-- AI Testing Rules Row -->
 		<div
-			class="mb-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
+			class="mb-12 grid auto-rows-fr grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4"
 		>
 			<!-- Cursor Rules Card -->
 			<FeatureCard
@@ -277,7 +277,7 @@
 				title="Cursor Rules"
 				description="Pre-configured AI assistant rules for Cursor that enforce testing best practices automatically when editing test files"
 				href="https://github.com/spences10/sveltest/blob/main/.cursor/rules/testing.mdc"
-				button_text="View Cursor Rules"
+				button_text="View Rules"
 				color_scheme="info"
 				button_icon={GitHub}
 				button_size="btn-lg"
@@ -293,7 +293,7 @@
 				title="Windsurf Rules"
 				description="Modern rule system with trigger-based activation for Windsurf. Same comprehensive patterns optimized for advanced AI capabilities"
 				href="https://github.com/spences10/sveltest/blob/main/.windsurf/rules/testing.md"
-				button_text="View Windsurf Rules"
+				button_text="View Rules"
 				color_scheme="info"
 				button_icon={GitHub}
 				button_size="btn-lg"
@@ -306,10 +306,10 @@
 			<!-- Claude Code Rules Card -->
 			<FeatureCard
 				icon={Claude}
-				title="Claude Code Guide"
+				title="CLAUDE.md"
 				description="Comprehensive guidance for Claude Code with personas, testing patterns, and project-specific rules for optimal AI assistance"
 				href="https://github.com/spences10/sveltest/blob/main/CLAUDE.md"
-				button_text="View Claude Guide"
+				button_text="View Guide"
 				color_scheme="info"
 				button_icon={GitHub}
 				button_size="btn-lg"
@@ -317,6 +317,22 @@
 				button_icon_classes="h-5 w-5"
 				onclick_event={() =>
 					Fathom.trackEvent('claude_guide_clicked')}
+			/>
+
+			<!-- Claude Skill Card -->
+			<FeatureCard
+				icon={Claude}
+				title="Claude Code Skill"
+				description="Comprehensive testing tools and examples for building robust Svelte applications. Auto-invoked skill for Claude Code with complete test patterns"
+				href="https://github.com/spences10/sveltest/tree/main/.claude/skills/sveltest-helper"
+				button_text="View Skill"
+				color_scheme="info"
+				button_icon={GitHub}
+				button_size="btn-lg"
+				button_classes="w-full text-lg"
+				button_icon_classes="h-5 w-5"
+				onclick_event={() =>
+					Fathom.trackEvent('claude_skill_clicked')}
 			/>
 		</div>
 
@@ -329,7 +345,7 @@
 				>
 					<div class="card-body p-8">
 						<div
-							class="from-primary/20 to-primary/10 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br transition-transform duration-300 group-hover:scale-110"
+							class="from-primary/20 to-primary/10 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br transition-transform duration-300 group-hover:scale-110"
 						>
 							<Calculator class_names="text-primary h-8 w-8" />
 						</div>
@@ -358,7 +374,7 @@
 				>
 					<div class="card-body p-8">
 						<div
-							class="from-secondary/20 to-secondary/10 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br transition-transform duration-300 group-hover:scale-110"
+							class="from-secondary/20 to-secondary/10 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br transition-transform duration-300 group-hover:scale-110"
 						>
 							<CheckCircle class_names="text-secondary h-8 w-8" />
 						</div>
@@ -383,7 +399,7 @@
 				>
 					<div class="card-body p-8">
 						<div
-							class="from-accent/20 to-accent/10 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br transition-transform duration-300 group-hover:scale-110"
+							class="from-accent/20 to-accent/10 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br transition-transform duration-300 group-hover:scale-110"
 						>
 							<BarChart class_names="text-accent h-8 w-8" />
 						</div>
@@ -409,7 +425,7 @@
 		<!-- Call to action -->
 		<div class="mt-16 text-center">
 			<div
-				class="card from-primary/10 via-secondary/5 to-accent/10 border-primary/20 mx-auto max-w-4xl border bg-gradient-to-br shadow-2xl backdrop-blur-sm"
+				class="card from-primary/10 via-secondary/5 to-accent/10 border-primary/20 mx-auto max-w-4xl border bg-linear-to-br shadow-2xl backdrop-blur-sm"
 			>
 				<div class="card-body p-12">
 					<h2 class="mb-4 text-3xl font-bold">

@@ -1,6 +1,23 @@
 import { render } from 'svelte/server';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import Page from './+page.svelte';
+
+// Mock the $app/environment module for SSR testing
+vi.mock('$app/environment', () => ({
+	browser: false,
+	building: false,
+	dev: true,
+	version: '1.0.0',
+}));
+
+// Mock the $app/state module for SSR testing
+vi.mock('$app/state', () => ({
+	page: {
+		url: {
+			pathname: '/',
+		},
+	},
+}));
 
 describe('/+page.svelte SSR', () => {
 	test('should render HTML correctly on server', () => {
@@ -59,7 +76,7 @@ describe('/+page.svelte SSR', () => {
 
 		// Test hero section structure
 		expect(body).toContain('hero');
-		expect(body).toContain('bg-gradient-to-br');
+		expect(body).toContain('bg-linear-to-br');
 		expect(body).toContain('min-h-screen');
 	});
 

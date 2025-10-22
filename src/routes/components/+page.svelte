@@ -146,13 +146,13 @@
 
 <!-- Hero Section -->
 <div
-	class="from-primary/10 via-secondary/5 to-accent/10 bg-gradient-to-br px-4 py-24"
+	class="from-primary/10 via-secondary/5 to-accent/10 bg-linear-to-br px-4 py-24"
 >
 	<div class="container mx-auto max-w-7xl text-center">
 		<div class="mb-8">
 			<h1 class="mb-6 text-6xl font-black tracking-tight">
 				<span
-					class="from-primary to-secondary bg-gradient-to-r bg-clip-text text-transparent"
+					class="from-primary to-secondary bg-linear-to-r bg-clip-text text-transparent"
 				>
 					Component Library
 				</span>

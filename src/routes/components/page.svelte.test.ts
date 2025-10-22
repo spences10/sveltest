@@ -1,6 +1,6 @@
-import { page } from '@vitest/browser/context';
 import { describe, expect, test } from 'vitest';
 import { render } from 'vitest-browser-svelte';
+import { page } from 'vitest/browser';
 import ComponentsPage from './+page.svelte';
 
 describe('Components Page', () => {
@@ -131,16 +131,18 @@ describe('Components Page', () => {
 		test('should open modal when button is clicked', async () => {
 			render(ComponentsPage);
 
-			const openModalButton = page.getByRole('button', {
-				name: 'Open Modal',
-			});
+			const openModalButton = page
+				.getByRole('button', {
+					name: 'Open Modal',
+				})
+				.first();
 			await openModalButton.click();
 
 			// Check modal is opened - wait for it to appear
-			const modal = page.getByTestId('modal');
+			const modal = page.getByTestId('modal').first();
 			await expect.element(modal).toBeInTheDocument();
 
-			const modalTitle = page.getByTestId('modal-title');
+			const modalTitle = page.getByTestId('modal-title').first();
 			await expect.element(modalTitle).toBeInTheDocument();
 		});
 
