@@ -24,19 +24,56 @@ Vitest v3 to v4, follow these steps:
 4. **Coverage Configuration** - `coverage.all` option removed, use
    `coverage.include` patterns instead
 
+### Migration At-a-Glance
+
+```bash
+# 1. Install new provider package
+pnpm add -D @vitest/browser-playwright
+
+# 2. Update all test imports (automated)
+find src -name "*.test.ts" -exec sed -i 's/@vitest\/browser\/context/vitest\/browser/g' {} +
+
+# 3. Update your vite.config.ts (see detailed examples below)
+
+# 4. Run tests to verify
+pnpm run test:unit
+```
+
+**What you'll change:**
+
+- **Package**: Add `@vitest/browser-playwright`, remove
+  `@vitest/browser` (if present)
+- **Config**: Import `playwright()` function and use
+  `provider: playwright()`
+- **Tests**: Change import path from `@vitest/browser/context` to
+  `vitest/browser`
+- **Coverage** (if used): Add explicit `include` patterns
+
 ### Quick Migration Steps
 
 #### 1. Install Browser Provider Package
+
+**Why this changed**: In Vitest v4, browser providers (Playwright,
+WebDriverIO) are now distributed as separate packages with factory
+functions, making configuration more explicit and removing the need
+for TypeScript reference comments.
 
 ```bash
 # Install the separate playwright provider package
 pnpm add -D @vitest/browser-playwright
 
-# The @vitest/browser package is no longer needed separately
+# The @vitest/browser package is no longer needed in v4
+# You can safely remove it if you have it installed
 # pnpm remove @vitest/browser  # Optional cleanup
 ```
 
 #### 2. Update vite.config.ts
+
+**Why this changed**: The browser provider now accepts an object (via
+factory function) instead of a string. This makes it easier to pass
+provider-specific options and aligns with Playwright's own API
+documentation. The `environment: 'browser'` is automatically inferred
+when `browser.enabled: true`.
 
 ```typescript
 // Before (Vitest v3)
@@ -50,10 +87,10 @@ export default defineConfig({
 			{
 				test: {
 					name: 'client',
-					environment: 'browser', // ❌ Remove this line
+					environment: 'browser', // ❌ Remove - inferred from browser.enabled
 					browser: {
 						enabled: true,
-						provider: 'playwright', // ❌ String provider
+						provider: 'playwright', // ❌ String provider (old API)
 					},
 				},
 			},
@@ -73,10 +110,11 @@ export default defineConfig({
 			{
 				test: {
 					name: 'client',
-					// ✅ No environment property needed
+					// ✅ No environment property - inferred from browser.enabled: true
 					browser: {
 						enabled: true,
-						provider: playwright(), // ✅ Use factory function
+						provider: playwright(), // ✅ Factory function with optional config
+						// Can pass options: playwright({ launchOptions: { slowMo: 100 } })
 					},
 				},
 			},
@@ -87,11 +125,19 @@ export default defineConfig({
 
 #### 3. Update Test Imports
 
+**Why this changed**: With `@vitest/browser` no longer needed as a
+separate package, the context imports are now part of the core
+`vitest` package itself. This simplifies the dependency tree and makes
+the import paths more intuitive.
+
 Find and replace all test file imports:
 
 ```bash
-# Update all imports in test files
+# Update all imports in test files (Unix/Linux/macOS)
 find src -name "*.test.ts" -type f -exec sed -i "s/@vitest\/browser\/context/vitest\/browser/g" {} +
+
+# For Windows Git Bash or WSL
+find src -name "*.test.ts" -type f -exec sed -i 's/@vitest\/browser\/context/vitest\/browser/g' {} +
 ```
 
 ```typescript
@@ -102,20 +148,41 @@ import { page, userEvent } from '@vitest/browser/context';
 import { page, userEvent } from 'vitest/browser';
 ```
 
+**Note**: The modules are functionally identical during a transition
+period, but `@vitest/browser/context` will be removed in a future
+release. Update your imports now to avoid breaking changes later.
+
 #### 4. Update Coverage Configuration (if applicable)
+
+**Why this changed**: Vitest v3 included all files by default
+(`coverage.all: true`), which caused slow coverage generation when
+processing unexpected files like minified JavaScript. Vitest v4 now
+only includes files that are actually loaded during tests, unless you
+specify explicit patterns.
 
 ```typescript
 // Before (Vitest v3)
 coverage: {
   all: true,  // ❌ Removed in v4
   include: ['src'],
+  extensions: ['.js', '.ts'],  // ❌ Also removed
 }
 
-// After (Vitest v4)
+// After (Vitest v4) - Option 1: Only covered files
 coverage: {
-  include: ['src/**/*'],  // ✅ Explicit pattern required
+  // No include specified = only files loaded during tests
+  exclude: ['**/*.config.ts', '**/node_modules/**'],
+}
+
+// After (Vitest v4) - Option 2: Explicit patterns (recommended)
+coverage: {
+  include: ['src/**/*.{js,ts,svelte}'],  // ✅ Explicit glob patterns
+  exclude: ['**/*.{test,spec}.ts', '**/node_modules/**'],
 }
 ```
+
+**Recommendation**: Use explicit `include` patterns to ensure
+consistent coverage reports across different test runs.
 
 #### 5. Run Tests
 
@@ -199,6 +266,11 @@ Removed packages:
 Note: Using Vitest v4 with factory-based browser provider configuration"
 ```
 
+**Note about E2E vs Unit Testing**: If you also have E2E tests using
+`@playwright/test` (separate from Vitest), keep that package
+installed. This migration is specifically for Vitest browser-mode
+unit/component tests using `vitest-browser-svelte`.
+
 ### Step 3: Update Vitest Configuration
 
 Update your `vite.config.ts` to enable browser mode (Vitest v4):
@@ -232,7 +304,7 @@ export default defineConfig({
 					include: ['src/**/*.svelte.{test,spec}.{js,ts}'],
 					exclude: [
 						'src/lib/server/**',
-						'src/**/*.ssr.{test,spec}.{js,ts}'],
+						'src/**/*.ssr.{test,spec}.{js,ts}',
 					],
 					setupFiles: ['./src/vitest-setup-client.ts'],
 				},
