@@ -1,9 +1,9 @@
 ---
 name: sveltest-helper
 description:
-  Testing assistant for Svelte 5 with vitest-browser-svelte. Creates
-  client/server/SSR tests using locators, untrack, and real FormData
-  patterns. Use for SvelteKit testing.
+  Fix and create Svelte 5 tests with vitest-browser-svelte and
+  Playwright. Use when fixing broken tests, debugging failures,
+  writing unit/SSR/e2e tests, or working with vitest/Playwright.
 ---
 
 # Sveltest Helper
