@@ -1,6 +1,14 @@
 import { render } from 'svelte/server';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import E2EPage from './+page.svelte';
+
+// Mock the $app/environment module for SSR testing
+vi.mock('$app/environment', () => ({
+	browser: false,
+	building: false,
+	dev: true,
+	version: '1.0.0',
+}));
 
 describe('E2E Testing Page SSR', () => {
 	describe('Core Content Rendering', () => {

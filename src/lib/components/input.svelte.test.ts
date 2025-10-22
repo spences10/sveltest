@@ -1,7 +1,7 @@
-import { page } from 'vitest/browser';
 import { createRawSnippet } from 'svelte';
 import { describe, expect, test } from 'vitest';
 import { render } from 'vitest-browser-svelte';
+import { page } from 'vitest/browser';
 import Input from './input.svelte';
 
 describe('Input Component', () => {
@@ -255,7 +255,7 @@ describe('Input Component', () => {
 				label: 'Interactive Input',
 			});
 
-			const input = page.getByTestId('input');
+			const input = page.getByTestId('input').first();
 			await input.fill('test value');
 
 			await expect.element(input).toHaveValue('test value');
@@ -266,7 +266,7 @@ describe('Input Component', () => {
 				label: 'Focus Test',
 			});
 
-			const input = page.getByTestId('input');
+			const input = page.getByTestId('input').first();
 			await input.click();
 			await input.fill('focused');
 			await expect.element(input).toHaveValue('focused');

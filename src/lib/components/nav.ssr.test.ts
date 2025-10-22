@@ -2,6 +2,14 @@ import { render } from 'svelte/server';
 import { describe, expect, test, vi } from 'vitest';
 import Nav from './nav.svelte';
 
+// Mock the $app/environment module for SSR testing
+vi.mock('$app/environment', () => ({
+	browser: false,
+	building: false,
+	dev: true,
+	version: '1.0.0',
+}));
+
 // Mock the $app/state module for SSR testing
 vi.mock('$app/state', () => ({
 	page: {
