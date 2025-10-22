@@ -11,7 +11,7 @@ Alignment Strategy** for reliable full-stack testing.
 ```typescript
 import { describe, expect, test, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
-import { page } from '@vitest/browser/context';
+import { page } from 'vitest/browser';
 ```
 
 ### Svelte 5 Runes & SSR
@@ -580,26 +580,32 @@ expect.extend({
 ### Vitest Browser Config
 
 ```typescript
-// vite.config.ts
+// vite.config.ts (Vitest v4)
+import { playwright } from '@vitest/browser-playwright';
+import { defineConfig } from 'vite';
+
 export default defineConfig({
 	test: {
 		browser: {
 			enabled: true,
 			name: 'chromium',
-			provider: 'playwright',
-			// Debugging options
-			slowMo: 100, // Slow down for debugging
+			provider: playwright({
+				// Debugging options
+				launchOptions: {
+					slowMo: 100, // Slow down for debugging
+				},
+			}),
 			screenshot: 'only-on-failure',
 			// Headless mode
 			headless: true,
 		},
-		// Workspace configuration
-		workspace: [
+		// Projects configuration (workspace renamed to projects in v4)
+		projects: [
 			{
 				test: {
 					include: ['**/*.svelte.test.ts'],
 					name: 'client',
-					browser: { enabled: true },
+					browser: { enabled: true, provider: playwright() },
 				},
 			},
 			{

@@ -78,8 +78,8 @@ These are the options that will be used in these examples:
 
 ```bash
 cd my-testing-app
-# Add vitest browser, Svelte testing and playwright
-pnpm install -D @vitest/browser vitest-browser-svelte playwright
+# Add vitest browser playwright provider, Svelte testing and playwright (Vitest v4)
+pnpm install -D @vitest/browser-playwright vitest-browser-svelte playwright
 
 # remove testing library and jsdom
 pnpm un @testing-library/jest-dom @testing-library/svelte jsdom
@@ -95,6 +95,7 @@ while keeping server tests fast with minimal mocking:
 ```typescript
 import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
+import { playwright } from '@vitest/browser-playwright';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
@@ -107,12 +108,11 @@ export default defineConfig({
 				extends: true,
 				test: {
 					name: 'client',
-					environment: 'browser',
 					// Timeout for browser tests - prevent hanging on element lookups
 					testTimeout: 2000,
 					browser: {
 						enabled: true,
-						provider: 'playwright',
+						provider: playwright(),
 						// Multiple browser instances for better performance
 						// Uses single Vite server with shared caching
 						instances: [
@@ -172,8 +172,8 @@ export default defineConfig({
 Replace the contents of the `src/vitest-setup-client.ts` with this:
 
 ```typescript
-/// <reference types="@vitest/browser/matchers" />
-/// <reference types="@vitest/browser/providers/playwright" />
+/// <reference types="vitest/browser" />
+/// <reference types="@vitest/browser-playwright" />
 ```
 
 ### Run the tests
@@ -183,7 +183,7 @@ Running `pnpm run test:unit` on the project now is going to fail! The
 `@testing-library/svelte`, replace the contents with this:
 
 ```ts
-import { page } from '@vitest/browser/context';
+import { page } from 'vitest/browser';
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import Page from './+page.svelte';
@@ -283,7 +283,7 @@ Create `src/lib/components/my-button.svelte.test.ts`:
 ```typescript
 import { describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
-import { page } from '@vitest/browser/context';
+import { page } from 'vitest/browser';
 import { createRawSnippet } from 'svelte';
 import MyButton from './my-button.svelte';
 
@@ -354,7 +354,7 @@ Let's break down what makes this test work with Vitest Browser Mode:
 ```typescript
 import { describe, expect, it, vi } from 'vitest'; // Test framework
 import { render } from 'vitest-browser-svelte'; // Svelte rendering
-import { page } from '@vitest/browser/context'; // Browser interactions
+import { page } from 'vitest/browser'; // Browser interactions
 import { createRawSnippet } from 'svelte'; // Svelte 5 snippets
 ```
 

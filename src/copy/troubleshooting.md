@@ -314,12 +314,15 @@ sudo npx playwright install
 
 ```typescript
 // vite.config.ts
+import { playwright } from '@vitest/browser-playwright';
+import { defineConfig } from 'vite';
+
 export default defineConfig({
 	test: {
 		browser: {
 			enabled: true,
 			name: 'chromium',
-			provider: 'playwright',
+			provider: playwright(),
 			// Reduce memory usage
 			headless: true,
 		},

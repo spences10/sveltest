@@ -4,6 +4,133 @@ A comprehensive guide for migrating your Svelte testing setup from
 `@testing-library/svelte` to `vitest-browser-svelte`, based on
 real-world migration experience.
 
+> **Note**: This guide has been updated for **Vitest v4**. If you're
+> upgrading from Vitest v3, see the
+> [Vitest v4 Migration](#vitest-v4-migration-guide) section first.
+
+## 🚀 Vitest v4 Migration Guide
+
+If you're upgrading an existing `vitest-browser-svelte` project from
+Vitest v3 to v4, follow these steps:
+
+### Breaking Changes in Vitest v4
+
+1. **Browser Provider Configuration** - Providers now use factory
+   functions
+2. **Import Paths** - Context imports moved from
+   `@vitest/browser/context` to `vitest/browser`
+3. **Environment Configuration** - Remove `environment: 'browser'`
+   when using `browser.enabled: true`
+4. **Coverage Configuration** - `coverage.all` option removed, use
+   `coverage.include` patterns instead
+
+### Quick Migration Steps
+
+#### 1. Install Browser Provider Package
+
+```bash
+# Install the separate playwright provider package
+pnpm add -D @vitest/browser-playwright
+
+# The @vitest/browser package is no longer needed separately
+# pnpm remove @vitest/browser  # Optional cleanup
+```
+
+#### 2. Update vite.config.ts
+
+```typescript
+// Before (Vitest v3)
+import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+	plugins: [sveltekit()],
+	test: {
+		projects: [
+			{
+				test: {
+					name: 'client',
+					environment: 'browser', // ❌ Remove this line
+					browser: {
+						enabled: true,
+						provider: 'playwright', // ❌ String provider
+					},
+				},
+			},
+		],
+	},
+});
+
+// After (Vitest v4)
+import { sveltekit } from '@sveltejs/kit/vite';
+import { playwright } from '@vitest/browser-playwright'; // ✅ Import factory
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+	plugins: [sveltekit()],
+	test: {
+		projects: [
+			{
+				test: {
+					name: 'client',
+					// ✅ No environment property needed
+					browser: {
+						enabled: true,
+						provider: playwright(), // ✅ Use factory function
+					},
+				},
+			},
+		],
+	},
+});
+```
+
+#### 3. Update Test Imports
+
+Find and replace all test file imports:
+
+```bash
+# Update all imports in test files
+find src -name "*.test.ts" -type f -exec sed -i "s/@vitest\/browser\/context/vitest\/browser/g" {} +
+```
+
+```typescript
+// Before (Vitest v3)
+import { page, userEvent } from '@vitest/browser/context';
+
+// After (Vitest v4)
+import { page, userEvent } from 'vitest/browser';
+```
+
+#### 4. Update Coverage Configuration (if applicable)
+
+```typescript
+// Before (Vitest v3)
+coverage: {
+  all: true,  // ❌ Removed in v4
+  include: ['src'],
+}
+
+// After (Vitest v4)
+coverage: {
+  include: ['src/**/*'],  // ✅ Explicit pattern required
+}
+```
+
+#### 5. Run Tests
+
+```bash
+pnpm run test:unit
+```
+
+### Vitest v4 Resources
+
+- [Official Vitest v4 Announcement](https://voidzero.dev/posts/announcing-vitest-4)
+- [Vitest v4 Migration Guide](https://vitest.dev/guide/migration)
+- [Browser Mode Documentation](https://vitest.dev/guide/browser/)
+
+---
+
 ## 🎯 Why Migrate?
 
 - **Real Browser Environment**: Tests run in actual Playwright
@@ -49,8 +176,8 @@ All subsequent commits will document the migration process."
 ### Step 2: Install Dependencies
 
 ```bash
-# Install vitest-browser-svelte and related packages
-pnpm add -D @vitest/browser vitest-browser-svelte playwright
+# Install vitest-browser-svelte and related packages (Vitest v4)
+pnpm add -D @vitest/browser-playwright vitest-browser-svelte playwright
 
 # Remove old testing library dependencies
 pnpm remove @testing-library/svelte @testing-library/jest-dom jsdom
@@ -60,7 +187,7 @@ git add package.json pnpm-lock.yaml
 git commit -m "feat: install vitest-browser-svelte dependencies
 
 Added packages:
-- @vitest/browser: Browser testing environment
+- @vitest/browser-playwright: Playwright provider for browser testing
 - vitest-browser-svelte: Svelte-specific browser testing utilities
 - playwright: Browser automation for tests
 
@@ -68,14 +195,17 @@ Removed packages:
 - @testing-library/svelte: Replaced by vitest-browser-svelte
 - @testing-library/jest-dom: Not needed
 - jsdom: Not needed
+
+Note: Using Vitest v4 with factory-based browser provider configuration"
 ```
 
 ### Step 3: Update Vitest Configuration
 
-Update your `vite.config.ts` to enable browser mode:
+Update your `vite.config.ts` to enable browser mode (Vitest v4):
 
 ```typescript
 import { sveltekit } from '@sveltejs/kit/vite';
+import { playwright } from '@vitest/browser-playwright';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
@@ -88,12 +218,11 @@ export default defineConfig({
 				extends: true,
 				test: {
 					name: 'client',
-					environment: 'browser',
 					// Timeout for browser tests - prevent hanging on element lookups
 					testTimeout: 2000,
 					browser: {
 						enabled: true,
-						provider: 'playwright',
+						provider: playwright(),
 						instances: [
 							{ browser: 'chromium' },
 							// { browser: 'firefox' },
@@ -103,7 +232,7 @@ export default defineConfig({
 					include: ['src/**/*.svelte.{test,spec}.{js,ts}'],
 					exclude: [
 						'src/lib/server/**',
-						'src/**/*.ssr.{test,spec}.{js,ts}',
+						'src/**/*.ssr.{test,spec}.{js,ts}'],
 					],
 					setupFiles: ['./src/vitest-setup-client.ts'],
 				},
@@ -175,8 +304,8 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 // AFTER: src/vitest-setup-client.ts (minimal setup)
-/// <reference types="@vitest/browser/matchers" />
-/// <reference types="@vitest/browser/providers/playwright" />
+/// <reference types="vitest/browser" />
+/// <reference types="@vitest/browser-playwright" />
 ```
 
 Commit the cleanup:
@@ -222,7 +351,7 @@ describe('Home Page', () => {
 
 ```typescript
 // page.svelte.test.ts (NEW)
-import { page } from '@vitest/browser/context';
+import { page } from 'vitest/browser';
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import Page from './+page.svelte';
@@ -241,7 +370,7 @@ describe('/+page.svelte', () => {
 
 1. **Import source**: `@testing-library/svelte` →
    `vitest-browser-svelte`
-2. **Page context**: `screen` → `page` from `@vitest/browser/context`
+2. **Page context**: `screen` → `page` from `vitest/browser`
 3. **Assertions**: `expect()` → `await expect.element()`
 4. **Auto-retry**: No need for `waitFor()` - locators auto-retry
 
@@ -295,7 +424,7 @@ describe('Button Component', () => {
 
 // AFTER: vitest-browser-svelte
 import { render } from 'vitest-browser-svelte';
-import { page } from '@vitest/browser/context';
+import { page } from 'vitest/browser';
 import { expect, it, describe } from 'vitest';
 import Button from './button.svelte';
 
@@ -360,8 +489,8 @@ describe('Modal Component', () => {
 
 // AFTER: vitest-browser-svelte with better patterns
 import { render } from 'vitest-browser-svelte';
-import { page } from '@vitest/browser/context';
-import { userEvent } from '@vitest/browser/context';
+import { page } from 'vitest/browser';
+import { userEvent } from 'vitest/browser';
 import { expect, it, describe } from 'vitest';
 import Modal from './modal.svelte';
 
@@ -467,7 +596,7 @@ describe('Async Operations', () => {
 ```typescript
 // Testing components with Svelte 5 runes
 import { render } from 'vitest-browser-svelte';
-import { page } from '@vitest/browser/context';
+import { page } from 'vitest/browser';
 import { expect, it, describe } from 'vitest';
 import Counter from './counter.svelte';
 
@@ -495,7 +624,7 @@ describe('Counter Component', () => {
 ```typescript
 // Complex form validation patterns
 import { render } from 'vitest-browser-svelte';
-import { page } from '@vitest/browser/context';
+import { page } from 'vitest/browser';
 import { expect, it, describe } from 'vitest';
 import LoginForm from './login-form.svelte';
 
@@ -526,7 +655,7 @@ describe('LoginForm Validation', () => {
 ```typescript
 // Testing components with dependencies
 import { render } from 'vitest-browser-svelte';
-import { page } from '@vitest/browser/context';
+import { page } from 'vitest/browser';
 import { expect, it, vi, describe } from 'vitest';
 import { validate_email } from '$lib/utils/validation';
 import LoginForm from './login-form.svelte';

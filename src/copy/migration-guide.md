@@ -32,8 +32,8 @@ supports the **Client-Server Alignment Strategy**:
 ### Step 1: Update Dependencies
 
 ```bash
-# Install vitest-browser-svelte and related packages
-pnpm add -D @vitest/browser vitest-browser-svelte playwright
+# Install vitest-browser-svelte and related packages (Vitest v4)
+pnpm add -D @vitest/browser-playwright vitest-browser-svelte playwright
 
 # Remove old testing library dependencies
 pnpm remove @testing-library/svelte @testing-library/jest-dom jsdom
@@ -44,9 +44,10 @@ pnpm remove @testing-library/svelte @testing-library/jest-dom jsdom
 Replace your existing test configuration with browser mode:
 
 ```typescript
-// vite.config.ts
+// vite.config.ts (Vitest v4)
 import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
+import { playwright } from '@vitest/browser-playwright';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
@@ -59,12 +60,11 @@ export default defineConfig({
 				extends: true,
 				test: {
 					name: 'client',
-					environment: 'browser',
 					// Timeout for browser tests - prevent hanging on element lookups
 					testTimeout: 2000,
 					browser: {
 						enabled: true,
-						provider: 'playwright',
+						provider: playwright(),
 						instances: [
 							{ browser: 'chromium' },
 							// { browser: 'firefox' },
@@ -96,7 +96,7 @@ export default defineConfig({
 					environment: 'node',
 					include: ['src/**/*.{test,spec}.{js,ts}'],
 					exclude: [
-						'src/**/*.svelte.{test,spec}.{js,ts}',
+						'src/**/*.svelte.{test,spec}.{js,ts}'],
 						'src/**/*.ssr.{test,spec}.{js,ts}',
 					],
 				},
@@ -126,8 +126,8 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 // AFTER: src/vitest-setup-client.ts (minimal setup)
-/// <reference types="@vitest/browser/matchers" />
-/// <reference types="@vitest/browser/providers/playwright" />
+/// <reference types="vitest/browser" />
+/// <reference types="@vitest/browser-playwright" />
 ```
 
 ## 🧪 Phase 2: Core Pattern Migration
@@ -141,7 +141,7 @@ import userEvent from '@testing-library/user-event';
 
 // AFTER: vitest-browser-svelte
 import { render } from 'vitest-browser-svelte';
-import { page } from '@vitest/browser/context';
+import { page } from 'vitest/browser';
 ```
 
 ### Critical Pattern: Always Use Locators
@@ -272,7 +272,7 @@ test('click handler', async () => {
 ```typescript
 // Testing components with Svelte 5 runes
 import { render } from 'vitest-browser-svelte';
-import { page } from '@vitest/browser/context';
+import { page } from 'vitest/browser';
 import { untrack } from 'svelte';
 
 test('counter with runes', async () => {
