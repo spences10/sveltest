@@ -21,12 +21,17 @@ test.describe('Rules File Access via Deployed Project', () => {
 		test('should have accessible View Rules buttons', async ({
 			page,
 		}) => {
-			const cursor_button = page.getByRole('link', {
-				name: /View Cursor Rules/i,
-			});
-			const windsurf_button = page.getByRole('link', {
-				name: /View Windsurf Rules/i,
-			});
+			// Both buttons have "View Rules" text, use .first() and .nth() to select them
+			const cursor_button = page
+				.getByRole('link', {
+					name: /View Rules/i,
+				})
+				.first();
+			const windsurf_button = page
+				.getByRole('link', {
+					name: /View Rules/i,
+				})
+				.nth(1);
 
 			await expect(cursor_button).toBeVisible();
 			await expect(windsurf_button).toBeVisible();
@@ -37,19 +42,23 @@ test.describe('Rules File Access via Deployed Project', () => {
 		test('should have correct URLs for rules files', async ({
 			page,
 		}) => {
-			// Cursor rules file link
-			const cursor_link = page.getByRole('link', {
-				name: /View Cursor Rules/i,
-			});
+			// Both buttons have "View Rules" text, use .first() and .nth() to select them
+			const cursor_link = page
+				.getByRole('link', {
+					name: /View Rules/i,
+				})
+				.first();
+			const windsurf_link = page
+				.getByRole('link', {
+					name: /View Rules/i,
+				})
+				.nth(1);
+
 			await expect(cursor_link).toHaveAttribute(
 				'href',
 				'https://github.com/spences10/sveltest/blob/main/.cursor/rules/testing.mdc',
 			);
 
-			// Windsurf rules file link
-			const windsurf_link = page.getByRole('link', {
-				name: /View Windsurf Rules/i,
-			});
 			await expect(windsurf_link).toHaveAttribute(
 				'href',
 				'https://github.com/spences10/sveltest/blob/main/.windsurf/rules/testing.md',
@@ -59,12 +68,17 @@ test.describe('Rules File Access via Deployed Project', () => {
 		test('should open links in new tab with security attributes', async ({
 			page,
 		}) => {
-			const cursor_link = page.getByRole('link', {
-				name: /View Cursor Rules/i,
-			});
-			const windsurf_link = page.getByRole('link', {
-				name: /View Windsurf Rules/i,
-			});
+			// Both buttons have "View Rules" text, use .first() and .nth() to select them
+			const cursor_link = page
+				.getByRole('link', {
+					name: /View Rules/i,
+				})
+				.first();
+			const windsurf_link = page
+				.getByRole('link', {
+					name: /View Rules/i,
+				})
+				.nth(1);
 
 			// Security and UX attributes for external links
 			await expect(cursor_link).toHaveAttribute('target', '_blank');
@@ -94,12 +108,17 @@ test.describe('Rules File Access via Deployed Project', () => {
 			).toBeVisible();
 
 			// User can access the links (they exist and are clickable)
-			const cursor_link = page.getByRole('link', {
-				name: /View Cursor Rules/i,
-			});
-			const windsurf_link = page.getByRole('link', {
-				name: /View Windsurf Rules/i,
-			});
+			// Both buttons have "View Rules" text, use .first() and .nth() to select them
+			const cursor_link = page
+				.getByRole('link', {
+					name: /View Rules/i,
+				})
+				.first();
+			const windsurf_link = page
+				.getByRole('link', {
+					name: /View Rules/i,
+				})
+				.nth(1);
 
 			await expect(cursor_link).toBeEnabled();
 			await expect(windsurf_link).toBeEnabled();

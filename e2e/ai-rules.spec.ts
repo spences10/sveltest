@@ -21,12 +21,17 @@ test.describe('AI Rules File Access', () => {
 		test('should have functional links to rules files', async ({
 			page,
 		}) => {
-			const cursor_link = page.getByRole('link', {
-				name: /View Cursor Rules/i,
-			});
-			const windsurf_link = page.getByRole('link', {
-				name: /View Windsurf Rules/i,
-			});
+			// Both buttons have "View Rules" text, use .first() and .nth() to select them
+			const cursor_link = page
+				.getByRole('link', {
+					name: /View Rules/i,
+				})
+				.first();
+			const windsurf_link = page
+				.getByRole('link', {
+					name: /View Rules/i,
+				})
+				.nth(1);
 
 			await expect(cursor_link).toBeVisible();
 			await expect(windsurf_link).toBeVisible();
@@ -37,12 +42,17 @@ test.describe('AI Rules File Access', () => {
 		test('should have correct URLs and attributes', async ({
 			page,
 		}) => {
-			const cursor_link = page.getByRole('link', {
-				name: /View Cursor Rules/i,
-			});
-			const windsurf_link = page.getByRole('link', {
-				name: /View Windsurf Rules/i,
-			});
+			// Both buttons have "View Rules" text, use .first() and .nth() to select them
+			const cursor_link = page
+				.getByRole('link', {
+					name: /View Rules/i,
+				})
+				.first();
+			const windsurf_link = page
+				.getByRole('link', {
+					name: /View Rules/i,
+				})
+				.nth(1);
 
 			// Verify URLs
 			await expect(cursor_link).toHaveAttribute(
