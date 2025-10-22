@@ -1,5 +1,5 @@
 import { calculator_state } from '$lib/state/calculator.svelte.ts';
-import { page } from '@vitest/browser/context';
+import { page } from 'vitest/browser';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import Calculator from './calculator.svelte';

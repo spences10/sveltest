@@ -1,4 +1,4 @@
-import { page, userEvent } from '@vitest/browser/context';
+import { page, userEvent } from 'vitest/browser';
 import { describe, expect, test, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import LoginForm from './login-form.svelte';

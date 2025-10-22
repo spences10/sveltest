@@ -5,8 +5,8 @@
 @import 'tailwindcss';
 
 /* Plugin configurations */
-@plugin "@tailwindcss/typography";
-@plugin "daisyui";
+@plugin '@tailwindcss/typography';
+@plugin 'daisyui';
 
 @theme {
 	--font-sans: 'Inter Variable', sans-serif;

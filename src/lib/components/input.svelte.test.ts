@@ -1,4 +1,4 @@
-import { page } from '@vitest/browser/context';
+import { page } from 'vitest/browser';
 import { createRawSnippet } from 'svelte';
 import { describe, expect, test } from 'vitest';
 import { render } from 'vitest-browser-svelte';
