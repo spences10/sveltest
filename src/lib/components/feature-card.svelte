@@ -44,18 +44,18 @@
 	};
 </script>
 
-<div class="group relative">
+<div class="group relative h-full">
 	<div
-		class="card bg-base-100/80 border-base-300/50 hover:shadow-3xl border shadow-2xl backdrop-blur-sm transition-all duration-300 hover:-translate-y-2"
+		class="card bg-base-100/80 border-base-300/50 hover:shadow-3xl flex h-full flex-col border shadow-2xl backdrop-blur-sm transition-all duration-300 hover:-translate-y-2"
 	>
-		<div class="card-body p-8">
+		<div class="card-body flex flex-col p-8">
 			<div
 				class="from-{color_scheme}/20 to-{color_scheme}/10 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br transition-transform duration-300 group-hover:scale-110"
 			>
 				<Icon class_names="text-{color_scheme} h-8 w-8" />
 			</div>
 			<h3 class="mb-4 text-2xl font-bold">{title}</h3>
-			<p class="text-base-content/70 mb-6 leading-relaxed">
+			<p class="text-base-content/70 mb-6 flex-1 leading-relaxed">
 				{description}
 			</p>
 			{#if badges.length > 0}
