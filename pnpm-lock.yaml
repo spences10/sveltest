@@ -10,7 +10,7 @@ importers:
     devDependencies:
       '@anthropic-ai/sdk':
         specifier: ^0.67.0
-        version: 0.67.0(zod@4.1.12)
+        version: 0.67.1(zod@4.1.12)
       '@eslint/compat':
         specifier: ^1.4.0
         version: 1.4.0(eslint@9.38.0(jiti@2.6.1))
@@ -134,8 +134,8 @@ importers:
 
 packages:
 
-  '@anthropic-ai/sdk@0.67.0':
-    resolution: {integrity: sha512-Buxbf6jYJ+pPtfCgXe1pcFtZmdXPrbdqhBjiscFt9irS1G0hCsmR/fPA+DwKTk4GPjqeNnnCYNecXH6uVZ4G/A==}
+  '@anthropic-ai/sdk@0.67.1':
+    resolution: {integrity: sha512-ZLYZLog5ttur2OXkBxoCr8C+bsIGG//OwKYoDw4ZOlwdKF6u+qqQ7y+R4x9zqgQJBbdg5qZs6RHA7L+QpSrHUA==}
     hasBin: true
     peerDependencies:
       zod: ^3.25.0 || ^4.0.0
@@ -165,8 +165,8 @@ packages:
     engines: {node: '>=6.0.0'}
     hasBin: true
 
-  '@babel/runtime@7.27.4':
-    resolution: {integrity: sha512-t3yaEOuGu9NlIZ+hIeGbBjFtZT7j2cb2tg0fuaJKeGotchRjjLfrBA9Kwf8quhpP1EUuxModQg04q/mBwyg8uA==}
+  '@babel/runtime@7.28.4':
+    resolution: {integrity: sha512-Q/N6JNWvIvPnLDvjlE1OUBLPQHH6l3CltCEsHIujp45zQUSSh8K+gHnaEX45yAT1nyngnINhvWtzN+Nb9D8RAQ==}
     engines: {node: '>=6.9.0'}
 
   '@babel/types@7.27.3':
@@ -2136,7 +2136,7 @@ packages:
 
 snapshots:
 
-  '@anthropic-ai/sdk@0.67.0(zod@4.1.12)':
+  '@anthropic-ai/sdk@0.67.1(zod@4.1.12)':
     dependencies:
       json-schema-to-ts: 3.1.1
     optionalDependencies:
@@ -2168,7 +2168,7 @@ snapshots:
     dependencies:
       '@babel/types': 7.27.3
 
-  '@babel/runtime@7.27.4': {}
+  '@babel/runtime@7.28.4': {}
 
   '@babel/types@7.27.3':
     dependencies:
@@ -3316,7 +3316,7 @@ snapshots:
 
   json-schema-to-ts@3.1.1:
     dependencies:
-      '@babel/runtime': 7.27.4
+      '@babel/runtime': 7.28.4
       ts-algebra: 2.0.0
 
   json-schema-traverse@0.4.1: {}
