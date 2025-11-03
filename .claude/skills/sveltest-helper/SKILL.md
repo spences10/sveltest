@@ -1,9 +1,7 @@
 ---
 name: sveltest-helper
-description:
-  Fix and create Svelte 5 tests with vitest-browser-svelte and
-  Playwright. Use when fixing broken tests, debugging failures,
-  writing unit/SSR/e2e tests, or working with vitest/Playwright.
+# prettier-ignore
+description: Fix and create Svelte 5 tests with vitest-browser-svelte and Playwright. Use when fixing broken tests, debugging failures, writing unit/SSR/e2e tests, or working with vitest/Playwright.
 ---
 
 # Sveltest Helper
@@ -28,16 +26,10 @@ test('button click increments counter', async () => {
 ## Core Principles
 
 - **Always use locators**: `page.getBy*()` methods, never containers
+- **Multiple elements**: Use `.first()`, `.nth()`, `.last()` to avoid
+  strict mode violations
 - **Use untrack()**: When accessing `$derived` values in tests
 - **Real API objects**: Test with FormData/Request, minimal mocking
-- **Foundation First**: Plan with `.skip` blocks before implementing
-
-## Common Patterns
-
-### Multiple Elements Handling
-
-Use `.first()`, `.nth()`, `.last()` to avoid strict mode violations
-when multiple elements match a locator.
 
 ## Reference Files
 
@@ -56,8 +48,7 @@ For detailed documentation, see:
 
 - Never click SvelteKit form submit buttons - test state directly
 - Always use `await expect.element()` for locator assertions
-- Co-locate tests with components for maintainability
-- Run `pnpm lint` after making changes
+- Co-locate tests with components
 
 <!--
 PROGRESSIVE DISCLOSURE GUIDELINES:
