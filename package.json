@@ -34,6 +34,7 @@
 	},
 	"devDependencies": {
 		"@anthropic-ai/sdk": "^0.68.0",
+		"@changesets/cli": "^2.29.7",
 		"@eslint/compat": "^1.4.1",
 		"@eslint/js": "^9.39.0",
 		"@fontsource-variable/inter": "^5.2.8",
