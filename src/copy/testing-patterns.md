@@ -47,6 +47,40 @@ it('should use semantic locators', async () => {
 });
 ```
 
+### DOM Manipulation Methods
+
+**Important**: Vitest browser locators require `.element()` to access
+native DOM methods like `focus()` and `blur()`:
+
+```typescript
+it('should access DOM methods through .element()', async () => {
+	render(MyComponent);
+
+	const input = page.getByRole('textbox', { name: 'Email' });
+
+	// ❌ WRONG: focus() doesn't exist on Vitest locators
+	// await input.focus();
+
+	// ✅ CORRECT: Use .element() to access native DOM methods
+	await input.element().focus();
+	await input.element().blur();
+
+	// Note: This is different from Playwright e2e tests where
+	// locators have focus() directly: await locator.focus()
+});
+```
+
+**Why the difference?**
+
+- **Playwright locators** (e2e tests with `@playwright/test`): Have
+  `focus()`, `blur()`, etc. directly available
+- **Vitest browser locators** (component tests with
+  `vitest-browser-svelte`): Require `.element()` to access these
+  methods
+
+This design keeps Vitest locators lightweight while providing access
+to all native DOM methods when needed.
+
 ### Handling Multiple Elements (Strict Mode)
 
 vitest-browser-svelte operates in strict mode - if multiple elements
@@ -255,7 +289,7 @@ describe('Dropdown Component', () => {
 		const trigger = page.getByRole('button', {
 			name: 'Choose option',
 		});
-		await trigger.focus();
+		await trigger.element().focus();
 		await page.keyboard.press('Enter');
 
 		// Navigate with arrow keys
@@ -554,8 +588,8 @@ describe('Form Validation Component', () => {
 			.not.toBeInTheDocument();
 
 		// Trigger validation by focusing and blurring
-		await email_input.focus();
-		await email_input.blur();
+		await email_input.element().focus();
+		await email_input.element().blur();
 
 		// Error should appear
 		await expect
