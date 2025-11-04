@@ -540,7 +540,7 @@ describe('Accessibility Best Practices', () => {
 		render(TabPanel);
 
 		const first_tab = page.getByRole('tab').first();
-		await first_tab.focus();
+		await first_tab.element().focus();
 
 		// Test arrow key navigation
 		await page.keyboard.press('ArrowRight');
@@ -599,14 +599,14 @@ describe('Component Props and Events', () => {
 		expect(handlers.click).toHaveBeenCalledOnce();
 
 		// Test focus/blur
-		await element.focus();
+		await element.element().focus();
 		expect(handlers.focus).toHaveBeenCalledOnce();
 
-		await element.blur();
+		await element.element().blur();
 		expect(handlers.blur).toHaveBeenCalledOnce();
 
 		// Test keyboard
-		await element.focus();
+		await element.element().focus();
 		await element.press('Enter');
 		expect(handlers.keydown).toHaveBeenCalledWith(
 			expect.objectContaining({ key: 'Enter' }),

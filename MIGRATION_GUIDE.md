@@ -625,7 +625,7 @@ describe('Modal Component', () => {
 | `await fireEvent.click(button)`                                | `await button.click()`                |
 | `await fireEvent.change(input, { target: { value: 'test' } })` | `await input.fill('test')`            |
 | `await fireEvent.keyDown(element, { key: 'Enter' })`           | `await userEvent.keyboard('{Enter}')` |
-| `await fireEvent.focus(input)`                                 | `await input.focus()`                 |
+| `await fireEvent.focus(input)`                                 | `await input.element().focus()`       |
 
 ### 4. Async Testing Improvements
 
