@@ -16,7 +16,7 @@ not match the info here.**
 - **Format code**: `pnpm run format`
 - **Build**: `pnpm run build`
 - **Check**: `pnpm run check`
-- **Test**: `pnpm run test` 
+- **Test**: `pnpm run test`
 
 ## Validation Requirements
 
