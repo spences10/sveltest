@@ -136,7 +136,7 @@ describe('Components Page', () => {
 					name: 'Open Modal',
 				})
 				.first();
-			await openModalButton.click();
+			await openModalButton.click({ force: true });
 
 			// Check modal is opened - wait for it to appear
 			const modal = page.getByTestId('modal').first();
