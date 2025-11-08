@@ -33,6 +33,7 @@
 		"test:ai-rules": "tsx scripts/generate-ai-rules.ts --dry-run"
 	},
 	"devDependencies": {
+		"@anthropic-ai/claude-agent-sdk": "^0.1.30",
 		"@anthropic-ai/sdk": "^0.68.0",
 		"@changesets/cli": "^2.29.7",
 		"@eslint/compat": "^1.4.1",
@@ -50,6 +51,7 @@
 		"@vitest/browser-playwright": "^4.0.7",
 		"@vitest/coverage-v8": "^4.0.7",
 		"daisyui": "^5.4.3",
+		"dotenv": "^17.2.3",
 		"eslint": "^9.39.1",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.13.0",
