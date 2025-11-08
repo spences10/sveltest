@@ -1,10 +1,10 @@
 ---
-name: sveltest-helper
+name: svelte-testing
 # prettier-ignore
 description: Fix and create Svelte 5 tests with vitest-browser-svelte and Playwright. Use when fixing broken tests, debugging failures, writing unit/SSR/e2e tests, or working with vitest/Playwright.
 ---
 
-# Sveltest Helper
+# Svelte Testing
 
 ## Quick Start
 
@@ -33,32 +33,14 @@ test('button click increments counter', async () => {
 
 ## Reference Files
 
-- [references/core-principles.md](references/core-principles.md) -
-  Locators, strict mode, untrack, FormData
-- [references/foundation-first.md](references/foundation-first.md) -
-  Planning with .skip blocks
-- [references/client-examples.md](references/client-examples.md) -
-  Component and runes testing
-- [references/server-ssr-examples.md](references/server-ssr-examples.md) -
-  API routes and SSR
-- [references/critical-patterns.md](references/critical-patterns.md) -
-  Forms, semantic queries, best practices
-- [references/client-server-alignment.md](references/client-server-alignment.md) -
-  Shared validation, contracts
-- [references/troubleshooting.md](references/troubleshooting.md) -
-  Common errors and quick reference
-
-## Test Types
-
-- `.svelte.test.ts` - Client-side browser tests
-- `.ssr.test.ts` - Server-side rendering tests
-- `server.test.ts` - API route/server logic tests
+- [core-principles](references/core-principles.md) | [foundation-first](references/foundation-first.md) | [client-examples](references/client-examples.md)
+- [server-ssr-examples](references/server-ssr-examples.md) | [critical-patterns](references/critical-patterns.md)
+- [client-server-alignment](references/client-server-alignment.md) | [troubleshooting](references/troubleshooting.md)
 
 ## Notes
 
-- Never click SvelteKit form submit buttons - test state directly
-- Always use `await expect.element()` for locator assertions
-- Co-locate tests with components
+- Never click SvelteKit form submit buttons - Always use `await expect.element()`
+- Test files: `.svelte.test.ts` (client), `.ssr.test.ts` (SSR), `server.test.ts` (API)
 
 <!--
 PROGRESSIVE DISCLOSURE GUIDELINES:

@@ -324,7 +324,7 @@
 				icon={Claude}
 				title="Claude Code Skill"
 				description="Comprehensive testing tools and examples for building robust Svelte applications. Auto-invoked skill for Claude Code with complete test patterns"
-				href="https://github.com/spences10/sveltest/tree/main/.claude/skills/sveltest-helper"
+				href="https://github.com/spences10/sveltest/tree/main/.claude/skills/svelte-testing"
 				button_text="View Skill"
 				color_scheme="info"
 				button_icon={GitHub}
