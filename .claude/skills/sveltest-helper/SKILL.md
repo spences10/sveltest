@@ -33,10 +33,20 @@ test('button click increments counter', async () => {
 
 ## Reference Files
 
-For detailed documentation, see:
-
-- [references/detailed-guide.md](references/detailed-guide.md) -
-  Complete guide with examples
+- [references/core-principles.md](references/core-principles.md) -
+  Locators, strict mode, untrack, FormData
+- [references/foundation-first.md](references/foundation-first.md) -
+  Planning with .skip blocks
+- [references/client-examples.md](references/client-examples.md) -
+  Component and runes testing
+- [references/server-ssr-examples.md](references/server-ssr-examples.md) -
+  API routes and SSR
+- [references/critical-patterns.md](references/critical-patterns.md) -
+  Forms, semantic queries, best practices
+- [references/client-server-alignment.md](references/client-server-alignment.md) -
+  Shared validation, contracts
+- [references/troubleshooting.md](references/troubleshooting.md) -
+  Common errors and quick reference
 
 ## Test Types
 
