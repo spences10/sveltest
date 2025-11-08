@@ -1,0 +1,46 @@
+{
+	"name": "sveltest",
+	"version": "0.1.0",
+	"description": "CLI tool to fetch Svelte testing patterns and examples from sveltest.dev",
+	"type": "module",
+	"bin": {
+		"sveltest": "./bin/sveltest.js"
+	},
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"files": [
+		"dist",
+		"bin",
+		"README.md"
+	],
+	"scripts": {
+		"build": "tsc",
+		"dev": "tsc --watch",
+		"prepublishOnly": "pnpm build"
+	},
+	"keywords": [
+		"svelte",
+		"testing",
+		"vitest",
+		"playwright",
+		"cli",
+		"sveltest"
+	],
+	"author": "Scott Spence",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/spences10/sveltest.git",
+		"directory": "packages/cli"
+	},
+	"bugs": {
+		"url": "https://github.com/spences10/sveltest/issues"
+	},
+	"homepage": "https://sveltest.dev",
+	"dependencies": {},
+	"devDependencies": {
+		"@types/node": "^24.10.0",
+		"typescript": "^5.9.3"
+	}
+}
