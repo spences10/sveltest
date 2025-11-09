@@ -1,5 +1,0 @@
----
-'sveltest': patch
----
-
-initial release
