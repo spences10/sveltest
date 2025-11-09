@@ -1,6 +1,6 @@
 {
 	"name": "sveltest",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"description": "CLI tool to fetch Svelte testing patterns and examples from sveltest.dev",
 	"type": "module",
 	"bin": {
