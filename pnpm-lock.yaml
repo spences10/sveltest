@@ -170,9 +170,6 @@ importers:
 
   packages/cli:
     devDependencies:
-      '@changesets/cli':
-        specifier: ^2.29.7
-        version: 2.29.7(@types/node@24.10.0)
       '@types/node':
         specifier: ^24.10.0
         version: 24.10.0
