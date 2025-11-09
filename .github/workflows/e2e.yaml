@@ -63,7 +63,7 @@ jobs:
       - name: Verify Playwright versions match
         run: |
           # Extract Playwright version from package.json
-          PACKAGE_VERSION=$(node -p "require('./package.json').devDependencies.playwright.replace(/[\^~]/, '')")
+          PACKAGE_VERSION=$(node -p "require('./apps/website/package.json').devDependencies.playwright.replace(/[\^~]/, '')")
 
           # Extract version from container image (from this workflow file)
           CONTAINER_VERSION=$(grep -o 'playwright:v[0-9.]*' .github/workflows/e2e.yaml | sed 's/playwright:v//')
@@ -84,7 +84,7 @@ jobs:
           fi
 
       - name: Build application
-        run: pnpm build
+        run: pnpm --filter @sveltest/website build
 
       - name: Run E2E tests
-        run: pnpm test:e2e
+        run: pnpm --filter @sveltest/website test:e2e

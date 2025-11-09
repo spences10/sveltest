@@ -19,10 +19,16 @@ post:
 
 ## 🎯 What is Sveltest?
 
-Sveltest showcases real-world testing patterns using
+Sveltest is both a comprehensive reference project and a CLI tool for
 `vitest-browser-svelte` - the modern testing solution for Svelte
-applications. This project demonstrates my opinionated approach to
-testing with:
+applications. Use it as:
+
+- **📚 A reference project** showcasing real-world testing patterns
+- **🤖 A CLI tool** for AI assistants to quickly access testing
+  examples
+- **📖 A learning resource** with comprehensive documentation
+
+This project demonstrates my opinionated approach to testing with:
 
 - **Client-side component testing** with real browser environments
 - **Server-side testing** for SvelteKit API routes and hooks
@@ -51,6 +57,30 @@ approach with minimal mocking:
 This methodology gives you **fast unit test feedback** while
 maintaining **confidence that client and server actually work
 together** in production.
+
+## 🤖 CLI for AI Assistants
+
+Sveltest includes a CLI tool designed specifically for LLMs to access
+testing patterns and examples. When working with your AI assistant
+(Claude, ChatGPT, etc.), you can get instant help with testing
+patterns:
+
+```bash
+# Your AI assistant can use this to fetch testing patterns
+pnpx sveltest list              # List all available patterns
+pnpx sveltest get button        # Get button testing examples
+pnpx sveltest search form       # Search for form testing patterns
+```
+
+**Usage Example**: Tell your AI assistant:
+
+> "I need to test a login form with validation. Use
+> `pnpx sveltest search form` to get the testing patterns."
+
+Your AI can then fetch relevant examples and adapt them to your
+specific needs. The CLI provides access to all the testing patterns in
+this repository, making it easy to integrate proven testing approaches
+into your workflow.
 
 ## 🚀 Features Demonstrated
 
@@ -91,6 +121,20 @@ together** in production.
 - **Package Manager**: pnpm
 
 ## 📦 Installation
+
+### Option 1: Use the CLI (Recommended for AI Assistants)
+
+```bash
+# No installation needed - use with npx/pnpx
+pnpx sveltest list              # List all patterns
+pnpx sveltest get <component>   # Get specific examples
+pnpx sveltest search <keyword>  # Search patterns
+```
+
+Perfect for quickly accessing testing patterns while working with AI
+assistants.
+
+### Option 2: Clone the Repository
 
 ```bash
 # Clone the repository
@@ -166,62 +210,58 @@ test('layout renders navigation on server', () => {
 
 ## 📁 Project Structure
 
+This is a monorepo project with multiple packages:
+
 ```
-src/
-├── lib/
-│   ├── components/           # Reusable components with tests
-│   │   ├── button.svelte
-│   │   ├── button.svelte.test.ts
-│   │   ├── button.ssr.test.ts
-│   │   ├── input.svelte
-│   │   ├── input.svelte.test.ts
-│   │   ├── modal.svelte
-│   │   ├── modal.svelte.test.ts
-│   │   ├── card.svelte
-│   │   ├── card.svelte.test.ts
-│   │   ├── login-form.svelte
-│   │   ├── login-form.svelte.test.ts
-│   │   ├── todo-manager.svelte
-│   │   ├── todo-manager.svelte.test.ts
-│   │   ├── todo-manager.ssr.test.ts
-│   │   ├── calculator.svelte
-│   │   ├── calculator.svelte.test.ts
-│   │   ├── calculator.ssr.test.ts
-│   │   ├── nav.svelte
-│   │   ├── nav.svelte.test.ts
-│   │   └── nav.ssr.test.ts
-│   ├── utils/               # Utility functions with tests
-│   │   ├── validation.ts
-│   │   └── validation.test.ts
-│   ├── state/               # State management
-│   └── icons/               # Icon components
-├── routes/
-│   ├── api/
-│   │   ├── secure-data/
-│   │   │   ├── +server.ts
-│   │   │   └── server.test.ts
-│   │   ├── health/
-│   │   └── csp-report/
-│   │       └── server.test.ts
-│   ├── components/          # Component showcase pages
-│   ├── docs/                # Documentation pages
-│   ├── examples/            # Example pages
-│   ├── todos/               # Todo application
-│   │   └── page.server.test.ts
-│   ├── +layout.svelte
-│   ├── layout.ssr.test.ts
-│   ├── +page.svelte
-│   ├── page.svelte.test.ts
-│   └── page.ssr.test.ts
-├── hooks.server.ts
-└── hooks.server.test.ts
+sveltest/
+├── apps/
+│   └── website/              # Main Sveltest website and examples
+│       └── src/
+│           ├── lib/
+│           │   ├── components/     # Reusable components with tests
+│           │   │   ├── button.svelte
+│           │   │   ├── button.svelte.test.ts
+│           │   │   ├── button.ssr.test.ts
+│           │   │   ├── input.svelte
+│           │   │   ├── modal.svelte
+│           │   │   ├── card.svelte
+│           │   │   ├── login-form.svelte
+│           │   │   ├── todo-manager.svelte
+│           │   │   ├── calculator.svelte
+│           │   │   └── nav.svelte
+│           │   └── utils/          # Utility functions with tests
+│           └── routes/
+│               ├── api/            # API routes with tests
+│               ├── components/     # Component showcase pages
+│               ├── docs/           # Documentation pages
+│               └── examples/       # Example pages
+│
+└── packages/
+    └── cli/                  # Sveltest CLI for AI Assistants
+        ├── src/
+        │   ├── index.ts      # CLI entry point
+        │   └── commands/     # List, get, search commands
+        └── README.md         # CLI documentation
 ```
+
+Each component is co-located with its tests (`.svelte.test.ts` for
+client tests, `.ssr.test.ts` for SSR tests).
 
 ## 🤖 AI Assistant Rules for Teams
 
 One of the key outcomes of this project was creating comprehensive AI
-assistant rules that help teams adopt this testing methodology more
-easily. I'm onboarding my team to use this approach!
+assistant rules and tools that help teams adopt this testing
+methodology more easily. I'm onboarding my team to use this approach!
+
+### CLI Tool for Any AI Assistant
+
+The `pnpx sveltest` CLI works with any AI assistant (Claude, ChatGPT,
+Cursor, Windsurf, etc.):
+
+- **Universal access** - No project setup required
+- **Instant patterns** - Get testing examples in seconds
+- **Always up-to-date** - Pulls latest patterns from the repository
+- **Context-aware** - Search and filter for your specific needs
 
 ### Cursor Rules (`.cursor/rules/testing.mdc`)
 
@@ -246,10 +286,10 @@ These rules files contain:
 - Form validation lifecycle patterns
 - Quick reference DO's and DON'Ts
 
-**For Teams**: Copy these rule files to your projects to ensure
-consistent testing patterns across your team. The AI assistants will
-automatically follow the established patterns when writing or
-reviewing tests.
+**For Teams**: Use the CLI for on-demand access, or copy the rule
+files to your projects to ensure consistent testing patterns across
+your team. The AI assistants will automatically follow the established
+patterns when writing or reviewing tests.
 
 ## 🎨 Testing Conventions
 

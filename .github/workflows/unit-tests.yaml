@@ -57,7 +57,7 @@ jobs:
       - name: Verify Playwright versions match
         run: |
           # Extract Playwright version from package.json
-          PACKAGE_VERSION=$(node -p "require('./package.json').devDependencies.playwright.replace(/[\^~]/, '')")
+          PACKAGE_VERSION=$(node -p "require('./apps/website/package.json').devDependencies.playwright.replace(/[\^~]/, '')")
 
           # Extract version from container image (from this workflow file)
           CONTAINER_VERSION=$(grep -o 'playwright:v[0-9.]*' .github/workflows/unit-tests.yaml | sed 's/playwright:v//')
@@ -78,7 +78,7 @@ jobs:
           fi
 
       - name: Build application
-        run: pnpm build
+        run: pnpm --filter @sveltest/website build
         env:
           API_SECRET: ${{ secrets.API_SECRET }}
           PUBLIC_FATHOM_ID: ${{ secrets.PUBLIC_FATHOM_ID }}
@@ -87,4 +87,4 @@ jobs:
           LLM_GEN_SECRET: ${{ secrets.LLM_GEN_SECRET }}
 
       - name: Coverage
-        run: pnpm test:unit --run --coverage
+        run: pnpm --filter @sveltest/website test:unit --run --coverage
