@@ -29,7 +29,7 @@ interface SearchResult {
 	excerpt: string;
 }
 
-async function fetchJSON<T>(url: string): Promise<T> {
+async function fetch_json<T>(url: string): Promise<T> {
 	const response = await fetch(url);
 	if (!response.ok) {
 		throw new Error(`HTTP error! status: ${response.status}`);
@@ -37,11 +37,11 @@ async function fetchJSON<T>(url: string): Promise<T> {
 	return response.json() as Promise<T>;
 }
 
-function formatJSON(data: unknown): string {
+function format_json(data: unknown): string {
 	return JSON.stringify(data, null, 2);
 }
 
-function formatReadable(data: unknown): string {
+function format_readable(data: unknown): string {
 	if (typeof data !== 'object' || data === null) {
 		return String(data);
 	}
@@ -70,13 +70,13 @@ function formatReadable(data: unknown): string {
 	return lines.join('\n');
 }
 
-async function listExamples() {
+async function list_examples() {
 	try {
-		const data = await fetchJSON<ExamplesResponse>(`${API_BASE}/examples`);
+		const data = await fetch_json<ExamplesResponse>(`${API_BASE}/examples`);
 		console.log('\nAvailable Testing Scenarios:\n');
 		data.scenarios.forEach((scenario) => {
-			const scenarioName = scenario.endpoint.split('/').pop();
-			console.log(`  ${scenarioName}`);
+			const scenario_name = scenario.endpoint.split('/').pop();
+			console.log(`  ${scenario_name}`);
 			console.log(`    Category: ${scenario.category}`);
 			console.log(`    ${scenario.description}\n`);
 		});
@@ -86,13 +86,13 @@ async function listExamples() {
 	}
 }
 
-async function getExample(scenario: string, format: 'json' | 'readable' = 'readable') {
+async function get_example(scenario: string, format: 'json' | 'readable' = 'readable') {
 	try {
-		const data = await fetchJSON(`${API_BASE}/examples/${scenario}`);
+		const data = await fetch_json(`${API_BASE}/examples/${scenario}`);
 		if (format === 'json') {
-			console.log(formatJSON(data));
+			console.log(format_json(data));
 		} else {
-			console.log(formatReadable(data));
+			console.log(format_readable(data));
 		}
 	} catch (error) {
 		console.error(`Error fetching example '${scenario}':`, error);
@@ -100,12 +100,12 @@ async function getExample(scenario: string, format: 'json' | 'readable' = 'reada
 	}
 }
 
-async function searchDocs(query: string, filter?: string) {
+async function search_docs(query: string, filter?: string) {
 	try {
 		const params = new URLSearchParams({ q: query });
 		if (filter) params.append('filter', filter);
 
-		const data = await fetchJSON<SearchResult[]>(`${API_BASE}/search?${params}`);
+		const data = await fetch_json<SearchResult[]>(`${API_BASE}/search?${params}`);
 
 		if (data.length === 0) {
 			console.log(`\nNo results found for: "${query}"\n`);
@@ -129,7 +129,7 @@ async function searchDocs(query: string, filter?: string) {
 	}
 }
 
-function showHelp() {
+function show_help() {
 	console.log(`
 Sveltest CLI - Fetch Svelte testing patterns and examples
 
@@ -166,7 +166,7 @@ async function main() {
 	const args = process.argv.slice(2);
 
 	if (args.length === 0 || args[0] === 'help' || args[0] === '--help' || args[0] === '-h') {
-		showHelp();
+		show_help();
 		return;
 	}
 
@@ -175,7 +175,7 @@ async function main() {
 	try {
 		switch (command) {
 			case 'list':
-				await listExamples();
+				await list_examples();
 				break;
 
 			case 'get': {
@@ -185,7 +185,7 @@ async function main() {
 					process.exit(1);
 				}
 				const format = args.includes('--json') ? 'json' : 'readable';
-				await getExample(scenario, format);
+				await get_example(scenario, format);
 				break;
 			}
 
@@ -195,9 +195,9 @@ async function main() {
 					console.error('Error: Please specify a search query\nRun "sveltest help" for usage information');
 					process.exit(1);
 				}
-				const filterIndex = args.indexOf('--filter');
-				const filter = filterIndex !== -1 ? args[filterIndex + 1] : undefined;
-				await searchDocs(query, filter);
+				const filter_index = args.indexOf('--filter');
+				const filter = filter_index !== -1 ? args[filter_index + 1] : undefined;
+				await search_docs(query, filter);
 				break;
 			}
 

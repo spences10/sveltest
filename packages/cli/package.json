@@ -38,8 +38,8 @@
 		"url": "https://github.com/spences10/sveltest/issues"
 	},
 	"homepage": "https://sveltest.dev",
-	"dependencies": {},
 	"devDependencies": {
+		"@changesets/cli": "^2.29.7",
 		"@types/node": "^24.10.0",
 		"typescript": "^5.9.3"
 	}
