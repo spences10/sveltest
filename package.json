@@ -32,11 +32,14 @@
 		"generate:ai-rules": "tsx scripts/generate-ai-rules.ts",
 		"test:ai-rules": "tsx scripts/generate-ai-rules.ts --dry-run",
 		"cli:build": "pnpm --filter sveltest build",
-		"cli:dev": "pnpm --filter sveltest dev"
+		"cli:dev": "pnpm --filter sveltest dev",
+		"changeset": "changeset",
+		"version": "changeset version",
+		"release": "pnpm cli:build && changeset publish"
 	},
 	"devDependencies": {
-		"@changesets/cli": "^2.29.7",
 		"@anthropic-ai/sdk": "^0.68.0",
+		"@changesets/cli": "2.29.7",
 		"eslint": "^9.39.1",
 		"eslint-config-prettier": "^10.1.8",
 		"prettier": "^3.6.2",

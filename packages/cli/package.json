@@ -1,6 +1,6 @@
 {
 	"name": "sveltest",
-	"version": "0.1.0",
+	"version": "0.0.0",
 	"description": "CLI tool to fetch Svelte testing patterns and examples from sveltest.dev",
 	"type": "module",
 	"bin": {
@@ -39,7 +39,6 @@
 	},
 	"homepage": "https://sveltest.dev",
 	"devDependencies": {
-		"@changesets/cli": "^2.29.7",
 		"@types/node": "^24.10.0",
 		"typescript": "^5.9.3"
 	}
