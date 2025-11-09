@@ -1,6 +1,88 @@
 #!/usr/bin/env node
 
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 const API_BASE = 'https://sveltest.dev/api';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Get CLI version from package.json
+function get_cli_version() {
+	try {
+		const pkg_path = join(__dirname, '..', 'package.json');
+		const pkg = JSON.parse(readFileSync(pkg_path, 'utf-8'));
+		return pkg.version;
+	} catch {
+		return 'unknown';
+	}
+}
+
+// Related patterns mapping for better discoverability
+const RELATED_PATTERNS: Record<string, string[]> = {
+	'button-variants': [
+		'locator-patterns',
+		'modal-states',
+		'runes-testing',
+	],
+	'form-validation': [
+		'authentication',
+		'crud-patterns',
+		'locator-patterns',
+	],
+	'modal-states': [
+		'button-variants',
+		'locator-patterns',
+		'runes-testing',
+	],
+	'crud-patterns': [
+		'form-validation',
+		'runes-testing',
+		'authentication',
+	],
+	'locator-patterns': [
+		'button-variants',
+		'form-validation',
+		'modal-states',
+	],
+	authentication: ['form-validation', 'crud-patterns'],
+	'runes-testing': [
+		'crud-patterns',
+		'button-variants',
+		'modal-states',
+	],
+};
+
+// Add related patterns to response
+function add_related_patterns(
+	data: Record<string, unknown>,
+	scenario: string,
+): Record<string, unknown> {
+	const related = RELATED_PATTERNS[scenario];
+	if (related && related.length > 0) {
+		return {
+			...data,
+			_related: related,
+		};
+	}
+	return data;
+}
+
+// Add metadata to JSON responses
+function add_metadata(
+	data: Record<string, unknown>,
+): Record<string, unknown> {
+	return {
+		...data,
+		_meta: {
+			cli_version: get_cli_version(),
+			timestamp: new Date().toISOString(),
+			source: 'https://sveltest.dev',
+		},
+	};
+}
 
 interface ScenarioMeta {
 	endpoint: string;
@@ -34,6 +116,12 @@ interface SearchResponse {
 	filter: string;
 	results: SearchResult[];
 	total: number;
+}
+
+interface GetExampleOptions {
+	compact?: boolean;
+	filter?: string;
+	sections?: string[];
 }
 
 async function fetch_json<T>(url: string): Promise<T> {
@@ -103,14 +191,64 @@ async function list_examples() {
 	}
 }
 
+function compact_json(
+	data: Record<string, unknown>,
+): Record<string, unknown> {
+	// Remove verbose fields to reduce token usage
+	const {
+		description,
+		source_file,
+		total_tests,
+		meta,
+		...essential
+	} = data;
+
+	// Keep only essential fields
+	return essential;
+}
+
 async function get_example(
 	scenario: string,
 	format: 'json' | 'readable' = 'readable',
+	options: GetExampleOptions = {},
 ) {
 	try {
 		const data = await fetch_json(`${API_BASE}/examples/${scenario}`);
+
 		if (format === 'json') {
-			console.log(format_json(data));
+			let output = data as Record<string, unknown>;
+
+			// Apply compact mode
+			if (options.compact) {
+				output = compact_json(output);
+			}
+
+			// Apply filter if specified
+			if (options.filter) {
+				const filterKey = options.filter;
+				if (output[filterKey]) {
+					output = { [filterKey]: output[filterKey] };
+				}
+			}
+
+			// Apply section filtering
+			if (options.sections && options.sections.length > 0) {
+				const filtered: Record<string, unknown> = {};
+				options.sections.forEach((section) => {
+					if (output[section]) {
+						filtered[section] = output[section];
+					}
+				});
+				output = filtered;
+			}
+
+			// Add related patterns
+			output = add_related_patterns(output, scenario);
+
+			// Add metadata to response
+			output = add_metadata(output);
+
+			console.log(format_json(output));
 		} else {
 			console.log(format_readable(data));
 		}
@@ -160,23 +298,33 @@ Usage:
 
 Commands:
   list                          List all available testing examples
-  get <scenario> [--json]       Get a specific testing example
+  get <scenario> [options]      Get a specific testing example
                                 Scenarios: button-variants, form-validation,
                                           modal-states, crud-patterns,
                                           locator-patterns, authentication,
                                           runes-testing
+                                Supports batch: button-variants,form-validation
   search <query> [--filter]     Search documentation and examples
                                 Filters: all, docs, examples, components
   help                          Show this help message
 
-Options:
-  --json                        Output in JSON format (for 'get' command)
-  --filter <type>               Filter search results (for 'search' command)
+Options (for 'get' command):
+  --json                        Output in JSON format
+  --compact                     Minimal JSON output (reduces token usage by ~50%)
+  --filter <field>              Get only specific field (e.g., testing_patterns)
+  --sections <list>             Get specific sections (comma-separated)
+
+Options (for 'search' command):
+  --filter <type>               Filter results by type
 
 Examples:
   sveltest list
   sveltest get button-variants
   sveltest get form-validation --json
+  sveltest get button-variants --json --compact
+  sveltest get form-validation --json --filter testing_patterns
+  sveltest get modal-states --json --sections test_scenarios,testing_patterns
+  sveltest get button-variants,form-validation --json
   sveltest search "form validation"
   sveltest search "runes" --filter examples
 
@@ -213,8 +361,73 @@ async function main() {
 					);
 					process.exit(1);
 				}
+
 				const format = args.includes('--json') ? 'json' : 'readable';
-				await get_example(scenario, format);
+				const compact = args.includes('--compact');
+
+				// Parse --filter flag
+				const filter_index = args.indexOf('--filter');
+				const filter =
+					filter_index !== -1 ? args[filter_index + 1] : undefined;
+
+				// Parse --sections flag (comma-separated)
+				const sections_index = args.indexOf('--sections');
+				const sections =
+					sections_index !== -1
+						? args[sections_index + 1].split(',')
+						: undefined;
+
+				const options = { compact, filter, sections };
+
+				// Handle batch get (comma-separated scenarios)
+				if (scenario.includes(',')) {
+					const scenarios = scenario.split(',').map((s) => s.trim());
+					const results: Record<string, Record<string, unknown>> = {};
+
+					for (const s of scenarios) {
+						try {
+							const data = await fetch_json(
+								`${API_BASE}/examples/${s}`,
+							);
+							let output = data as Record<string, unknown>;
+
+							if (options.compact) {
+								output = compact_json(output);
+							}
+
+							if (options.filter && output[options.filter]) {
+								output = { [options.filter]: output[options.filter] };
+							}
+
+							if (options.sections && options.sections.length > 0) {
+								const filtered: Record<string, unknown> = {};
+								options.sections.forEach((section) => {
+									if (output[section]) {
+										filtered[section] = output[section];
+									}
+								});
+								output = filtered;
+							}
+
+							// Add related patterns
+							output = add_related_patterns(output, s);
+
+							results[s] = output;
+						} catch (error) {
+							console.error(`Error fetching '${s}':`, error);
+						}
+					}
+
+					if (format === 'json') {
+						// Add metadata to batch results
+						const output = add_metadata(results);
+						console.log(format_json(output));
+					} else {
+						console.log('Batch mode requires --json flag');
+					}
+				} else {
+					await get_example(scenario, format, options);
+				}
 				break;
 			}
 
