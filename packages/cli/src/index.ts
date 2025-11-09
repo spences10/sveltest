@@ -29,6 +29,13 @@ interface SearchResult {
 	excerpt: string;
 }
 
+interface SearchResponse {
+	query: string;
+	filter: string;
+	results: SearchResult[];
+	total: number;
+}
+
 async function fetch_json<T>(url: string): Promise<T> {
 	const response = await fetch(url);
 	if (!response.ok) {
@@ -57,14 +64,22 @@ function format_readable(data: unknown): string {
 		lines.push(`\n${data.description}`);
 	}
 
-	if ('testingPatterns' in data && Array.isArray(data.testingPatterns)) {
+	if (
+		'testingPatterns' in data &&
+		Array.isArray(data.testingPatterns)
+	) {
 		lines.push('\nTesting Patterns:');
-		data.testingPatterns.forEach((pattern: { category: string; tests: { description: string }[] }) => {
-			lines.push(`\n  ${pattern.category}:`);
-			pattern.tests.forEach((test: { description: string }) => {
-				lines.push(`    - ${test.description}`);
-			});
-		});
+		data.testingPatterns.forEach(
+			(pattern: {
+				category: string;
+				tests: { description: string }[];
+			}) => {
+				lines.push(`\n  ${pattern.category}:`);
+				pattern.tests.forEach((test: { description: string }) => {
+					lines.push(`    - ${test.description}`);
+				});
+			},
+		);
 	}
 
 	return lines.join('\n');
@@ -72,7 +87,9 @@ function format_readable(data: unknown): string {
 
 async function list_examples() {
 	try {
-		const data = await fetch_json<ExamplesResponse>(`${API_BASE}/examples`);
+		const data = await fetch_json<ExamplesResponse>(
+			`${API_BASE}/examples`,
+		);
 		console.log('\nAvailable Testing Scenarios:\n');
 		data.scenarios.forEach((scenario) => {
 			const scenario_name = scenario.endpoint.split('/').pop();
@@ -86,7 +103,10 @@ async function list_examples() {
 	}
 }
 
-async function get_example(scenario: string, format: 'json' | 'readable' = 'readable') {
+async function get_example(
+	scenario: string,
+	format: 'json' | 'readable' = 'readable',
+) {
 	try {
 		const data = await fetch_json(`${API_BASE}/examples/${scenario}`);
 		if (format === 'json') {
@@ -105,15 +125,17 @@ async function search_docs(query: string, filter?: string) {
 		const params = new URLSearchParams({ q: query });
 		if (filter) params.append('filter', filter);
 
-		const data = await fetch_json<SearchResult[]>(`${API_BASE}/search?${params}`);
+		const response = await fetch_json<SearchResponse>(
+			`${API_BASE}/search?${params}`,
+		);
 
-		if (data.length === 0) {
+		if (response.results.length === 0) {
 			console.log(`\nNo results found for: "${query}"\n`);
 			return;
 		}
 
 		console.log(`\nSearch Results for "${query}":\n`);
-		data.forEach((result, index) => {
+		response.results.forEach((result, index) => {
 			console.log(`${index + 1}. ${result.title}`);
 			console.log(`   ${result.description}`);
 			console.log(`   ${result.url}`);
@@ -165,7 +187,12 @@ Documentation: https://sveltest.dev
 async function main() {
 	const args = process.argv.slice(2);
 
-	if (args.length === 0 || args[0] === 'help' || args[0] === '--help' || args[0] === '-h') {
+	if (
+		args.length === 0 ||
+		args[0] === 'help' ||
+		args[0] === '--help' ||
+		args[0] === '-h'
+	) {
 		show_help();
 		return;
 	}
@@ -181,7 +208,9 @@ async function main() {
 			case 'get': {
 				const scenario = args[1];
 				if (!scenario) {
-					console.error('Error: Please specify a scenario\nRun "sveltest help" for usage information');
+					console.error(
+						'Error: Please specify a scenario\nRun "sveltest help" for usage information',
+					);
 					process.exit(1);
 				}
 				const format = args.includes('--json') ? 'json' : 'readable';
@@ -192,17 +221,22 @@ async function main() {
 			case 'search': {
 				const query = args[1];
 				if (!query) {
-					console.error('Error: Please specify a search query\nRun "sveltest help" for usage information');
+					console.error(
+						'Error: Please specify a search query\nRun "sveltest help" for usage information',
+					);
 					process.exit(1);
 				}
 				const filter_index = args.indexOf('--filter');
-				const filter = filter_index !== -1 ? args[filter_index + 1] : undefined;
+				const filter =
+					filter_index !== -1 ? args[filter_index + 1] : undefined;
 				await search_docs(query, filter);
 				break;
 			}
 
 			default:
-				console.error(`Unknown command: ${command}\nRun "sveltest help" for usage information`);
+				console.error(
+					`Unknown command: ${command}\nRun "sveltest help" for usage information`,
+				);
 				process.exit(1);
 		}
 	} catch (error) {
