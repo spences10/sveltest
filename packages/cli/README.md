@@ -1,6 +1,7 @@
 # Sveltest CLI
 
-A command-line tool to fetch Svelte testing patterns and examples from [sveltest.dev](https://sveltest.dev).
+A command-line tool to fetch Svelte testing patterns and examples from
+[sveltest.dev](https://sveltest.dev).
 
 ## Installation
 
@@ -77,7 +78,9 @@ sveltest search "runes" --filter examples
 
 ## About
 
-This CLI fetches testing patterns and examples from the Sveltest project, a comprehensive testing demonstration for Svelte 5 applications using vitest-browser-svelte.
+This CLI fetches testing patterns and examples from the Sveltest
+project, a comprehensive testing demonstration for Svelte 5
+applications using vitest-browser-svelte.
 
 - Website: https://sveltest.dev
 - GitHub: https://github.com/spences10/sveltest
