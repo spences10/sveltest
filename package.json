@@ -39,6 +39,7 @@
 	"devDependencies": {
 		"@anthropic-ai/sdk": "^0.68.0",
 		"@changesets/cli": "2.29.7",
+		"dotenv": "^17.2.3",
 		"eslint": "^9.39.1",
 		"eslint-config-prettier": "^10.1.8",
 		"prettier": "^3.6.2",

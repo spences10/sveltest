@@ -125,10 +125,14 @@ scripts/
 
 ### Environment Variables
 
+Create a `.env` file in the project root:
+
 ```bash
-# Required: Anthropic API key
+# .env
 ANTHROPIC_API_KEY=your-api-key-here
 ```
+
+The scripts automatically load environment variables using `dotenv/config`.
 
 Get your API key from: https://console.anthropic.com/
 

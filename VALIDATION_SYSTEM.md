@@ -49,10 +49,15 @@ validation-reports/
 ### First Time Setup
 
 1. **Set API Key**
+
+   Create a `.env` file in the project root:
+
    ```bash
-   # Add to .env (already in .gitignore)
-   echo "ANTHROPIC_API_KEY=your-key-here" >> .env
+   # .env
+   ANTHROPIC_API_KEY=your-key-here
    ```
+
+   Scripts automatically load this using `dotenv/config`.
 
 2. **Run Full Validation**
    ```bash

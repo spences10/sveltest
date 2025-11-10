@@ -1,5 +1,7 @@
 #!/usr/bin/env tsx
 
+import 'dotenv/config';
+
 /**
  * Shared Anthropic API configuration for all scripts
  *
