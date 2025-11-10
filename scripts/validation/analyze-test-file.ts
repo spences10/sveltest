@@ -1,22 +1,15 @@
 #!/usr/bin/env tsx
 
-import Anthropic from '@anthropic-ai/sdk';
-import {
-	ANTHROPIC_CONFIG,
-	get_api_key,
-} from '../config/anthropic.js';
+import { query } from '@anthropic-ai/claude-agent-sdk';
+import { ANTHROPIC_CONFIG } from '../config/anthropic.js';
 import { logger } from '../utils/logger.js';
 import { read_file } from '../utils/file-helpers.js';
 
 /**
- * Analyze a test file using Haiku 4.5 with web search tool
+ * Analyze a test file using Agent SDK with web search
  *
  * The agent autonomously searches for relevant docs as needed
  */
-
-const anthropic = new Anthropic({
-	apiKey: get_api_key(),
-});
 
 export interface ValidationIssue {
 	severity: 'critical' | 'warning' | 'suggestion';
@@ -54,14 +47,7 @@ export async function analyze_test_file(
 	try {
 		const test_code = await read_file(file_path);
 
-		const response = await anthropic.messages.create({
-			model: ANTHROPIC_CONFIG.haiku.model,
-			max_tokens: ANTHROPIC_CONFIG.haiku.max_tokens,
-			temperature: ANTHROPIC_CONFIG.haiku.temperature,
-			messages: [
-				{
-					role: 'user',
-					content: `You are a senior testing expert validating Svelte 5 test code against official documentation.
+		const prompt = `You are a senior testing expert validating Svelte 5 test code.
 
 ## Test File to Validate
 
@@ -73,113 +59,103 @@ ${test_code}
 
 ## Your Task
 
-Analyze this test file and identify ALL issues. You have access to web search - use it to look up official documentation for:
-- Vitest browser mode
-- vitest-browser-svelte
-- Playwright locators
-- Svelte 5 testing patterns
-- SvelteKit server testing
+Validate this test file against official best practices. Use web search to look up:
+- Vitest browser mode documentation
+- vitest-browser-svelte patterns
+- Playwright locator best practices
+- Svelte 5 testing with runes
+- SvelteKit server testing patterns
 
-Search for specific topics you need. For example:
-- "vitest browser mode page.getByRole official docs"
-- "playwright locators first nth last strict mode"
+Search for specific topics as needed. Examples:
+- "vitest browser mode page.getByRole official"
+- "playwright strict mode first nth last"
 - "svelte 5 untrack derived testing"
 - "sveltekit FormData Request testing"
 
 ## Validation Categories
 
 ### 1. API Usage
-- Using deprecated APIs
-- Incorrect import statements
+- Deprecated APIs
+- Incorrect imports
 - Wrong function signatures
-- Outdated patterns from older versions
 
 ### 2. Anti-Patterns
 - Using containers instead of locators
-- Not handling strict mode violations (multiple elements)
-- Testing implementation details instead of behavior
-- Missing await on async operations
+- Not handling strict mode (multiple elements)
+- Testing implementation vs behavior
+- Missing await
 
 ### 3. Accessibility
 - Not using semantic queries (getByRole, getByLabel)
 - Incorrect ARIA roles
-- Missing accessibility attributes in tests
 
 ### 4. Best Practices
-- Not using untrack() with $derived values
-- Heavy mocking instead of real FormData/Request objects
-- Missing error handling in tests
-- Poor test structure or organization
+- Not using untrack() with $derived
+- Heavy mocking vs real FormData/Request
+- Missing error handling
 
-### 5. Performance
-- Inefficient selectors
-- Missing timeouts
-- Not cleaning up resources
-
-### 6. Svelte 5 Specific
+### 5. Svelte 5
 - Using Svelte 4 patterns
 - Incorrect runes usage
-- Missing flushSync() when needed
+- Missing flushSync()
 
 ## Output Format
 
-Return a JSON object with this exact structure:
+Return ONLY valid JSON (no markdown):
 
-\`\`\`json
 {
   "is_valid": boolean,
-  "summary": "Brief 1-2 sentence summary of findings",
+  "summary": "Brief 1-2 sentence summary",
   "issues": [
     {
       "severity": "critical" | "warning" | "suggestion",
-      "line_number": number (if applicable),
+      "line_number": number,
       "category": "api_usage" | "anti_pattern" | "deprecation" | "accessibility" | "best_practice" | "performance",
-      "description": "Clear description of the issue",
-      "current_code": "The problematic code snippet (if applicable)",
-      "recommended_fix": "Specific code example of how to fix it",
-      "documentation_reference": "Link or reference to official docs you found"
+      "description": "Clear issue description",
+      "current_code": "Problematic code",
+      "recommended_fix": "Specific code fix",
+      "documentation_reference": "Link to docs you found"
     }
   ]
 }
-\`\`\`
 
-## Critical Rules
+**severity rules:**
+- "critical": Code will fail or uses deprecated APIs
+- "warning": Works but uses anti-patterns
+- "suggestion": Code is fine but could improve
 
-- **severity: "critical"** - Code will fail or uses deprecated/incorrect APIs
-- **severity: "warning"** - Code works but uses anti-patterns or non-recommended approaches
-- **severity: "suggestion"** - Code is fine but could be improved
+Use web search to verify against official docs. If code follows best practices, return is_valid: true with empty issues array.`;
 
-Use web search to verify your findings against official documentation. Be thorough but fair. If the code follows official best practices, return is_valid: true with an empty issues array.`,
-				},
-			],
-			tools: [
-				{
-					type: 'web_search_20250305',
-					name: 'web_search',
-					max_uses: 5,
-				},
-			],
-		});
+		let result_text = '';
+		let web_searches = 0;
 
-		logger.progress_done();
-
-		// Extract web search usage
-		const web_searches_used =
-			response.usage?.web_search_requests ?? 0;
-
-		// Find the final text response (after any tool uses)
-		let content = '';
-		for (const block of response.content) {
-			if (block.type === 'text') {
-				content = block.text;
+		// Use Agent SDK query with web search enabled
+		for await (const msg of query({
+			prompt,
+			options: {
+				model: ANTHROPIC_CONFIG.haiku.model,
+				maxTurns: 5, // Allow multiple search rounds
+				tools: [{ name: 'web_search' }],
+			},
+		})) {
+			if (msg.type === 'result') {
+				result_text = msg.result || '';
+			}
+			// Track web search usage
+			if (msg.type === 'tool_use' && msg.tool === 'web_search') {
+				web_searches++;
 			}
 		}
 
-		// Parse JSON from response (extract from markdown code blocks if needed)
-		const json_match = content.match(/```json\s*([\s\S]*?)\s*```/);
-		const json_str = json_match ? json_match[1] : content;
+		logger.progress_done();
 
-		const result = JSON.parse(json_str);
+		// Parse JSON response
+		const json_match = result_text.match(/\{[\s\S]*\}/);
+		if (!json_match) {
+			throw new Error('No JSON found in response');
+		}
+
+		const result = JSON.parse(json_match[0]);
 
 		// Build validation result
 		const issues: ValidationIssue[] = result.issues || [];
@@ -202,7 +178,7 @@ Use web search to verify your findings against official documentation. Be thorou
 			suggestion_issues: suggestion_count,
 			issues,
 			summary: result.summary || 'Analysis complete',
-			web_searches_used,
+			web_searches_used: web_searches,
 		};
 	} catch (error) {
 		logger.error(
