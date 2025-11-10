@@ -2,13 +2,19 @@
 
 import { query } from '@anthropic-ai/claude-agent-sdk';
 import { ANTHROPIC_CONFIG } from '../config/anthropic.js';
-import { logger } from '../utils/logger.js';
 import { read_file } from '../utils/file-helpers.js';
+import { logger } from '../utils/logger.js';
+import {
+	detect_test_type,
+	get_validation_prompt,
+	type TestType,
+} from './prompts/index.js';
 
 /**
  * Analyze a test file using Agent SDK with web search
  *
  * The agent autonomously searches for relevant docs as needed
+ * Uses test-type-specific prompts for accurate validation
  */
 
 export interface ValidationIssue {
@@ -29,6 +35,7 @@ export interface ValidationIssue {
 
 export interface ValidationResult {
 	file_path: string;
+	test_type: TestType;
 	is_valid: boolean;
 	total_issues: number;
 	critical_issues: number;
@@ -47,84 +54,15 @@ export async function analyze_test_file(
 	try {
 		const test_code = await read_file(file_path);
 
-		const prompt = `You are a senior testing expert validating Svelte 5 test code.
+		// Detect test type and get appropriate prompt
+		const test_type = detect_test_type(file_path, test_code);
+		const prompt = get_validation_prompt(
+			test_type,
+			file_path,
+			test_code,
+		);
 
-## Test File to Validate
-
-File: ${file_path}
-
-\`\`\`typescript
-${test_code}
-\`\`\`
-
-## Your Task
-
-Validate this test file against official best practices. Use web search to look up:
-- Vitest browser mode documentation
-- vitest-browser-svelte patterns
-- Playwright locator best practices
-- Svelte 5 testing with runes
-- SvelteKit server testing patterns
-
-Search for specific topics as needed. Examples:
-- "vitest browser mode page.getByRole official"
-- "playwright strict mode first nth last"
-- "svelte 5 untrack derived testing"
-- "sveltekit FormData Request testing"
-
-## Validation Categories
-
-### 1. API Usage
-- Deprecated APIs
-- Incorrect imports
-- Wrong function signatures
-
-### 2. Anti-Patterns
-- Using containers instead of locators
-- Not handling strict mode (multiple elements)
-- Testing implementation vs behavior
-- Missing await
-
-### 3. Accessibility
-- Not using semantic queries (getByRole, getByLabel)
-- Incorrect ARIA roles
-
-### 4. Best Practices
-- Not using untrack() with $derived
-- Heavy mocking vs real FormData/Request
-- Missing error handling
-
-### 5. Svelte 5
-- Using Svelte 4 patterns
-- Incorrect runes usage
-- Missing flushSync()
-
-## Output Format
-
-Return ONLY valid JSON (no markdown):
-
-{
-  "is_valid": boolean,
-  "summary": "Brief 1-2 sentence summary",
-  "issues": [
-    {
-      "severity": "critical" | "warning" | "suggestion",
-      "line_number": number,
-      "category": "api_usage" | "anti_pattern" | "deprecation" | "accessibility" | "best_practice" | "performance",
-      "description": "Clear issue description",
-      "current_code": "Problematic code",
-      "recommended_fix": "Specific code fix",
-      "documentation_reference": "Link to docs you found"
-    }
-  ]
-}
-
-**severity rules:**
-- "critical": Code will fail or uses deprecated APIs
-- "warning": Works but uses anti-patterns
-- "suggestion": Code is fine but could improve
-
-Use web search to verify against official docs. If code follows best practices, return is_valid: true with empty issues array.`;
+		logger.info(`  📝 Test type: ${test_type}`);
 
 		let result_text = '';
 		let web_searches = 0;
@@ -134,16 +72,29 @@ Use web search to verify against official docs. If code follows best practices, 
 			prompt,
 			options: {
 				model: ANTHROPIC_CONFIG.haiku.model,
-				maxTurns: 5, // Allow multiple search rounds
-				tools: [{ name: 'web_search' }],
+				maxTurns: 10, // Limit searches to force quicker response
+				allowedTools: ['WebSearch', 'WebFetch'],
+				permissionMode: 'bypassPermissions', // Required for non-interactive scripts
 			},
 		})) {
-			if (msg.type === 'result') {
+			if (msg.type === 'result' && msg.subtype === 'success') {
 				result_text = msg.result || '';
 			}
+
+			if (msg.type === 'result' && msg.subtype !== 'success') {
+				logger.error(`  ❌ Result error: ${msg.subtype}`);
+				if ('errors' in msg && msg.errors.length > 0) {
+					logger.error(`  📋 Errors: ${msg.errors.join(', ')}`);
+				}
+			}
+
 			// Track web search usage
-			if (msg.type === 'tool_use' && msg.tool === 'web_search') {
-				web_searches++;
+			if (msg.type === 'assistant') {
+				msg.message.content.forEach((c: any) => {
+					if (c.type === 'tool_use' && c.name === 'WebSearch') {
+						web_searches++;
+					}
+				});
 			}
 		}
 
@@ -152,7 +103,9 @@ Use web search to verify against official docs. If code follows best practices, 
 		// Parse JSON response
 		const json_match = result_text.match(/\{[\s\S]*\}/);
 		if (!json_match) {
-			throw new Error('No JSON found in response');
+			throw new Error(
+				`No JSON found in response. Got: ${result_text.slice(0, 200)}${result_text.length > 200 ? '...' : ''}`,
+			);
 		}
 
 		const result = JSON.parse(json_match[0]);
@@ -171,6 +124,7 @@ Use web search to verify against official docs. If code follows best practices, 
 
 		return {
 			file_path,
+			test_type,
 			is_valid: result.is_valid && critical_count === 0,
 			total_issues: issues.length,
 			critical_issues: critical_count,
@@ -187,6 +141,7 @@ Use web search to verify against official docs. If code follows best practices, 
 
 		return {
 			file_path,
+			test_type: 'unit', // Default to unit on error
 			is_valid: false,
 			total_issues: 1,
 			critical_issues: 1,

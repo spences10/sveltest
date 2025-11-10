@@ -2,13 +2,13 @@
 
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { logger } from '../utils/logger.js';
 import { find_test_files } from '../utils/file-helpers.js';
-import { analyze_test_file } from './analyze-test-file.js';
+import { logger } from '../utils/logger.js';
 import type { ValidationResult } from './analyze-test-file.js';
+import { analyze_test_file } from './analyze-test-file.js';
 import {
-	save_validation_report,
 	print_summary,
+	save_validation_report,
 	type ValidationReport,
 } from './generate-report.js';
 
@@ -61,26 +61,80 @@ async function run_validation(
 
 	const results: ValidationResult[] = [];
 
-	for (let i = 0; i < test_files.length; i++) {
-		const file = test_files[i];
-		logger.info(`[${i + 1}/${test_files.length}] ${file}`);
+	// Group files by test type for more efficient batch processing
+	const files_by_type = new Map<string, string[]>();
+	test_files.forEach((file) => {
+		// Quick detection based on filename patterns
+		let type = 'unit';
+		if (file.endsWith('.ssr.test.ts')) type = 'ssr';
+		else if (file.endsWith('.spec.ts')) type = 'playwright';
+		else if (file.endsWith('.svelte.test.ts'))
+			type = 'browser_component';
+		else if (file.includes('server.test.ts')) type = 'server';
 
-		const result = await analyze_test_file(file);
-		results.push(result);
+		if (!files_by_type.has(type)) {
+			files_by_type.set(type, []);
+		}
+		files_by_type.get(type)!.push(file);
+	});
 
-		// Show quick status
-		if (result.is_valid) {
-			logger.success(
-				`  ✅ Valid (${result.web_searches_used} searches)`,
+	// Show test type breakdown
+	logger.info(`Test types found:`);
+	for (const [type, files] of files_by_type.entries()) {
+		logger.info(`  - ${type}: ${files.length} files`);
+	}
+	logger.info('');
+
+	// Process files in batches, grouped by test type
+	const BATCH_SIZE = 10;
+	let total_completed = 0;
+
+	for (const [test_type, files] of files_by_type.entries()) {
+		logger.info(
+			`🔹 Processing ${test_type} tests (${files.length} files)`,
+		);
+
+		for (let i = 0; i < files.length; i += BATCH_SIZE) {
+			const batch = files.slice(i, i + BATCH_SIZE);
+			const batch_num = Math.floor(i / BATCH_SIZE) + 1;
+			const total_batches = Math.ceil(files.length / BATCH_SIZE);
+
+			logger.info(
+				`  Batch ${batch_num}/${total_batches} (${batch.length} files)`,
 			);
-		} else {
-			logger.error(
-				`  ❌ ${result.critical_issues} critical, ${result.warning_issues} warnings (${result.web_searches_used} searches)`,
+
+			// Process batch in parallel
+			const batch_results = await Promise.all(
+				batch.map(async (file) => {
+					const file_number = total_completed + 1;
+					total_completed++;
+
+					const result = await analyze_test_file(file);
+
+					// Show quick status
+					if (result.is_valid) {
+						logger.success(
+							`    ✅ [${file_number}/${test_files.length}] Valid (${result.web_searches_used} searches) - ${file}`,
+						);
+					} else {
+						logger.error(
+							`    ❌ [${file_number}/${test_files.length}] ${result.critical_issues} critical, ${result.warning_issues} warnings (${result.web_searches_used} searches) - ${file}`,
+						);
+					}
+
+					return result;
+				}),
 			);
+
+			results.push(...batch_results);
+
+			// Small delay between batches to avoid rate limiting
+			if (i + BATCH_SIZE < files.length) {
+				await new Promise((resolve) => setTimeout(resolve, 500));
+			}
 		}
 
-		// Small delay to avoid rate limiting
-		await new Promise((resolve) => setTimeout(resolve, 1000));
+		logger.info('');
 	}
 
 	// Step 3: Generate report
