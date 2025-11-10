@@ -44,6 +44,8 @@ Search for:
 
 CRITICAL: Your response must be ONLY valid JSON. No explanations, no markdown blocks, no text before or after.
 
+Your entire response must be ONLY the JSON object. Start with { and end with }. Nothing else.
+
 Return this exact JSON structure:
 
 {

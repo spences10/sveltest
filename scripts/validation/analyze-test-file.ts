@@ -103,21 +103,22 @@ export async function analyze_test_file(
 		// Parse JSON response - try multiple strategies
 		let result;
 		try {
-			// Strategy 1: Strip markdown code blocks and parse
-			const cleaned = result_text
-				.replace(/```json\s*/g, '')
-				.replace(/```\s*/g, '')
-				.trim();
+			// Strip everything before first { and after last }
+			const first_brace = result_text.indexOf('{');
+			const last_brace = result_text.lastIndexOf('}');
 
-			// Strategy 2: Extract JSON object (non-greedy, first valid JSON)
-			const json_match = cleaned.match(/\{[\s\S]*?\}/);
-			if (!json_match) {
+			if (first_brace === -1 || last_brace === -1) {
 				throw new Error(
 					`No JSON found in response. Got: ${result_text.slice(0, 300)}...`,
 				);
 			}
 
-			result = JSON.parse(json_match[0]);
+			const json_text = result_text
+				.slice(first_brace, last_brace + 1)
+				.replace(/```json\s*/g, '')
+				.replace(/```\s*/g, '');
+
+			result = JSON.parse(json_text);
 		} catch (parse_error) {
 			throw new Error(
 				`Failed to parse JSON: ${parse_error instanceof Error ? parse_error.message : 'Unknown error'}.\nResponse: ${result_text.slice(0, 500)}...`,
