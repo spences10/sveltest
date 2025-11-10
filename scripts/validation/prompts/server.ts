@@ -20,23 +20,29 @@ File: ${file_path}
 ${test_code}
 \`\`\`
 
-IMPORTANT: Do a MAXIMUM of 2-3 web searches, then provide your analysis. Focus on obvious issues.
+IMPORTANT: Do a MAXIMUM of 2-3 web searches, then provide your analysis.
+
+**Context**: This is a teaching/example codebase. Focus on broken patterns that teach incorrect usage.
 
 Search for:
 1. SvelteKit server-side testing patterns (+server.ts, +page.server.ts)
 2. Web API Request/Response/FormData best practices
 3. SvelteKit load function testing
 
-Common issues to check:
-- Heavy mocking instead of using real Request/FormData/Response objects
-- Not testing actual SvelteKit load functions or API handlers
-- Missing input validation tests
-- Not testing error cases (400, 404, 500 responses)
-- Incorrect Request construction (missing headers, wrong body format)
-- Not testing FormData properly for form submissions
-- Missing tests for edge cases (empty input, invalid data)
+**Only flag CRITICAL issues**:
+- Incorrect Request/FormData construction that would fail
+- Wrong SvelteKit API usage
+- Deprecated patterns
 
-Then return ONLY this JSON (no markdown, no explanations):
+**IGNORE these (acceptable for examples)**:
+- Using 'as any' for simplified request mocks (clarity > type safety in examples)
+- Missing edge case tests (examples show happy path)
+- Incomplete mock objects (YAGNI - only mock what's used)
+- Missing error case tests (unless teaching error handling)
+
+CRITICAL: Your response must be ONLY valid JSON. No explanations, no markdown blocks, no text before or after.
+
+Return this exact JSON structure:
 
 {
   "is_valid": boolean,

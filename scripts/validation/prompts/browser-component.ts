@@ -21,22 +21,30 @@ File: ${file_path}
 ${test_code}
 \`\`\`
 
-IMPORTANT: Do a MAXIMUM of 2-3 web searches, then provide your analysis. Focus on obvious issues.
+IMPORTANT: Do a MAXIMUM of 2-3 web searches, then provide your analysis.
+
+**Context**: This is a teaching/example codebase. Focus on issues that would break or teach incorrect patterns.
 
 Search for:
 1. vitest-browser-svelte API patterns (render, expect.element, locators)
 2. Playwright strict mode and locator best practices
 3. Svelte 5 runes testing ($state, $derived with untrack())
 
-Common issues to check:
-- Using containers instead of locators (❌ container.querySelector vs ✅ page.getByRole)
-- Not using .first()/.nth()/.last() for multiple elements (strict mode violations)
-- Missing await on expect.element() assertions
-- Not using untrack() when accessing $derived values in tests
-- Not using semantic queries (getByRole, getByLabel) for accessibility
-- Testing implementation details instead of user-visible behavior
+**Only flag CRITICAL issues**:
+- Deprecated/broken APIs that won't work
+- Missing .first()/.nth()/.last() causing actual strict mode failures
+- Missing await causing test failures
+- Wrong imports or module paths
 
-Then return ONLY this JSON (no markdown, no explanations):
+**IGNORE these (acceptable for examples)**:
+- Using 'any' in test mocks (simplifies examples)
+- Simplified mocks missing unused properties
+- Style preferences (it.each, helper functions)
+- Over-complete type definitions in test fixtures
+
+CRITICAL: Your response must be ONLY valid JSON. No explanations, no markdown blocks, no text before or after.
+
+Return this exact JSON structure:
 
 {
   "is_valid": boolean,

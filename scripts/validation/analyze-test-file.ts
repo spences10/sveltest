@@ -100,15 +100,29 @@ export async function analyze_test_file(
 
 		logger.progress_done();
 
-		// Parse JSON response
-		const json_match = result_text.match(/\{[\s\S]*\}/);
-		if (!json_match) {
+		// Parse JSON response - try multiple strategies
+		let result;
+		try {
+			// Strategy 1: Strip markdown code blocks and parse
+			const cleaned = result_text
+				.replace(/```json\s*/g, '')
+				.replace(/```\s*/g, '')
+				.trim();
+
+			// Strategy 2: Extract JSON object (non-greedy, first valid JSON)
+			const json_match = cleaned.match(/\{[\s\S]*?\}/);
+			if (!json_match) {
+				throw new Error(
+					`No JSON found in response. Got: ${result_text.slice(0, 300)}...`,
+				);
+			}
+
+			result = JSON.parse(json_match[0]);
+		} catch (parse_error) {
 			throw new Error(
-				`No JSON found in response. Got: ${result_text.slice(0, 200)}${result_text.length > 200 ? '...' : ''}`,
+				`Failed to parse JSON: ${parse_error instanceof Error ? parse_error.message : 'Unknown error'}.\nResponse: ${result_text.slice(0, 500)}...`,
 			);
 		}
-
-		const result = JSON.parse(json_match[0]);
 
 		// Build validation result
 		const issues: ValidationIssue[] = result.issues || [];

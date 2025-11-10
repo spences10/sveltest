@@ -20,24 +20,29 @@ File: ${file_path}
 ${test_code}
 \`\`\`
 
-IMPORTANT: Do a MAXIMUM of 2-3 web searches, then provide your analysis. Focus on obvious issues.
+IMPORTANT: Do a MAXIMUM of 2-3 web searches, then provide your analysis.
+
+**Context**: This is a teaching/example codebase. Focus on broken patterns that would fail.
 
 Search for:
 1. Vitest unit testing best practices
 2. Mocking and stubbing patterns in Vitest
 3. Test organization and structure
 
-Common issues to check:
-- Using browser APIs (window, document) in unit tests
-- Heavy mocking instead of testing actual logic
-- Missing test cases for edge conditions
-- Not testing error handling
-- Unclear test names that don't describe behavior
-- Missing cleanup (afterEach/afterAll)
-- Not using vi.mock() for external dependencies
-- Testing implementation details instead of behavior
+**Only flag CRITICAL issues**:
+- Browser APIs used in Node unit tests (will fail)
+- Deprecated Vitest APIs
+- Missing cleanup causing test pollution
 
-Then return ONLY this JSON (no markdown, no explanations):
+**IGNORE these (acceptable for examples)**:
+- Simplified mocks (teaching pattern, not production code)
+- Missing edge case tests (examples show main path)
+- Test organization preferences
+- Using 'any' for test fixtures
+
+CRITICAL: Your response must be ONLY valid JSON. No explanations, no markdown blocks, no text before or after.
+
+Return this exact JSON structure:
 
 {
   "is_valid": boolean,

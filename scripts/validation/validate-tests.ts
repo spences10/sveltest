@@ -165,8 +165,13 @@ async function run_validation(
 		generated_at: new Date().toISOString(),
 	};
 
-	// Save report
-	const report_filename = `validation-report-${new Date().toISOString().split('T')[0]}.md`;
+	// Save report with timestamp to prevent overwriting
+	const timestamp = new Date()
+		.toISOString()
+		.replace(/T/, '_')
+		.replace(/\..+/, '')
+		.replace(/:/g, '-');
+	const report_filename = `validation-report-${timestamp}.md`;
 	const report_path = join(OUTPUT_DIR, report_filename);
 
 	await save_validation_report(report, report_path);

@@ -20,24 +20,30 @@ File: ${file_path}
 ${test_code}
 \`\`\`
 
-IMPORTANT: Do a MAXIMUM of 2-3 web searches, then provide your analysis. Focus on obvious issues.
+IMPORTANT: Do a MAXIMUM of 2-3 web searches, then provide your analysis.
+
+**Context**: This is a teaching/example codebase. Focus on patterns that cause actual failures.
 
 Search for:
 1. Playwright Test framework best practices
 2. Playwright locator strategies and strict mode
 3. Playwright test organization patterns
 
-Common issues to check:
-- Not using test.step() for complex workflows
-- Using CSS selectors instead of semantic locators (getByRole, getByLabel, getByText)
-- Not handling strict mode violations (.first(), .nth(), .last() for multiple elements)
-- Missing expect() assertions or using wrong assertion methods
-- Not using page.waitForLoadState() when needed
-- Test flakiness from timing issues or missing waits
-- Not using test fixtures for common setup
-- Missing test.describe() for logical grouping
+**Only flag CRITICAL issues**:
+- Deprecated Playwright APIs
+- Strict mode violations that cause test failures
+- Missing essential assertions
+- Timing issues causing flaky tests
 
-Then return ONLY this JSON (no markdown, no explanations):
+**IGNORE these (acceptable for examples)**:
+- Not using test.step() (organizational preference)
+- CSS selectors (sometimes clearer for examples)
+- Not using fixtures (simpler for teaching)
+- Missing test.describe() (optional grouping)
+
+CRITICAL: Your response must be ONLY valid JSON. No explanations, no markdown blocks, no text before or after.
+
+Return this exact JSON structure:
 
 {
   "is_valid": boolean,

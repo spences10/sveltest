@@ -20,22 +20,28 @@ File: ${file_path}
 ${test_code}
 \`\`\`
 
-IMPORTANT: Do a MAXIMUM of 2-3 web searches, then provide your analysis. Focus on obvious issues.
+IMPORTANT: Do a MAXIMUM of 2-3 web searches, then provide your analysis.
+
+**Context**: This is a teaching/example codebase. Focus on broken or deprecated patterns.
 
 Search for:
 1. Svelte server-side render() API usage
 2. SSR testing patterns and best practices
 3. Any deprecated Svelte SSR APIs
 
-Common issues to check:
-- Using browser-specific APIs (window, document, locators) in SSR tests
-- Not importing render() from 'svelte/server'
-- Testing dynamic behavior instead of static HTML output
-- Incorrect HTML string assertions
-- Missing checks for proper HTML structure/attributes
-- Not testing SSR-specific concerns (hydration markers, data attributes)
+**Only flag CRITICAL issues**:
+- Deprecated APIs (e.g., Svelte 4 'body' vs Svelte 5 'html')
+- Wrong imports (not from 'svelte/server')
+- Browser APIs used in SSR (window, document)
 
-Then return ONLY this JSON (no markdown, no explanations):
+**IGNORE these (acceptable for examples)**:
+- Simplified HTML assertions (exact string matching is fine for examples)
+- Missing hydration marker tests (advanced topic)
+- Using 'any' in test setup
+
+CRITICAL: Your response must be ONLY valid JSON. No explanations, no markdown blocks, no text before or after.
+
+Return this exact JSON structure:
 
 {
   "is_valid": boolean,
