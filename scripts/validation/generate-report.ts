@@ -16,6 +16,7 @@ export interface ValidationReport {
 	critical_issues: number;
 	warning_issues: number;
 	suggestion_issues: number;
+	total_web_searches: number;
 	results: ValidationResult[];
 	generated_at: string;
 }
@@ -67,6 +68,9 @@ export function generate_markdown_report(
 	lines.push(`| Warning Issues | 🟡 ${report.warning_issues} |`);
 	lines.push(
 		`| Suggestion Issues | 🔵 ${report.suggestion_issues} |`,
+	);
+	lines.push(
+		`| Web Searches Used | 🔍 ${report.total_web_searches} |`,
 	);
 	lines.push('');
 
@@ -206,6 +210,7 @@ export function print_summary(report: ValidationReport): void {
 		'Critical Issues': `🔴 ${report.critical_issues}`,
 		'Warning Issues': `🟡 ${report.warning_issues}`,
 		'Suggestion Issues': `🔵 ${report.suggestion_issues}`,
+		'Web Searches Used': `🔍 ${report.total_web_searches}`,
 	});
 	logger.divider();
 

@@ -9,9 +9,9 @@ import { logger } from '../utils/logger.js';
 import { read_file } from '../utils/file-helpers.js';
 
 /**
- * Analyze a test file against official documentation
+ * Analyze a test file using Haiku 4.5 with web search tool
  *
- * Uses Sonnet 4.5 for deep, accurate code analysis
+ * The agent autonomously searches for relevant docs as needed
  */
 
 const anthropic = new Anthropic({
@@ -43,11 +43,11 @@ export interface ValidationResult {
 	suggestion_issues: number;
 	issues: ValidationIssue[];
 	summary: string;
+	web_searches_used: number;
 }
 
 export async function analyze_test_file(
 	file_path: string,
-	official_docs: string,
 ): Promise<ValidationResult> {
 	logger.progress(`Analyzing ${file_path}`);
 
@@ -55,9 +55,9 @@ export async function analyze_test_file(
 		const test_code = await read_file(file_path);
 
 		const response = await anthropic.messages.create({
-			model: ANTHROPIC_CONFIG.sonnet.model,
-			max_tokens: ANTHROPIC_CONFIG.sonnet.max_tokens,
-			temperature: ANTHROPIC_CONFIG.sonnet.temperature,
+			model: ANTHROPIC_CONFIG.haiku.model,
+			max_tokens: ANTHROPIC_CONFIG.haiku.max_tokens,
+			temperature: ANTHROPIC_CONFIG.haiku.temperature,
 			messages: [
 				{
 					role: 'user',
@@ -71,13 +71,22 @@ File: ${file_path}
 ${test_code}
 \`\`\`
 
-## Official Documentation Reference
+## Your Task
 
-${official_docs}
+Analyze this test file and identify ALL issues. You have access to web search - use it to look up official documentation for:
+- Vitest browser mode
+- vitest-browser-svelte
+- Playwright locators
+- Svelte 5 testing patterns
+- SvelteKit server testing
 
-## Validation Task
+Search for specific topics you need. For example:
+- "vitest browser mode page.getByRole official docs"
+- "playwright locators first nth last strict mode"
+- "svelte 5 untrack derived testing"
+- "sveltekit FormData Request testing"
 
-Analyze this test file and identify ALL issues across these categories:
+## Validation Categories
 
 ### 1. API Usage
 - Using deprecated APIs
@@ -128,7 +137,7 @@ Return a JSON object with this exact structure:
       "description": "Clear description of the issue",
       "current_code": "The problematic code snippet (if applicable)",
       "recommended_fix": "Specific code example of how to fix it",
-      "documentation_reference": "Link or reference to official docs"
+      "documentation_reference": "Link or reference to official docs you found"
     }
   ]
 }
@@ -140,17 +149,31 @@ Return a JSON object with this exact structure:
 - **severity: "warning"** - Code works but uses anti-patterns or non-recommended approaches
 - **severity: "suggestion"** - Code is fine but could be improved
 
-Be thorough but fair. If the code follows official best practices, return is_valid: true with an empty issues array.`,
+Use web search to verify your findings against official documentation. Be thorough but fair. If the code follows official best practices, return is_valid: true with an empty issues array.`,
+				},
+			],
+			tools: [
+				{
+					type: 'web_search_20250305',
+					name: 'web_search',
+					max_uses: 5,
 				},
 			],
 		});
 
 		logger.progress_done();
 
-		const content =
-			response.content[0].type === 'text'
-				? response.content[0].text
-				: '';
+		// Extract web search usage
+		const web_searches_used =
+			response.usage?.web_search_requests ?? 0;
+
+		// Find the final text response (after any tool uses)
+		let content = '';
+		for (const block of response.content) {
+			if (block.type === 'text') {
+				content = block.text;
+			}
+		}
 
 		// Parse JSON from response (extract from markdown code blocks if needed)
 		const json_match = content.match(/```json\s*([\s\S]*?)\s*```/);
@@ -179,6 +202,7 @@ Be thorough but fair. If the code follows official best practices, return is_val
 			suggestion_issues: suggestion_count,
 			issues,
 			summary: result.summary || 'Analysis complete',
+			web_searches_used,
 		};
 	} catch (error) {
 		logger.error(
@@ -202,6 +226,7 @@ Be thorough but fair. If the code follows official best practices, return is_val
 				},
 			],
 			summary: 'Analysis failed - manual review required',
+			web_searches_used: 0,
 		};
 	}
 }

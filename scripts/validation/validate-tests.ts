@@ -4,7 +4,6 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { logger } from '../utils/logger.js';
 import { find_test_files } from '../utils/file-helpers.js';
-import { fetch_all_official_docs } from './fetch-official-docs.js';
 import { analyze_test_file } from './analyze-test-file.js';
 import type { ValidationResult } from './analyze-test-file.js';
 import {
@@ -16,7 +15,7 @@ import {
 /**
  * Main validation orchestrator
  *
- * Validates all test files against official documentation
+ * Uses Haiku 4.5 with web search tool to validate tests on-demand
  */
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -27,14 +26,12 @@ const OUTPUT_DIR = join(ROOT_DIR, 'validation-reports');
 interface ValidationOptions {
 	target_dir?: string;
 	specific_file?: string;
-	skip_docs_fetch?: boolean;
-	cached_docs_path?: string;
 }
 
 async function run_validation(
 	options: ValidationOptions = {},
 ): Promise<void> {
-	logger.header('🧪 Sveltest Validation System');
+	logger.header('🧪 Sveltest Validation System (Agent-Powered)');
 
 	// Step 1: Determine what to validate
 	const target_dir = options.target_dir || WEBSITE_DIR;
@@ -56,46 +53,29 @@ async function run_validation(
 		return;
 	}
 
-	// Step 2: Fetch official documentation
-	logger.step(2, 'Fetching official documentation');
-
-	let official_docs: string;
-
-	if (options.skip_docs_fetch && options.cached_docs_path) {
-		logger.info('Using cached documentation');
-		const { read_file } = await import('../utils/file-helpers.js');
-		official_docs = await read_file(options.cached_docs_path);
-	} else {
-		official_docs = await fetch_all_official_docs();
-
-		// Cache the docs
-		const { write_file } = await import('../utils/file-helpers.js');
-		const cache_path = join(OUTPUT_DIR, 'cached-official-docs.md');
-		await write_file(cache_path, official_docs);
-		logger.success(`Cached documentation to: ${cache_path}`);
-	}
-
-	// Step 3: Analyze each test file
-	logger.step(3, 'Analyzing test files');
+	// Step 2: Analyze each test file (agent searches for docs as needed)
+	logger.step(2, 'Analyzing test files with intelligent doc search');
 	logger.info(
-		`This will take a few minutes for ${test_files.length} files...`,
+		`Agent will search for relevant documentation on-demand...`,
 	);
 
 	const results: ValidationResult[] = [];
 
 	for (let i = 0; i < test_files.length; i++) {
 		const file = test_files[i];
-		logger.info(`[${i + 1}/${test_files.length}] Analyzing: ${file}`);
+		logger.info(`[${i + 1}/${test_files.length}] ${file}`);
 
-		const result = await analyze_test_file(file, official_docs);
+		const result = await analyze_test_file(file);
 		results.push(result);
 
 		// Show quick status
 		if (result.is_valid) {
-			logger.success(`  ✅ Valid`);
+			logger.success(
+				`  ✅ Valid (${result.web_searches_used} searches)`,
+			);
 		} else {
 			logger.error(
-				`  ❌ Issues found: ${result.critical_issues} critical, ${result.warning_issues} warnings`,
+				`  ❌ ${result.critical_issues} critical, ${result.warning_issues} warnings (${result.web_searches_used} searches)`,
 			);
 		}
 
@@ -103,8 +83,8 @@ async function run_validation(
 		await new Promise((resolve) => setTimeout(resolve, 1000));
 	}
 
-	// Step 4: Generate report
-	logger.step(4, 'Generating validation report');
+	// Step 3: Generate report
+	logger.step(3, 'Generating validation report');
 
 	const report: ValidationReport = {
 		total_files: results.length,
@@ -123,6 +103,10 @@ async function run_validation(
 			(sum, r) => sum + r.suggestion_issues,
 			0,
 		),
+		total_web_searches: results.reduce(
+			(sum, r) => sum + r.web_searches_used,
+			0,
+		),
 		results,
 		generated_at: new Date().toISOString(),
 	};
@@ -134,8 +118,22 @@ async function run_validation(
 	await save_validation_report(report, report_path);
 
 	// Print summary
-	logger.step(5, 'Validation Complete');
+	logger.step(4, 'Validation Complete');
 	print_summary(report);
+
+	// Cost estimate
+	const search_cost = (report.total_web_searches / 1000) * 10;
+	const token_estimate = results.length * 7000; // ~7K tokens per file
+	const token_cost = (token_estimate / 1_000_000) * 6; // Haiku pricing
+	const total_cost = search_cost + token_cost;
+
+	logger.info(`💰 Estimated cost: $${total_cost.toFixed(2)}`);
+	logger.info(
+		`   - Web searches: ${report.total_web_searches} × $0.01 = $${search_cost.toFixed(2)}`,
+	);
+	logger.info(
+		`   - Tokens: ~${token_estimate.toLocaleString()} = $${token_cost.toFixed(2)}`,
+	);
 
 	// Exit with appropriate code
 	if (report.critical_issues > 0 || report.invalid_files > 0) {
@@ -148,10 +146,6 @@ async function main() {
 	const args = process.argv.slice(2);
 
 	const options: ValidationOptions = {
-		skip_docs_fetch: args.includes('--skip-docs-fetch'),
-		cached_docs_path: args.includes('--cached-docs')
-			? args[args.indexOf('--cached-docs') + 1]
-			: undefined,
 		specific_file: args.includes('--file')
 			? args[args.indexOf('--file') + 1]
 			: undefined,
@@ -163,7 +157,10 @@ async function main() {
 	// Show help
 	if (args.includes('--help') || args.includes('-h')) {
 		console.log(`
-Sveltest Validation System
+Sveltest Validation System (Agent-Powered)
+
+Uses Haiku 4.5 with web search tool to validate tests on-demand.
+The agent autonomously searches for relevant documentation as needed.
 
 Usage:
   pnpm validate:tests [options]
@@ -171,14 +168,17 @@ Usage:
 Options:
   --file <path>              Validate a specific test file
   --dir <path>               Validate all tests in directory (default: apps/website)
-  --skip-docs-fetch          Skip fetching official docs
-  --cached-docs <path>       Use cached documentation file
   --help, -h                 Show this help message
 
 Examples:
   pnpm validate:tests
   pnpm validate:tests --file apps/website/src/lib/components/button.svelte.test.ts
-  pnpm validate:tests --skip-docs-fetch --cached-docs validation-reports/cached-official-docs.md
+  pnpm validate:tests --dir apps/website/src/lib/components
+
+Cost:
+  - Web searches: $10 per 1,000 searches
+  - Haiku 4.5: $1/$5 per million tokens (input/output)
+  - Typical run (49 files): ~$2-3
 		`);
 		return;
 	}

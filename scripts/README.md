@@ -1,10 +1,12 @@
 # Sveltest Validation & Generation Scripts
 
-This directory contains scripts for validating test files and generating documentation/rules.
+This directory contains scripts for validating test files and
+generating documentation/rules.
 
 ## 🧪 Test Validation System
 
-**Purpose**: Validate all test files against official documentation from Vitest, Playwright, Svelte, and SvelteKit.
+**Purpose**: Validate all test files against official documentation
+from Vitest, Playwright, Svelte, and SvelteKit.
 
 ### Quick Start
 
@@ -24,7 +26,8 @@ pnpm validate:tests --dir apps/website/src/lib/components
 
 ### What It Does
 
-1. **Fetches Official Documentation** (Haiku 4.5 - fast & cost-effective)
+1. **Fetches Official Documentation** (Haiku 4.5 - fast &
+   cost-effective)
    - Vitest Browser Mode
    - vitest-browser-svelte
    - Playwright Locators
@@ -66,14 +69,14 @@ Reports are saved to `validation-reports/`:
 
 ## Summary
 
-| Metric | Count |
-|--------|-------|
-| Total Files Analyzed | 49 |
-| Valid Files | ✅ 42 |
-| Invalid Files | ❌ 7 |
-| Critical Issues | 🔴 3 |
-| Warning Issues | 🟡 12 |
-| Suggestion Issues | 🔵 8 |
+| Metric               | Count |
+| -------------------- | ----- |
+| Total Files Analyzed | 49    |
+| Valid Files          | ✅ 42 |
+| Invalid Files        | ❌ 7  |
+| Critical Issues      | 🔴 3  |
+| Warning Issues       | 🟡 12 |
+| Suggestion Issues    | 🔵 8  |
 
 ## Files Requiring Attention
 
@@ -85,17 +88,12 @@ Reports are saved to `validation-reports/`:
 
 **Issue:** Using deprecated container selector
 
-**Current Code:**
-\`\`\`typescript
-const { container } = render(Button);
-const button = container.querySelector('button');
+**Current Code:** \`\`\`typescript const { container } =
+render(Button); const button = container.querySelector('button');
 \`\`\`
 
-**Recommended Fix:**
-\`\`\`typescript
-render(Button);
-const button = page.getByRole('button', { name: /click/i });
-\`\`\`
+**Recommended Fix:** \`\`\`typescript render(Button); const button =
+page.getByRole('button', { name: /click/i }); \`\`\`
 
 **Reference:** https://vitest.dev/guide/browser/#locators
 ```
@@ -132,7 +130,8 @@ Create a `.env` file in the project root:
 ANTHROPIC_API_KEY=your-api-key-here
 ```
 
-The scripts automatically load environment variables using `dotenv/config`.
+The scripts automatically load environment variables using
+`dotenv/config`.
 
 Get your API key from: https://console.anthropic.com/
 
@@ -188,6 +187,7 @@ pnpm validate:tests
 ```
 
 This will:
+
 - Fetch latest official docs
 - Cache them to `validation-reports/cached-official-docs.md`
 - Validate all test files
@@ -233,11 +233,13 @@ Exit code is `1` if critical issues are found.
 ### Phase 0: Validation (Before Scenario Split)
 
 1. **Run full validation**
+
    ```bash
    pnpm validate:tests
    ```
 
 2. **Review report**
+
    ```bash
    cat validation-reports/validation-report-$(date +%Y-%m-%d).md
    ```
@@ -248,6 +250,7 @@ Exit code is `1` if critical issues are found.
    - Reference official documentation
 
 4. **Re-validate**
+
    ```bash
    pnpm validate:tests:cached
    ```
@@ -260,6 +263,7 @@ Exit code is `1` if critical issues are found.
 ### Once Validated
 
 When all tests pass validation:
+
 - Tests are confirmed as best practices
 - Safe to use as examples
 - Ready to generate rules/skills from
