@@ -87,4 +87,5 @@ jobs:
           LLM_GEN_SECRET: ${{ secrets.LLM_GEN_SECRET }}
 
       - name: Coverage
-        run: pnpm --filter @sveltest/website test:unit --run --coverage
+        run:
+          pnpm --filter @sveltest/website test:unit --run --coverage
