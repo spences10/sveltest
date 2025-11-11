@@ -8,12 +8,18 @@ importers:
 
   .:
     devDependencies:
+      '@anthropic-ai/claude-agent-sdk':
+        specifier: ^0.1.30
+        version: 0.1.30(zod@4.1.12)
       '@anthropic-ai/sdk':
         specifier: ^0.68.0
         version: 0.68.0(zod@4.1.12)
       '@changesets/cli':
         specifier: 2.29.7
         version: 2.29.7(@types/node@24.10.0)
+      dotenv:
+        specifier: ^17.2.3
+        version: 17.2.3
       eslint:
         specifier: ^9.39.1
         version: 9.39.1(jiti@2.6.1)
@@ -89,9 +95,6 @@ importers:
       daisyui:
         specifier: ^5.4.7
         version: 5.4.7
-      dotenv:
-        specifier: ^17.2.3
-        version: 17.2.3
       eslint:
         specifier: ^9.39.1
         version: 9.39.1(jiti@2.6.1)

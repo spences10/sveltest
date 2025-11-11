@@ -33,14 +33,20 @@ test('button click increments counter', async () => {
 
 ## Reference Files
 
-- [core-principles](references/core-principles.md) | [foundation-first](references/foundation-first.md) | [client-examples](references/client-examples.md)
-- [server-ssr-examples](references/server-ssr-examples.md) | [critical-patterns](references/critical-patterns.md)
-- [client-server-alignment](references/client-server-alignment.md) | [troubleshooting](references/troubleshooting.md)
+- [core-principles](references/core-principles.md) |
+  [foundation-first](references/foundation-first.md) |
+  [client-examples](references/client-examples.md)
+- [server-ssr-examples](references/server-ssr-examples.md) |
+  [critical-patterns](references/critical-patterns.md)
+- [client-server-alignment](references/client-server-alignment.md) |
+  [troubleshooting](references/troubleshooting.md)
 
 ## Notes
 
-- Never click SvelteKit form submit buttons - Always use `await expect.element()`
-- Test files: `.svelte.test.ts` (client), `.ssr.test.ts` (SSR), `server.test.ts` (API)
+- Never click SvelteKit form submit buttons - Always use
+  `await expect.element()`
+- Test files: `.svelte.test.ts` (client), `.ssr.test.ts` (SSR),
+  `server.test.ts` (API)
 
 <!--
 PROGRESSIVE DISCLOSURE GUIDELINES:

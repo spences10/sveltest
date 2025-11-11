@@ -28,9 +28,7 @@
 		"test": "pnpm --filter @sveltest/website test",
 		"test:e2e": "pnpm --filter @sveltest/website test:e2e",
 		"coverage": "pnpm --filter @sveltest/website coverage",
-		"generate:llms": "tsx scripts/generate-llms.ts",
-		"generate:ai-rules": "tsx scripts/generate-ai-rules.ts",
-		"test:ai-rules": "tsx scripts/generate-ai-rules.ts --dry-run",
+		"validate:tests": "tsx scripts/validation/validate-tests.ts",
 		"cli:build": "pnpm --filter sveltest build",
 		"cli:dev": "pnpm --filter sveltest dev",
 		"changeset": "changeset",
@@ -38,8 +36,10 @@
 		"release": "pnpm cli:build && changeset publish"
 	},
 	"devDependencies": {
+		"@anthropic-ai/claude-agent-sdk": "^0.1.30",
 		"@anthropic-ai/sdk": "^0.68.0",
 		"@changesets/cli": "2.29.7",
+		"dotenv": "^17.2.3",
 		"eslint": "^9.39.1",
 		"eslint-config-prettier": "^10.1.8",
 		"prettier": "^3.6.2",
