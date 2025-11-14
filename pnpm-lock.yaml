@@ -12,8 +12,8 @@ importers:
         specifier: ^0.1.30
         version: 0.1.30(zod@4.1.12)
       '@anthropic-ai/sdk':
-        specifier: ^0.68.0
-        version: 0.68.0(zod@4.1.12)
+        specifier: ^0.69.0
+        version: 0.69.0(zod@4.1.12)
       '@changesets/cli':
         specifier: 2.29.7
         version: 2.29.7(@types/node@24.10.0)
@@ -185,8 +185,8 @@ packages:
     peerDependencies:
       zod: ^3.24.1
 
-  '@anthropic-ai/sdk@0.68.0':
-    resolution: {integrity: sha512-SMYAmbbiprG8k1EjEPMTwaTqssDT7Ae+jxcR5kWXiqTlbwMR2AthXtscEVWOHkRfyAV5+y3PFYTJRNa3OJWIEw==}
+  '@anthropic-ai/sdk@0.69.0':
+    resolution: {integrity: sha512-L92d2q47BSq+7slUqHBL1d2DwloulZotYGCTDt9AYRtPmYF+iK6rnwq9JaZwPPJgk+LenbcbQ/nj6gfaDFsl9w==}
     hasBin: true
     peerDependencies:
       zod: ^3.25.0 || ^4.0.0
@@ -2489,7 +2489,7 @@ snapshots:
       '@img/sharp-linux-x64': 0.33.5
       '@img/sharp-win32-x64': 0.33.5
 
-  '@anthropic-ai/sdk@0.68.0(zod@4.1.12)':
+  '@anthropic-ai/sdk@0.69.0(zod@4.1.12)':
     dependencies:
       json-schema-to-ts: 3.1.1
     optionalDependencies:
