@@ -31,7 +31,7 @@
 	},
 	"devDependencies": {
 		"@changesets/cli": "^2.29.7",
-		"@eslint/compat": "^1.4.1",
+		"@eslint/compat": "^2.0.0",
 		"@eslint/js": "^9.39.1",
 		"@fontsource-variable/inter": "^5.2.8",
 		"@fontsource-variable/victor-mono": "^5.2.8",
