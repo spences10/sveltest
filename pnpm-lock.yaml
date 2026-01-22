@@ -10,10 +10,10 @@ importers:
     devDependencies:
       '@anthropic-ai/claude-agent-sdk':
         specifier: ^0.1.58
-        version: 0.1.62(zod@4.1.13)
+        version: 0.1.62(zod@4.3.6)
       '@anthropic-ai/sdk':
         specifier: ^0.71.0
-        version: 0.71.2(zod@4.1.13)
+        version: 0.71.2(zod@4.3.6)
       '@changesets/cli':
         specifier: 2.29.8
         version: 2.29.8(@types/node@24.10.3)
@@ -37,7 +37,7 @@ importers:
         version: 5.9.3
       zod:
         specifier: ^4.1.13
-        version: 4.1.13
+        version: 4.3.6
 
   apps/website:
     devDependencies:
@@ -163,7 +163,7 @@ importers:
         version: 2.0.1(svelte@5.48.0)(vitest@4.0.15)
       zod:
         specifier: ^4.1.12
-        version: 4.1.13
+        version: 4.3.6
 
   packages/cli:
     devDependencies:
@@ -2296,11 +2296,6 @@ packages:
     resolution: {integrity: sha512-xAg7SOnEhrm5zI3puOOKyy1OMcMlIJZYNJY7xLBwSze0UjhPLnWfj2GF2EpT0jmzaJKIWKHLsaSSajf35bcYnA==}
     engines: {node: '>=v12.22.7'}
 
-  semver@7.7.2:
-    resolution: {integrity: sha512-RF0Fw+rO5AMf9MAyaRXI4AV0Ulj5lMHqVxxdSgiVbixSCXoEmmX/jk0CuJw4+3SqroYO9VoUh+HcuJivvtJemA==}
-    engines: {node: '>=10'}
-    hasBin: true
-
   semver@7.7.3:
     resolution: {integrity: sha512-SdsKMrI9TdgjdweUSR9MweHA4EJ8YxHn8DFaDisvhVlUOe4BF1tLD7GAj0lIqWVl+dPb/rExr0Btby5loQm20Q==}
     engines: {node: '>=10'}
@@ -2692,8 +2687,8 @@ packages:
   zimmerframe@1.1.4:
     resolution: {integrity: sha512-B58NGBEoc8Y9MWWCQGl/gq9xBCe4IiKM0a2x7GZdQKOW5Exr8S1W24J6OgM1njK8xCRGvAJIL/MxXHf6SkmQKQ==}
 
-  zod@4.1.13:
-    resolution: {integrity: sha512-AvvthqfqrAhNH9dnfmrfKzX5upOdjUVJYFqNSlkmGf64gRaTzlPwz99IHYnVs28qYAybvAlBV+H7pn0saFY4Ig==}
+  zod@4.3.6:
+    resolution: {integrity: sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
@@ -2702,9 +2697,9 @@ snapshots:
 
   '@acemir/cssom@0.9.23': {}
 
-  '@anthropic-ai/claude-agent-sdk@0.1.62(zod@4.1.13)':
+  '@anthropic-ai/claude-agent-sdk@0.1.62(zod@4.3.6)':
     dependencies:
-      zod: 4.1.13
+      zod: 4.3.6
     optionalDependencies:
       '@img/sharp-darwin-arm64': 0.33.5
       '@img/sharp-darwin-x64': 0.33.5
@@ -2715,11 +2710,11 @@ snapshots:
       '@img/sharp-linuxmusl-x64': 0.33.5
       '@img/sharp-win32-x64': 0.33.5
 
-  '@anthropic-ai/sdk@0.71.2(zod@4.1.13)':
+  '@anthropic-ai/sdk@0.71.2(zod@4.3.6)':
     dependencies:
       json-schema-to-ts: 3.1.1
     optionalDependencies:
-      zod: 4.1.13
+      zod: 4.3.6
 
   '@asamuzakjp/css-color@4.0.5':
     dependencies:
@@ -4725,8 +4720,6 @@ snapshots:
     dependencies:
       xmlchars: 2.2.0
 
-  semver@7.7.2: {}
-
   semver@7.7.3: {}
 
   set-cookie-parser@2.7.2: {}
@@ -5091,6 +5084,6 @@ snapshots:
 
   zimmerframe@1.1.4: {}
 
-  zod@4.1.13: {}
+  zod@4.3.6: {}
 
   zwitch@2.0.4: {}
