@@ -6,8 +6,8 @@ This guide provides specific, actionable testing patterns for common
 scenarios in Svelte 5 applications.
 
 For comprehensive best practices and philosophy, see
-[Best Practices](./best-practices.md). For setup and configuration,
-see [Getting Started](./getting-started.md).
+[Best Practices](./best-practices). For setup and configuration,
+see [Getting Started](./getting-started).
 
 ## Essential Setup Pattern
 
