@@ -36,7 +36,7 @@
 		"release": "pnpm cli:build && changeset publish"
 	},
 	"devDependencies": {
-		"@anthropic-ai/claude-agent-sdk": "^0.1.58",
+		"@anthropic-ai/claude-agent-sdk": "^0.2.0",
 		"@anthropic-ai/sdk": "^0.71.0",
 		"@changesets/cli": "2.29.8",
 		"dotenv": "^17.2.3",
