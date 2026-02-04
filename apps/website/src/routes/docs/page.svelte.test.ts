@@ -212,7 +212,7 @@ describe('Documentation Page', () => {
 				.toBeInTheDocument();
 			await expect
 				.element(
-					page.getByRole('button', { name: /Testing Patterns/ }),
+					page.getByLabel('Switch to Component Testing section'),
 				)
 				.toBeInTheDocument();
 			await expect
@@ -250,13 +250,13 @@ describe('Documentation Page', () => {
 			render(DocsPage, { data: mock_data });
 
 			// Just verify buttons exist and are enabled - don't click them
-			const testing_patterns_button = page.getByRole('button', {
-				name: /Testing Patterns/,
-			});
+			const component_testing_button = page.getByLabel(
+				'Switch to Component Testing section',
+			);
 			await expect
-				.element(testing_patterns_button)
+				.element(component_testing_button)
 				.toBeInTheDocument();
-			await expect.element(testing_patterns_button).toBeEnabled();
+			await expect.element(component_testing_button).toBeEnabled();
 
 			const api_reference_button = page.getByRole('button', {
 				name: /API Reference/,
@@ -270,7 +270,7 @@ describe('Documentation Page', () => {
 
 			// Test that all buttons are clickable
 			const buttons = [
-				page.getByRole('button', { name: /Component Testing/ }),
+				page.getByLabel('Switch to Component Testing section'),
 				page.getByRole('button', { name: /API Reference/ }),
 				page.getByRole('button', { name: /Migration Guide/ }),
 				page.getByRole('button', { name: /Troubleshooting/ }),
@@ -295,15 +295,13 @@ describe('Documentation Page', () => {
 				.toHaveClass(/btn-primary/);
 
 			// Test that other buttons are clickable (without testing state changes)
-			const component_testing_button = page.getByRole('button', {
-				name: /Component Testing/,
-			});
+			const comp_testing_btn = page.getByLabel(
+				'Switch to Component Testing section',
+			);
 
 			// Just verify the button exists and is clickable
-			await expect
-				.element(component_testing_button)
-				.toBeInTheDocument();
-			await expect.element(component_testing_button).toBeEnabled();
+			await expect.element(comp_testing_btn).toBeInTheDocument();
+			await expect.element(comp_testing_btn).toBeEnabled();
 		});
 	});
 
