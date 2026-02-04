@@ -200,112 +200,43 @@ describe('Documentation Page', () => {
 		});
 	});
 
-	describe('Section Navigation', () => {
-		test('should render all section navigation buttons', async () => {
+	describe('Documentation Navigation', () => {
+		test('should render documentation guide section', async () => {
 			render(DocsPage, { data: mock_data });
 
-			// Check section navigation buttons
+			// Check documentation guide section exists
 			await expect
 				.element(
-					page.getByRole('button', { name: /Getting Started/ }),
+					page.getByRole('heading', { name: 'Documentation Guide' }),
 				)
-				.toBeInTheDocument();
-			await expect
-				.element(
-					page.getByRole('button', {
-						name: 'Switch to Component Testing section',
-					}),
-				)
-				.toBeInTheDocument();
-			await expect
-				.element(page.getByRole('button', { name: /API Reference/ }))
-				.toBeInTheDocument();
-			await expect
-				.element(
-					page.getByRole('button', { name: /Migration Guide/ }),
-				)
-				.toBeInTheDocument();
-			await expect
-				.element(
-					page.getByRole('button', { name: /Troubleshooting/ }),
-				)
-				.toBeInTheDocument();
-			await expect
-				.element(page.getByRole('button', { name: /Best Practices/ }))
 				.toBeInTheDocument();
 		});
 
-		test('should show getting started content by default', async () => {
+		test('should render doc cards for all topics', async () => {
 			render(DocsPage, { data: mock_data });
 
-			// Check default content using test ID
+			// Check that doc cards are rendered via test IDs
 			await expect
-				.element(page.getByTestId('section-getting-started'))
+				.element(page.getByTestId('doc-link-getting-started'))
 				.toBeInTheDocument();
 			await expect
-				.element(page.getByText('Installation & Setup'))
+				.element(page.getByTestId('doc-link-component-testing'))
+				.toBeInTheDocument();
+			await expect
+				.element(page.getByTestId('doc-link-ssr-testing'))
 				.toBeInTheDocument();
 		});
 
-		// Use smoke test approach for complex reactive components
-		test('should have navigation buttons without clicking them', async () => {
+		test('should have doc cards with correct links', async () => {
 			render(DocsPage, { data: mock_data });
 
-			// Just verify buttons exist and are enabled - don't click them
-			const component_testing_button = page.getByRole('button', {
-				name: 'Switch to Component Testing section',
-			});
+			// Check that links point to correct URLs
+			const getting_started_link = page.getByTestId(
+				'doc-link-getting-started',
+			);
 			await expect
-				.element(component_testing_button)
-				.toBeInTheDocument();
-			await expect.element(component_testing_button).toBeEnabled();
-
-			const api_reference_button = page.getByRole('button', {
-				name: /API Reference/,
-			});
-			await expect.element(api_reference_button).toBeInTheDocument();
-			await expect.element(api_reference_button).toBeEnabled();
-		});
-
-		test('should have clickable navigation buttons', async () => {
-			render(DocsPage, { data: mock_data });
-
-			// Test that all buttons are clickable
-			const buttons = [
-				page.getByRole('button', {
-					name: 'Switch to Component Testing section',
-				}),
-				page.getByRole('button', { name: /API Reference/ }),
-				page.getByRole('button', { name: /Migration Guide/ }),
-				page.getByRole('button', { name: /Troubleshooting/ }),
-				page.getByRole('button', { name: /Best Practices/ }),
-			];
-
-			for (const button of buttons) {
-				await expect.element(button).toBeEnabled();
-			}
-		});
-
-		// Test button state changes instead of content changes
-		test('should show active state on button clicks', async () => {
-			render(DocsPage, { data: mock_data });
-
-			// Getting Started should be active by default
-			const getting_started_button = page.getByRole('button', {
-				name: /Getting Started/,
-			});
-			await expect
-				.element(getting_started_button)
-				.toHaveClass(/btn-primary/);
-
-			// Test that other buttons are clickable (without testing state changes)
-			const comp_testing_btn = page.getByRole('button', {
-				name: 'Switch to Component Testing section',
-			});
-
-			// Just verify the button exists and is clickable
-			await expect.element(comp_testing_btn).toBeInTheDocument();
-			await expect.element(comp_testing_btn).toBeEnabled();
+				.element(getting_started_link)
+				.toHaveAttribute('href', '/docs/getting-started');
 		});
 	});
 
@@ -383,14 +314,12 @@ describe('Documentation Page', () => {
 				.toBeInTheDocument();
 		});
 
-		test('should have accessible navigation', async () => {
+		test('should have accessible doc cards', async () => {
 			render(DocsPage, { data: mock_data });
 
-			// Check for proper button roles
+			// Check for doc cards with proper links
 			await expect
-				.element(
-					page.getByRole('button', { name: /Getting Started/ }),
-				)
+				.element(page.getByTestId('doc-link-getting-started'))
 				.toBeInTheDocument();
 		});
 
