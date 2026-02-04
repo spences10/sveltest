@@ -16,25 +16,39 @@
 		Settings,
 	} from '$lib/icons';
 	const { data } = $props();
-	const { topics } = data;
+	const { topics, topic_categories } = data;
 
 	// Icon mapping for topics
 	const icon_map = {
 		'getting-started': BookOpen,
-		'testing-patterns': Code,
 		'api-reference': Settings,
+		'component-testing': Code,
+		'ssr-testing': Document,
+		'server-testing': Settings,
+		'e2e-testing': Eye,
+		'context-testing': Code,
+		'remote-functions-testing': LightningBolt,
+		'runes-testing': LightningBolt,
 		'migration-guide': Arrow,
 		troubleshooting: CheckCircle,
+		'ci-cd': Settings,
 		'best-practices': LightningBolt,
 	};
 
 	// Color mapping for topics
 	const color_map = {
 		'getting-started': 'primary',
-		'testing-patterns': 'secondary',
 		'api-reference': 'accent',
+		'component-testing': 'secondary',
+		'ssr-testing': 'info',
+		'server-testing': 'warning',
+		'e2e-testing': 'success',
+		'context-testing': 'primary',
+		'remote-functions-testing': 'accent',
+		'runes-testing': 'secondary',
 		'migration-guide': 'info',
 		troubleshooting: 'success',
+		'ci-cd': 'accent',
 		'best-practices': 'warning',
 	};
 
@@ -263,19 +277,24 @@ vi.mock('$lib/heavy-computation', () => ({
 			</p>
 		</div>
 
-		<!-- Prominent Documentation Links -->
-		<div class="mb-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-			{#each sections as section}
-				<DocCard
-					href="/docs/{section.id}"
-					title={section.title}
-					description={section.description}
-					icon={section.icon}
-					color_scheme={section.color}
-					test_id="doc-link-{section.id}"
-				/>
-			{/each}
-		</div>
+		<!-- Grouped Documentation Links -->
+		{#each topic_categories as category}
+			<div class="mb-12">
+				<h3 class="text-base-content/80 mb-6 text-2xl font-bold">{category.name}</h3>
+				<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+					{#each category.topics as topic}
+						<DocCard
+							href="/docs/{topic.slug}"
+							title={topic.title}
+							description={topic.description}
+							icon={icon_map[topic.slug as keyof typeof icon_map] || BookOpen}
+							color_scheme={color_map[topic.slug as keyof typeof color_map] || 'primary'}
+							test_id="doc-link-{topic.slug}"
+						/>
+					{/each}
+				</div>
+			</div>
+		{/each}
 
 		<!-- Quick Access Bar -->
 		<div
@@ -365,20 +384,25 @@ vi.mock('$lib/heavy-computation', () => ({
 			</p>
 		</div>
 
-		<!-- Prominent Documentation Links Grid -->
-		<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-			{#each sections as section, index}
-				<DocCard
-					href="/docs/{section.id}"
-					title={section.title}
-					description={section.description}
-					icon={section.icon}
-					color_scheme={section.color}
-					{index}
-					test_id="docs-link-{section.id}"
-				/>
-			{/each}
-		</div>
+		<!-- Grouped Documentation Links Grid -->
+		{#each topic_categories as category}
+			<div class="mb-10">
+				<h3 class="text-base-content/80 mb-4 text-xl font-bold">{category.name}</h3>
+				<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+					{#each category.topics as topic, index}
+						<DocCard
+							href="/docs/{topic.slug}"
+							title={topic.title}
+							description={topic.description}
+							icon={icon_map[topic.slug as keyof typeof icon_map] || BookOpen}
+							color_scheme={color_map[topic.slug as keyof typeof color_map] || 'primary'}
+							{index}
+							test_id="docs-link-{topic.slug}"
+						/>
+					{/each}
+				</div>
+			</div>
+		{/each}
 
 		<!-- Quick Access Info -->
 		<div class="mt-12 text-center">
