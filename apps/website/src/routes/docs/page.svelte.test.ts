@@ -4,39 +4,117 @@ import { render } from 'vitest-browser-svelte';
 import DocsPage from './+page.svelte';
 
 // Mock data that matches the expected structure from +page.ts
+const mock_topics = [
+	{
+		slug: 'getting-started',
+		title: 'Getting Started',
+		description: 'Setup and first test',
+		category: 'Fundamentals',
+	},
+	{
+		slug: 'api-reference',
+		title: 'API Reference',
+		description: 'Testing utilities',
+		category: 'Fundamentals',
+	},
+	{
+		slug: 'component-testing',
+		title: 'Component Testing',
+		description: 'Browser testing',
+		category: 'Test Types',
+	},
+	{
+		slug: 'ssr-testing',
+		title: 'SSR Testing',
+		description: 'Server rendering tests',
+		category: 'Test Types',
+	},
+	{
+		slug: 'server-testing',
+		title: 'Server Testing',
+		description: 'API routes',
+		category: 'Test Types',
+	},
+	{
+		slug: 'e2e-testing',
+		title: 'E2E Testing',
+		description: 'End-to-end testing',
+		category: 'Test Types',
+	},
+	{
+		slug: 'context-testing',
+		title: 'Context Testing',
+		description: 'Context and stores',
+		category: 'Advanced Patterns',
+	},
+	{
+		slug: 'remote-functions-testing',
+		title: 'Remote Functions',
+		description: 'Remote functions',
+		category: 'Advanced Patterns',
+	},
+	{
+		slug: 'runes-testing',
+		title: 'Runes Testing',
+		description: 'Svelte 5 runes',
+		category: 'Advanced Patterns',
+	},
+	{
+		slug: 'migration-guide',
+		title: 'Migration Guide',
+		description: 'Migrating from @testing-library/svelte',
+		category: 'Migration & Troubleshooting',
+	},
+	{
+		slug: 'troubleshooting',
+		title: 'Troubleshooting',
+		description: 'Common issues',
+		category: 'Migration & Troubleshooting',
+	},
+	{
+		slug: 'ci-cd',
+		title: 'CI/CD',
+		description: 'Testing pipelines',
+		category: 'DevOps',
+	},
+	{
+		slug: 'best-practices',
+		title: 'Best Practices',
+		description: 'Advanced patterns',
+		category: 'DevOps',
+	},
+];
+
+const mock_topic_categories = [
+	{
+		name: 'Fundamentals',
+		topics: mock_topics.filter((t) => t.category === 'Fundamentals'),
+	},
+	{
+		name: 'Test Types',
+		topics: mock_topics.filter((t) => t.category === 'Test Types'),
+	},
+	{
+		name: 'Advanced Patterns',
+		topics: mock_topics.filter(
+			(t) => t.category === 'Advanced Patterns',
+		),
+	},
+	{
+		name: 'Migration & Troubleshooting',
+		topics: mock_topics.filter(
+			(t) => t.category === 'Migration & Troubleshooting',
+		),
+	},
+	{
+		name: 'DevOps',
+		topics: mock_topics.filter((t) => t.category === 'DevOps'),
+	},
+];
+
 const mock_data = {
-	topics: [
-		{
-			slug: 'getting-started',
-			title: 'Getting Started',
-			description: 'Setup, installation, and your first test',
-		},
-		{
-			slug: 'testing-patterns',
-			title: 'Testing Patterns',
-			description: 'Component, SSR, and server testing patterns',
-		},
-		{
-			slug: 'api-reference',
-			title: 'API Reference',
-			description: 'Complete testing utilities and helper functions',
-		},
-		{
-			slug: 'migration-guide',
-			title: 'Migration Guide',
-			description: 'Migrating from @testing-library/svelte',
-		},
-		{
-			slug: 'best-practices',
-			title: 'Best Practices',
-			description: 'Advanced patterns and optimization techniques',
-		},
-		{
-			slug: 'troubleshooting',
-			title: 'Troubleshooting',
-			description: 'Common issues and solutions',
-		},
-	],
+	topics: mock_topics,
+	topic_categories: mock_topic_categories,
 };
 
 /**
@@ -134,7 +212,9 @@ describe('Documentation Page', () => {
 				.toBeInTheDocument();
 			await expect
 				.element(
-					page.getByRole('button', { name: /Testing Patterns/ }),
+					page.getByRole('button', {
+						name: 'Switch to Component Testing section',
+					}),
 				)
 				.toBeInTheDocument();
 			await expect
@@ -172,13 +252,13 @@ describe('Documentation Page', () => {
 			render(DocsPage, { data: mock_data });
 
 			// Just verify buttons exist and are enabled - don't click them
-			const testing_patterns_button = page.getByRole('button', {
-				name: /Testing Patterns/,
+			const component_testing_button = page.getByRole('button', {
+				name: 'Switch to Component Testing section',
 			});
 			await expect
-				.element(testing_patterns_button)
+				.element(component_testing_button)
 				.toBeInTheDocument();
-			await expect.element(testing_patterns_button).toBeEnabled();
+			await expect.element(component_testing_button).toBeEnabled();
 
 			const api_reference_button = page.getByRole('button', {
 				name: /API Reference/,
@@ -192,7 +272,9 @@ describe('Documentation Page', () => {
 
 			// Test that all buttons are clickable
 			const buttons = [
-				page.getByRole('button', { name: /Testing Patterns/ }),
+				page.getByRole('button', {
+					name: 'Switch to Component Testing section',
+				}),
 				page.getByRole('button', { name: /API Reference/ }),
 				page.getByRole('button', { name: /Migration Guide/ }),
 				page.getByRole('button', { name: /Troubleshooting/ }),
@@ -217,15 +299,13 @@ describe('Documentation Page', () => {
 				.toHaveClass(/btn-primary/);
 
 			// Test that other buttons are clickable (without testing state changes)
-			const testing_patterns_button = page.getByRole('button', {
-				name: /Testing Patterns/,
+			const comp_testing_btn = page.getByRole('button', {
+				name: 'Switch to Component Testing section',
 			});
 
 			// Just verify the button exists and is clickable
-			await expect
-				.element(testing_patterns_button)
-				.toBeInTheDocument();
-			await expect.element(testing_patterns_button).toBeEnabled();
+			await expect.element(comp_testing_btn).toBeInTheDocument();
+			await expect.element(comp_testing_btn).toBeEnabled();
 		});
 	});
 
