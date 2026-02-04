@@ -4,39 +4,33 @@ import { render } from 'vitest-browser-svelte';
 import DocsPage from './+page.svelte';
 
 // Mock data that matches the expected structure from +page.ts
+const mock_topics = [
+	{ slug: 'getting-started', title: 'Getting Started', description: 'Setup and first test', category: 'Fundamentals' },
+	{ slug: 'api-reference', title: 'API Reference', description: 'Testing utilities', category: 'Fundamentals' },
+	{ slug: 'component-testing', title: 'Component Testing', description: 'Browser testing', category: 'Test Types' },
+	{ slug: 'ssr-testing', title: 'SSR Testing', description: 'Server rendering tests', category: 'Test Types' },
+	{ slug: 'server-testing', title: 'Server Testing', description: 'API routes', category: 'Test Types' },
+	{ slug: 'e2e-testing', title: 'E2E Testing', description: 'End-to-end testing', category: 'Test Types' },
+	{ slug: 'context-testing', title: 'Context Testing', description: 'Context and stores', category: 'Advanced Patterns' },
+	{ slug: 'remote-functions-testing', title: 'Remote Functions', description: 'Remote functions', category: 'Advanced Patterns' },
+	{ slug: 'runes-testing', title: 'Runes Testing', description: 'Svelte 5 runes', category: 'Advanced Patterns' },
+	{ slug: 'migration-guide', title: 'Migration Guide', description: 'Migrating from @testing-library/svelte', category: 'Migration & Troubleshooting' },
+	{ slug: 'troubleshooting', title: 'Troubleshooting', description: 'Common issues', category: 'Migration & Troubleshooting' },
+	{ slug: 'ci-cd', title: 'CI/CD', description: 'Testing pipelines', category: 'DevOps' },
+	{ slug: 'best-practices', title: 'Best Practices', description: 'Advanced patterns', category: 'DevOps' },
+];
+
+const mock_topic_categories = [
+	{ name: 'Fundamentals', topics: mock_topics.filter((t) => t.category === 'Fundamentals') },
+	{ name: 'Test Types', topics: mock_topics.filter((t) => t.category === 'Test Types') },
+	{ name: 'Advanced Patterns', topics: mock_topics.filter((t) => t.category === 'Advanced Patterns') },
+	{ name: 'Migration & Troubleshooting', topics: mock_topics.filter((t) => t.category === 'Migration & Troubleshooting') },
+	{ name: 'DevOps', topics: mock_topics.filter((t) => t.category === 'DevOps') },
+];
+
 const mock_data = {
-	topics: [
-		{
-			slug: 'getting-started',
-			title: 'Getting Started',
-			description: 'Setup, installation, and your first test',
-		},
-		{
-			slug: 'testing-patterns',
-			title: 'Testing Patterns',
-			description: 'Component, SSR, and server testing patterns',
-		},
-		{
-			slug: 'api-reference',
-			title: 'API Reference',
-			description: 'Complete testing utilities and helper functions',
-		},
-		{
-			slug: 'migration-guide',
-			title: 'Migration Guide',
-			description: 'Migrating from @testing-library/svelte',
-		},
-		{
-			slug: 'best-practices',
-			title: 'Best Practices',
-			description: 'Advanced patterns and optimization techniques',
-		},
-		{
-			slug: 'troubleshooting',
-			title: 'Troubleshooting',
-			description: 'Common issues and solutions',
-		},
-	],
+	topics: mock_topics,
+	topic_categories: mock_topic_categories,
 };
 
 /**

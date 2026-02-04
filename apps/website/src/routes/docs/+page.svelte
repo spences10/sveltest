@@ -16,25 +16,39 @@
 		Settings,
 	} from '$lib/icons';
 	const { data } = $props();
-	const { topics } = data;
+	const { topics, topic_categories } = data;
 
 	// Icon mapping for topics
 	const icon_map = {
 		'getting-started': BookOpen,
-		'testing-patterns': Code,
 		'api-reference': Settings,
+		'component-testing': Code,
+		'ssr-testing': Document,
+		'server-testing': Settings,
+		'e2e-testing': Eye,
+		'context-testing': Code,
+		'remote-functions-testing': LightningBolt,
+		'runes-testing': LightningBolt,
 		'migration-guide': Arrow,
 		troubleshooting: CheckCircle,
+		'ci-cd': Settings,
 		'best-practices': LightningBolt,
 	};
 
 	// Color mapping for topics
 	const color_map = {
 		'getting-started': 'primary',
-		'testing-patterns': 'secondary',
 		'api-reference': 'accent',
+		'component-testing': 'secondary',
+		'ssr-testing': 'info',
+		'server-testing': 'warning',
+		'e2e-testing': 'success',
+		'context-testing': 'primary',
+		'remote-functions-testing': 'accent',
+		'runes-testing': 'secondary',
 		'migration-guide': 'info',
 		troubleshooting: 'success',
+		'ci-cd': 'accent',
 		'best-practices': 'warning',
 	};
 
