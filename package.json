@@ -36,16 +36,16 @@
 		"release": "pnpm cli:build && changeset publish"
 	},
 	"devDependencies": {
-		"@anthropic-ai/claude-agent-sdk": "^0.1.58",
-		"@anthropic-ai/sdk": "^0.71.0",
+		"@anthropic-ai/claude-agent-sdk": "^0.2.31",
+		"@anthropic-ai/sdk": "^0.72.1",
 		"@changesets/cli": "2.29.8",
 		"dotenv": "^17.2.3",
-		"eslint": "^9.39.1",
+		"eslint": "^9.39.2",
 		"eslint-config-prettier": "^10.1.8",
-		"prettier": "^3.7.4",
+		"prettier": "^3.8.1",
 		"tsx": "^4.21.0",
 		"typescript": "^5.9.3",
-		"zod": "^4.1.13"
+		"zod": "^4.3.6"
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [
