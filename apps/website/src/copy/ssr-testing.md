@@ -3,12 +3,13 @@
 ## Overview
 
 SSR (Server-Side Rendering) tests ensure server-rendered HTML matches
-client expectations and prevent hydration mismatches. This guide covers
-when to add SSR tests and the essential patterns for testing
+client expectations and prevent hydration mismatches. This guide
+covers when to add SSR tests and the essential patterns for testing
 server-rendered components.
 
-For component testing patterns, see [Testing Patterns](./testing-patterns).
-For best practices, see [Best Practices](./best-practices).
+For component testing patterns, see
+[Testing Patterns](./testing-patterns). For best practices, see
+[Best Practices](./best-practices).
 
 ## When to Add SSR Tests
 

@@ -2,11 +2,10 @@
 	import type { Snippet } from 'svelte';
 	import type { HTMLInputAttributes } from 'svelte/elements';
 
-	interface Props
-		extends Omit<
-			HTMLInputAttributes,
-			'value' | 'size' | 'id' | 'prefix'
-		> {
+	interface Props extends Omit<
+		HTMLInputAttributes,
+		'value' | 'size' | 'id' | 'prefix'
+	> {
 		// Custom props
 		value?: string | number;
 		label?: string;

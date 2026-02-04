@@ -332,8 +332,8 @@
 										class_names="text-success mt-1 h-4 w-4 flex-shrink-0"
 									/>
 									<div>
-										<strong>Multi-Step Forms:</strong> Test navigation
-										between form steps and data persistence
+										<strong>Multi-Step Forms:</strong> Test navigation between
+										form steps and data persistence
 									</div>
 								</li>
 								<li class="flex items-start gap-3">

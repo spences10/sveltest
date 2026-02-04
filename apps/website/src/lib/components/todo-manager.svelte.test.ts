@@ -102,9 +102,8 @@ describe('TodoManager', () => {
 
 	describe('Mock Verification', () => {
 		test('should have todo_state mocked correctly', async () => {
-			const { todo_state } = await import(
-				'$lib/state/todo.svelte.ts'
-			);
+			const { todo_state } =
+				await import('$lib/state/todo.svelte.ts');
 
 			expect(todo_state).toBeDefined();
 			expect(vi.isMockFunction(todo_state.add_todo)).toBe(true);

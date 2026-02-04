@@ -5,6 +5,7 @@
 		PUBLIC_FATHOM_ID,
 		PUBLIC_FATHOM_URL,
 	} from '$env/static/public';
+	import CommandPalette from '$lib/components/command-palette.svelte';
 	import Nav from '$lib/components/nav.svelte';
 	import {
 		CircleDot,
@@ -13,6 +14,7 @@
 		Heart,
 		Robot,
 	} from '$lib/icons';
+	import { command_palette_state } from '$lib/state/command-palette.svelte';
 	import * as Fathom from 'fathom-client';
 	import { onMount } from 'svelte';
 	import '../app.css';
@@ -28,7 +30,16 @@
 	$effect(() => {
 		(page.url.pathname, browser && Fathom.trackPageview());
 	});
+
+	function handle_keydown(event: KeyboardEvent) {
+		if ((event.metaKey || event.ctrlKey) && event.key === 'k') {
+			event.preventDefault();
+			command_palette_state.toggle();
+		}
+	}
 </script>
+
+<svelte:window onkeydown={handle_keydown} />
 
 <Nav />
 
@@ -102,10 +113,12 @@
 			<div class="divider my-4"></div>
 			<div class="text-center">
 				<p class="text-base-content/50 text-sm">
-					© {new Date().getFullYear()} Sveltest - Open source testing
-					resource for Svelte applications
+					© {new Date().getFullYear()} Sveltest - Open source testing resource
+					for Svelte applications
 				</p>
 			</div>
 		</div>
 	</footer>
 </div>
+
+<CommandPalette />
