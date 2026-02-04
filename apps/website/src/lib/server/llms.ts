@@ -12,19 +12,31 @@ import getting_started from '../../copy/getting-started.md?raw';
 import migration_guide from '../../copy/migration-guide.md?raw';
 import testing_patterns from '../../copy/testing-patterns.md?raw';
 import troubleshooting from '../../copy/troubleshooting.md?raw';
+import component_testing from '../../copy/component-testing.md?raw';
+import context_testing from '../../copy/context-testing.md?raw';
+import remote_functions_testing from '../../copy/remote-functions-testing.md?raw';
+import runes_testing from '../../copy/runes-testing.md?raw';
+import server_testing from '../../copy/server-testing.md?raw';
+import ssr_testing from '../../copy/ssr-testing.md?raw';
 
 export { topics };
 
 // Content map using the imported markdown
 const content_map: Record<string, string> = {
 	'getting-started': getting_started,
-	'testing-patterns': testing_patterns,
-	'e2e-testing': e2e_testing,
 	'api-reference': api_reference,
+	'component-testing': component_testing,
+	'ssr-testing': ssr_testing,
+	'server-testing': server_testing,
+	'e2e-testing': e2e_testing,
+	'context-testing': context_testing,
+	'remote-functions-testing': remote_functions_testing,
+	'runes-testing': runes_testing,
 	'migration-guide': migration_guide,
-	'best-practices': best_practices,
-	'ci-cd': ci_cd,
 	troubleshooting: troubleshooting,
+	'ci-cd': ci_cd,
+	'best-practices': best_practices,
+	'testing-patterns': testing_patterns,
 	about: about,
 };
 

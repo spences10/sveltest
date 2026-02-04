@@ -1,5 +1,5 @@
 ---
-"@sveltest/website": patch
+'@sveltest/website': patch
 ---
 
 Add command palette for site-wide search (Cmd+K)
