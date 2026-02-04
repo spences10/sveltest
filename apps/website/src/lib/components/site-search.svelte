@@ -31,9 +31,6 @@
 	// Debounced search with API call
 	let search_timeout: ReturnType<typeof setTimeout>;
 
-	// Reference to the search input for keyboard shortcuts
-	let search_input: HTMLInputElement;
-
 	async function perform_search(
 		query: string,
 	): Promise<SearchResult[]> {
@@ -125,33 +122,19 @@
 		}
 	}
 
-	// Handle keyboard shortcuts
+	// Handle local keyboard shortcuts (Escape to clear)
 	function handle_keydown(event: KeyboardEvent) {
-		// Ctrl+K or Cmd+K to focus search
-		if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
-			event.preventDefault();
-			search_input?.focus();
-		}
-		// Escape to clear search
 		if (event.key === 'Escape') {
 			handle_clear_search();
-			search_input?.blur();
 		}
 	}
 </script>
-
-<!-- Global keyboard shortcuts -->
-<svelte:window onkeydown={handle_keydown} />
 
 <div class="relative w-full">
 	<!-- Search Input -->
 	<div class="form-control w-full">
 		<label class="label" for="site-search">
 			<span class="label-text text-lg font-medium">{label}</span>
-			<span class="label-text-alt text-sm opacity-60">
-				<kbd class="kbd kbd-sm">⌘</kbd> +
-				<kbd class="kbd kbd-sm">K</kbd>
-			</span>
 		</label>
 		<label
 			class="input input-bordered input-lg flex w-full items-center gap-2"
@@ -163,13 +146,13 @@
 				<Search class_names="h-[1em] opacity-50" />
 			{/if}
 			<input
-				bind:this={search_input}
 				id="site-search"
 				type="search"
 				{placeholder}
 				class="grow text-lg"
 				bind:value={search_query}
 				oninput={handle_search_input}
+				onkeydown={handle_keydown}
 				onblur={handle_blur}
 				onfocus={() => {
 					if (search_results.length > 0) {
