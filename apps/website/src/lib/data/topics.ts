@@ -49,7 +49,8 @@ const test_types: Topic[] = [
 	{
 		slug: 'e2e-testing',
 		title: 'E2E Testing',
-		description: 'End-to-end testing patterns and integration validation',
+		description:
+			'End-to-end testing patterns and integration validation',
 		category: 'Test Types',
 	},
 ];
@@ -113,7 +114,10 @@ export const topic_categories: TopicCategory[] = [
 	{ name: 'Fundamentals', topics: fundamentals },
 	{ name: 'Test Types', topics: test_types },
 	{ name: 'Advanced Patterns', topics: advanced_patterns },
-	{ name: 'Migration & Troubleshooting', topics: migration_troubleshooting },
+	{
+		name: 'Migration & Troubleshooting',
+		topics: migration_troubleshooting,
+	},
 	{ name: 'DevOps', topics: devops },
 ];
 

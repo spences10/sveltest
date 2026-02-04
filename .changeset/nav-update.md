@@ -1,5 +1,5 @@
 ---
-"@sveltest/website": patch
+'@sveltest/website': patch
 ---
 
 Update docs navigation with grouped categories

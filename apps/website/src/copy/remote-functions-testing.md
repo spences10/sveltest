@@ -104,7 +104,9 @@ describe('validate_item', () => {
 		const result = validate_item({ name: 'Widget', quantity: 0 });
 
 		expect(result.is_valid).toBe(false);
-		expect(result.errors.quantity).toBe('Quantity must be at least 1');
+		expect(result.errors.quantity).toBe(
+			'Quantity must be at least 1',
+		);
 	});
 });
 
@@ -223,10 +225,12 @@ import { page } from 'vitest/browser';
 import ItemForm from './item-form.svelte';
 
 // Create a mock that mimics remote function shape
-const create_mock_form = (options: {
-	result?: { success: boolean; errors?: Record<string, string> };
-	pending?: boolean;
-} = {}) => {
+const create_mock_form = (
+	options: {
+		result?: { success: boolean; errors?: Record<string, string> };
+		pending?: boolean;
+	} = {},
+) => {
 	const { result = null, pending = false } = options;
 
 	return {
@@ -363,7 +367,14 @@ export const handlers = [
 
 ```typescript
 // src/lib/components/item-form.integration.test.ts
-import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
+import {
+	afterAll,
+	afterEach,
+	beforeAll,
+	describe,
+	expect,
+	it,
+} from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import { page } from 'vitest/browser';
 import { setupServer } from 'msw/node';
@@ -481,12 +492,12 @@ describe('extract_session_metadata', () => {
 
 ## Testing Strategy Summary
 
-| Layer                    | Test Type       | Speed | Coverage            |
-| ------------------------ | --------------- | ----- | ------------------- |
-| Pure helpers             | Unit            | Fast  | Business logic      |
-| Components with DI mocks | Component       | Fast  | UI behavior         |
-| Network-layer mocks      | Integration     | Med   | Client-server flow  |
-| Full remote functions    | E2E (Playwright)| Slow  | Complete integration|
+| Layer                    | Test Type        | Speed | Coverage             |
+| ------------------------ | ---------------- | ----- | -------------------- |
+| Pure helpers             | Unit             | Fast  | Business logic       |
+| Components with DI mocks | Component        | Fast  | UI behavior          |
+| Network-layer mocks      | Integration      | Med   | Client-server flow   |
+| Full remote functions    | E2E (Playwright) | Slow  | Complete integration |
 
 ### Recommended Approach
 

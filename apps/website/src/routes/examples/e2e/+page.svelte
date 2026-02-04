@@ -337,8 +337,8 @@
 										class_names="text-success mt-1 h-4 w-4 flex-shrink-0"
 									/>
 									<div>
-										<strong>Device Testing:</strong> Verify responsive
-										design on different screen sizes
+										<strong>Device Testing:</strong> Verify responsive design
+										on different screen sizes
 									</div>
 								</li>
 								<li class="flex items-start gap-3">

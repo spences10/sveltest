@@ -280,15 +280,20 @@ vi.mock('$lib/heavy-computation', () => ({
 		<!-- Grouped Documentation Links -->
 		{#each topic_categories as category}
 			<div class="mb-12">
-				<h3 class="text-base-content/80 mb-6 text-2xl font-bold">{category.name}</h3>
+				<h3 class="text-base-content/80 mb-6 text-2xl font-bold">
+					{category.name}
+				</h3>
 				<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 					{#each category.topics as topic}
 						<DocCard
 							href="/docs/{topic.slug}"
 							title={topic.title}
 							description={topic.description}
-							icon={icon_map[topic.slug as keyof typeof icon_map] || BookOpen}
-							color_scheme={color_map[topic.slug as keyof typeof color_map] || 'primary'}
+							icon={icon_map[topic.slug as keyof typeof icon_map] ||
+								BookOpen}
+							color_scheme={color_map[
+								topic.slug as keyof typeof color_map
+							] || 'primary'}
 							test_id="doc-link-{topic.slug}"
 						/>
 					{/each}
@@ -387,15 +392,20 @@ vi.mock('$lib/heavy-computation', () => ({
 		<!-- Grouped Documentation Links Grid -->
 		{#each topic_categories as category}
 			<div class="mb-10">
-				<h3 class="text-base-content/80 mb-4 text-xl font-bold">{category.name}</h3>
+				<h3 class="text-base-content/80 mb-4 text-xl font-bold">
+					{category.name}
+				</h3>
 				<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 					{#each category.topics as topic, index}
 						<DocCard
 							href="/docs/{topic.slug}"
 							title={topic.title}
 							description={topic.description}
-							icon={icon_map[topic.slug as keyof typeof icon_map] || BookOpen}
-							color_scheme={color_map[topic.slug as keyof typeof color_map] || 'primary'}
+							icon={icon_map[topic.slug as keyof typeof icon_map] ||
+								BookOpen}
+							color_scheme={color_map[
+								topic.slug as keyof typeof color_map
+							] || 'primary'}
 							{index}
 							test_id="docs-link-{topic.slug}"
 						/>

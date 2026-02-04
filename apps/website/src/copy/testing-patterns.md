@@ -6,16 +6,16 @@ This guide provides specific, actionable testing patterns for common
 scenarios in Svelte 5 applications.
 
 For comprehensive best practices and philosophy, see
-[Best Practices](./best-practices). For setup and configuration,
-see [Getting Started](./getting-started). For Svelte 5 runes testing
+[Best Practices](./best-practices). For setup and configuration, see
+[Getting Started](./getting-started). For Svelte 5 runes testing
 (`$state`, `$derived`, `untrack()`, `flushSync()`), see
 [Runes Testing](./runes-testing).
 
 ## Component Testing
 
-For locator patterns, handling multiple elements, role confusion fixes,
-component patterns (Button, Input, Modal, Dropdown), and mocking patterns,
-see [Component Testing](./component-testing).
+For locator patterns, handling multiple elements, role confusion
+fixes, component patterns (Button, Input, Modal, Dropdown), and
+mocking patterns, see [Component Testing](./component-testing).
 
 ## Integration Testing Patterns
 
@@ -165,8 +165,8 @@ describe('Navigation Integration', () => {
 
 ## SSR Testing Patterns
 
-For comprehensive SSR testing guidance including when to add SSR tests,
-basic patterns, layout patterns, and head/body testing, see
+For comprehensive SSR testing guidance including when to add SSR
+tests, basic patterns, layout patterns, and head/body testing, see
 [SSR Testing](./ssr-testing).
 
 ## Server Testing Patterns

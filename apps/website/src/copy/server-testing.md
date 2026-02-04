@@ -6,8 +6,9 @@ Server tests follow the **Client-Server Alignment Strategy** by using
 real `FormData` and `Request` objects instead of heavy mocking. This
 catches client-server contract mismatches that mocked tests miss.
 
-For component testing patterns, see [Testing Patterns](./testing-patterns).
-For setup and configuration, see [Getting Started](./getting-started).
+For component testing patterns, see
+[Testing Patterns](./testing-patterns). For setup and configuration,
+see [Getting Started](./getting-started).
 
 ## Essential Setup Pattern
 
@@ -21,7 +22,8 @@ import { actions } from './+page.server';
 
 ## Client-Server Alignment Strategy
 
-The key principle: **use real web APIs instead of mocking data structures**.
+The key principle: **use real web APIs instead of mocking data
+structures**.
 
 ### Why Real Objects Matter
 
@@ -38,6 +40,7 @@ form_data.append('password', 'secure123');
 ```
 
 Real objects catch:
+
 - Field name typos (`email` vs `e-mail`)
 - Missing required fields
 - Type mismatches (string vs number)
@@ -335,7 +338,8 @@ const mock_resolve = async (event: any) => {
 
 ### Common Fixes
 
-- **Field not found**: Check field names match between client and server
+- **Field not found**: Check field names match between client and
+  server
 - **Parsing errors**: Verify Content-Type header matches body format
 - **Auth failures**: Ensure Authorization header format is correct
 - **Status code wrong**: Check error handling returns proper codes

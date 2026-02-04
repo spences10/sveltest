@@ -638,9 +638,8 @@ describe('Mocking Patterns', () => {
 	}));
 
 	it('should verify mocks are working correctly', async () => {
-		const { fetch_user_data } = await import(
-			'$lib/utils/data-fetcher'
-		);
+		const { fetch_user_data } =
+			await import('$lib/utils/data-fetcher');
 
 		expect(fetch_user_data).toBeDefined();
 		expect(vi.isMockFunction(fetch_user_data)).toBe(true);

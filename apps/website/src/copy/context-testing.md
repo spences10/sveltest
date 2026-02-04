@@ -4,15 +4,16 @@
 
 Testing Svelte components that use `setContext`/`getContext` requires
 a wrapper component pattern. Unlike `@testing-library/svelte`,
-`vitest-browser-svelte` does not support passing a context map directly
-to the render function.
+`vitest-browser-svelte` does not support passing a context map
+directly to the render function.
 
 This guide covers the wrapper component pattern for testing components
 that depend on Svelte context.
 
 ## The Problem
 
-When migrating from `@testing-library/svelte`, you may have tests like:
+When migrating from `@testing-library/svelte`, you may have tests
+like:
 
 ```typescript
 // This pattern does NOT work in vitest-browser-svelte
@@ -169,7 +170,9 @@ import DashboardTestWrapper from './dashboard-page.test-wrapper.svelte';
 
 describe('Dashboard Page', () => {
 	it('should display authenticated user dashboard', async () => {
-		const mock_api = { get: vi.fn().mockResolvedValue({ stats: [] }) };
+		const mock_api = {
+			get: vi.fn().mockResolvedValue({ stats: [] }),
+		};
 		const mock_auth = {
 			user: { firstname: 'John', role: 'admin' },
 			is_authenticated: true,
@@ -216,10 +219,10 @@ export const create_mock_auth_state = (overrides = {}) => ({
 
 ### Key Differences from @testing-library/svelte
 
-| Feature    | @testing-library/svelte     | vitest-browser-svelte |
-| ---------- | --------------------------- | --------------------- |
-| Context    | `render(Comp, { context })` | Not supported         |
-| Solution   | Direct context map          | Wrapper component     |
+| Feature  | @testing-library/svelte     | vitest-browser-svelte |
+| -------- | --------------------------- | --------------------- |
+| Context  | `render(Comp, { context })` | Not supported         |
+| Solution | Direct context map          | Wrapper component     |
 
 ### Wrapper Component Checklist
 
