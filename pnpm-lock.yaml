@@ -168,8 +168,8 @@ importers:
   packages/cli:
     devDependencies:
       '@types/node':
-        specifier: ^24.10.0
-        version: 24.10.3
+        specifier: ^25.2.0
+        version: 25.2.0
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -979,9 +979,6 @@ packages:
 
   '@types/node@12.20.55':
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
-
-  '@types/node@24.10.3':
-    resolution: {integrity: sha512-gqkrWUsS8hcm0r44yn7/xZeV1ERva/nLgrLxFRUGb7aoNMIJfZJ3AC261zDQuOAKC7MiXai1WCpYc48jAHoShQ==}
 
   '@types/node@25.2.0':
     resolution: {integrity: sha512-DZ8VwRFUNzuqJ5khrvwMXHmvPe+zGayJhr2CDNiKB1WBE1ST8Djl00D0IC4vvNmHMdj6DlbYRIaFE7WHjlDl5w==}
@@ -3271,10 +3268,6 @@ snapshots:
       '@types/unist': 3.0.3
 
   '@types/node@12.20.55': {}
-
-  '@types/node@24.10.3':
-    dependencies:
-      undici-types: 7.16.0
 
   '@types/node@25.2.0':
     dependencies:
