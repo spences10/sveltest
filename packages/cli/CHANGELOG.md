@@ -1,5 +1,11 @@
 # sveltest
 
+## 0.0.7
+
+### Patch Changes
+
+- f714f9b: chore: exclude tests
+
 ## 0.0.6
 
 ### Patch Changes
