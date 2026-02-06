@@ -1,5 +1,11 @@
 # sveltest
 
+## 0.0.6
+
+### Patch Changes
+
+- 0aa4f56: tests and bug fixing
+
 ## 0.0.5
 
 ### Patch Changes
