@@ -36,10 +36,10 @@
 		"release": "pnpm cli:build && changeset publish"
 	},
 	"devDependencies": {
-		"@anthropic-ai/claude-agent-sdk": "^0.2.31",
-		"@anthropic-ai/sdk": "^0.72.1",
+		"@anthropic-ai/claude-agent-sdk": "^0.2.34",
+		"@anthropic-ai/sdk": "^0.73.0",
 		"@changesets/cli": "2.29.8",
-		"dotenv": "^17.2.3",
+		"dotenv": "^17.2.4",
 		"eslint": "^9.39.2",
 		"eslint-config-prettier": "^10.1.8",
 		"prettier": "^3.8.1",
