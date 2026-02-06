@@ -75,6 +75,13 @@ const advanced_patterns: Topic[] = [
 		description: 'Testing Svelte 5 runes and reactivity',
 		category: 'Advanced Patterns',
 	},
+	{
+		slug: 'testing-patterns',
+		title: 'Testing Patterns',
+		description:
+			'Integration, error handling, and performance testing patterns',
+		category: 'Advanced Patterns',
+	},
 ];
 
 // Migration & Troubleshooting

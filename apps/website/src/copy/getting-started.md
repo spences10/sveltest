@@ -3,13 +3,9 @@
 ## Learn Modern Svelte Testing
 
 This guide goes through getting set up for testing Svelte 5
-applications using the experimental `vitest-browser-svelte` - the
-modern testing solution that runs your tests in real browsers instead
-of simulated environments.
-
-> **Note:** Vitest Browser Mode is currently experimental. While
-> stable for most use cases, APIs may change in future versions. Pin
-> your Vitest version when using Browser Mode in production.
+applications using `vitest-browser-svelte` - the modern testing
+solution that runs your tests in real browsers instead of simulated
+environments.
 
 **You'll learn:**
 

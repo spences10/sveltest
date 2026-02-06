@@ -54,4 +54,28 @@
 - **Vitest Configuration** - Multi-project setup supporting client, server, and SSR testing strategies
 - **CI/CD Workflows** - GitHub Actions workflows with Playwright containers and proper caching
 
-Cross-references: [Getting Started](./getting-started.md) → [Testing Patterns](./testing-patterns.md) → [Best Practices](./best-practices.md) → [Migration Guide](./migration-guide.md) → [API Reference](./api-reference.md)
+## Documentation Index
+
+### Fundamentals
+- [Getting Started](https://sveltest.dev/docs/getting-started) - Setup, installation, and your first test
+- [API Reference](https://sveltest.dev/docs/api-reference) - Complete testing utilities and helper functions
+
+### Test Types
+- [Component Testing](https://sveltest.dev/docs/component-testing) - Browser-based component testing patterns
+- [SSR Testing](https://sveltest.dev/docs/ssr-testing) - Server-side rendering test patterns
+- [Server Testing](https://sveltest.dev/docs/server-testing) - API routes and server function testing
+- [E2E Testing](https://sveltest.dev/docs/e2e-testing) - End-to-end testing patterns and integration validation
+
+### Advanced Patterns
+- [Context Testing](https://sveltest.dev/docs/context-testing) - Testing Svelte context and stores
+- [Remote Functions Testing](https://sveltest.dev/docs/remote-functions-testing) - Testing SvelteKit remote functions
+- [Runes Testing](https://sveltest.dev/docs/runes-testing) - Testing Svelte 5 runes and reactivity
+- [Testing Patterns](https://sveltest.dev/docs/testing-patterns) - Integration, error handling, and performance testing patterns
+
+### Migration & Troubleshooting
+- [Migration Guide](https://sveltest.dev/docs/migration-guide) - Migrating from @testing-library/svelte
+- [Troubleshooting](https://sveltest.dev/docs/troubleshooting) - Common issues and solutions
+
+### DevOps
+- [CI/CD](https://sveltest.dev/docs/ci-cd) - Production-ready testing pipelines and automation
+- [Best Practices](https://sveltest.dev/docs/best-practices) - Advanced patterns and optimization techniques
