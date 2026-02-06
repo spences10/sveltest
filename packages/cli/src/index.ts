@@ -125,11 +125,17 @@ interface GetExampleOptions {
 }
 
 async function fetch_json<T>(url: string): Promise<T> {
-	const response = await fetch(url);
-	if (!response.ok) {
-		throw new Error(`HTTP error! status: ${response.status}`);
+	const controller = new AbortController();
+	const timeout_id = setTimeout(() => controller.abort(), 30000);
+	try {
+		const response = await fetch(url, { signal: controller.signal });
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json() as Promise<T>;
+	} finally {
+		clearTimeout(timeout_id);
 	}
-	return response.json() as Promise<T>;
 }
 
 function format_json(data: unknown): string {
@@ -345,6 +351,11 @@ async function main() {
 		return;
 	}
 
+	if (args[0] === '--version' || args[0] === '-v') {
+		console.log(get_cli_version());
+		return;
+	}
+
 	const command = args[0];
 
 	try {
@@ -367,15 +378,31 @@ async function main() {
 
 				// Parse --filter flag
 				const filter_index = args.indexOf('--filter');
-				const filter =
-					filter_index !== -1 ? args[filter_index + 1] : undefined;
+				let filter: string | undefined;
+				if (filter_index !== -1) {
+					const next_arg = args[filter_index + 1];
+					if (!next_arg || next_arg.startsWith('--')) {
+						console.error(
+							'Error: --filter requires a value\nRun "sveltest help" for usage information',
+						);
+						process.exit(1);
+					}
+					filter = next_arg;
+				}
 
 				// Parse --sections flag (comma-separated)
 				const sections_index = args.indexOf('--sections');
-				const sections =
-					sections_index !== -1
-						? args[sections_index + 1].split(',')
-						: undefined;
+				let sections: string[] | undefined;
+				if (sections_index !== -1) {
+					const next_arg = args[sections_index + 1];
+					if (!next_arg || next_arg.startsWith('--')) {
+						console.error(
+							'Error: --sections requires a value\nRun "sveltest help" for usage information',
+						);
+						process.exit(1);
+					}
+					sections = next_arg.split(',');
+				}
 
 				const options = { compact, filter, sections };
 
@@ -424,6 +451,7 @@ async function main() {
 						console.log(format_json(output));
 					} else {
 						console.log('Batch mode requires --json flag');
+						process.exit(1);
 					}
 				} else {
 					await get_example(scenario, format, options);
@@ -439,10 +467,19 @@ async function main() {
 					);
 					process.exit(1);
 				}
-				const filter_index = args.indexOf('--filter');
-				const filter =
-					filter_index !== -1 ? args[filter_index + 1] : undefined;
-				await search_docs(query, filter);
+				const search_filter_index = args.indexOf('--filter');
+				let search_filter: string | undefined;
+				if (search_filter_index !== -1) {
+					const next_arg = args[search_filter_index + 1];
+					if (!next_arg || next_arg.startsWith('--')) {
+						console.error(
+							'Error: --filter requires a value\nRun "sveltest help" for usage information',
+						);
+						process.exit(1);
+					}
+					search_filter = next_arg;
+				}
+				await search_docs(query, search_filter);
 				break;
 			}
 

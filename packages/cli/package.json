@@ -17,6 +17,7 @@
 	"scripts": {
 		"build": "tsc",
 		"dev": "tsc --watch",
+		"test": "vitest run",
 		"prepublishOnly": "pnpm build"
 	},
 	"keywords": [
@@ -40,6 +41,7 @@
 	"homepage": "https://sveltest.dev",
 	"devDependencies": {
 		"@types/node": "^25.2.0",
-		"typescript": "^5.9.3"
+		"typescript": "^5.9.3",
+		"vitest": "^4.0.18"
 	}
 }
