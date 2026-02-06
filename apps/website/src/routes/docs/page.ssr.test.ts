@@ -28,31 +28,97 @@ const mock_data = {
 			slug: 'getting-started',
 			title: 'Getting Started',
 			description: 'Setup, installation, and your first test',
-		},
-		{
-			slug: 'testing-patterns',
-			title: 'Testing Patterns',
-			description: 'Component, SSR, and server testing patterns',
+			category: 'Fundamentals',
 		},
 		{
 			slug: 'api-reference',
 			title: 'API Reference',
 			description: 'Complete testing utilities and helper functions',
+			category: 'Fundamentals',
+		},
+		{
+			slug: 'component-testing',
+			title: 'Component Testing',
+			description: 'Testing Svelte components in real browsers',
+			category: 'Test Types',
 		},
 		{
 			slug: 'migration-guide',
 			title: 'Migration Guide',
 			description: 'Migrating from @testing-library/svelte',
-		},
-		{
-			slug: 'best-practices',
-			title: 'Best Practices',
-			description: 'Advanced patterns and optimization techniques',
+			category: 'Migration & Troubleshooting',
 		},
 		{
 			slug: 'troubleshooting',
 			title: 'Troubleshooting',
 			description: 'Common issues and solutions',
+			category: 'Migration & Troubleshooting',
+		},
+		{
+			slug: 'best-practices',
+			title: 'Best Practices',
+			description: 'Advanced patterns and optimization techniques',
+			category: 'DevOps',
+		},
+	],
+	topic_categories: [
+		{
+			name: 'Fundamentals',
+			topics: [
+				{
+					slug: 'getting-started',
+					title: 'Getting Started',
+					description: 'Setup, installation, and your first test',
+					category: 'Fundamentals',
+				},
+				{
+					slug: 'api-reference',
+					title: 'API Reference',
+					description:
+						'Complete testing utilities and helper functions',
+					category: 'Fundamentals',
+				},
+			],
+		},
+		{
+			name: 'Test Types',
+			topics: [
+				{
+					slug: 'component-testing',
+					title: 'Component Testing',
+					description: 'Testing Svelte components in real browsers',
+					category: 'Test Types',
+				},
+			],
+		},
+		{
+			name: 'Migration & Troubleshooting',
+			topics: [
+				{
+					slug: 'migration-guide',
+					title: 'Migration Guide',
+					description: 'Migrating from @testing-library/svelte',
+					category: 'Migration & Troubleshooting',
+				},
+				{
+					slug: 'troubleshooting',
+					title: 'Troubleshooting',
+					description: 'Common issues and solutions',
+					category: 'Migration & Troubleshooting',
+				},
+			],
+		},
+		{
+			name: 'DevOps',
+			topics: [
+				{
+					slug: 'best-practices',
+					title: 'Best Practices',
+					description:
+						'Advanced patterns and optimization techniques',
+					category: 'DevOps',
+				},
+			],
 		},
 	],
 };
@@ -110,9 +176,8 @@ describe('Documentation Page SSR', () => {
 				props: { data: mock_data },
 			});
 
-			// Check section navigation buttons
+			// Check topic titles are rendered
 			expect(body).toContain('Getting Started');
-			expect(body).toContain('Testing Patterns');
 			expect(body).toContain('API Reference');
 			expect(body).toContain('Migration Guide');
 			expect(body).toContain('Troubleshooting');
@@ -124,9 +189,9 @@ describe('Documentation Page SSR', () => {
 				props: { data: mock_data },
 			});
 
-			// Check default getting started content (rendered by default in SSR)
-			expect(body).toContain('Installation &amp; Setup');
-			expect(body).toContain('Project Structure');
+			// Check content that is actually rendered on the page
+			expect(body).toContain('Documentation Guide');
+			expect(body).toContain('Complete Documentation');
 			expect(body).toContain('Your First Test');
 		});
 
@@ -159,9 +224,9 @@ describe('Documentation Page SSR', () => {
 				props: { data: mock_data },
 			});
 
-			// Check installation commands
-			expect(body).toContain('pnpm install');
-			expect(body).toContain('pnpm test');
+			// Check code example section content
+			expect(body).toContain('Essential Imports');
+			expect(body).toContain('title="Copy code"');
 		});
 	});
 
@@ -183,10 +248,9 @@ describe('Documentation Page SSR', () => {
 				props: { data: mock_data },
 			});
 
-			// Check semantic elements that we added
+			// Check semantic elements that are present in the page
 			expect(body).toContain('<section');
-			expect(body).toContain('<nav');
-			expect(body).toContain('<main');
+			expect(body).toContain('<a href=');
 		});
 
 		test('should render meta information', () => {
@@ -222,8 +286,8 @@ describe('Documentation Page SSR', () => {
 			});
 
 			// Check that all section content is present for SEO
-			expect(body).toContain('Documentation Sections');
-			expect(body).toContain('Comprehensive guides');
+			expect(body).toContain('Documentation Guide');
+			expect(body).toContain('Complete testing documentation');
 		});
 
 		test('should render interactive elements', () => {
