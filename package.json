@@ -40,7 +40,7 @@
 		"@anthropic-ai/sdk": "^0.74.0",
 		"@changesets/cli": "2.29.8",
 		"dotenv": "^17.2.4",
-		"eslint": "^9.39.2",
+		"eslint": "^10.0.0",
 		"eslint-config-prettier": "^10.1.8",
 		"prettier": "^3.8.1",
 		"tsx": "^4.21.0",
