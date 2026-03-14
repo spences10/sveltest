@@ -160,7 +160,7 @@ importers:
         version: 4.0.18(@types/node@25.3.3)(@vitest/browser-playwright@4.0.18)(jiti@2.6.1)(jsdom@28.1.0)(lightningcss@1.31.1)(tsx@4.21.0)
       vitest-browser-svelte:
         specifier: ^2.0.2
-        version: 2.0.2(svelte@5.53.10)(vitest@4.0.18)
+        version: 2.1.0(svelte@5.53.10)(vitest@4.0.18)
       zod:
         specifier: ^4.3.6
         version: 4.3.6
@@ -2450,8 +2450,8 @@ packages:
       vite:
         optional: true
 
-  vitest-browser-svelte@2.0.2:
-    resolution: {integrity: sha512-OLJVYoIYflwToFIy3s41pZ9mVp6dwXfYd8IIsWoc57g8DyN3SxsNJ5GB1xWFPxLFlKM+1MPExjPxLaqdELrfRQ==}
+  vitest-browser-svelte@2.1.0:
+    resolution: {integrity: sha512-Uqcqn9gKhYoNOn5uGOQHSPIEGHgIz25zPP6R63LQ5+yEVHfDXdOKBMba9pBlPIgp31AxYbV9h43j9+W+5M5y+A==}
     peerDependencies:
       svelte: ^3 || ^4 || ^5 || ^5.0.0-next.0
       vitest: ^4.0.0
@@ -4732,8 +4732,9 @@ snapshots:
     optionalDependencies:
       vite: 7.3.1(@types/node@25.3.3)(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)
 
-  vitest-browser-svelte@2.0.2(svelte@5.53.10)(vitest@4.0.18):
+  vitest-browser-svelte@2.1.0(svelte@5.53.10)(vitest@4.0.18):
     dependencies:
+      '@playwright/test': 1.58.2
       '@testing-library/svelte-core': 1.0.0(svelte@5.53.10)
       svelte: 5.53.10
       vitest: 4.0.18(@types/node@25.3.3)(@vitest/browser-playwright@4.0.18)(jiti@2.6.1)(jsdom@28.1.0)(lightningcss@1.31.1)(tsx@4.21.0)
