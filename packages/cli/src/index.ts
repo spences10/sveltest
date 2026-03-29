@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { defineCommand, runMain } from 'citty';
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -10,19 +11,16 @@ const SITE_BASE = 'https://sveltest.dev';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Detect if output is being piped (non-TTY)
-function is_plain(): boolean {
-	return !process.stdout.isTTY || process.argv.includes('--plain');
+function is_plain(explicit?: boolean): boolean {
+	return explicit || !process.stdout.isTTY;
 }
 
-// Context preamble for LLM consumption
 const CONTEXT_HEADER = `# Context: Svelte 5 Testing with vitest-browser-svelte
 # Key: Use page.getByRole() locators, never container queries
 # Key: Use untrack() for $derived values in tests
 ---
 `;
 
-// Get CLI version from package.json
 function get_cli_version() {
 	try {
 		const pkg_path = join(__dirname, '..', 'package.json');
@@ -33,7 +31,6 @@ function get_cli_version() {
 	}
 }
 
-// Related patterns mapping for better discoverability
 const RELATED_PATTERNS: Record<string, string[]> = {
 	'button-variants': [
 		'locator-patterns',
@@ -68,22 +65,17 @@ const RELATED_PATTERNS: Record<string, string[]> = {
 	],
 };
 
-// Add related patterns to response
 function add_related_patterns(
 	data: Record<string, unknown>,
 	scenario: string,
 ): Record<string, unknown> {
 	const related = RELATED_PATTERNS[scenario];
 	if (related && related.length > 0) {
-		return {
-			...data,
-			_related: related,
-		};
+		return { ...data, _related: related };
 	}
 	return data;
 }
 
-// Add metadata to JSON responses
 function add_metadata(
 	data: Record<string, unknown>,
 ): Record<string, unknown> {
@@ -222,36 +214,29 @@ function format_readable(data: unknown): string {
 	return lines.join('\n');
 }
 
-async function list_examples() {
-	try {
-		const data = await fetch_json<ExamplesResponse>(
-			`${API_BASE}/examples`,
-		);
+async function list_examples(plain?: boolean) {
+	const data = await fetch_json<ExamplesResponse>(
+		`${API_BASE}/examples`,
+	);
 
-		if (is_plain()) {
-			data.scenarios.forEach((scenario) => {
-				const scenario_name = scenario.endpoint.split('/').pop();
-				console.log(scenario_name);
-			});
-		} else {
-			console.log('\nAvailable Testing Scenarios:\n');
-			data.scenarios.forEach((scenario) => {
-				const scenario_name = scenario.endpoint.split('/').pop();
-				console.log(`  ${scenario_name}`);
-				console.log(`    Category: ${scenario.category}`);
-				console.log(`    ${scenario.description}\n`);
-			});
-		}
-	} catch (error) {
-		console.error('Error fetching examples:', error);
-		process.exit(1);
+	if (plain) {
+		data.scenarios.forEach((scenario) => {
+			console.log(scenario.endpoint.split('/').pop());
+		});
+	} else {
+		console.log('\nAvailable Testing Scenarios:\n');
+		data.scenarios.forEach((scenario) => {
+			const scenario_name = scenario.endpoint.split('/').pop();
+			console.log(`  ${scenario_name}`);
+			console.log(`    Category: ${scenario.category}`);
+			console.log(`    ${scenario.description}\n`);
+		});
 	}
 }
 
 function compact_json(
 	data: Record<string, unknown>,
 ): Record<string, unknown> {
-	// Remove verbose fields to reduce token usage
 	const {
 		description,
 		source_file,
@@ -259,8 +244,6 @@ function compact_json(
 		meta,
 		...essential
 	} = data;
-
-	// Keep only essential fields
 	return essential;
 }
 
@@ -269,26 +252,61 @@ async function get_example(
 	format: 'json' | 'readable' = 'readable',
 	options: GetExampleOptions = {},
 ) {
-	try {
-		const data = await fetch_json(`${API_BASE}/examples/${scenario}`);
+	const data = await fetch_json(`${API_BASE}/examples/${scenario}`);
 
-		if (format === 'json') {
+	if (format === 'json') {
+		let output = data as Record<string, unknown>;
+
+		if (options.compact) {
+			output = compact_json(output);
+		}
+
+		if (options.filter) {
+			const filterKey = options.filter;
+			if (output[filterKey]) {
+				output = { [filterKey]: output[filterKey] };
+			}
+		}
+
+		if (options.sections && options.sections.length > 0) {
+			const filtered: Record<string, unknown> = {};
+			options.sections.forEach((section) => {
+				if (output[section]) {
+					filtered[section] = output[section];
+				}
+			});
+			output = filtered;
+		}
+
+		output = add_related_patterns(output, scenario);
+		output = add_metadata(output);
+		console.log(format_json(output));
+	} else {
+		console.log(format_readable(data));
+	}
+}
+
+async function batch_get_examples(
+	scenarios: string[],
+	options: GetExampleOptions,
+) {
+	const results: Record<string, Record<string, unknown>> = {};
+
+	for (const s of scenarios) {
+		try {
+			const data = await fetch_json(`${API_BASE}/examples/${s}`);
 			let output = data as Record<string, unknown>;
 
-			// Apply compact mode
 			if (options.compact) {
 				output = compact_json(output);
 			}
 
-			// Apply filter if specified
-			if (options.filter) {
-				const filterKey = options.filter;
-				if (output[filterKey]) {
-					output = { [filterKey]: output[filterKey] };
-				}
+			if (options.filter && output[options.filter]) {
+				output = {
+					[options.filter]: output[options.filter],
+				};
 			}
 
-			// Apply section filtering
 			if (options.sections && options.sections.length > 0) {
 				const filtered: Record<string, unknown> = {};
 				options.sections.forEach((section) => {
@@ -299,130 +317,105 @@ async function get_example(
 				output = filtered;
 			}
 
-			// Add related patterns
-			output = add_related_patterns(output, scenario);
-
-			// Add metadata to response
-			output = add_metadata(output);
-
-			console.log(format_json(output));
-		} else {
-			console.log(format_readable(data));
+			output = add_related_patterns(output, s);
+			results[s] = output;
+		} catch (error) {
+			console.error(`Error fetching '${s}':`, error);
 		}
-	} catch (error) {
-		console.error(`Error fetching example '${scenario}':`, error);
-		process.exit(1);
 	}
+
+	const output = add_metadata(results);
+	console.log(format_json(output));
 }
 
 async function search_docs(query: string, filter?: string) {
-	try {
-		const params = new URLSearchParams({ q: query });
-		if (filter) params.append('filter', filter);
+	const params = new URLSearchParams({ q: query });
+	if (filter) params.append('filter', filter);
 
-		const response = await fetch_json<SearchResponse>(
-			`${API_BASE}/search?${params}`,
-		);
+	const response = await fetch_json<SearchResponse>(
+		`${API_BASE}/search?${params}`,
+	);
 
-		if (response.results.length === 0) {
-			console.log(`\nNo results found for: "${query}"\n`);
-			return;
-		}
+	if (response.results.length === 0) {
+		console.log(`\nNo results found for: "${query}"\n`);
+		return;
+	}
 
-		if (is_plain()) {
-			response.results.forEach((result) => {
-				console.log(JSON.stringify(result));
-			});
-		} else {
-			console.log(`\nSearch Results for "${query}":\n`);
-			response.results.forEach((result, index) => {
-				console.log(`${index + 1}. ${result.title}`);
-				console.log(`   ${result.description}`);
-				console.log(`   ${result.url}`);
-				if (result.excerpt) {
-					console.log(`   ...${result.excerpt}...\n`);
-				} else {
-					console.log('');
-				}
-			});
-		}
-	} catch (error) {
-		console.error('Error searching:', error);
-		process.exit(1);
+	if (is_plain()) {
+		response.results.forEach((result) => {
+			console.log(JSON.stringify(result));
+		});
+	} else {
+		console.log(`\nSearch Results for "${query}":\n`);
+		response.results.forEach((result, index) => {
+			console.log(`${index + 1}. ${result.title}`);
+			console.log(`   ${result.description}`);
+			console.log(`   ${result.url}`);
+			if (result.excerpt) {
+				console.log(`   ...${result.excerpt}...\n`);
+			} else {
+				console.log('');
+			}
+		});
 	}
 }
 
-async function fetch_llms(full: boolean, context: boolean) {
-	try {
-		const url = full
-			? `${SITE_BASE}/llms-full.txt`
-			: `${SITE_BASE}/llms.txt`;
-		const text = await fetch_text(url);
-		if (context) {
-			process.stdout.write(CONTEXT_HEADER);
-		}
-		process.stdout.write(text);
-	} catch (error) {
-		console.error('Error fetching llms.txt:', error);
-		process.exit(1);
+async function fetch_llms(full?: boolean, context?: boolean) {
+	const url = full
+		? `${SITE_BASE}/llms-full.txt`
+		: `${SITE_BASE}/llms.txt`;
+	const text = await fetch_text(url);
+	if (context) {
+		process.stdout.write(CONTEXT_HEADER);
 	}
+	process.stdout.write(text);
 }
 
-async function list_docs() {
-	try {
-		const data = await fetch_json<DocsIndexResponse>(
-			`${API_BASE}/docs`,
-		);
+async function list_docs(plain?: boolean) {
+	const data = await fetch_json<DocsIndexResponse>(
+		`${API_BASE}/docs`,
+	);
 
-		if (is_plain()) {
-			data.topics.forEach((topic) => {
-				console.log(topic.slug);
-			});
-		} else {
-			console.log('\nAvailable Documentation Topics:\n');
-			let current_category = '';
-			data.topics.forEach((topic) => {
-				if (topic.category !== current_category) {
-					current_category = topic.category;
-					console.log(`  ${current_category}:`);
-				}
-				console.log(`    ${topic.slug}`);
-				console.log(`      ${topic.description}\n`);
-			});
-		}
-	} catch (error) {
-		console.error('Error fetching docs:', error);
-		process.exit(1);
+	if (plain) {
+		data.topics.forEach((topic) => {
+			console.log(topic.slug);
+		});
+	} else {
+		console.log('\nAvailable Documentation Topics:\n');
+		let current_category = '';
+		data.topics.forEach((topic) => {
+			if (topic.category !== current_category) {
+				current_category = topic.category;
+				console.log(`  ${current_category}:`);
+			}
+			console.log(`    ${topic.slug}`);
+			console.log(`      ${topic.description}\n`);
+		});
 	}
 }
 
 async function get_doc(
 	topic: string,
 	format: 'markdown' | 'json',
-	context: boolean,
+	context?: boolean,
 ) {
-	try {
-		if (format === 'json') {
-			const data = await fetch_json(
-				`${API_BASE}/docs/${topic}?format=json`,
-			);
-			let output = data as Record<string, unknown>;
-			output = add_metadata(output);
-			console.log(format_json(output));
-		} else {
-			const text = await fetch_text(`${API_BASE}/docs/${topic}`);
-			if (context) {
-				process.stdout.write(CONTEXT_HEADER);
-			}
-			process.stdout.write(text);
+	if (format === 'json') {
+		const data = await fetch_json(
+			`${API_BASE}/docs/${topic}?format=json`,
+		);
+		let output = data as Record<string, unknown>;
+		output = add_metadata(output);
+		console.log(format_json(output));
+	} else {
+		const text = await fetch_text(`${API_BASE}/docs/${topic}`);
+		if (context) {
+			process.stdout.write(CONTEXT_HEADER);
 		}
-	} catch (error) {
-		console.error(`Error fetching doc '${topic}':`, error);
-		process.exit(1);
+		process.stdout.write(text);
 	}
 }
 
-async function get_docs_batch(topics: string[], context: boolean) {
+async function get_docs_batch(topics: string[], context?: boolean) {
 	if (context) {
 		process.stdout.write(CONTEXT_HEADER);
 	}
@@ -437,249 +430,179 @@ async function get_docs_batch(topics: string[], context: boolean) {
 	}
 }
 
-function show_help() {
-	console.log(`
-Sveltest CLI - Fetch Svelte testing patterns and examples
+// --- Command definitions ---
 
-Usage:
-  sveltest [command] [options]
+const llms_command = defineCommand({
+	meta: {
+		name: 'llms',
+		description: 'Fetch llms.txt documentation for LLM consumption',
+	},
+	args: {
+		full: {
+			type: 'boolean',
+			description: 'Fetch complete documentation (130KB)',
+		},
+		context: {
+			type: 'boolean',
+			description: 'Prepend testing context header',
+		},
+	},
+	async run({ args }) {
+		await fetch_llms(args.full, args.context);
+	},
+});
 
-Commands:
-  llms [options]                  Fetch llms.txt documentation for LLM consumption
-  docs [topic] [options]          Browse documentation topics
-  list                            List all available testing examples
-  get <scenario> [options]        Get a specific testing example
-  search <query> [--filter]       Search documentation and examples
-  help                            Show this help message
-
-LLM Commands:
-  llms                            Fetch llms.txt index (5KB)
-  llms --full                     Fetch complete documentation (130KB)
-  llms --context                  Prepend testing context header
-  docs                            List all documentation topics
-  docs <topic>                    Fetch topic as raw markdown
-  docs <topic> --json             Fetch topic as structured JSON
-  docs <topic> --context          Prepend testing context header
-  docs <t1>,<t2>                  Fetch multiple topics (concatenated)
-
-Example Commands:
-  list                            List all testing scenarios
-  get <scenario>                  Get a scenario in readable format
-  get <scenario> --json           Get as JSON
-  get <scenario> --json --compact Minimal JSON (~50% fewer tokens)
-  get <s1>,<s2> --json            Batch fetch scenarios
-
-Options:
-  --json                          Output in JSON format
-  --compact                       Minimal JSON output (reduces token usage)
-  --filter <field>                Get only specific field
-  --sections <list>               Get specific sections (comma-separated)
-  --context                       Prepend testing context header (llms/docs)
-  --plain                         Force plain output (auto-detected when piped)
-  --full                          Fetch complete documentation (llms command)
-
-Search:
-  search <query>                  Search all documentation
-  search <query> --filter <type>  Filter: all, docs, examples, components
-
-Examples:
-  sveltest llms --full | llm "how do I test runes?"
-  sveltest docs runes-testing --context
-  sveltest docs runes-testing,component-testing
-  sveltest get button-variants --json --compact
-  sveltest search "form validation"
-
-Documentation: https://sveltest.dev
-	`);
-}
-
-async function main() {
-	const args = process.argv.slice(2);
-
-	if (
-		args.length === 0 ||
-		args[0] === 'help' ||
-		args[0] === '--help' ||
-		args[0] === '-h'
-	) {
-		show_help();
-		return;
-	}
-
-	if (args[0] === '--version' || args[0] === '-v') {
-		console.log(get_cli_version());
-		return;
-	}
-
-	const command = args[0];
-	const has_context = args.includes('--context');
-
-	try {
-		switch (command) {
-			case 'llms': {
-				const full = args.includes('--full');
-				await fetch_llms(full, has_context);
-				break;
-			}
-
-			case 'docs': {
-				const topic = args[1];
-
-				// No topic — list all docs
-				if (!topic || topic.startsWith('--')) {
-					await list_docs();
-					break;
-				}
-
-				const format = args.includes('--json') ? 'json' : 'markdown';
-
-				// Batch mode
-				if (topic.includes(',')) {
-					const topics = topic.split(',').map((t) => t.trim());
-					await get_docs_batch(topics, has_context);
-				} else {
-					await get_doc(topic, format, has_context);
-				}
-				break;
-			}
-
-			case 'list':
-				await list_examples();
-				break;
-
-			case 'get': {
-				const scenario = args[1];
-				if (!scenario) {
-					console.error(
-						'Error: Please specify a scenario\nRun "sveltest help" for usage information',
-					);
-					process.exit(1);
-				}
-
-				const use_plain = is_plain();
-				const format =
-					args.includes('--json') || use_plain ? 'json' : 'readable';
-				const compact = args.includes('--compact') || use_plain;
-
-				// Parse --filter flag
-				const filter_index = args.indexOf('--filter');
-				let filter: string | undefined;
-				if (filter_index !== -1) {
-					const next_arg = args[filter_index + 1];
-					if (!next_arg || next_arg.startsWith('--')) {
-						console.error(
-							'Error: --filter requires a value\nRun "sveltest help" for usage information',
-						);
-						process.exit(1);
-					}
-					filter = next_arg;
-				}
-
-				// Parse --sections flag (comma-separated)
-				const sections_index = args.indexOf('--sections');
-				let sections: string[] | undefined;
-				if (sections_index !== -1) {
-					const next_arg = args[sections_index + 1];
-					if (!next_arg || next_arg.startsWith('--')) {
-						console.error(
-							'Error: --sections requires a value\nRun "sveltest help" for usage information',
-						);
-						process.exit(1);
-					}
-					sections = next_arg.split(',');
-				}
-
-				const options = { compact, filter, sections };
-
-				// Handle batch get (comma-separated scenarios)
-				if (scenario.includes(',')) {
-					const scenarios = scenario.split(',').map((s) => s.trim());
-					const results: Record<string, Record<string, unknown>> = {};
-
-					for (const s of scenarios) {
-						try {
-							const data = await fetch_json(
-								`${API_BASE}/examples/${s}`,
-							);
-							let output = data as Record<string, unknown>;
-
-							if (options.compact) {
-								output = compact_json(output);
-							}
-
-							if (options.filter && output[options.filter]) {
-								output = {
-									[options.filter]: output[options.filter],
-								};
-							}
-
-							if (options.sections && options.sections.length > 0) {
-								const filtered: Record<string, unknown> = {};
-								options.sections.forEach((section) => {
-									if (output[section]) {
-										filtered[section] = output[section];
-									}
-								});
-								output = filtered;
-							}
-
-							// Add related patterns
-							output = add_related_patterns(output, s);
-
-							results[s] = output;
-						} catch (error) {
-							console.error(`Error fetching '${s}':`, error);
-						}
-					}
-
-					if (format === 'json') {
-						// Add metadata to batch results
-						const output = add_metadata(results);
-						console.log(format_json(output));
-					} else {
-						console.log('Batch mode requires --json flag');
-						process.exit(1);
-					}
-				} else {
-					await get_example(scenario, format, options);
-				}
-				break;
-			}
-
-			case 'search': {
-				const query = args[1];
-				if (!query) {
-					console.error(
-						'Error: Please specify a search query\nRun "sveltest help" for usage information',
-					);
-					process.exit(1);
-				}
-				const search_filter_index = args.indexOf('--filter');
-				let search_filter: string | undefined;
-				if (search_filter_index !== -1) {
-					const next_arg = args[search_filter_index + 1];
-					if (!next_arg || next_arg.startsWith('--')) {
-						console.error(
-							'Error: --filter requires a value\nRun "sveltest help" for usage information',
-						);
-						process.exit(1);
-					}
-					search_filter = next_arg;
-				}
-				await search_docs(query, search_filter);
-				break;
-			}
-
-			default:
-				console.error(
-					`Unknown command: ${command}\nRun "sveltest help" for usage information`,
-				);
-				process.exit(1);
+const docs_command = defineCommand({
+	meta: {
+		name: 'docs',
+		description: 'Browse documentation topics',
+	},
+	args: {
+		topic: {
+			type: 'positional',
+			description: 'Topic slug (or comma-separated for batch)',
+			required: false,
+		},
+		json: {
+			type: 'boolean',
+			description: 'Output as structured JSON',
+		},
+		context: {
+			type: 'boolean',
+			description: 'Prepend testing context header',
+		},
+		plain: {
+			type: 'boolean',
+			description: 'Force plain output',
+		},
+	},
+	async run({ args }) {
+		if (!args.topic) {
+			await list_docs(is_plain(args.plain));
+			return;
 		}
-	} catch (error) {
-		console.error('An error occurred:', error);
-		process.exit(1);
-	}
-}
+		if (args.topic.includes(',')) {
+			const topics = args.topic.split(',').map((t) => t.trim());
+			await get_docs_batch(topics, args.context);
+		} else {
+			await get_doc(
+				args.topic,
+				args.json ? 'json' : 'markdown',
+				args.context,
+			);
+		}
+	},
+});
 
-main();
+const list_command = defineCommand({
+	meta: {
+		name: 'list',
+		description: 'List all available testing examples',
+	},
+	args: {
+		plain: {
+			type: 'boolean',
+			description: 'Force plain output',
+		},
+	},
+	async run({ args }) {
+		await list_examples(is_plain(args.plain));
+	},
+});
+
+const get_command = defineCommand({
+	meta: {
+		name: 'get',
+		description: 'Get a specific testing example',
+	},
+	args: {
+		scenario: {
+			type: 'positional',
+			description: 'Scenario name (or comma-separated for batch)',
+			required: true,
+		},
+		json: {
+			type: 'boolean',
+			description: 'Output in JSON format',
+		},
+		compact: {
+			type: 'boolean',
+			description: 'Minimal JSON output (~50% fewer tokens)',
+		},
+		filter: {
+			type: 'string',
+			description: 'Get only specific field',
+		},
+		sections: {
+			type: 'string',
+			description: 'Get specific sections (comma-separated)',
+		},
+		plain: {
+			type: 'boolean',
+			description: 'Force plain output',
+		},
+	},
+	async run({ args }) {
+		const plain = is_plain(args.plain);
+		const format = args.json || plain ? 'json' : 'readable';
+		const compact = args.compact || plain;
+		const sections = args.sections
+			? args.sections.split(',')
+			: undefined;
+		const options: GetExampleOptions = {
+			compact,
+			filter: args.filter,
+			sections,
+		};
+
+		if (args.scenario.includes(',')) {
+			const scenarios = args.scenario.split(',').map((s) => s.trim());
+			await batch_get_examples(scenarios, options);
+		} else {
+			await get_example(
+				args.scenario,
+				format as 'json' | 'readable',
+				options,
+			);
+		}
+	},
+});
+
+const search_command = defineCommand({
+	meta: {
+		name: 'search',
+		description: 'Search documentation and examples',
+	},
+	args: {
+		query: {
+			type: 'positional',
+			description: 'Search query',
+			required: true,
+		},
+		filter: {
+			type: 'string',
+			description: 'Filter results: all, docs, examples, components',
+		},
+	},
+	async run({ args }) {
+		await search_docs(args.query, args.filter);
+	},
+});
+
+const main = defineCommand({
+	meta: {
+		name: 'sveltest',
+		version: get_cli_version(),
+		description:
+			'Fetch Svelte testing patterns and examples from sveltest.dev',
+	},
+	subCommands: {
+		llms: llms_command,
+		docs: docs_command,
+		list: list_command,
+		get: get_command,
+		search: search_command,
+	},
+});
+
+runMain(main);
