@@ -14,7 +14,7 @@ Every component test file should start with this setup:
 ```typescript
 import { describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
-import { page } from 'vitest/browser';
+import { page, userEvent } from 'vitest/browser';
 import { createRawSnippet } from 'svelte';
 import { flushSync, untrack } from 'svelte';
 
@@ -228,7 +228,7 @@ describe('Modal Component', () => {
 		await expect.element(modal).toBeInTheDocument();
 
 		// Test focus trap
-		await page.keyboard.press('Tab');
+		await userEvent.keyboard('{Tab}');
 		const close_button = page.getByRole('button', { name: 'Close' });
 		await expect.element(close_button).toBeFocused();
 	});
@@ -237,7 +237,7 @@ describe('Modal Component', () => {
 		const close_handler = vi.fn();
 		render(Modal, { open: true, onclose: close_handler });
 
-		await page.keyboard.press('Escape');
+		await userEvent.keyboard('{Escape}');
 		expect(close_handler).toHaveBeenCalledOnce();
 	});
 
@@ -288,11 +288,11 @@ describe('Dropdown Component', () => {
 			name: 'Choose option',
 		});
 		await trigger.element().focus();
-		await page.keyboard.press('Enter');
+		await userEvent.keyboard('{Enter}');
 
 		// Navigate with arrow keys
-		await page.keyboard.press('ArrowDown');
-		await page.keyboard.press('Enter');
+		await userEvent.keyboard('{ArrowDown}');
+		await userEvent.keyboard('{Enter}');
 
 		await expect.element(trigger).toHaveTextContent('Option 1');
 	});
