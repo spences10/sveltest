@@ -186,7 +186,7 @@ import Page from './+page.svelte';
 
 describe('/+page.svelte', () => {
 	it('should render h1', async () => {
-		render(Page);
+		await render(Page);
 
 		const heading = page.getByRole('heading', { level: 1 });
 		await expect.element(heading).toBeInTheDocument();
@@ -289,7 +289,7 @@ describe('MyButton', () => {
 			render: () => `<span>Click me</span>`,
 		}));
 
-		render(MyButton, { children });
+		await render(MyButton, { children });
 
 		const button = page.getByRole('button', { name: 'Click me' });
 		await expect.element(button).toBeInTheDocument();
@@ -301,7 +301,7 @@ describe('MyButton', () => {
 			render: () => `<span>Click me</span>`,
 		}));
 
-		render(MyButton, { onclick: click_handler, children });
+		await render(MyButton, { onclick: click_handler, children });
 
 		const button = page.getByRole('button', { name: 'Click me' });
 		await button.click();
@@ -314,7 +314,7 @@ describe('MyButton', () => {
 			render: () => `<span>Secondary</span>`,
 		}));
 
-		render(MyButton, { variant: 'secondary', children });
+		await render(MyButton, { variant: 'secondary', children });
 
 		const button = page.getByTestId('my-button');
 		await expect.element(button).toHaveClass('btn-secondary');
@@ -418,7 +418,7 @@ page.getByRole('link', { name: 'Home' }).last();
 
 ```typescript
 it('should handle form input', async () => {
-	render(MyInput, { label: 'Email', type: 'email' });
+	await render(MyInput, { label: 'Email', type: 'email' });
 
 	const input = page.getByLabel('Email');
 	await input.fill('user@example.com');
@@ -431,7 +431,7 @@ it('should handle form input', async () => {
 
 ```typescript
 it('should show error message when invalid', async () => {
-	render(MyInput, {
+	await render(MyInput, {
 		label: 'Email',
 		error: 'Invalid email format',
 	});
@@ -450,7 +450,7 @@ it('should show loading state', async () => {
 		render: () => `<span>Loading...</span>`,
 	}));
 
-	render(MyButton, { loading: true, children });
+	await render(MyButton, { loading: true, children });
 
 	await expect.element(page.getByRole('button')).toBeDisabled();
 	await expect
@@ -533,7 +533,7 @@ it('should be accessible', async () => {
 		render: () => `<span>Submit</span>`,
 	}));
 
-	render(MyComponent, { children });
+	await render(MyComponent, { children });
 
 	const button = page.getByRole('button', { name: 'Submit' });
 	await expect.element(button).toHaveAttribute('aria-label');
@@ -569,7 +569,7 @@ Test form state directly:
 await submit_button.click();
 
 // ✅ Test the state directly
-render(MyForm, { errors: { email: 'Required' } });
+await render(MyForm, { errors: { email: 'Required' } });
 await expect.element(page.getByText('Required')).toBeInTheDocument();
 ```
 

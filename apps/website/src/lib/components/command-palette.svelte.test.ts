@@ -1,15 +1,15 @@
-import { page } from 'vitest/browser';
+import { command_palette_state } from '$lib/state/command-palette.svelte';
 import {
+	afterEach,
+	beforeEach,
 	describe,
 	expect,
 	test,
 	vi,
-	beforeEach,
-	afterEach,
 } from 'vitest';
 import { render } from 'vitest-browser-svelte';
+import { page } from 'vitest/browser';
 import CommandPalette from './command-palette.svelte';
-import { command_palette_state } from '$lib/state/command-palette.svelte';
 
 // Mock search_site - use vi.stubGlobal for CI compatibility
 vi.mock('$lib/search.remote', () => ({
@@ -38,7 +38,7 @@ describe('CommandPalette', () => {
 
 	describe('Initial Rendering', () => {
 		test('should render dialog element when opened', async () => {
-			render(CommandPalette);
+			await render(CommandPalette);
 
 			command_palette_state.open();
 
@@ -47,7 +47,7 @@ describe('CommandPalette', () => {
 		});
 
 		test('should have search input when opened', async () => {
-			render(CommandPalette);
+			await render(CommandPalette);
 
 			command_palette_state.open();
 
@@ -56,7 +56,7 @@ describe('CommandPalette', () => {
 		});
 
 		test('should have proper aria-label when opened', async () => {
-			render(CommandPalette);
+			await render(CommandPalette);
 
 			command_palette_state.open();
 
@@ -69,7 +69,7 @@ describe('CommandPalette', () => {
 
 	describe('Opening and Closing', () => {
 		test('should open when showModal is called on dialog', async () => {
-			render(CommandPalette);
+			await render(CommandPalette);
 
 			// Open the palette through state
 			command_palette_state.open();
@@ -79,7 +79,7 @@ describe('CommandPalette', () => {
 		});
 
 		test('should update is_open state when opened', async () => {
-			render(CommandPalette);
+			await render(CommandPalette);
 
 			expect(command_palette_state.is_open).toBe(false);
 
@@ -89,7 +89,7 @@ describe('CommandPalette', () => {
 		});
 
 		test('should close via state close method', async () => {
-			render(CommandPalette);
+			await render(CommandPalette);
 
 			command_palette_state.open();
 			expect(command_palette_state.is_open).toBe(true);
@@ -100,7 +100,7 @@ describe('CommandPalette', () => {
 		});
 
 		test('should toggle open/close', async () => {
-			render(CommandPalette);
+			await render(CommandPalette);
 
 			command_palette_state.toggle();
 			expect(command_palette_state.is_open).toBe(true);
@@ -110,7 +110,7 @@ describe('CommandPalette', () => {
 		});
 
 		test('should clear query when closed', async () => {
-			render(CommandPalette);
+			await render(CommandPalette);
 
 			command_palette_state.open();
 			command_palette_state.query = 'test query';
@@ -123,7 +123,7 @@ describe('CommandPalette', () => {
 
 	describe('Search Input', () => {
 		test('should update query state directly', async () => {
-			render(CommandPalette);
+			await render(CommandPalette);
 
 			command_palette_state.open();
 			command_palette_state.query = 'button';
@@ -138,7 +138,7 @@ describe('CommandPalette', () => {
 		});
 
 		test('should show placeholder text', async () => {
-			render(CommandPalette);
+			await render(CommandPalette);
 
 			command_palette_state.open();
 
@@ -152,7 +152,7 @@ describe('CommandPalette', () => {
 		});
 
 		test('should show start typing message when empty', async () => {
-			render(CommandPalette);
+			await render(CommandPalette);
 
 			command_palette_state.open();
 
@@ -164,7 +164,7 @@ describe('CommandPalette', () => {
 
 	describe('Keyboard Navigation', () => {
 		test('should have keyboard hint in footer', async () => {
-			render(CommandPalette);
+			await render(CommandPalette);
 
 			command_palette_state.open();
 
@@ -195,7 +195,7 @@ describe('CommandPalette', () => {
 			const { search_site } = await import('$lib/search.remote');
 			vi.mocked(search_site).mockResolvedValue([]);
 
-			render(CommandPalette);
+			await render(CommandPalette);
 
 			command_palette_state.open();
 			command_palette_state.query = 'nonexistent';
@@ -259,7 +259,7 @@ describe('CommandPalette', () => {
 
 	describe('Accessibility', () => {
 		test('should have navigation with aria-label for results', async () => {
-			render(CommandPalette);
+			await render(CommandPalette);
 
 			command_palette_state.open();
 
@@ -271,7 +271,7 @@ describe('CommandPalette', () => {
 		});
 
 		test('should have sr-only label for search input', async () => {
-			render(CommandPalette);
+			await render(CommandPalette);
 
 			command_palette_state.open();
 

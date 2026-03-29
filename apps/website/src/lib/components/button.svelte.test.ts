@@ -24,7 +24,7 @@ import Button from './button.svelte';
  *
  * Svelte 5 Snippet Testing:
  * - Use createRawSnippet() for children props
- * - render() must return HTML elements, not plain text
+ * - await render() must return HTML elements, not plain text
  * - setup() function handles interactivity (optional for simple cases)
  */
 
@@ -37,7 +37,7 @@ describe('Button Component', () => {
 				setup: () => {},
 			}));
 
-			const screen = render(Button, { children });
+			const screen = await render(Button, { children });
 
 			const button = screen.getByRole('button');
 			await expect.element(button).toBeInTheDocument();
@@ -50,7 +50,7 @@ describe('Button Component', () => {
 				setup: () => {},
 			}));
 
-			const screen = render(Button, {
+			const screen = await render(Button, {
 				type: 'submit',
 				children,
 			});
@@ -67,7 +67,7 @@ describe('Button Component', () => {
 				setup: () => {},
 			}));
 
-			const screen = render(Button, {
+			const screen = await render(Button, {
 				variant: 'primary',
 				children,
 			});
@@ -82,7 +82,7 @@ describe('Button Component', () => {
 				setup: () => {},
 			}));
 
-			const screen = render(Button, {
+			const screen = await render(Button, {
 				variant: 'secondary',
 				children,
 			});
@@ -97,7 +97,7 @@ describe('Button Component', () => {
 				setup: () => {},
 			}));
 
-			const screen = render(Button, {
+			const screen = await render(Button, {
 				variant: 'outline',
 				children,
 			});
@@ -112,7 +112,7 @@ describe('Button Component', () => {
 				setup: () => {},
 			}));
 
-			const screen = render(Button, {
+			const screen = await render(Button, {
 				variant: 'ghost',
 				children,
 			});
@@ -129,7 +129,7 @@ describe('Button Component', () => {
 				setup: () => {},
 			}));
 
-			const screen = render(Button, {
+			const screen = await render(Button, {
 				size: 'sm',
 				children,
 			});
@@ -144,7 +144,7 @@ describe('Button Component', () => {
 				setup: () => {},
 			}));
 
-			const screen = render(Button, {
+			const screen = await render(Button, {
 				size: 'lg',
 				children,
 			});
@@ -159,7 +159,7 @@ describe('Button Component', () => {
 				setup: () => {},
 			}));
 
-			const screen = render(Button, {
+			const screen = await render(Button, {
 				size: 'md',
 				children,
 			});
@@ -180,7 +180,7 @@ describe('Button Component', () => {
 				setup: () => {},
 			}));
 
-			const screen = render(Button, {
+			const screen = await render(Button, {
 				onclick: clickHandler,
 				children,
 			});
@@ -197,7 +197,7 @@ describe('Button Component', () => {
 				setup: () => {},
 			}));
 
-			const screen = render(Button, {
+			const screen = await render(Button, {
 				disabled: false,
 				children,
 			});
@@ -214,7 +214,7 @@ describe('Button Component', () => {
 				setup: () => {},
 			}));
 
-			const screen = render(Button, {
+			const screen = await render(Button, {
 				disabled: true,
 				children,
 			});
@@ -234,7 +234,7 @@ describe('Button Component', () => {
 				setup: () => {},
 			}));
 
-			const screen = render(Button, {
+			const screen = await render(Button, {
 				disabled: true,
 				onclick: clickHandler,
 				children,
@@ -257,7 +257,7 @@ describe('Button Component', () => {
 				setup: () => {},
 			}));
 
-			const screen = render(Button, {
+			const screen = await render(Button, {
 				loading: true,
 				children,
 			});
@@ -278,7 +278,7 @@ describe('Button Component', () => {
 				setup: () => {},
 			}));
 
-			const screen = render(Button, {
+			const screen = await render(Button, {
 				loading: false,
 				children,
 			});
@@ -302,7 +302,7 @@ describe('Button Component', () => {
 				setup: () => {},
 			}));
 
-			const screen = render(Button, {
+			const screen = await render(Button, {
 				loading: true,
 				onclick: clickHandler,
 				children,
@@ -329,7 +329,7 @@ describe('Button Component', () => {
 				setup: () => {},
 			}));
 
-			const screen = render(Button, { children });
+			const screen = await render(Button, { children });
 
 			const button = screen.getByRole('button');
 			await expect.element(button).toBeInTheDocument();
@@ -344,7 +344,7 @@ describe('Button Component', () => {
 				setup: () => {},
 			}));
 
-			const screen = render(Button, {
+			const screen = await render(Button, {
 				disabled: true,
 				children,
 			});
@@ -361,7 +361,7 @@ describe('Button Component', () => {
 				setup: () => {},
 			}));
 
-			const screen = render(Button, {
+			const screen = await render(Button, {
 				loading: true,
 				children,
 			});
@@ -381,7 +381,7 @@ describe('Button Component', () => {
 				setup: () => {},
 			}));
 
-			const screen = render(Button, {
+			const screen = await render(Button, {
 				class_names: 'custom-class another-class',
 				children,
 			});
@@ -397,7 +397,7 @@ describe('Button Component', () => {
 				setup: () => {},
 			}));
 
-			const screen = render(Button, {
+			const screen = await render(Button, {
 				class_names: 'custom-class',
 				children,
 			});
@@ -416,7 +416,7 @@ describe('Button Component', () => {
 				setup: () => {},
 			}));
 
-			const screen = render(Button, { children });
+			const screen = await render(Button, { children });
 
 			const button = screen.getByRole('button');
 			await expect.element(button).toBeInTheDocument();
@@ -428,7 +428,7 @@ describe('Button Component', () => {
 				setup: () => {},
 			}));
 
-			const screen = render(Button, { children });
+			const screen = await render(Button, { children });
 
 			const button = screen.getByRole('button');
 			await expect.element(button).toHaveTextContent('Save Document');
@@ -442,7 +442,7 @@ describe('Button Component', () => {
 				setup: () => {},
 			}));
 
-			const screen = render(Button, {
+			const screen = await render(Button, {
 				variant: 'outline',
 				size: 'lg',
 				type: 'submit',

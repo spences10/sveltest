@@ -1,12 +1,12 @@
-import { page, userEvent } from 'vitest/browser';
 import { describe, expect, test, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
+import { page, userEvent } from 'vitest/browser';
 import LoginForm from './login-form.svelte';
 
 describe('LoginForm Component', () => {
 	describe('Initial Rendering', () => {
 		test('should render with default props', async () => {
-			render(LoginForm);
+			await render(LoginForm);
 
 			const form = page.getByTestId('login-form');
 			const email_input = page.getByTestId('input');
@@ -22,7 +22,7 @@ describe('LoginForm Component', () => {
 		});
 
 		test('should render with custom props', async () => {
-			render(LoginForm, {
+			await render(LoginForm, {
 				remember_me_enabled: false,
 				forgot_password_enabled: false,
 				initial_email: 'test@example.com',
@@ -44,7 +44,7 @@ describe('LoginForm Component', () => {
 
 	describe('Form Elements', () => {
 		test('should have proper form structure and accessibility', async () => {
-			render(LoginForm);
+			await render(LoginForm);
 
 			const email_input = page.getByTestId('input');
 			const password_input = page.getByTestId('password-input');
@@ -62,7 +62,7 @@ describe('LoginForm Component', () => {
 		});
 
 		test.skip('should have password toggle functionality', async () => {
-			render(LoginForm);
+			await render(LoginForm);
 
 			const password_input = page.getByTestId('password-input');
 			const toggle_button = page.getByTestId('password-toggle');
@@ -86,7 +86,7 @@ describe('LoginForm Component', () => {
 
 	describe('Form Validation', () => {
 		test.skip('should show validation errors for empty fields', async () => {
-			render(LoginForm);
+			await render(LoginForm);
 
 			const submit_button = page.getByRole('button', {
 				name: 'Sign In',
@@ -99,7 +99,7 @@ describe('LoginForm Component', () => {
 		});
 
 		test.skip('should show validation error for invalid email', async () => {
-			render(LoginForm);
+			await render(LoginForm);
 
 			const email_input = page.getByTestId('input');
 			const submit_button = page.getByRole('button', {
@@ -115,7 +115,7 @@ describe('LoginForm Component', () => {
 		});
 
 		test.skip('should show validation error for short password', async () => {
-			render(LoginForm);
+			await render(LoginForm);
 
 			const password_input = page.getByTestId('password-input');
 			const submit_button = page.getByRole('button', {
@@ -131,7 +131,7 @@ describe('LoginForm Component', () => {
 		});
 
 		test.skip('should clear validation errors when valid input is provided', async () => {
-			render(LoginForm);
+			await render(LoginForm);
 
 			const email_input = page.getByTestId('input');
 			const password_input = page.getByTestId('password-input');
@@ -158,7 +158,7 @@ describe('LoginForm Component', () => {
 
 	describe('User Interactions', () => {
 		test('should handle email input correctly', async () => {
-			render(LoginForm);
+			await render(LoginForm);
 
 			const email_input = page.getByTestId('input');
 			const test_email = 'user@example.com';
@@ -168,7 +168,7 @@ describe('LoginForm Component', () => {
 		});
 
 		test('should handle password input correctly', async () => {
-			render(LoginForm);
+			await render(LoginForm);
 
 			const password_input = page.getByTestId('password-input');
 			const test_password = 'mypassword123';
@@ -178,7 +178,7 @@ describe('LoginForm Component', () => {
 		});
 
 		test('should handle remember me checkbox', async () => {
-			render(LoginForm);
+			await render(LoginForm);
 
 			const remember_checkbox = page.getByTestId(
 				'remember-me-checkbox',
@@ -191,7 +191,7 @@ describe('LoginForm Component', () => {
 
 		test.skip('should handle form submission with valid data', async () => {
 			const mockSubmit = vi.fn();
-			render(LoginForm, {
+			await render(LoginForm, {
 				onsubmit: mockSubmit,
 			});
 
@@ -214,7 +214,7 @@ describe('LoginForm Component', () => {
 
 		test('should handle forgot password click', async () => {
 			const mockForgotPassword = vi.fn();
-			render(LoginForm, {
+			await render(LoginForm, {
 				onforgot_password: mockForgotPassword,
 			});
 
@@ -231,7 +231,7 @@ describe('LoginForm Component', () => {
 
 		test('should handle register click', async () => {
 			const mockRegisterClick = vi.fn();
-			render(LoginForm, {
+			await render(LoginForm, {
 				onregister_click: mockRegisterClick,
 			});
 
@@ -245,7 +245,7 @@ describe('LoginForm Component', () => {
 	describe('Keyboard Navigation', () => {
 		test.skip('should submit form on Enter key in password field', async () => {
 			const mockSubmit = vi.fn();
-			render(LoginForm, {
+			await render(LoginForm, {
 				onsubmit: mockSubmit,
 			});
 
@@ -265,7 +265,7 @@ describe('LoginForm Component', () => {
 		});
 
 		test.skip('should toggle password visibility with Space key on toggle button', async () => {
-			render(LoginForm);
+			await render(LoginForm);
 
 			const password_input = page.getByTestId('password-input');
 			const toggle_button = page.getByTestId('password-toggle');
@@ -280,7 +280,7 @@ describe('LoginForm Component', () => {
 
 	describe('Loading States', () => {
 		test('should show loading state during form submission', async () => {
-			render(LoginForm, {
+			await render(LoginForm, {
 				loading: true,
 			});
 
@@ -293,7 +293,7 @@ describe('LoginForm Component', () => {
 		});
 
 		test('should disable form elements during loading', async () => {
-			render(LoginForm, {
+			await render(LoginForm, {
 				loading: true,
 			});
 
@@ -311,7 +311,7 @@ describe('LoginForm Component', () => {
 
 	describe('Conditional Features', () => {
 		test('should hide remember me when disabled', async () => {
-			render(LoginForm, {
+			await render(LoginForm, {
 				remember_me_enabled: false,
 			});
 
@@ -322,7 +322,7 @@ describe('LoginForm Component', () => {
 		});
 
 		test('should hide forgot password when disabled', async () => {
-			render(LoginForm, {
+			await render(LoginForm, {
 				forgot_password_enabled: false,
 			});
 
@@ -333,7 +333,7 @@ describe('LoginForm Component', () => {
 
 	describe('Accessibility', () => {
 		test('should have proper form labels', async () => {
-			render(LoginForm);
+			await render(LoginForm);
 
 			const email_input = page.getByLabelText('Email Address');
 			const password_input = page.getByTestId('password-input');

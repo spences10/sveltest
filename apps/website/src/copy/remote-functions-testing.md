@@ -252,7 +252,7 @@ const create_mock_form = (
 describe('ItemForm', () => {
 	it('should render form fields', async () => {
 		const mock_form = create_mock_form();
-		render(ItemForm, { form: mock_form as any });
+		await render(ItemForm, { form: mock_form as any });
 
 		const name_input = page.getByLabelText('Name');
 		const quantity_input = page.getByLabelText('Quantity');
@@ -267,7 +267,7 @@ describe('ItemForm', () => {
 
 	it('should show pending state', async () => {
 		const mock_form = create_mock_form({ pending: true });
-		render(ItemForm, { form: mock_form as any });
+		await render(ItemForm, { form: mock_form as any });
 
 		const submit_button = page.getByRole('button', {
 			name: 'Creating...',
@@ -282,7 +282,7 @@ describe('ItemForm', () => {
 				errors: { name: 'Name is required' },
 			},
 		});
-		render(ItemForm, { form: mock_form as any });
+		await render(ItemForm, { form: mock_form as any });
 
 		await expect
 			.element(page.getByText('Name is required'))
@@ -295,7 +295,7 @@ describe('ItemForm', () => {
 			result: { success: true },
 		});
 
-		render(ItemForm, {
+		await render(ItemForm, {
 			form: mock_form as any,
 			onSuccess: on_success,
 		});
@@ -315,7 +315,7 @@ describe('ItemForm', () => {
 			result: { success: false, errors: { name: 'Invalid' } },
 		});
 
-		render(ItemForm, {
+		await render(ItemForm, {
 			form: mock_form as any,
 			onError: on_error,
 		});
@@ -389,7 +389,7 @@ afterAll(() => server.close());
 
 describe('ItemForm Integration', () => {
 	it('should submit and receive success response', async () => {
-		render(ItemForm);
+		await render(ItemForm);
 
 		const name_input = page.getByLabelText('Name');
 		const quantity_input = page.getByLabelText('Quantity');

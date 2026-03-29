@@ -1,6 +1,6 @@
-import { page } from 'vitest/browser';
 import { describe, expect, test } from 'vitest';
 import { render } from 'vitest-browser-svelte';
+import { page } from 'vitest/browser';
 import DocsPage from './+page.svelte';
 
 // Mock data that matches the expected structure from +page.ts
@@ -131,7 +131,7 @@ const mock_data = {
 describe('Documentation Page', () => {
 	describe('Initial Rendering', () => {
 		test('should render the page without errors', async () => {
-			render(DocsPage, { data: mock_data });
+			await render(DocsPage, { data: mock_data });
 
 			await expect
 				.element(
@@ -143,7 +143,7 @@ describe('Documentation Page', () => {
 		});
 
 		test('should render quick start examples', async () => {
-			render(DocsPage, { data: mock_data });
+			await render(DocsPage, { data: mock_data });
 
 			// Check quick start section
 			await expect
@@ -167,7 +167,7 @@ describe('Documentation Page', () => {
 		});
 
 		test('should render testing principles', async () => {
-			render(DocsPage, { data: mock_data });
+			await render(DocsPage, { data: mock_data });
 
 			// Check testing principles section
 			await expect
@@ -202,7 +202,7 @@ describe('Documentation Page', () => {
 
 	describe('Documentation Navigation', () => {
 		test('should render documentation guide section', async () => {
-			render(DocsPage, { data: mock_data });
+			await render(DocsPage, { data: mock_data });
 
 			// Check documentation guide section exists
 			await expect
@@ -213,7 +213,7 @@ describe('Documentation Page', () => {
 		});
 
 		test('should render doc cards for all topics', async () => {
-			render(DocsPage, { data: mock_data });
+			await render(DocsPage, { data: mock_data });
 
 			// Check that doc cards are rendered via test IDs
 			await expect
@@ -228,7 +228,7 @@ describe('Documentation Page', () => {
 		});
 
 		test('should have doc cards with correct links', async () => {
-			render(DocsPage, { data: mock_data });
+			await render(DocsPage, { data: mock_data });
 
 			// Check that links point to correct URLs
 			const getting_started_link = page.getByTestId(
@@ -242,7 +242,7 @@ describe('Documentation Page', () => {
 
 	describe('Interactive Features', () => {
 		test('should have copy code functionality', async () => {
-			render(DocsPage, { data: mock_data });
+			await render(DocsPage, { data: mock_data });
 
 			// Check for copy buttons in quick start examples
 			const copyButtons = page.getByTitle('Copy code');
@@ -250,7 +250,7 @@ describe('Documentation Page', () => {
 		});
 
 		test('should render code examples', async () => {
-			render(DocsPage, { data: mock_data });
+			await render(DocsPage, { data: mock_data });
 
 			// Wait for the page to render first
 			await expect
@@ -274,7 +274,7 @@ describe('Documentation Page', () => {
 
 	describe('Call to Action', () => {
 		test('should render call to action section', async () => {
-			render(DocsPage, { data: mock_data });
+			await render(DocsPage, { data: mock_data });
 
 			await expect
 				.element(
@@ -286,7 +286,7 @@ describe('Documentation Page', () => {
 		});
 
 		test('should have navigation links', async () => {
-			render(DocsPage, { data: mock_data });
+			await render(DocsPage, { data: mock_data });
 
 			// Test that buttons exist and are properly formed (they have role="button")
 			await expect
@@ -302,7 +302,7 @@ describe('Documentation Page', () => {
 
 	describe('SEO and Accessibility', () => {
 		test('should have proper page title and meta tags', async () => {
-			render(DocsPage, { data: mock_data });
+			await render(DocsPage, { data: mock_data });
 
 			// Check that the page renders (meta tags are in head)
 			await expect
@@ -315,7 +315,7 @@ describe('Documentation Page', () => {
 		});
 
 		test('should have accessible doc cards', async () => {
-			render(DocsPage, { data: mock_data });
+			await render(DocsPage, { data: mock_data });
 
 			// Check for doc cards with proper links
 			await expect
@@ -324,7 +324,7 @@ describe('Documentation Page', () => {
 		});
 
 		test('should have semantic HTML structure', async () => {
-			render(DocsPage, { data: mock_data });
+			await render(DocsPage, { data: mock_data });
 
 			// Check for proper heading hierarchy - use first() to avoid multiple matches
 			await expect

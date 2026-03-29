@@ -1,7 +1,7 @@
 import { calculator_state } from '$lib/state/calculator.svelte.ts';
-import { page } from 'vitest/browser';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
+import { page } from 'vitest/browser';
 import Calculator from './calculator.svelte';
 
 // Mock the calculator state to isolate component testing
@@ -26,7 +26,7 @@ describe('Calculator Component', () => {
 
 	describe('Initial Rendering', () => {
 		test('should render with default display value', async () => {
-			render(Calculator);
+			await render(Calculator);
 
 			// Check display shows initial value - use more specific selector to avoid strict mode violation
 			// The display is in a div with specific classes, while the button is a button element
@@ -36,7 +36,7 @@ describe('Calculator Component', () => {
 		});
 
 		test('should render all digit buttons', async () => {
-			render(Calculator);
+			await render(Calculator);
 
 			// Check all digit buttons are present
 			for (let i = 0; i <= 9; i++) {
@@ -47,7 +47,7 @@ describe('Calculator Component', () => {
 		});
 
 		test('should render all operation buttons', async () => {
-			render(Calculator);
+			await render(Calculator);
 
 			// Check operation buttons
 			await expect
@@ -65,7 +65,7 @@ describe('Calculator Component', () => {
 		});
 
 		test('should render control buttons', async () => {
-			render(Calculator);
+			await render(Calculator);
 
 			// Check control buttons
 			await expect
@@ -90,7 +90,7 @@ describe('Calculator Component', () => {
 
 	describe('User Interactions - Digit Input', () => {
 		test('should call input_digit when digit buttons are clicked', async () => {
-			render(Calculator);
+			await render(Calculator);
 
 			// Test clicking digit 7
 			const button7 = page.getByRole('button', { name: '7' });
@@ -100,7 +100,7 @@ describe('Calculator Component', () => {
 		});
 
 		test('should handle all digit button clicks', async () => {
-			render(Calculator);
+			await render(Calculator);
 
 			// Test all digits
 			for (let i = 0; i <= 9; i++) {
@@ -115,7 +115,7 @@ describe('Calculator Component', () => {
 		});
 
 		test('should handle decimal point input', async () => {
-			render(Calculator);
+			await render(Calculator);
 
 			const decimalButton = page.getByRole('button', { name: '.' });
 			await decimalButton.click({ force: true });
@@ -134,7 +134,7 @@ describe('Calculator Component', () => {
 
 	describe('User Interactions - Operations', () => {
 		test('should call input_operation for addition', async () => {
-			render(Calculator);
+			await render(Calculator);
 
 			const addButton = page.getByRole('button', { name: '+' });
 			await addButton.click({ force: true });
@@ -145,7 +145,7 @@ describe('Calculator Component', () => {
 		});
 
 		test('should call input_operation for subtraction', async () => {
-			render(Calculator);
+			await render(Calculator);
 
 			const subtractButton = page.getByRole('button', { name: '−' });
 			await subtractButton.click({ force: true });
@@ -156,7 +156,7 @@ describe('Calculator Component', () => {
 		});
 
 		test('should call input_operation for multiplication', async () => {
-			render(Calculator);
+			await render(Calculator);
 
 			const multiplyButton = page.getByRole('button', { name: '×' });
 			await multiplyButton.click({ force: true });
@@ -167,7 +167,7 @@ describe('Calculator Component', () => {
 		});
 
 		test('should call input_operation for division', async () => {
-			render(Calculator);
+			await render(Calculator);
 
 			const divideButton = page.getByRole('button', { name: '÷' });
 			await divideButton.click({ force: true });
@@ -188,7 +188,7 @@ describe('Calculator Component', () => {
 
 	describe('User Interactions - Control Functions', () => {
 		test('should call clear when C button is clicked', async () => {
-			render(Calculator);
+			await render(Calculator);
 
 			const clearButton = page.getByRole('button', { name: 'C' });
 			await clearButton.click({ force: true });
@@ -197,7 +197,7 @@ describe('Calculator Component', () => {
 		});
 
 		test('should call perform_calculation when equals button is clicked', async () => {
-			render(Calculator);
+			await render(Calculator);
 
 			const equalsButton = page.getByRole('button', { name: '=' });
 			await equalsButton.click({ force: true });
@@ -219,7 +219,7 @@ describe('Calculator Component', () => {
 			// Mock state with different value
 			(calculator_state as any).current_value = '123';
 
-			render(Calculator);
+			await render(Calculator);
 
 			await expect.element(page.getByText('123')).toBeInTheDocument();
 		});
@@ -228,7 +228,7 @@ describe('Calculator Component', () => {
 			// Mock state with long number
 			(calculator_state as any).current_value = '123456789.123';
 
-			render(Calculator);
+			await render(Calculator);
 
 			await expect
 				.element(page.getByText('123456789.123'))
@@ -246,7 +246,7 @@ describe('Calculator Component', () => {
 
 	describe('Button States and Styling', () => {
 		test('should have disabled state for placeholder buttons', async () => {
-			render(Calculator);
+			await render(Calculator);
 
 			// Check disabled buttons (± and %)
 			const plusMinusButton = page.getByRole('button', { name: '±' });
@@ -285,7 +285,7 @@ describe('Calculator Component', () => {
 
 	describe('Edge Cases', () => {
 		test('should handle rapid button clicking without errors', async () => {
-			render(Calculator);
+			await render(Calculator);
 
 			const button5 = page.getByRole('button', { name: '5' });
 
@@ -329,7 +329,7 @@ describe('Calculator Component', () => {
 
 	describe('Integration with Calculator State', () => {
 		test('should properly import and use calculator_state', async () => {
-			render(Calculator);
+			await render(Calculator);
 
 			// Verify the mock is being used
 			expect(calculator_state).toBeDefined();

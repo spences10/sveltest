@@ -1,6 +1,6 @@
-import { page } from 'vitest/browser';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
+import { page } from 'vitest/browser';
 import Nav from './nav.svelte';
 
 // Mock the $app/state module
@@ -80,7 +80,7 @@ describe('Nav Component', () => {
 		});
 
 		test('should render brand logo and title', async () => {
-			render(Nav);
+			await render(Nav);
 
 			await expect
 				.element(page.getByText('Sveltest'))
@@ -88,7 +88,7 @@ describe('Nav Component', () => {
 		});
 
 		test('should render mobile dock navigation links', async () => {
-			render(Nav);
+			await render(Nav);
 
 			// Test mobile dock links (these are always visible)
 			await expect
@@ -100,7 +100,7 @@ describe('Nav Component', () => {
 		});
 
 		test('should render status indicator', async () => {
-			render(Nav);
+			await render(Nav);
 
 			// The status is shown in the dropdown menu, not as "All tests passing" text
 			// Look for the Status section in the dropdown menu
@@ -110,7 +110,7 @@ describe('Nav Component', () => {
 		});
 
 		test('should render navigation menu button', async () => {
-			render(Nav);
+			await render(Nav);
 
 			await expect
 				.element(
@@ -126,7 +126,7 @@ describe('Nav Component', () => {
 
 	describe('Navigation Links', () => {
 		test('should have mobile dock navigation links present', async () => {
-			render(Nav);
+			await render(Nav);
 
 			// Test mobile dock links (these are the visible navigation)
 			await expect
@@ -138,7 +138,7 @@ describe('Nav Component', () => {
 		});
 
 		test('should have brand link present', async () => {
-			render(Nav);
+			await render(Nav);
 
 			await expect
 				.element(page.getByText('Sveltest'))
@@ -146,7 +146,7 @@ describe('Nav Component', () => {
 		});
 
 		test('should have dropdown menu structure', async () => {
-			render(Nav);
+			await render(Nav);
 
 			// Test that dropdown menu exists (even if collapsed)
 			await expect
@@ -165,7 +165,7 @@ describe('Nav Component', () => {
 
 	describe('Active State Logic', () => {
 		test('should render navigation without errors', async () => {
-			render(Nav);
+			await render(Nav);
 
 			// Smoke test for active state rendering
 			// The component should render without throwing errors
@@ -186,7 +186,7 @@ describe('Nav Component', () => {
 
 	describe('User Interactions', () => {
 		test('should handle navigation menu button click', async () => {
-			render(Nav);
+			await render(Nav);
 
 			const navigation_menu_button = page.getByRole('button', {
 				name: /Open navigation menu/i,
@@ -202,7 +202,7 @@ describe('Nav Component', () => {
 			// TODO: Fix viewport issues in CI - element outside viewport error
 			// The navigation menu button click fails in CI due to viewport size differences
 			// Need to configure proper viewport settings or use alternative testing approach
-			render(Nav);
+			await render(Nav);
 
 			const navigation_menu_button = page.getByRole('button', {
 				name: /Open navigation menu/i,
@@ -236,7 +236,7 @@ describe('Nav Component', () => {
 
 	describe('Styling and CSS Classes', () => {
 		test('should apply correct navbar classes', async () => {
-			render(Nav);
+			await render(Nav);
 
 			// Test navbar exists and has basic structure
 			const navbar = page.getByRole('navigation').first();
@@ -273,7 +273,7 @@ describe('Nav Component', () => {
 
 	describe('Accessibility', () => {
 		test('should have proper ARIA labels for interactive elements', async () => {
-			render(Nav);
+			await render(Nav);
 
 			const navigationMenuButton = page.getByRole('button', {
 				name: /Open navigation menu/i,
@@ -285,7 +285,7 @@ describe('Nav Component', () => {
 		});
 
 		test('should have proper navigation landmark', async () => {
-			render(Nav);
+			await render(Nav);
 
 			await expect
 				.element(page.getByRole('navigation').first())

@@ -1,12 +1,12 @@
-import { page, userEvent } from 'vitest/browser';
 import { describe, expect, test } from 'vitest';
 import { render } from 'vitest-browser-svelte';
+import { page, userEvent } from 'vitest/browser';
 import Modal from './modal.svelte';
 
 describe('Modal Component', () => {
 	describe('Initial Rendering', () => {
 		test('should not render when is_open is false', async () => {
-			render(Modal, {
+			await render(Modal, {
 				is_open: false,
 				title: 'Test Modal',
 			});
@@ -16,7 +16,7 @@ describe('Modal Component', () => {
 		});
 
 		test('should render when is_open is true', async () => {
-			render(Modal, {
+			await render(Modal, {
 				is_open: true,
 				title: 'Test Modal',
 			});
@@ -31,7 +31,7 @@ describe('Modal Component', () => {
 		});
 
 		test('should render with custom props', async () => {
-			render(Modal, {
+			await render(Modal, {
 				is_open: true,
 				title: 'Custom Modal',
 				size: 'lg',
@@ -63,7 +63,7 @@ describe('Modal Component', () => {
 
 		sizes.forEach(({ size, expected_class }) => {
 			test(`should apply correct CSS classes for ${size} size`, async () => {
-				render(Modal, {
+				await render(Modal, {
 					is_open: true,
 					size,
 					title: 'Size Test',
@@ -77,7 +77,7 @@ describe('Modal Component', () => {
 
 	describe('Close Button', () => {
 		test('should show close button when show_close_button is true', async () => {
-			render(Modal, {
+			await render(Modal, {
 				is_open: true,
 				title: 'Modal with Close',
 				show_close_button: true,
@@ -91,7 +91,7 @@ describe('Modal Component', () => {
 		});
 
 		test('should hide close button when show_close_button is false', async () => {
-			render(Modal, {
+			await render(Modal, {
 				is_open: true,
 				title: 'Modal without Close',
 				show_close_button: false,
@@ -104,7 +104,7 @@ describe('Modal Component', () => {
 
 	describe('Content Rendering', () => {
 		test('should render title when provided', async () => {
-			render(Modal, {
+			await render(Modal, {
 				is_open: true,
 				title: 'Modal Title',
 			});
@@ -115,7 +115,7 @@ describe('Modal Component', () => {
 		});
 
 		test('should not render title section when title is empty', async () => {
-			render(Modal, {
+			await render(Modal, {
 				is_open: true,
 				title: '',
 			});
@@ -125,7 +125,7 @@ describe('Modal Component', () => {
 		});
 
 		test('should render content when content_text is provided', async () => {
-			render(Modal, {
+			await render(Modal, {
 				is_open: true,
 				content_text: 'This is the modal content',
 			});
@@ -138,7 +138,7 @@ describe('Modal Component', () => {
 		});
 
 		test('should not render content section when content_text is empty', async () => {
-			render(Modal, {
+			await render(Modal, {
 				is_open: true,
 				content_text: '',
 			});
@@ -152,7 +152,7 @@ describe('Modal Component', () => {
 		test('should handle close button click', async () => {
 			let is_closed = false;
 
-			render(Modal, {
+			await render(Modal, {
 				is_open: true,
 				title: 'Test Modal',
 				show_close_button: true,
@@ -170,7 +170,7 @@ describe('Modal Component', () => {
 		test('should handle backdrop click when close_on_backdrop_click is true', async () => {
 			let is_closed = false;
 
-			render(Modal, {
+			await render(Modal, {
 				is_open: true,
 				title: 'Test Modal',
 				close_on_backdrop_click: true,
@@ -190,7 +190,7 @@ describe('Modal Component', () => {
 		test('should handle escape key when close_on_escape is true', async () => {
 			let is_closed = false;
 
-			render(Modal, {
+			await render(Modal, {
 				is_open: true,
 				title: 'Test Modal',
 				close_on_escape: true,
@@ -208,7 +208,7 @@ describe('Modal Component', () => {
 
 	describe('Accessibility', () => {
 		test('should have proper ARIA attributes', async () => {
-			render(Modal, {
+			await render(Modal, {
 				is_open: true,
 				title: 'Accessible Modal',
 			});
@@ -219,7 +219,7 @@ describe('Modal Component', () => {
 		});
 
 		test('should not have aria-labelledby when no title', async () => {
-			render(Modal, {
+			await render(Modal, {
 				is_open: true,
 			});
 
@@ -230,7 +230,7 @@ describe('Modal Component', () => {
 		});
 
 		test('should be focusable', async () => {
-			render(Modal, {
+			await render(Modal, {
 				is_open: true,
 				title: 'Focusable Modal',
 			});
@@ -244,7 +244,7 @@ describe('Modal Component', () => {
 
 	describe('Modal Structure', () => {
 		test('should render all structural elements', async () => {
-			render(Modal, {
+			await render(Modal, {
 				is_open: true,
 				title: 'Complete Modal',
 				content_text: 'Modal content',
@@ -268,7 +268,7 @@ describe('Modal Component', () => {
 
 	describe('Edge Cases', () => {
 		test('should handle all props combination', async () => {
-			render(Modal, {
+			await render(Modal, {
 				is_open: true,
 				title: 'Complex Modal',
 				size: 'xl',
@@ -292,7 +292,7 @@ describe('Modal Component', () => {
 		});
 
 		test('should handle minimal props', async () => {
-			render(Modal, {
+			await render(Modal, {
 				is_open: true,
 			});
 

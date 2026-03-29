@@ -1,12 +1,12 @@
-import { page } from 'vitest/browser';
 import { describe, expect, test } from 'vitest';
 import { render } from 'vitest-browser-svelte';
+import { page } from 'vitest/browser';
 import Arrow from './arrow.svelte';
 
 describe('Arrow', () => {
 	describe('Initial Rendering', () => {
 		test('should render with default props', async () => {
-			render(Arrow);
+			await render(Arrow);
 
 			const svg = page.getByRole('img');
 			await expect.element(svg).toBeInTheDocument();
@@ -18,7 +18,7 @@ describe('Arrow', () => {
 		});
 
 		test('should render with custom dimensions', async () => {
-			render(Arrow, { height: '32px', width: '32px' });
+			await render(Arrow, { height: '32px', width: '32px' });
 
 			const svg = page.getByRole('img');
 			await expect.element(svg).toHaveAttribute('height', '32px');
@@ -26,7 +26,7 @@ describe('Arrow', () => {
 		});
 
 		test('should render with custom class names', async () => {
-			render(Arrow, { class_names: 'custom-arrow-class' });
+			await render(Arrow, { class_names: 'custom-arrow-class' });
 
 			const svg = page.getByRole('img');
 			await expect.element(svg).toHaveClass('custom-arrow-class');
@@ -39,7 +39,7 @@ describe('Arrow', () => {
 
 	describe('Direction Prop', () => {
 		test('should default to right direction (0deg rotation)', async () => {
-			render(Arrow);
+			await render(Arrow);
 
 			const svg = page.getByRole('img');
 			await expect
@@ -48,7 +48,7 @@ describe('Arrow', () => {
 		});
 
 		test('should rotate for up direction (270deg)', async () => {
-			render(Arrow, { direction: 'up' });
+			await render(Arrow, { direction: 'up' });
 
 			const svg = page.getByRole('img');
 			await expect
@@ -57,7 +57,7 @@ describe('Arrow', () => {
 		});
 
 		test('should rotate for down direction (90deg)', async () => {
-			render(Arrow, { direction: 'down' });
+			await render(Arrow, { direction: 'down' });
 
 			const svg = page.getByRole('img');
 			await expect
@@ -66,7 +66,7 @@ describe('Arrow', () => {
 		});
 
 		test('should rotate for left direction (180deg)', async () => {
-			render(Arrow, { direction: 'left' });
+			await render(Arrow, { direction: 'left' });
 
 			const svg = page.getByRole('img');
 			await expect
@@ -75,7 +75,7 @@ describe('Arrow', () => {
 		});
 
 		test('should rotate for right direction (0deg)', async () => {
-			render(Arrow, { direction: 'right' });
+			await render(Arrow, { direction: 'right' });
 
 			const svg = page.getByRole('img');
 			await expect
@@ -90,7 +90,7 @@ describe('Arrow', () => {
 
 	describe('SVG Structure and Styling', () => {
 		test('should have correct SVG semantic structure', async () => {
-			render(Arrow);
+			await render(Arrow);
 
 			const svg = page.getByRole('img');
 			await expect
@@ -106,7 +106,7 @@ describe('Arrow', () => {
 		});
 
 		test('should render with proper visual styling for users', async () => {
-			render(Arrow);
+			await render(Arrow);
 
 			const svg = page.getByRole('img');
 			await expect.element(svg).toBeInTheDocument();
@@ -131,7 +131,7 @@ describe('Arrow', () => {
 		});
 
 		test('should have smooth transition for rotation animation', async () => {
-			render(Arrow);
+			await render(Arrow);
 
 			const svg = page.getByRole('img');
 			await expect
@@ -146,7 +146,7 @@ describe('Arrow', () => {
 
 	describe('Accessibility', () => {
 		test('should be accessible as decorative icon by default', async () => {
-			render(Arrow);
+			await render(Arrow);
 
 			const svg = page.getByRole('img');
 			await expect.element(svg).toBeInTheDocument();
@@ -164,7 +164,7 @@ describe('Arrow', () => {
 
 	describe('Edge Cases', () => {
 		test('should handle undefined direction gracefully', async () => {
-			render(Arrow, { direction: undefined });
+			await render(Arrow, { direction: undefined });
 
 			const svg = page.getByRole('img');
 			await expect.element(svg).toBeInTheDocument();
@@ -174,7 +174,7 @@ describe('Arrow', () => {
 		});
 
 		test('should handle empty class names', async () => {
-			render(Arrow, { class_names: '' });
+			await render(Arrow, { class_names: '' });
 
 			const svg = page.getByRole('img');
 			await expect.element(svg).toBeInTheDocument();

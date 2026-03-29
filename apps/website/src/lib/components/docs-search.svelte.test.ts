@@ -1,6 +1,6 @@
-import { page } from 'vitest/browser';
 import { describe, expect, test, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
+import { page } from 'vitest/browser';
 import DocsSearch from './docs-search.svelte';
 
 // Mock fetch for API calls - use vi.stubGlobal for better CI compatibility
@@ -10,7 +10,7 @@ vi.stubGlobal('fetch', mock_fetch);
 describe('DocsSearch', () => {
 	describe('Initial Rendering', () => {
 		test('should render search input', async () => {
-			render(DocsSearch);
+			await render(DocsSearch);
 
 			await expect
 				.element(page.getByLabelText('Search Documentation'))
@@ -22,7 +22,7 @@ describe('DocsSearch', () => {
 		});
 
 		test('should show search placeholder', async () => {
-			render(DocsSearch);
+			await render(DocsSearch);
 
 			const input = page.getByTestId('docs-search-input');
 			await expect
@@ -64,7 +64,7 @@ describe('DocsSearch', () => {
 
 	describe('Keyboard Shortcuts', () => {
 		test('should show keyboard shortcut hint', async () => {
-			render(DocsSearch);
+			await render(DocsSearch);
 
 			await expect
 				.element(page.getByText('Ctrl'))
@@ -85,7 +85,7 @@ describe('DocsSearch', () => {
 
 	describe('Accessibility', () => {
 		test('should have proper labels and ARIA attributes', async () => {
-			render(DocsSearch);
+			await render(DocsSearch);
 
 			const input = page.getByTestId('docs-search-input');
 			await expect
