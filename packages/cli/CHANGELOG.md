@@ -1,5 +1,14 @@
 # sveltest
 
+## 0.0.8
+
+### Patch Changes
+
+- 4add239: Refactor CLI from hand-rolled arg parsing to citty with
+  typed subcommands and auto-generated help
+- 353b6fa: Add llms/docs CLI commands, --plain/--context flags, and
+  /api/docs endpoints for LLM consumption
+
 ## 0.0.7
 
 ### Patch Changes
