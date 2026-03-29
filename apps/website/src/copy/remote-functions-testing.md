@@ -31,7 +31,7 @@ framework-specific code thin.
 ### The Helper File Pattern
 
 ```typescript
-// src/lib/items/items.helpers.ts
+// src/lib/items/items.remote.helper.ts
 // Pure functions - no SvelteKit dependencies
 
 export type ItemValidation = {
@@ -77,13 +77,13 @@ export const calculate_total = (
 ```
 
 ```typescript
-// src/lib/items/items.helpers.test.ts
+// src/lib/items/items.remote.helper.test.ts
 import { describe, expect, it } from 'vitest';
 import {
 	calculate_total,
 	format_item_display,
 	validate_item,
-} from './items.helpers';
+} from './items.remote.helper';
 
 describe('validate_item', () => {
 	it('should validate valid item', () => {
@@ -131,7 +131,7 @@ describe('calculate_total', () => {
 ```typescript
 // src/lib/items/items.remote.ts
 import { form } from '@sveltejs/kit';
-import { validate_item } from './items.helpers';
+import { validate_item } from './items.remote.helper';
 import { db } from '$lib/db';
 
 export const createItem = form(async ({ request }) => {
@@ -417,7 +417,7 @@ helper file pattern.
 ### Real-World Example: Analytics Metadata
 
 ```typescript
-// src/lib/analytics/analytics.helpers.ts
+// src/lib/analytics/analytics.remote.helper.ts
 import type { RequestEvent } from '@sveltejs/kit';
 
 export type SessionMetadata = {
@@ -456,9 +456,9 @@ export const extract_metadata_from_event = (
 ```
 
 ```typescript
-// src/lib/analytics/analytics.helpers.test.ts
+// src/lib/analytics/analytics.remote.helper.test.ts
 import { describe, expect, it } from 'vitest';
-import { extract_session_metadata } from './analytics.helpers';
+import { extract_session_metadata } from './analytics.remote.helper';
 
 describe('extract_session_metadata', () => {
 	it('should parse Chrome user agent', () => {
@@ -501,7 +501,7 @@ describe('extract_session_metadata', () => {
 
 ### Recommended Approach
 
-1. **Extract pure logic** into `.helpers.ts` files - test these
+1. **Extract pure logic** into `.remote.helper.ts` files - test these
    thoroughly
 2. **Inject remote functions** into components - test UI behavior with
    mocks
@@ -562,15 +562,17 @@ for critical flows even if most testing is unit/component level.
 ### File Organization
 
 ```
-src/lib/items/
-├── items.remote.ts        # Remote function (thin)
-├── items.helpers.ts       # Pure business logic
-├── items.helpers.test.ts  # Unit tests for helpers
+src/lib/
+├── search.remote.ts              # Remote function (thin wrapper)
+├── search.remote.helper.ts       # Pure business logic
+├── search.remote.helper.test.ts  # Tests for the helper
 └── components/
-    ├── item-form.svelte
-    ├── item-form.svelte.test.ts    # Component tests with DI mocks
-    └── item-form.integration.test.ts # Network-layer mock tests
+    ├── command-palette.svelte
+    └── command-palette.svelte.test.ts  # Component tests with vi.mock
 ```
+
+The naming convention `<name>.remote.helper.ts` ties the helper
+directly to its remote function, making the relationship unambiguous.
 
 ### Mock Shape for Remote Functions
 
