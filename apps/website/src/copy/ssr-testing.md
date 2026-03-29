@@ -91,6 +91,48 @@ describe('Component SSR', () => {
 });
 ```
 
+## Passing Children with createRawSnippet
+
+Svelte 5 components use snippets for children. In SSR tests, use
+`createRawSnippet()` to pass children content:
+
+```typescript
+import { render } from 'svelte/server';
+import { createRawSnippet } from 'svelte';
+import Button from './button.svelte';
+
+describe('Button SSR', () => {
+	it('should render with children content', () => {
+		const { body } = render(Button, {
+			props: {
+				children: createRawSnippet(() => ({
+					render: () => 'Click me',
+				})),
+			},
+		});
+
+		expect(body).toContain('Click me');
+		expect(body).toContain('<button');
+	});
+
+	it('should render with HTML children', () => {
+		const { body } = render(Button, {
+			props: {
+				children: createRawSnippet(() => ({
+					render: () => '<span class="icon">★</span> Star',
+				})),
+			},
+		});
+
+		expect(body).toContain('★');
+		expect(body).toContain('Star');
+	});
+});
+```
+
+This pattern is essential for any component that accepts children via
+`{@render children?.()}` in its template.
+
 ## Layout SSR Pattern
 
 ```typescript

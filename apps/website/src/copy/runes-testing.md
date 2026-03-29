@@ -359,6 +359,69 @@ describe('Form Validation Component', () => {
 });
 ```
 
+## Testing $props
+
+Component props declared with `$props()` are tested by passing them
+through `render()`. You don't access `$props` directly in tests —
+verify the component renders correctly with the given props:
+
+```typescript
+describe('Button Props', () => {
+	it('should render with variant prop', async () => {
+		render(Button, {
+			props: {
+				variant: 'primary',
+				disabled: true,
+				children: createRawSnippet(() => ({
+					render: () => 'Submit',
+				})),
+			},
+		});
+
+		const button = page.getByRole('button', { name: 'Submit' });
+		await expect.element(button).toHaveClass('btn-primary');
+		await expect.element(button).toBeDisabled();
+	});
+
+	it('should handle default prop values', async () => {
+		render(Button); // No props — uses defaults
+
+		const button = page.getByRole('button');
+		await expect.element(button).not.toBeDisabled();
+	});
+});
+```
+
+For `$bindable` props, test two-way binding through UI interactions
+rather than asserting on prop values directly.
+
+## Testing $effect
+
+Effects are side effects that run when their dependencies change. You
+cannot observe `$effect` directly in tests — instead, test the
+observable outcomes:
+
+```typescript
+describe('Auto-save Effect', () => {
+	it('should persist state changes to localStorage', async () => {
+		render(SettingsForm);
+
+		const theme_select = page.getByRole('combobox', {
+			name: 'Theme',
+		});
+		await theme_select.selectOption('dark');
+
+		// Test the effect's observable outcome
+		expect(localStorage.getItem('theme')).toBe('dark');
+	});
+});
+```
+
+If the effect updates DOM or triggers visible changes, assert on
+those. If it calls an external API, mock the API and verify the call.
+The pattern is always: trigger the dependency change, then assert on
+the side effect's result.
+
 ## Quick Reference
 
 ### Essential Rules
