@@ -81,7 +81,7 @@ describe('UserProfile', () => {
 	it('should display user information', async () => {
 		const mock_api = create_mock_api();
 
-		render(UserProfileTestWrapper, {
+		await render(UserProfileTestWrapper, {
 			api_client: mock_api,
 			user_id: '1',
 		});
@@ -98,7 +98,7 @@ describe('UserProfile', () => {
 			),
 		});
 
-		render(UserProfileTestWrapper, {
+		await render(UserProfileTestWrapper, {
 			api_client: mock_api,
 		});
 
@@ -112,7 +112,7 @@ describe('UserProfile', () => {
 			get: vi.fn().mockRejectedValue(new Error('Network error')),
 		});
 
-		render(UserProfileTestWrapper, {
+		await render(UserProfileTestWrapper, {
 			api_client: mock_api,
 		});
 
@@ -178,7 +178,7 @@ describe('Dashboard Page', () => {
 			is_authenticated: true,
 		};
 
-		render(DashboardTestWrapper, {
+		await render(DashboardTestWrapper, {
 			api_client: mock_api,
 			auth_state: mock_auth,
 		});

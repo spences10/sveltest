@@ -14,7 +14,7 @@ in tests.
 ```typescript
 describe('Reactive State Component', () => {
 	it('should handle $state updates', async () => {
-		render(CounterComponent);
+		await render(CounterComponent);
 
 		const count_display = page.getByTestId('count');
 		const increment_button = page.getByRole('button', {
@@ -284,7 +284,7 @@ Component internals are encapsulated in Svelte 5. Test through UI:
 ```typescript
 describe('LoginForm Derived State', () => {
 	it('should validate email and show errors through UI', async () => {
-		render(LoginForm);
+		await render(LoginForm);
 
 		// ✅ Test through UI interactions
 		const email_input = page.getByLabelText('Email');
@@ -329,7 +329,7 @@ describe('Form Validation Component', () => {
 	});
 
 	it('should handle field-level validation', async () => {
-		render(FormComponent);
+		await render(FormComponent);
 
 		const email_input = page.getByLabelText('Email');
 
@@ -368,7 +368,7 @@ verify the component renders correctly with the given props:
 ```typescript
 describe('Button Props', () => {
 	it('should render with variant prop', async () => {
-		render(Button, {
+		await render(Button, {
 			props: {
 				variant: 'primary',
 				disabled: true,
@@ -384,7 +384,7 @@ describe('Button Props', () => {
 	});
 
 	it('should handle default prop values', async () => {
-		render(Button); // No props — uses defaults
+		await render(Button); // No props — uses defaults
 
 		const button = page.getByRole('button');
 		await expect.element(button).not.toBeDisabled();
@@ -404,7 +404,7 @@ observable outcomes:
 ```typescript
 describe('Auto-save Effect', () => {
 	it('should persist state changes to localStorage', async () => {
-		render(SettingsForm);
+		await render(SettingsForm);
 
 		const theme_select = page.getByRole('combobox', {
 			name: 'Theme',
@@ -421,6 +421,37 @@ If the effect updates DOM or triggers visible changes, assert on
 those. If it calls an external API, mock the API and verify the call.
 The pattern is always: trigger the dependency change, then assert on
 the side effect's result.
+
+### Testing $effect in Unit Tests with $effect.root
+
+When testing effects outside of components (in `.svelte.test.ts`
+files), wrap them in `$effect.root()` to manage cleanup:
+
+```typescript
+it('should run effect when dependency changes', () => {
+	let log: string[] = [];
+
+	const cleanup = $effect.root(() => {
+		let count = $state(0);
+
+		$effect(() => {
+			log.push(`count: ${count}`);
+		});
+
+		flushSync();
+		expect(log).toEqual(['count: 0']);
+
+		count = 5;
+		flushSync();
+		expect(log).toEqual(['count: 0', 'count: 5']);
+	});
+
+	cleanup(); // Dispose all effects
+});
+```
+
+Without `$effect.root()`, effects created in tests will leak and may
+cause unexpected behavior in subsequent tests.
 
 ## Quick Reference
 

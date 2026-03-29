@@ -1,12 +1,12 @@
-import { page } from 'vitest/browser';
 import { describe, expect, test } from 'vitest';
 import { render } from 'vitest-browser-svelte';
+import { page } from 'vitest/browser';
 import Card from './card.svelte';
 
 describe('Card Component', () => {
 	describe('Initial Rendering', () => {
 		test('should render with default props', async () => {
-			render(Card, {});
+			await render(Card, {});
 
 			const card = page.getByTestId('card');
 			await expect.element(card).toBeInTheDocument();
@@ -16,7 +16,7 @@ describe('Card Component', () => {
 		});
 
 		test('should render with custom props', async () => {
-			render(Card, {
+			await render(Card, {
 				variant: 'elevated',
 				padding: 'lg',
 				rounded: 'xl',
@@ -59,7 +59,7 @@ describe('Card Component', () => {
 
 		variants.forEach(({ variant, expected_class }) => {
 			test(`should apply correct CSS classes for ${variant} variant`, async () => {
-				render(Card, {
+				await render(Card, {
 					variant,
 				});
 
@@ -79,7 +79,7 @@ describe('Card Component', () => {
 
 		paddings.forEach(({ padding, expected_class }) => {
 			test(`should apply correct padding for ${padding} size`, async () => {
-				render(Card, {
+				await render(Card, {
 					padding,
 				});
 
@@ -107,7 +107,7 @@ describe('Card Component', () => {
 
 		rounded_options.forEach(({ rounded, expected_class }) => {
 			test(`should apply correct rounded corners for ${rounded} option`, async () => {
-				render(Card, {
+				await render(Card, {
 					rounded,
 				});
 
@@ -127,7 +127,7 @@ describe('Card Component', () => {
 
 	describe('Content Rendering', () => {
 		test('should render title when provided', async () => {
-			render(Card, {
+			await render(Card, {
 				title: 'Test Card Title',
 			});
 
@@ -139,14 +139,14 @@ describe('Card Component', () => {
 		});
 
 		test('should not render title when not provided', async () => {
-			render(Card, {});
+			await render(Card, {});
 
 			const title = page.getByTestId('card-title');
 			await expect.element(title).not.toBeInTheDocument();
 		});
 
 		test('should render subtitle when provided', async () => {
-			render(Card, {
+			await render(Card, {
 				subtitle: 'Test Subtitle',
 			});
 
@@ -158,7 +158,7 @@ describe('Card Component', () => {
 		});
 
 		test('should render content when provided', async () => {
-			render(Card, {
+			await render(Card, {
 				content_text: 'This is card content',
 			});
 
@@ -170,7 +170,7 @@ describe('Card Component', () => {
 		});
 
 		test('should render footer when provided', async () => {
-			render(Card, {
+			await render(Card, {
 				footer_text: 'Card footer text',
 			});
 
@@ -182,7 +182,7 @@ describe('Card Component', () => {
 		});
 
 		test('should render image when provided', async () => {
-			render(Card, {
+			await render(Card, {
 				image_src: 'https://example.com/image.jpg',
 				image_alt: 'Test image',
 			});
@@ -200,7 +200,7 @@ describe('Card Component', () => {
 
 	describe('Clickable Behavior', () => {
 		test('should be clickable when clickable prop is true', async () => {
-			render(Card, {
+			await render(Card, {
 				title: 'Clickable Card',
 				clickable: true,
 			});
@@ -211,7 +211,7 @@ describe('Card Component', () => {
 		});
 
 		test('should not be clickable when clickable prop is false', async () => {
-			render(Card, {
+			await render(Card, {
 				title: 'Non-clickable Card',
 				clickable: false,
 			});
@@ -223,7 +223,7 @@ describe('Card Component', () => {
 
 		test('should handle click events when clickable', async () => {
 			let clicked = false;
-			render(Card, {
+			await render(Card, {
 				title: 'Interactive Card',
 				clickable: true,
 				onclick: () => {
@@ -238,7 +238,7 @@ describe('Card Component', () => {
 		});
 
 		test('should handle focus and blur events when clickable', async () => {
-			render(Card, {
+			await render(Card, {
 				title: 'Focusable Card',
 				clickable: true,
 			});
@@ -252,7 +252,7 @@ describe('Card Component', () => {
 
 	describe('Disabled State', () => {
 		test('should apply disabled styles when disabled', async () => {
-			render(Card, {
+			await render(Card, {
 				disabled: true,
 				clickable: true,
 				title: 'Disabled Card',
@@ -268,7 +268,7 @@ describe('Card Component', () => {
 		});
 
 		test('should not apply disabled styles when not disabled', async () => {
-			render(Card, {
+			await render(Card, {
 				disabled: false,
 				clickable: true,
 				title: 'Enabled Card',
@@ -285,7 +285,7 @@ describe('Card Component', () => {
 
 	describe('Accessibility', () => {
 		test('should have proper button role when clickable', async () => {
-			render(Card, {
+			await render(Card, {
 				clickable: true,
 				title: 'Accessible Card',
 			});
@@ -295,7 +295,7 @@ describe('Card Component', () => {
 		});
 
 		test('should be keyboard accessible when clickable', async () => {
-			render(Card, {
+			await render(Card, {
 				clickable: true,
 				title: 'Keyboard Accessible',
 			});
@@ -305,7 +305,7 @@ describe('Card Component', () => {
 		});
 
 		test('should not be keyboard accessible when disabled', async () => {
-			render(Card, {
+			await render(Card, {
 				clickable: true,
 				disabled: true,
 				title: 'Disabled Card',
@@ -318,7 +318,7 @@ describe('Card Component', () => {
 
 	describe('Edge Cases', () => {
 		test('should handle all content sections together', async () => {
-			render(Card, {
+			await render(Card, {
 				title: 'Complete Card',
 				subtitle: 'With all sections',
 				content_text: 'Main content area',
@@ -341,7 +341,7 @@ describe('Card Component', () => {
 		});
 
 		test('should handle all prop combinations', async () => {
-			render(Card, {
+			await render(Card, {
 				variant: 'outlined',
 				padding: 'sm',
 				rounded: 'lg',
@@ -362,7 +362,7 @@ describe('Card Component', () => {
 		});
 
 		test('should handle minimal props', async () => {
-			render(Card, {});
+			await render(Card, {});
 
 			const card = page.getByTestId('card');
 			await expect.element(card).toBeInTheDocument();

@@ -7,7 +7,7 @@ import Input from './input.svelte';
 describe('Input Component', () => {
 	describe('Initial Rendering', () => {
 		test('should render with default props', async () => {
-			render(Input, {
+			await render(Input, {
 				label: 'Test Input',
 			});
 
@@ -21,7 +21,7 @@ describe('Input Component', () => {
 		});
 
 		test('should render with custom props', async () => {
-			render(Input, {
+			await render(Input, {
 				type: 'email',
 				placeholder: 'Enter email',
 				label: 'Email Address',
@@ -67,7 +67,7 @@ describe('Input Component', () => {
 
 		sizes.forEach(({ size, expected_class }) => {
 			test(`should apply correct CSS classes for ${size} size`, async () => {
-				render(Input, {
+				await render(Input, {
 					size,
 					label: 'Test',
 				});
@@ -92,7 +92,7 @@ describe('Input Component', () => {
 
 		variants.forEach(({ variant, expected_class }) => {
 			test(`should apply correct CSS classes for ${variant} variant`, async () => {
-				render(Input, {
+				await render(Input, {
 					variant,
 					label: 'Test',
 				});
@@ -106,7 +106,7 @@ describe('Input Component', () => {
 		});
 
 		test('should override variant with error when error prop is present', async () => {
-			render(Input, {
+			await render(Input, {
 				variant: 'success',
 				error: 'Test error',
 				label: 'Test',
@@ -137,7 +137,7 @@ describe('Input Component', () => {
 
 		input_types.forEach((type) => {
 			test(`should render with ${type} input type`, async () => {
-				render(Input, {
+				await render(Input, {
 					type,
 					label: `${type} input`,
 				});
@@ -150,7 +150,7 @@ describe('Input Component', () => {
 
 	describe('Validation and Error States', () => {
 		test('should show error message when error prop is provided', async () => {
-			render(Input, {
+			await render(Input, {
 				label: 'Test Input',
 				error: 'This field is required',
 			});
@@ -169,7 +169,7 @@ describe('Input Component', () => {
 		});
 
 		test('should not show error message when no error', async () => {
-			render(Input, {
+			await render(Input, {
 				label: 'Test Input',
 			});
 
@@ -184,7 +184,7 @@ describe('Input Component', () => {
 		});
 
 		test('should show required indicator when required', async () => {
-			render(Input, {
+			await render(Input, {
 				label: 'Required Field',
 				required: true,
 			});
@@ -200,7 +200,7 @@ describe('Input Component', () => {
 		});
 
 		test('should have proper error announcement for screen readers', async () => {
-			render(Input, {
+			await render(Input, {
 				label: 'Test Input',
 				error: 'Invalid input',
 			});
@@ -217,7 +217,7 @@ describe('Input Component', () => {
 
 	describe('Disabled and Readonly States', () => {
 		test('should apply disabled styles when disabled', async () => {
-			render(Input, {
+			await render(Input, {
 				label: 'Disabled Input',
 				disabled: true,
 			});
@@ -228,7 +228,7 @@ describe('Input Component', () => {
 		});
 
 		test('should apply readonly styles when readonly', async () => {
-			render(Input, {
+			await render(Input, {
 				label: 'Readonly Input',
 				readonly: true,
 			});
@@ -239,7 +239,7 @@ describe('Input Component', () => {
 		});
 
 		test('should not accept input when disabled', async () => {
-			render(Input, {
+			await render(Input, {
 				label: 'Disabled Input',
 				disabled: true,
 			});
@@ -251,7 +251,7 @@ describe('Input Component', () => {
 
 	describe('User Interactions', () => {
 		test('should handle input events', async () => {
-			render(Input, {
+			await render(Input, {
 				label: 'Interactive Input',
 			});
 
@@ -262,7 +262,7 @@ describe('Input Component', () => {
 		});
 
 		test('should handle focus and blur events', async () => {
-			render(Input, {
+			await render(Input, {
 				label: 'Focus Test',
 			});
 
@@ -273,7 +273,7 @@ describe('Input Component', () => {
 		});
 
 		test('should handle keyboard navigation', async () => {
-			render(Input, {
+			await render(Input, {
 				label: 'Keyboard Test',
 			});
 
@@ -289,7 +289,7 @@ describe('Input Component', () => {
 				render: () => `<span data-testid="prefix-icon">$</span>`,
 			}));
 
-			render(Input, {
+			await render(Input, {
 				label: 'Price Input',
 				prefix,
 			});
@@ -306,7 +306,7 @@ describe('Input Component', () => {
 				render: () => `<span data-testid="suffix-icon">@</span>`,
 			}));
 
-			render(Input, {
+			await render(Input, {
 				label: 'Email Input',
 				suffix,
 			});
@@ -326,7 +326,7 @@ describe('Input Component', () => {
 				render: () => `<span data-testid="suffix-icon">.00</span>`,
 			}));
 
-			render(Input, {
+			await render(Input, {
 				label: 'Currency Input',
 				prefix,
 				suffix,
@@ -349,7 +349,7 @@ describe('Input Component', () => {
 
 	describe('Form Integration', () => {
 		test('should work with form submission', async () => {
-			render(Input, {
+			await render(Input, {
 				name: 'email',
 				label: 'Email',
 				value: 'test@example.com',
@@ -361,7 +361,7 @@ describe('Input Component', () => {
 		});
 
 		test('should handle form validation attributes', async () => {
-			render(Input, {
+			await render(Input, {
 				label: 'Validated Input',
 				required: true,
 				minlength: 3,
@@ -385,7 +385,7 @@ describe('Input Component', () => {
 
 	describe('Accessibility', () => {
 		test('should have proper label association', async () => {
-			render(Input, {
+			await render(Input, {
 				label: 'Accessible Input',
 			});
 
@@ -394,7 +394,7 @@ describe('Input Component', () => {
 		});
 
 		test('should have proper ARIA attributes for errors', async () => {
-			render(Input, {
+			await render(Input, {
 				label: 'Error Input',
 				error: 'Invalid input',
 			});
@@ -407,7 +407,7 @@ describe('Input Component', () => {
 		});
 
 		test('should generate unique IDs when not provided', async () => {
-			render(Input, {
+			await render(Input, {
 				label: 'Auto ID Input',
 			});
 
@@ -419,7 +419,7 @@ describe('Input Component', () => {
 		});
 
 		test('should use provided ID when given', async () => {
-			render(Input, {
+			await render(Input, {
 				id: 'custom-input-id',
 				label: 'Custom ID Input',
 			});
@@ -431,7 +431,7 @@ describe('Input Component', () => {
 		});
 
 		test('should have proper focus management', async () => {
-			render(Input, {
+			await render(Input, {
 				label: 'Focus Test',
 			});
 
@@ -455,7 +455,7 @@ describe('Input Component', () => {
 
 	describe('Edge Cases', () => {
 		test('should handle empty label gracefully', async () => {
-			render(Input, {});
+			await render(Input, {});
 
 			const input = page.getByTestId('input');
 
@@ -466,7 +466,7 @@ describe('Input Component', () => {
 		});
 
 		test('should handle number input type', async () => {
-			render(Input, {
+			await render(Input, {
 				type: 'number',
 				label: 'Number Input',
 			});
@@ -478,7 +478,7 @@ describe('Input Component', () => {
 		});
 
 		test('should handle all prop combinations', async () => {
-			render(Input, {
+			await render(Input, {
 				type: 'email',
 				label: 'Complex Input',
 				placeholder: 'Enter email',
@@ -508,7 +508,7 @@ describe('Input Component', () => {
 		});
 
 		test('should handle empty values gracefully', async () => {
-			render(Input, {
+			await render(Input, {
 				label: 'Empty Value Test',
 				value: '',
 			});
@@ -519,7 +519,7 @@ describe('Input Component', () => {
 
 		test('should handle very long values', async () => {
 			const long_value = 'a'.repeat(1000);
-			render(Input, {
+			await render(Input, {
 				label: 'Long Value Test',
 				value: long_value,
 			});

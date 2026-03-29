@@ -15,7 +15,7 @@ import { page } from 'vitest/browser';
 describe('TodoManager Component', () => {
 	describe('Initial Rendering', () => {
 		it('should render empty state', async () => {
-			render(TodoManager);
+			await render(TodoManager);
 
 			await expect
 				.element(page.getByText('No todos yet'))
@@ -32,7 +32,7 @@ describe('TodoManager Component', () => {
 
 	describe('User Interactions', () => {
 		it('should add new todo', async () => {
-			render(TodoManager);
+			await render(TodoManager);
 
 			const input = page.getByLabelText('New todo');
 			const add_button = page.getByRole('button', {
@@ -313,7 +313,7 @@ it('should handle button click - WRONG WAY', async () => {
 
 // ✅ ALWAYS use locators - auto-retry, semantic queries
 it('should handle button click', async () => {
-	render(MyComponent);
+	await render(MyComponent);
 	const button = page.getByTestId('submit');
 	await button.click(); // Automatic waiting and retrying
 
@@ -326,7 +326,7 @@ it('should handle button click', async () => {
 ```typescript
 describe('Locator Best Practices', () => {
 	it('should use semantic queries first', async () => {
-		render(LoginForm);
+		await render(LoginForm);
 
 		// ✅ Semantic queries (preferred - test accessibility)
 		const email_input = page.getByRole('textbox', { name: 'Email' });
@@ -345,7 +345,7 @@ describe('Locator Best Practices', () => {
 	});
 
 	it('should handle multiple elements with strict mode', async () => {
-		render(NavigationMenu);
+		await render(NavigationMenu);
 
 		// ❌ FAILS: Multiple elements match
 		// page.getByRole('link', { name: 'Home' });
@@ -362,7 +362,7 @@ describe('Locator Best Practices', () => {
 	});
 
 	it('should use test ids when semantic queries are not possible', async () => {
-		render(ComplexWidget);
+		await render(ComplexWidget);
 
 		// ✅ Test IDs (when semantic queries aren't possible)
 		const widget = page.getByTestId('complex-widget');
@@ -397,7 +397,7 @@ it('should render check icon - WRONG WAY', () => {
 
 // ✅ ROBUST PATTERN - Tests semantic meaning and user experience
 it('should indicate success state to users', async () => {
-	render(StatusIcon, { status: 'success' });
+	await render(StatusIcon, { status: 'success' });
 
 	// Test what users actually see and experience
 	await expect
@@ -428,7 +428,7 @@ it('should apply correct styling classes', () => {
 ```typescript
 it('should respond to user interactions', async () => {
 	const click_handler = vi.fn();
-	render(Button, { onclick: click_handler });
+	await render(Button, { onclick: click_handler });
 
 	const button = page.getByRole('button');
 	await button.click();
@@ -504,7 +504,7 @@ Always prefer semantic queries that test accessibility:
 ```typescript
 describe('Accessibility Best Practices', () => {
 	it('should use semantic queries for better accessibility testing', async () => {
-		render(ContactForm);
+		await render(ContactForm);
 
 		// ✅ EXCELLENT - Tests accessibility and semantics
 		const name_input = page.getByRole('textbox', {
@@ -526,7 +526,7 @@ describe('Accessibility Best Practices', () => {
 	});
 
 	it('should test ARIA properties and roles', async () => {
-		render(Modal, { open: true, title: 'Settings' });
+		await render(Modal, { open: true, title: 'Settings' });
 
 		const modal = page.getByRole('dialog');
 		await expect.element(modal).toHaveAttribute('aria-labelledby');
@@ -537,7 +537,7 @@ describe('Accessibility Best Practices', () => {
 	});
 
 	it('should test keyboard navigation', async () => {
-		render(TabPanel);
+		await render(TabPanel);
 
 		const first_tab = page.getByRole('tab').first();
 		await first_tab.element().focus();
@@ -568,7 +568,7 @@ describe('Component Props and Events', () => {
 
 		for (const variant of variants) {
 			for (const size of sizes) {
-				render(Button, { variant, size });
+				await render(Button, { variant, size });
 
 				const button = page.getByRole('button');
 				await expect.element(button).toHaveClass(`btn-${variant}`);
@@ -585,7 +585,7 @@ describe('Component Props and Events', () => {
 			keydown: vi.fn(),
 		};
 
-		render(InteractiveComponent, {
+		await render(InteractiveComponent, {
 			onclick: handlers.click,
 			onfocus: handlers.focus,
 			onblur: handlers.blur,
@@ -653,7 +653,7 @@ describe('Mocking Patterns', () => {
 	});
 
 	it('should test component with mocked data', async () => {
-		render(UserProfile, { user_id: '123' });
+		await render(UserProfile, { user_id: '123' });
 
 		// Wait for async data loading
 		await expect
@@ -678,7 +678,7 @@ describe('Error Handling', () => {
 			.spyOn(console, 'error')
 			.mockImplementation(() => {});
 
-		render(ErrorBoundary, {
+		await render(ErrorBoundary, {
 			children: createRawSnippet(() => ({
 				render: () => {
 					throw new Error('Component crashed!');
@@ -702,7 +702,7 @@ describe('Error Handling', () => {
 			new Error('Network error'),
 		);
 
-		render(DataComponent);
+		await render(DataComponent);
 
 		await expect
 			.element(page.getByText('Failed to load data'))
@@ -713,7 +713,7 @@ describe('Error Handling', () => {
 	});
 
 	it('should handle empty data states', async () => {
-		render(TodoList, { todos: [] });
+		await render(TodoList, { todos: [] });
 
 		await expect
 			.element(page.getByText('No todos yet'))
@@ -732,7 +732,7 @@ describe('Error Handling', () => {
 ```typescript
 describe('Animation and Performance', () => {
 	it('should handle animated elements', async () => {
-		render(AnimatedModal, { open: true });
+		await render(AnimatedModal, { open: true });
 
 		const modal = page.getByRole('dialog');
 
@@ -747,7 +747,7 @@ describe('Animation and Performance', () => {
 	it('should test component performance', async () => {
 		const start = performance.now();
 
-		render(ComplexDashboard, { data: large_dataset });
+		await render(ComplexDashboard, { data: large_dataset });
 
 		// Wait for initial render
 		await expect

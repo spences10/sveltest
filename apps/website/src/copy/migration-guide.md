@@ -152,7 +152,7 @@ const { container } = render(MyComponent);
 const button = container.querySelector('[data-testid="submit"]');
 
 // ✅ ALWAYS use locators - auto-retry, semantic queries
-render(MyComponent);
+await render(MyComponent);
 const button = page.getByTestId('submit');
 await button.click(); // Automatic waiting and retrying
 ```
@@ -170,7 +170,7 @@ test('button renders with correct variant', () => {
 
 // AFTER: vitest-browser-svelte
 test('button renders with correct variant', async () => {
-	render(Button, { variant: 'primary' });
+	await render(Button, { variant: 'primary' });
 	const button = page.getByRole('button');
 	await expect.element(button).toBeInTheDocument();
 	await expect.element(button).toHaveClass('btn-primary');
@@ -198,7 +198,7 @@ test('form submission', async () => {
 
 // AFTER: vitest-browser-svelte
 test('form submission', async () => {
-	render(LoginForm);
+	await render(LoginForm);
 
 	const email_input = page.getByLabelText('Email');
 	const password_input = page.getByLabelText('Password');
@@ -229,7 +229,7 @@ test('click handler', async () => {
 // AFTER: vitest-browser-svelte
 test('click handler', async () => {
 	const handle_click = vi.fn();
-	render(Button, { onclick: handle_click });
+	await render(Button, { onclick: handle_click });
 
 	await page.getByRole('button').click();
 	expect(handle_click).toHaveBeenCalled();
@@ -279,7 +279,7 @@ test('counter with runes', async () => {
 	let count = $state(0);
 	let doubled = $derived(count * 2);
 
-	render(Counter, { initial_count: 5 });
+	await render(Counter, { initial_count: 5 });
 
 	const count_display = page.getByTestId('count');
 	await expect.element(count_display).toHaveTextContent('5');
@@ -301,7 +301,7 @@ test('counter with runes', async () => {
 ```typescript
 // Test the full lifecycle: valid → validate → invalid → fix → valid
 test('form validation lifecycle', async () => {
-	render(LoginForm);
+	await render(LoginForm);
 
 	const email_input = page.getByLabelText('Email');
 	const submit_button = page.getByRole('button', { name: 'Submit' });
@@ -339,7 +339,7 @@ test('navigation links', async () => {
 
 // ✅ CORRECT: Use .first(), .nth(), .last()
 test('navigation links', async () => {
-	render(Navigation);
+	await render(Navigation);
 	const home_link = page.getByRole('link', { name: 'Home' }).first();
 	await expect.element(home_link).toBeVisible();
 });
@@ -357,7 +357,7 @@ vi.mock('$lib/utils/validation', () => ({
 test('form uses validation utilities', async () => {
 	const mock_validate_email = vi.mocked(validate_email);
 
-	render(LoginForm);
+	await render(LoginForm);
 
 	const email_input = page.getByLabelText('Email');
 	await email_input.fill('test@example.com');
@@ -417,7 +417,7 @@ await submit_button.click(); // May cause SSR errors!
 await submit_button.click({ force: true });
 
 // ✅ Or test validation state instead
-render(MyForm, { errors: { email: 'Required' } });
+await render(MyForm, { errors: { email: 'Required' } });
 await expect.element(page.getByText('Required')).toBeInTheDocument();
 ```
 

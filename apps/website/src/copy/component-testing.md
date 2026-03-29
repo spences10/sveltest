@@ -28,7 +28,7 @@ import MyComponent from './my-component.svelte';
 
 ```typescript
 it('should use semantic locators', async () => {
-	render(MyComponent);
+	await render(MyComponent);
 
 	// ✅ Semantic queries (preferred - test accessibility)
 	const submit_button = page.getByRole('button', { name: 'Submit' });
@@ -52,7 +52,7 @@ native DOM methods like `focus()` and `blur()`:
 
 ```typescript
 it('should access DOM methods through .element()', async () => {
-	render(MyComponent);
+	await render(MyComponent);
 
 	const input = page.getByRole('textbox', { name: 'Email' });
 
@@ -86,7 +86,7 @@ match, you must specify which one:
 
 ```typescript
 it('should handle multiple matching elements', async () => {
-	render(NavigationComponent);
+	await render(NavigationComponent);
 
 	// ❌ FAILS: Strict mode violation if desktop + mobile nav both exist
 	// page.getByRole('link', { name: 'Home' });
@@ -111,7 +111,7 @@ Common role mistakes and their solutions:
 
 ```typescript
 it('should use correct element roles', async () => {
-	render(FormComponent);
+	await render(FormComponent);
 
 	// ❌ WRONG: Input role doesn't exist
 	// page.getByRole('input', { name: 'Email' });
@@ -139,7 +139,10 @@ it('should use correct element roles', async () => {
 ```typescript
 describe('Button Component', () => {
 	it('should render with variant styling', async () => {
-		render(Button, { variant: 'primary', children: 'Click me' });
+		await render(Button, {
+			variant: 'primary',
+			children: 'Click me',
+		});
 
 		const button = page.getByRole('button', { name: 'Click me' });
 		await expect.element(button).toBeInTheDocument();
@@ -148,7 +151,10 @@ describe('Button Component', () => {
 
 	it('should handle click events', async () => {
 		const click_handler = vi.fn();
-		render(Button, { onclick: click_handler, children: 'Click me' });
+		await render(Button, {
+			onclick: click_handler,
+			children: 'Click me',
+		});
 
 		const button = page.getByRole('button', { name: 'Click me' });
 		await button.click();
@@ -157,7 +163,7 @@ describe('Button Component', () => {
 	});
 
 	it('should support disabled state', async () => {
-		render(Button, { disabled: true, children: 'Disabled' });
+		await render(Button, { disabled: true, children: 'Disabled' });
 
 		const button = page.getByRole('button', { name: 'Disabled' });
 		await expect.element(button).toBeDisabled();
@@ -165,7 +171,7 @@ describe('Button Component', () => {
 	});
 
 	it('should handle animations with force click', async () => {
-		render(AnimatedButton, { children: 'Animated' });
+		await render(AnimatedButton, { children: 'Animated' });
 
 		const button = page.getByRole('button', { name: 'Animated' });
 		// Use force: true for elements that may be animating
@@ -183,7 +189,7 @@ describe('Button Component', () => {
 ```typescript
 describe('Input Component', () => {
 	it('should handle user input', async () => {
-		render(Input, { type: 'text', label: 'Full Name' });
+		await render(Input, { type: 'text', label: 'Full Name' });
 
 		const input = page.getByLabelText('Full Name');
 		await input.fill('John Doe');
@@ -192,7 +198,7 @@ describe('Input Component', () => {
 	});
 
 	it('should display validation errors', async () => {
-		render(Input, {
+		await render(Input, {
 			type: 'email',
 			label: 'Email',
 			error: 'Invalid email format',
@@ -209,7 +215,7 @@ describe('Input Component', () => {
 	});
 
 	it('should support different input types', async () => {
-		render(Input, { type: 'password', label: 'Password' });
+		await render(Input, { type: 'password', label: 'Password' });
 
 		const input = page.getByLabelText('Password');
 		await expect.element(input).toHaveAttribute('type', 'password');
@@ -222,7 +228,7 @@ describe('Input Component', () => {
 ```typescript
 describe('Modal Component', () => {
 	it('should handle focus management', async () => {
-		render(Modal, { open: true, children: 'Modal content' });
+		await render(Modal, { open: true, children: 'Modal content' });
 
 		const modal = page.getByRole('dialog');
 		await expect.element(modal).toBeInTheDocument();
@@ -235,14 +241,14 @@ describe('Modal Component', () => {
 
 	it('should close on escape key', async () => {
 		const close_handler = vi.fn();
-		render(Modal, { open: true, onclose: close_handler });
+		await render(Modal, { open: true, onclose: close_handler });
 
 		await userEvent.keyboard('{Escape}');
 		expect(close_handler).toHaveBeenCalledOnce();
 	});
 
 	it('should prevent background scroll when open', async () => {
-		render(Modal, { open: true });
+		await render(Modal, { open: true });
 
 		const body = page.locator('body');
 		await expect.element(body).toHaveClass('modal-open');
@@ -259,7 +265,7 @@ describe('Dropdown Component', () => {
 			{ value: 'option1', label: 'Option 1' },
 			{ value: 'option2', label: 'Option 2' },
 		];
-		render(Dropdown, { options, label: 'Choose option' });
+		await render(Dropdown, { options, label: 'Choose option' });
 
 		const trigger = page.getByRole('button', {
 			name: 'Choose option',
@@ -282,7 +288,7 @@ describe('Dropdown Component', () => {
 			{ value: 'option1', label: 'Option 1' },
 			{ value: 'option2', label: 'Option 2' },
 		];
-		render(Dropdown, { options, label: 'Choose option' });
+		await render(Dropdown, { options, label: 'Choose option' });
 
 		const trigger = page.getByRole('button', {
 			name: 'Choose option',
@@ -316,7 +322,7 @@ vi.mock('./child-component.svelte', () => ({
 
 describe('Parent Component', () => {
 	it('should render with mocked child', async () => {
-		render(ParentComponent);
+		await render(ParentComponent);
 
 		// Test parent functionality without child complexity
 		const parent_element = page.getByTestId('parent');
@@ -342,7 +348,7 @@ vi.mock('$lib/utils/api', () => ({
 
 describe('User Profile Component', () => {
 	it('should load user data on mount', async () => {
-		render(UserProfile, { user_id: 1 });
+		await render(UserProfile, { user_id: 1 });
 
 		await expect
 			.element(page.getByText('John Doe'))
@@ -371,7 +377,7 @@ vi.mock('$lib/stores/user', () => ({
 
 describe('User Dashboard', () => {
 	it('should display user information from store', async () => {
-		render(UserDashboard);
+		await render(UserDashboard);
 
 		await expect
 			.element(page.getByText('Test User'))

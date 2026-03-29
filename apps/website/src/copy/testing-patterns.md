@@ -25,7 +25,7 @@ mocking patterns, see [Component Testing](./component-testing).
 describe('Contact Form Integration', () => {
 	it('should handle complete form submission flow', async () => {
 		const submit_handler = vi.fn();
-		render(ContactForm, { onsubmit: submit_handler });
+		await render(ContactForm, { onsubmit: submit_handler });
 
 		// Fill out form
 		const name_input = page.getByLabelText('Name');
@@ -57,7 +57,7 @@ describe('Contact Form Integration', () => {
 
 	it('should prevent submission with invalid data', async () => {
 		const submit_handler = vi.fn();
-		render(ContactForm, { onsubmit: submit_handler });
+		await render(ContactForm, { onsubmit: submit_handler });
 
 		// Try to submit empty form
 		const submit_button = page.getByRole('button', {
@@ -84,7 +84,7 @@ describe('Contact Form Integration', () => {
 ```typescript
 describe('Todo List Integration', () => {
 	it('should handle complete todo lifecycle', async () => {
-		render(TodoManager);
+		await render(TodoManager);
 
 		// Add todo
 		const input = page.getByLabelText('New todo');
@@ -124,7 +124,7 @@ describe('Todo List Integration', () => {
 ```typescript
 describe('Navigation Integration', () => {
 	it('should navigate between pages', async () => {
-		render(AppLayout);
+		await render(AppLayout);
 
 		// Navigate to docs
 		const docs_link = page
@@ -148,7 +148,7 @@ describe('Navigation Integration', () => {
 	});
 
 	it('should highlight active navigation', async () => {
-		render(AppLayout, { current_page: '/docs' });
+		await render(AppLayout, { current_page: '/docs' });
 
 		const docs_link = page
 			.getByRole('link', { name: 'Documentation' })
@@ -181,7 +181,7 @@ actions, and server hooks, see [Server Testing](./server-testing).
 ```typescript
 describe('Async Component', () => {
 	it('should handle loading states', async () => {
-		render(AsyncDataComponent);
+		await render(AsyncDataComponent);
 
 		// Should show loading initially
 		await expect
@@ -203,7 +203,7 @@ describe('Async Component', () => {
 			new Error('API Error'),
 		);
 
-		render(AsyncDataComponent);
+		await render(AsyncDataComponent);
 
 		await expect
 			.element(page.getByText('Error: API Error'))
@@ -222,7 +222,7 @@ describe('Form Error Handling', () => {
 			field_errors: { email: 'Email already exists' },
 		});
 
-		render(RegistrationForm, { onsubmit: submit_handler });
+		await render(RegistrationForm, { onsubmit: submit_handler });
 
 		const submit_button = page.getByRole('button', {
 			name: 'Register',
@@ -251,7 +251,7 @@ describe('Large List Performance', () => {
 			name: `Item ${i}`,
 		}));
 
-		render(VirtualizedList, { items: large_dataset });
+		await render(VirtualizedList, { items: large_dataset });
 
 		// Should render without hanging
 		await expect
@@ -276,7 +276,7 @@ describe('Large List Performance', () => {
 describe('Search Input Performance', () => {
 	it('should debounce search queries', async () => {
 		const search_handler = vi.fn();
-		render(SearchInput, { onsearch: search_handler });
+		await render(SearchInput, { onsearch: search_handler });
 
 		const input = page.getByLabelText('Search');
 

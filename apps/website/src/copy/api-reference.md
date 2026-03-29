@@ -232,14 +232,14 @@ await page.getByRole('textbox').press('Enter');
 
 ```typescript
 // ✅ Simple component with snake_case props
-render(Button, {
+await render(Button, {
 	variant: 'primary',
 	is_disabled: false,
 	click_handler: vi.fn(),
 });
 
 // ✅ Form component with validation
-render(Input, {
+await render(Input, {
 	input_type: 'email',
 	label_text: 'Email',
 	current_value: 'test@example.com',
@@ -255,7 +255,7 @@ render(Input, {
 const handle_click = vi.fn();
 const handle_submit = vi.fn();
 
-render(Button, {
+await render(Button, {
 	onclick: handle_click,
 	onsubmit: handle_submit,
 	children: 'Click me',
@@ -265,10 +265,10 @@ render(Button, {
 const children = createRawSnippet(() => ({
 	render: () => `<span>Custom content</span>`, // Must return HTML
 }));
-render(Modal, { children });
+await render(Modal, { children });
 
 // ✅ Component with context
-render(
+await render(
 	Component,
 	{ user_data: { name: 'Test' } },
 	{ context: new Map([['theme', 'dark']]) },
@@ -503,7 +503,7 @@ expect(() => {
 }).toThrow('Component error');
 
 // ✅ Test error states
-render(Component, {
+await render(Component, {
 	props: {
 		error_message: 'Something went wrong',
 		has_error: true,
@@ -533,8 +533,8 @@ try {
 
 ```typescript
 // ✅ Custom render helper with snake_case
-const render_with_theme = (Component: any, props = {}) => {
-	return render(Component, {
+const render_with_theme = async (Component: any, props = {}) => {
+	return await render(Component, {
 		...props,
 		context: new Map([['theme', 'dark']]),
 	});
@@ -652,7 +652,7 @@ const { container } = render(MyComponent);
 const button = container.querySelector('[data-testid="submit"]');
 
 // ✅ ALWAYS - Auto-retry, semantic queries
-render(MyComponent);
+await render(MyComponent);
 const button = page.getByTestId('submit');
 await button.click();
 ```
@@ -678,7 +678,7 @@ await expect
 await page.getByRole('button', { name: 'Submit' }).click();
 
 // ✅ Test form state directly
-render(MyForm, { props: { errors: { email: 'Required' } } });
+await render(MyForm, { props: { errors: { email: 'Required' } } });
 await expect.element(page.getByText('Required')).toBeInTheDocument();
 ```
 

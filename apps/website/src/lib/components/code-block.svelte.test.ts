@@ -1,12 +1,12 @@
-import { page } from 'vitest/browser';
 import { describe, expect, test } from 'vitest';
 import { render } from 'vitest-browser-svelte';
+import { page } from 'vitest/browser';
 import CodeBlock from './code-block.svelte';
 
 describe('CodeBlock Component', () => {
 	describe('Initial Rendering', () => {
 		test('should render with default props', async () => {
-			render(CodeBlock, {
+			await render(CodeBlock, {
 				code: 'const hello = "world";',
 			});
 
@@ -17,7 +17,7 @@ describe('CodeBlock Component', () => {
 		});
 
 		test('should render code after loading', async () => {
-			render(CodeBlock, {
+			await render(CodeBlock, {
 				code: 'console.log("Hello, World!");',
 				lang: 'javascript',
 			});
@@ -29,7 +29,7 @@ describe('CodeBlock Component', () => {
 		});
 
 		test('should apply correct language highlighting', async () => {
-			render(CodeBlock, {
+			await render(CodeBlock, {
 				code: 'function test() { return true; }',
 				lang: 'typescript',
 			});
@@ -63,7 +63,7 @@ describe('CodeBlock Component', () => {
 
 	describe('Theme Support', () => {
 		test('should use default night-owl theme', async () => {
-			render(CodeBlock, {
+			await render(CodeBlock, {
 				code: 'const test = true;',
 			});
 
@@ -80,7 +80,7 @@ describe('CodeBlock Component', () => {
 
 	describe('Error Handling', () => {
 		test('should handle invalid language gracefully', async () => {
-			render(CodeBlock, {
+			await render(CodeBlock, {
 				code: 'some code',
 				lang: 'invalid-language',
 			});
@@ -107,7 +107,7 @@ describe('CodeBlock Component', () => {
 
 	describe('Loading States', () => {
 		test('should show fallback code during SSR', async () => {
-			render(CodeBlock, {
+			await render(CodeBlock, {
 				code: 'const test = true;',
 			});
 
@@ -118,7 +118,7 @@ describe('CodeBlock Component', () => {
 		});
 
 		test('should render code content consistently', async () => {
-			render(CodeBlock, {
+			await render(CodeBlock, {
 				code: 'const test = true;',
 			});
 
@@ -137,7 +137,7 @@ describe('CodeBlock Component', () => {
   return x + y;
 }`;
 
-			render(CodeBlock, {
+			await render(CodeBlock, {
 				code: multi_line_code,
 				lang: 'javascript',
 			});
@@ -149,7 +149,7 @@ describe('CodeBlock Component', () => {
 		});
 
 		test('should handle special characters', async () => {
-			render(CodeBlock, {
+			await render(CodeBlock, {
 				code: 'const obj = { key: "value", count: 42 };',
 				lang: 'javascript',
 			});

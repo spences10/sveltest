@@ -6,7 +6,7 @@ import ComponentsPage from './+page.svelte';
 describe('Components Page', () => {
 	describe('Initial Rendering', () => {
 		test('should render the page without errors', async () => {
-			render(ComponentsPage);
+			await render(ComponentsPage);
 
 			// Check hero section
 			await expect
@@ -20,7 +20,7 @@ describe('Components Page', () => {
 		});
 
 		test('should display component statistics', async () => {
-			render(ComponentsPage);
+			await render(ComponentsPage);
 
 			// Test that the page renders with component content instead of specific stats
 			await expect
@@ -41,7 +41,7 @@ describe('Components Page', () => {
 		});
 
 		test('should render all component sections', async () => {
-			render(ComponentsPage);
+			await render(ComponentsPage);
 
 			// Check all component sections are present - use heading roles to be more specific
 			await expect
@@ -69,7 +69,7 @@ describe('Components Page', () => {
 
 	describe('Calculator Component Demo', () => {
 		test('should display calculator with interactive buttons', async () => {
-			render(ComponentsPage);
+			await render(ComponentsPage);
 
 			// Check calculator is rendered
 			const calculatorSection = page.getByText(
@@ -93,7 +93,7 @@ describe('Components Page', () => {
 		});
 
 		test('should show calculator features list', async () => {
-			render(ComponentsPage);
+			await render(ComponentsPage);
 
 			await expect
 				.element(page.getByText('Reactive state with Svelte 5 runes'))
@@ -111,7 +111,7 @@ describe('Components Page', () => {
 
 	describe('Modal Component Demo', () => {
 		test('should display modal trigger button and configuration', async () => {
-			render(ComponentsPage);
+			await render(ComponentsPage);
 
 			// Check modal trigger button
 			const openModalButton = page.getByRole('button', {
@@ -129,7 +129,7 @@ describe('Components Page', () => {
 		});
 
 		test('should open modal when button is clicked', async () => {
-			render(ComponentsPage);
+			await render(ComponentsPage);
 
 			const openModalButton = page
 				.getByRole('button', {
@@ -147,7 +147,7 @@ describe('Components Page', () => {
 		});
 
 		test('should show modal features list', async () => {
-			render(ComponentsPage);
+			await render(ComponentsPage);
 
 			await expect
 				.element(page.getByText('Focus management and restoration'))
@@ -163,7 +163,7 @@ describe('Components Page', () => {
 
 	describe('Card Component Demo', () => {
 		test('should display card with configuration controls', async () => {
-			render(ComponentsPage);
+			await render(ComponentsPage);
 
 			// Check card is rendered
 			await expect
@@ -180,7 +180,7 @@ describe('Components Page', () => {
 		});
 
 		test('should update card when configuration changes', async () => {
-			render(ComponentsPage);
+			await render(ComponentsPage);
 
 			// Find the variant select
 			const variantSelect = page.getByRole('combobox').first();
@@ -196,7 +196,7 @@ describe('Components Page', () => {
 		});
 
 		test('should show card features list', async () => {
-			render(ComponentsPage);
+			await render(ComponentsPage);
 
 			await expect
 				.element(page.getByText('Multiple visual variants'))
@@ -212,7 +212,7 @@ describe('Components Page', () => {
 
 	describe('Login Form Component Demo', () => {
 		test('should display login form with configuration', async () => {
-			render(ComponentsPage);
+			await render(ComponentsPage);
 
 			// Check login form is rendered
 			await expect
@@ -248,7 +248,7 @@ describe('Components Page', () => {
 		});
 
 		test('should show login form features list', async () => {
-			render(ComponentsPage);
+			await render(ComponentsPage);
 
 			// Use more specific text matching to avoid conflicts
 			await expect
@@ -268,7 +268,7 @@ describe('Components Page', () => {
 		});
 
 		test('should show validation rules', async () => {
-			render(ComponentsPage);
+			await render(ComponentsPage);
 
 			await expect
 				.element(page.getByText('Valid email format required'))
@@ -285,7 +285,7 @@ describe('Components Page', () => {
 
 	describe('Component Overview Grid', () => {
 		test('should display overview cards for all components', async () => {
-			render(ComponentsPage);
+			await render(ComponentsPage);
 
 			// Check overview section
 			await expect
@@ -309,7 +309,7 @@ describe('Components Page', () => {
 		});
 
 		test('should show test coverage indicators', async () => {
-			render(ComponentsPage);
+			await render(ComponentsPage);
 
 			// Check for test coverage indicators
 			const testIndicators = page.getByText('✓ Tested');
@@ -321,7 +321,7 @@ describe('Components Page', () => {
 
 	describe('SEO and Meta', () => {
 		test('should have proper page title and meta description', async () => {
-			render(ComponentsPage);
+			await render(ComponentsPage);
 
 			// Check title is set
 			expect(document.title).toBe('Components - Sveltest');
@@ -338,7 +338,7 @@ describe('Components Page', () => {
 
 	describe('Accessibility', () => {
 		test('should have proper heading hierarchy', async () => {
-			render(ComponentsPage);
+			await render(ComponentsPage);
 
 			// Check main heading
 			await expect
@@ -374,7 +374,7 @@ describe('Components Page', () => {
 		});
 
 		test('should have accessible form controls', async () => {
-			render(ComponentsPage);
+			await render(ComponentsPage);
 
 			// Check form controls exist using different strategies
 			await expect

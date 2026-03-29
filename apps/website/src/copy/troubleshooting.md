@@ -154,7 +154,7 @@ never complete.
 await page.getByRole('button', { name: 'Submit' }).click();
 
 // ✅ Test form state directly
-render(Form, { props: { errors: { email: 'Required' } } });
+await render(Form, { props: { errors: { email: 'Required' } } });
 await expect.element(page.getByText('Required')).toBeInTheDocument();
 
 // ✅ Use timeouts for flaky elements
@@ -186,10 +186,10 @@ render(Component, {
 const children = createRawSnippet(() => ({
 	render: () => `<span>Text content</span>`,
 }));
-render(Component, { children });
+await render(Component, { children });
 
 // ✅ Or use alternative props
-render(Component, {
+await render(Component, {
 	label: 'Text content', // Instead of children
 });
 ```
@@ -222,7 +222,7 @@ test('should render success icon', () => {
 
 // ✅ ROBUST - Tests user-visible styling and accessibility
 test('should indicate success to users', async () => {
-	render(StatusIcon, { status: 'success' });
+	await render(StatusIcon, { status: 'success' });
 
 	// Test what users see and experience
 	await expect
@@ -405,7 +405,7 @@ const { rerender } = render(Component, { count: 0 });
 // count is still 0 internally
 
 // ✅ Re-render with new props
-const { rerender } = render(Component, { count: 0 });
+const { rerender } = await render(Component, { count: 0 });
 rerender({ count: 1 });
 ```
 
@@ -421,7 +421,7 @@ rerender({ count: 1 });
 
 ```typescript
 // ✅ Correct event handler props for Svelte
-render(Button, {
+await render(Button, {
 	onclick: vi.fn(), // Not onClick
 });
 
@@ -512,7 +512,7 @@ afterEach(() => {
 
 ```typescript
 // Don't render entire app in every test
-render(SpecificComponent); // ✅
+await render(SpecificComponent); // ✅
 // render(App); // ❌ Heavy
 ```
 
@@ -601,7 +601,7 @@ await page.getByText('Success').click();
 ```typescript
 // Take screenshots for debugging
 test('debug test', async () => {
-	render(Component);
+	await render(Component);
 
 	// Take screenshot
 	await page.screenshot({ path: 'debug.png' });
@@ -618,7 +618,7 @@ test('debug test', async () => {
 ```typescript
 // View page content
 test('debug content', async () => {
-	render(Component);
+	await render(Component);
 
 	// Log current HTML
 	const html = await page.innerHTML('body');

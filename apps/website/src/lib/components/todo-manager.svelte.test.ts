@@ -1,6 +1,6 @@
-import { page } from 'vitest/browser';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
+import { page } from 'vitest/browser';
 import TodoManager from './todo-manager.svelte';
 
 // Mock Element.animate for Svelte 5 transitions
@@ -129,7 +129,7 @@ describe('TodoManager', () => {
 		});
 
 		test('should render with default props', async () => {
-			render(TodoManager);
+			await render(TodoManager);
 
 			await expect
 				.element(page.getByRole('heading', { name: 'Todo Manager' }))
@@ -143,7 +143,7 @@ describe('TodoManager', () => {
 		});
 
 		test('should render with custom title', async () => {
-			render(TodoManager, { title: 'My Custom Todo List' });
+			await render(TodoManager, { title: 'My Custom Todo List' });
 
 			await expect
 				.element(
@@ -160,7 +160,7 @@ describe('TodoManager', () => {
 				completionRate: 40,
 			};
 
-			render(TodoManager, { showStats: true });
+			await render(TodoManager, { showStats: true });
 
 			await expect
 				.element(page.getByText('Total Tasks'))
@@ -168,7 +168,7 @@ describe('TodoManager', () => {
 		});
 
 		test('should hide stats when showStats is false', async () => {
-			render(TodoManager, { showStats: false });
+			await render(TodoManager, { showStats: false });
 
 			await expect
 				.element(page.getByText('Total Tasks'))
@@ -178,7 +178,7 @@ describe('TodoManager', () => {
 
 	describe('Form Elements', () => {
 		test('should render add todo form elements', async () => {
-			render(TodoManager);
+			await render(TodoManager);
 
 			const input = page.getByTestId('new-todo-input');
 			const button = page.getByTestId('add-todo-button');
@@ -189,7 +189,7 @@ describe('TodoManager', () => {
 		});
 
 		test('should render filter elements', async () => {
-			render(TodoManager);
+			await render(TodoManager);
 
 			const status_filter = page.getByTestId('status-filter');
 			const search_input = page.getByTestId('search-input');
@@ -199,7 +199,7 @@ describe('TodoManager', () => {
 		});
 
 		test('should render bulk action buttons', async () => {
-			render(TodoManager);
+			await render(TodoManager);
 
 			const toggle_button = page.getByTestId('toggle-all-button');
 			const clear_button = page.getByTestId('clear-completed-button');
@@ -213,14 +213,14 @@ describe('TodoManager', () => {
 
 	describe('Sample Data Functionality', () => {
 		test('should show load sample button when enableSampleData is true', async () => {
-			render(TodoManager, { enableSampleData: true });
+			await render(TodoManager, { enableSampleData: true });
 
 			const sample_button = page.getByTestId('load-sample-button');
 			await expect.element(sample_button).toBeInTheDocument();
 		});
 
 		test('should hide load sample button when enableSampleData is false', async () => {
-			render(TodoManager, { enableSampleData: false });
+			await render(TodoManager, { enableSampleData: false });
 
 			await expect
 				.element(page.getByTestId('load-sample-button'))
@@ -233,7 +233,7 @@ describe('TodoManager', () => {
 			mock_todo_state.filtered_todos = [];
 			mock_todo_state.todos = [];
 
-			render(TodoManager);
+			await render(TodoManager);
 
 			// Check for empty state emoji
 			await expect.element(page.getByText('📝')).toBeInTheDocument();
@@ -251,7 +251,7 @@ describe('TodoManager', () => {
 				},
 			];
 
-			render(TodoManager);
+			await render(TodoManager);
 
 			// Check for filtered empty state emoji
 			await expect.element(page.getByText('🔍')).toBeInTheDocument();
@@ -269,7 +269,7 @@ describe('TodoManager', () => {
 			};
 			mock_todo_state.filtered_todos = [test_todo];
 
-			render(TodoManager);
+			await render(TodoManager);
 
 			await expect
 				.element(page.getByTestId('todo-item'))
@@ -289,7 +289,7 @@ describe('TodoManager', () => {
 			};
 			mock_todo_state.filtered_todos = [test_todo];
 
-			render(TodoManager);
+			await render(TodoManager);
 
 			const checkbox = page.getByTestId('todo-checkbox');
 			await expect.element(checkbox).toBeInTheDocument();
@@ -306,7 +306,7 @@ describe('TodoManager', () => {
 			};
 			mock_todo_state.filtered_todos = [test_todo];
 
-			render(TodoManager);
+			await render(TodoManager);
 
 			const checkbox = page.getByTestId('todo-checkbox');
 			await expect.element(checkbox).toBeChecked();
@@ -318,7 +318,7 @@ describe('TodoManager', () => {
 			mock_todo_state.todos = [];
 			mock_todo_state.stats.completed = 0;
 
-			render(TodoManager);
+			await render(TodoManager);
 
 			const toggle_button = page.getByTestId('toggle-all-button');
 			const clear_button = page.getByTestId('clear-completed-button');
@@ -341,7 +341,7 @@ describe('TodoManager', () => {
 			];
 			mock_todo_state.stats.completed = 1;
 
-			render(TodoManager);
+			await render(TodoManager);
 
 			const toggle_button = page.getByTestId('toggle-all-button');
 			const clear_button = page.getByTestId('clear-completed-button');
@@ -355,7 +355,7 @@ describe('TodoManager', () => {
 
 	describe('User Interactions - Smoke Tests', () => {
 		test('should handle add button click without errors', async () => {
-			render(TodoManager);
+			await render(TodoManager);
 
 			const input = page.getByTestId('new-todo-input');
 			const add_button = page.getByTestId('add-todo-button');
@@ -371,7 +371,7 @@ describe('TodoManager', () => {
 		});
 
 		test('should handle filter change without errors', async () => {
-			render(TodoManager);
+			await render(TodoManager);
 
 			const status_filter = page.getByTestId('status-filter');
 
@@ -394,7 +394,7 @@ describe('TodoManager', () => {
 				},
 			];
 
-			render(TodoManager);
+			await render(TodoManager);
 
 			const toggle_button = page.getByTestId('toggle-all-button');
 
@@ -407,7 +407,7 @@ describe('TodoManager', () => {
 		});
 
 		test('should enable add button when input has text', async () => {
-			render(TodoManager);
+			await render(TodoManager);
 
 			const input = page.getByTestId('new-todo-input');
 			const add_button = page.getByTestId('add-todo-button');

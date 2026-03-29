@@ -7,7 +7,7 @@ import Page from './+page.svelte';
 
 describe('/+page.svelte', () => {
 	it('should render h1', () => {
-		render(Page);
+		await render(Page);
 		expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
 	});
 });
@@ -21,7 +21,7 @@ import Page from './+page.svelte';
 
 describe('/+page.svelte', () => {
 	it('should render h1', async () => {
-		render(Page);
+		await render(Page);
 
 		const heading = page.getByText('Sveltest').first();
 		await expect.element(heading).toBeInTheDocument();
@@ -29,7 +29,7 @@ describe('/+page.svelte', () => {
 
 	describe('AI Rules File Access', () => {
 		it('should provide Cursor rules file link', async () => {
-			render(Page);
+			await render(Page);
 
 			// Find the Cursor Rules heading first, then find the link nearby
 			const cursor_heading = page.getByText('Cursor Rules').first();
@@ -45,7 +45,7 @@ describe('/+page.svelte', () => {
 		});
 
 		it('should provide Windsurf rules file link', async () => {
-			render(Page);
+			await render(Page);
 
 			// Find the Windsurf Rules heading first
 			const windsurf_heading = page
@@ -63,7 +63,7 @@ describe('/+page.svelte', () => {
 		});
 
 		it('should open rules links in new tab with security attributes', async () => {
-			render(Page);
+			await render(Page);
 
 			// Get the first two "View Rules" links (Cursor and Windsurf)
 			const view_rules_links = page
@@ -89,7 +89,7 @@ describe('/+page.svelte', () => {
 		});
 
 		it('should display AI rules section content', async () => {
-			render(Page);
+			await render(Page);
 
 			await expect
 				.element(page.getByText('Cursor Rules').first())
