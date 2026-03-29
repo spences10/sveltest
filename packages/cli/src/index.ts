@@ -5,9 +5,22 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const API_BASE = 'https://sveltest.dev/api';
+const SITE_BASE = 'https://sveltest.dev';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+// Detect if output is being piped (non-TTY)
+function is_plain(): boolean {
+	return !process.stdout.isTTY || process.argv.includes('--plain');
+}
+
+// Context preamble for LLM consumption
+const CONTEXT_HEADER = `# Context: Svelte 5 Testing with vitest-browser-svelte
+# Key: Use page.getByRole() locators, never container queries
+# Key: Use untrack() for $derived values in tests
+---
+`;
 
 // Get CLI version from package.json
 function get_cli_version() {
@@ -118,6 +131,22 @@ interface SearchResponse {
 	total: number;
 }
 
+interface DocsTopicMeta {
+	slug: string;
+	title: string;
+	description: string;
+	category: string;
+	has_content: boolean;
+}
+
+interface DocsIndexResponse {
+	title: string;
+	description: string;
+	total_topics: number;
+	categories: string[];
+	topics: DocsTopicMeta[];
+}
+
 interface GetExampleOptions {
 	compact?: boolean;
 	filter?: string;
@@ -133,6 +162,20 @@ async function fetch_json<T>(url: string): Promise<T> {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 		return response.json() as Promise<T>;
+	} finally {
+		clearTimeout(timeout_id);
+	}
+}
+
+async function fetch_text(url: string): Promise<string> {
+	const controller = new AbortController();
+	const timeout_id = setTimeout(() => controller.abort(), 30000);
+	try {
+		const response = await fetch(url, { signal: controller.signal });
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.text();
 	} finally {
 		clearTimeout(timeout_id);
 	}
@@ -184,13 +227,21 @@ async function list_examples() {
 		const data = await fetch_json<ExamplesResponse>(
 			`${API_BASE}/examples`,
 		);
-		console.log('\nAvailable Testing Scenarios:\n');
-		data.scenarios.forEach((scenario) => {
-			const scenario_name = scenario.endpoint.split('/').pop();
-			console.log(`  ${scenario_name}`);
-			console.log(`    Category: ${scenario.category}`);
-			console.log(`    ${scenario.description}\n`);
-		});
+
+		if (is_plain()) {
+			data.scenarios.forEach((scenario) => {
+				const scenario_name = scenario.endpoint.split('/').pop();
+				console.log(scenario_name);
+			});
+		} else {
+			console.log('\nAvailable Testing Scenarios:\n');
+			data.scenarios.forEach((scenario) => {
+				const scenario_name = scenario.endpoint.split('/').pop();
+				console.log(`  ${scenario_name}`);
+				console.log(`    Category: ${scenario.category}`);
+				console.log(`    ${scenario.description}\n`);
+			});
+		}
 	} catch (error) {
 		console.error('Error fetching examples:', error);
 		process.exit(1);
@@ -278,20 +329,111 @@ async function search_docs(query: string, filter?: string) {
 			return;
 		}
 
-		console.log(`\nSearch Results for "${query}":\n`);
-		response.results.forEach((result, index) => {
-			console.log(`${index + 1}. ${result.title}`);
-			console.log(`   ${result.description}`);
-			console.log(`   ${result.url}`);
-			if (result.excerpt) {
-				console.log(`   ...${result.excerpt}...\n`);
-			} else {
-				console.log('');
-			}
-		});
+		if (is_plain()) {
+			response.results.forEach((result) => {
+				console.log(JSON.stringify(result));
+			});
+		} else {
+			console.log(`\nSearch Results for "${query}":\n`);
+			response.results.forEach((result, index) => {
+				console.log(`${index + 1}. ${result.title}`);
+				console.log(`   ${result.description}`);
+				console.log(`   ${result.url}`);
+				if (result.excerpt) {
+					console.log(`   ...${result.excerpt}...\n`);
+				} else {
+					console.log('');
+				}
+			});
+		}
 	} catch (error) {
 		console.error('Error searching:', error);
 		process.exit(1);
+	}
+}
+
+async function fetch_llms(full: boolean, context: boolean) {
+	try {
+		const url = full
+			? `${SITE_BASE}/llms-full.txt`
+			: `${SITE_BASE}/llms.txt`;
+		const text = await fetch_text(url);
+		if (context) {
+			process.stdout.write(CONTEXT_HEADER);
+		}
+		process.stdout.write(text);
+	} catch (error) {
+		console.error('Error fetching llms.txt:', error);
+		process.exit(1);
+	}
+}
+
+async function list_docs() {
+	try {
+		const data = await fetch_json<DocsIndexResponse>(
+			`${API_BASE}/docs`,
+		);
+
+		if (is_plain()) {
+			data.topics.forEach((topic) => {
+				console.log(topic.slug);
+			});
+		} else {
+			console.log('\nAvailable Documentation Topics:\n');
+			let current_category = '';
+			data.topics.forEach((topic) => {
+				if (topic.category !== current_category) {
+					current_category = topic.category;
+					console.log(`  ${current_category}:`);
+				}
+				console.log(`    ${topic.slug}`);
+				console.log(`      ${topic.description}\n`);
+			});
+		}
+	} catch (error) {
+		console.error('Error fetching docs:', error);
+		process.exit(1);
+	}
+}
+
+async function get_doc(
+	topic: string,
+	format: 'markdown' | 'json',
+	context: boolean,
+) {
+	try {
+		if (format === 'json') {
+			const data = await fetch_json(
+				`${API_BASE}/docs/${topic}?format=json`,
+			);
+			let output = data as Record<string, unknown>;
+			output = add_metadata(output);
+			console.log(format_json(output));
+		} else {
+			const text = await fetch_text(`${API_BASE}/docs/${topic}`);
+			if (context) {
+				process.stdout.write(CONTEXT_HEADER);
+			}
+			process.stdout.write(text);
+		}
+	} catch (error) {
+		console.error(`Error fetching doc '${topic}':`, error);
+		process.exit(1);
+	}
+}
+
+async function get_docs_batch(topics: string[], context: boolean) {
+	if (context) {
+		process.stdout.write(CONTEXT_HEADER);
+	}
+	for (const topic of topics) {
+		try {
+			const text = await fetch_text(`${API_BASE}/docs/${topic}`);
+			process.stdout.write(text);
+			process.stdout.write('\n');
+		} catch (error) {
+			console.error(`Error fetching doc '${topic}':`, error);
+		}
 	}
 }
 
@@ -303,36 +445,49 @@ Usage:
   sveltest [command] [options]
 
 Commands:
-  list                          List all available testing examples
-  get <scenario> [options]      Get a specific testing example
-                                Scenarios: button-variants, form-validation,
-                                          modal-states, crud-patterns,
-                                          locator-patterns, authentication,
-                                          runes-testing
-                                Supports batch: button-variants,form-validation
-  search <query> [--filter]     Search documentation and examples
-                                Filters: all, docs, examples, components
-  help                          Show this help message
+  llms [options]                  Fetch llms.txt documentation for LLM consumption
+  docs [topic] [options]          Browse documentation topics
+  list                            List all available testing examples
+  get <scenario> [options]        Get a specific testing example
+  search <query> [--filter]       Search documentation and examples
+  help                            Show this help message
 
-Options (for 'get' command):
-  --json                        Output in JSON format
-  --compact                     Minimal JSON output (reduces token usage by ~50%)
-  --filter <field>              Get only specific field (e.g., testing_patterns)
-  --sections <list>             Get specific sections (comma-separated)
+LLM Commands:
+  llms                            Fetch llms.txt index (5KB)
+  llms --full                     Fetch complete documentation (130KB)
+  llms --context                  Prepend testing context header
+  docs                            List all documentation topics
+  docs <topic>                    Fetch topic as raw markdown
+  docs <topic> --json             Fetch topic as structured JSON
+  docs <topic> --context          Prepend testing context header
+  docs <t1>,<t2>                  Fetch multiple topics (concatenated)
 
-Options (for 'search' command):
-  --filter <type>               Filter results by type
+Example Commands:
+  list                            List all testing scenarios
+  get <scenario>                  Get a scenario in readable format
+  get <scenario> --json           Get as JSON
+  get <scenario> --json --compact Minimal JSON (~50% fewer tokens)
+  get <s1>,<s2> --json            Batch fetch scenarios
+
+Options:
+  --json                          Output in JSON format
+  --compact                       Minimal JSON output (reduces token usage)
+  --filter <field>                Get only specific field
+  --sections <list>               Get specific sections (comma-separated)
+  --context                       Prepend testing context header (llms/docs)
+  --plain                         Force plain output (auto-detected when piped)
+  --full                          Fetch complete documentation (llms command)
+
+Search:
+  search <query>                  Search all documentation
+  search <query> --filter <type>  Filter: all, docs, examples, components
 
 Examples:
-  sveltest list
-  sveltest get button-variants
-  sveltest get form-validation --json
+  sveltest llms --full | llm "how do I test runes?"
+  sveltest docs runes-testing --context
+  sveltest docs runes-testing,component-testing
   sveltest get button-variants --json --compact
-  sveltest get form-validation --json --filter testing_patterns
-  sveltest get modal-states --json --sections test_scenarios,testing_patterns
-  sveltest get button-variants,form-validation --json
   sveltest search "form validation"
-  sveltest search "runes" --filter examples
 
 Documentation: https://sveltest.dev
 	`);
@@ -357,9 +512,37 @@ async function main() {
 	}
 
 	const command = args[0];
+	const has_context = args.includes('--context');
 
 	try {
 		switch (command) {
+			case 'llms': {
+				const full = args.includes('--full');
+				await fetch_llms(full, has_context);
+				break;
+			}
+
+			case 'docs': {
+				const topic = args[1];
+
+				// No topic — list all docs
+				if (!topic || topic.startsWith('--')) {
+					await list_docs();
+					break;
+				}
+
+				const format = args.includes('--json') ? 'json' : 'markdown';
+
+				// Batch mode
+				if (topic.includes(',')) {
+					const topics = topic.split(',').map((t) => t.trim());
+					await get_docs_batch(topics, has_context);
+				} else {
+					await get_doc(topic, format, has_context);
+				}
+				break;
+			}
+
 			case 'list':
 				await list_examples();
 				break;
@@ -373,8 +556,10 @@ async function main() {
 					process.exit(1);
 				}
 
-				const format = args.includes('--json') ? 'json' : 'readable';
-				const compact = args.includes('--compact');
+				const use_plain = is_plain();
+				const format =
+					args.includes('--json') || use_plain ? 'json' : 'readable';
+				const compact = args.includes('--compact') || use_plain;
 
 				// Parse --filter flag
 				const filter_index = args.indexOf('--filter');
@@ -423,7 +608,9 @@ async function main() {
 							}
 
 							if (options.filter && output[options.filter]) {
-								output = { [options.filter]: output[options.filter] };
+								output = {
+									[options.filter]: output[options.filter],
+								};
 							}
 
 							if (options.sections && options.sections.length > 0) {

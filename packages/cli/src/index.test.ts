@@ -54,6 +54,23 @@ describe('sveltest CLI', () => {
 			expect(result.code).toBe(0);
 			expect(result.stdout).toContain('Sveltest CLI');
 		});
+
+		it('documents llms command', async () => {
+			const result = await run_cli('help');
+			expect(result.stdout).toContain('llms');
+			expect(result.stdout).toContain('--full');
+			expect(result.stdout).toContain('--context');
+		});
+
+		it('documents docs command', async () => {
+			const result = await run_cli('help');
+			expect(result.stdout).toContain('docs');
+		});
+
+		it('documents --plain flag', async () => {
+			const result = await run_cli('help');
+			expect(result.stdout).toContain('--plain');
+		});
 	});
 
 	describe('version output', () => {
