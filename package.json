@@ -41,13 +41,13 @@
 		"@changesets/cli": "2.30.0",
 		"dotenv": "^17.4.1",
 		"eslint": "^10.2.0",
-		"eslint-plugin-svelte": "^3.16.0",
+		"eslint-plugin-svelte": "^3.17.0",
 		"prettier": "^3.8.1",
 		"prettier-plugin-svelte": "^3.5.1",
 		"prettier-plugin-tailwindcss": "^0.7.2",
 		"tsx": "^4.21.0",
 		"typescript": "^6.0.2",
-		"vite-plus": "^0.1.15",
+		"vite-plus": "^0.1.16",
 		"zod": "^4.3.6"
 	},
 	"pnpm": {
