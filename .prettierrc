@@ -3,5 +3,17 @@
 	"singleQuote": true,
 	"trailingComma": "all",
 	"printWidth": 70,
-	"proseWrap": "always"
+	"proseWrap": "always",
+	"plugins": [
+		"prettier-plugin-svelte",
+		"prettier-plugin-tailwindcss"
+	],
+	"overrides": [
+		{
+			"files": "*.svelte",
+			"options": {
+				"parser": "svelte"
+			}
+		}
+	]
 }
