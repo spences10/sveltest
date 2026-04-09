@@ -52,10 +52,10 @@ pnpm coverage       # Generate test coverage report
 ### Code Quality
 
 ```bash
-pnpm lint                  # Check linting and formatting
+pnpm lint                  # Check linting and formatting (vp check + eslint svelte + prettier svelte)
 pnpm lint:fix              # Fix linting and formatting issues
-pnpm format                # Format code with Prettier
-pnpm check                 # Run Svelte type checking
+pnpm format                # Format code (oxfmt for JS/TS, prettier for .svelte)
+pnpm check                 # Run vp check (oxlint + oxfmt + type check)
 pnpm check:watch           # Watch mode for type checking
 ```
 
