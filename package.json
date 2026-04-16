@@ -37,7 +37,7 @@
 	},
 	"devDependencies": {
 		"@anthropic-ai/claude-agent-sdk": "^0.2.97",
-		"@anthropic-ai/sdk": "^0.87.0",
+		"@anthropic-ai/sdk": "^0.90.0",
 		"@changesets/cli": "2.30.0",
 		"dotenv": "^17.4.1",
 		"eslint": "^10.2.0",
