@@ -25,12 +25,10 @@ function create_schema_from_rules(
 	}
 
 	// Convert legacy rules to Zod schema
-	let schema: z.ZodSchema<any> = z.string();
+	let schema = z.string();
 
 	if (rules.required) {
 		schema = schema.min(1, 'This field is required');
-	} else {
-		schema = schema.optional().or(z.literal(''));
 	}
 
 	if (rules.min_length) {
@@ -51,7 +49,9 @@ function create_schema_from_rules(
 		schema = schema.regex(rules.pattern, 'Invalid format');
 	}
 
-	return schema;
+	return rules.required
+		? schema
+		: schema.optional().or(z.literal(''));
 }
 
 export function create_form_state(

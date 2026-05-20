@@ -237,13 +237,11 @@ async function list_examples(plain?: boolean) {
 function compact_json(
 	data: Record<string, unknown>,
 ): Record<string, unknown> {
-	const {
-		description,
-		source_file,
-		total_tests,
-		meta,
-		...essential
-	} = data;
+	const essential = { ...data };
+	delete essential.description;
+	delete essential.source_file;
+	delete essential.total_tests;
+	delete essential.meta;
 	return essential;
 }
 
@@ -605,4 +603,4 @@ const main = defineCommand({
 	},
 });
 
-runMain(main);
+void runMain(main);

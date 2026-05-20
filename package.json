@@ -47,6 +47,7 @@
 		"prettier-plugin-tailwindcss": "catalog:",
 		"tsx": "catalog:",
 		"typescript": "catalog:",
+		"typescript-eslint": "catalog:",
 		"vite-plus": "catalog:",
 		"zod": "catalog:"
 	},

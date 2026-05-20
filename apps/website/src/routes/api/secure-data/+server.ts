@@ -1,7 +1,8 @@
 import { API_SECRET } from '$env/static/private';
 import { error, json } from '@sveltejs/kit';
+import type { RequestHandler } from './$types';
 
-export const GET = async ({ request }) => {
+export const GET: RequestHandler = async ({ request }) => {
 	const auth_token = request.headers.get('authorization');
 
 	if (!auth_token || auth_token !== `Bearer ${API_SECRET}`) {

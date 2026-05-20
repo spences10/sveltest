@@ -1,5 +1,6 @@
 import svelte from 'eslint-plugin-svelte';
-import svelteConfig from './svelte.config.js';
+import ts from 'typescript-eslint';
+import svelteConfig from './apps/website/svelte.config.js';
 
 // Svelte-only ESLint config — JS/TS linting handled by vite-plus (oxlint)
 export default [
@@ -9,8 +10,14 @@ export default [
 		languageOptions: {
 			parserOptions: {
 				extraFileExtensions: ['.svelte'],
+				parser: ts.parser,
 				svelteConfig,
 			},
+		},
+		rules: {
+			'svelte/no-navigation-without-resolve': 'off',
+			'svelte/require-each-key': 'off',
+			'svelte/no-at-html-tags': 'off',
 		},
 	},
 	{

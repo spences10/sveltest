@@ -1,8 +1,7 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
-import { playwright } from 'vite-plus/test/browser-playwright';
-import { defineConfig } from 'vite-plus';
-import { coverageConfigDefaults } from 'vite-plus/test/config';
+import { playwright } from '@vitest/browser-playwright';
+import { coverageConfigDefaults, defineConfig } from 'vitest/config';
 
 export default defineConfig({
 	plugins: [sveltekit(), tailwindcss()],
@@ -11,7 +10,7 @@ export default defineConfig({
 		projects: [
 			{
 				// Client-side tests (Svelte components)
-				extends: true,
+				extends: './vite.config.ts',
 				test: {
 					name: 'client',
 					// Timeout for browser tests - prevent hanging on element lookups
@@ -30,12 +29,12 @@ export default defineConfig({
 						'src/lib/server/**',
 						'src/**/*.ssr.{test,spec}.{js,ts}',
 					],
-					setupFiles: ['./src/vitest-setup-client.ts'],
+					setupFiles: ['vitest-browser-svelte'],
 				},
 			},
 			{
 				// SSR tests (Server-side rendering)
-				extends: true,
+				extends: './vite.config.ts',
 				test: {
 					name: 'ssr',
 					environment: 'node',
@@ -44,7 +43,7 @@ export default defineConfig({
 			},
 			{
 				// Server-side tests (Node.js utilities)
-				extends: true,
+				extends: './vite.config.ts',
 				test: {
 					name: 'server',
 					environment: 'node',
