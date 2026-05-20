@@ -101,7 +101,7 @@ export default defineConfig({
 		projects: [
 			{
 				// Client-side tests (Svelte components)
-				extends: true,
+				extends: './vite.config.ts',
 				test: {
 					name: 'client',
 					// Timeout for browser tests - prevent hanging on element lookups
@@ -109,8 +109,6 @@ export default defineConfig({
 					browser: {
 						enabled: true,
 						provider: playwright(),
-						// Multiple browser instances for better performance
-						// Uses single Vite server with shared caching
 						instances: [
 							{ browser: 'chromium' },
 							// { browser: 'firefox' },
@@ -122,12 +120,12 @@ export default defineConfig({
 						'src/lib/server/**',
 						'src/**/*.ssr.{test,spec}.{js,ts}',
 					],
-					setupFiles: ['./src/vitest-setup-client.ts'],
+					setupFiles: ['vitest-browser-svelte'],
 				},
 			},
 			{
 				// SSR tests (Server-side rendering)
-				extends: true,
+				extends: './vite.config.ts',
 				test: {
 					name: 'ssr',
 					environment: 'node',
@@ -136,7 +134,7 @@ export default defineConfig({
 			},
 			{
 				// Server-side tests (Node.js utilities)
-				extends: true,
+				extends: './vite.config.ts',
 				test: {
 					name: 'server',
 					environment: 'node',
@@ -148,28 +146,26 @@ export default defineConfig({
 				},
 			},
 		],
-		coverage: {
-			include: ['src'],
-			// Improved performance: Vitest only checks files in src/
-			// instead of scanning the entire project
-		},
 	},
 });
 ```
 
-> **Performance Note**: The simplified `extends: true` configuration
-> automatically inherits settings from the same file, and using
-> `coverage.include: ['src']` improves performance by limiting
-> coverage scanning to your source directory instead of the entire
-> project.
+> **Setup Note**: `setupFiles: ['vitest-browser-svelte']` is the
+> official setup entry. It registers cleanup and browser helpers; you
+> no longer need a local `src/vitest-setup-client.ts` file just for
+> type references.
 
-### Edit Setup File
+### Add TypeScript Browser Test Types
 
-Replace the contents of the `src/vitest-setup-client.ts` with this:
+If TypeScript does not pick up the browser render/assertion types, add
+`vitest-browser-svelte` to your `tsconfig.json`:
 
-```typescript
-/// <reference types="vitest/browser" />
-/// <reference types="@vitest/browser-playwright" />
+```json
+{
+	"compilerOptions": {
+		"types": ["vitest-browser-svelte"]
+	}
+}
 ```
 
 ### Run the tests

@@ -582,7 +582,7 @@ expect.extend({
 ```typescript
 // vite.config.ts (Vitest v4)
 import { playwright } from '@vitest/browser-playwright';
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
 	test: {
@@ -605,7 +605,11 @@ export default defineConfig({
 				test: {
 					include: ['**/*.svelte.test.ts'],
 					name: 'client',
-					browser: { enabled: true, provider: playwright() },
+					browser: {
+						enabled: true,
+						provider: playwright(),
+						instances: [{ browser: 'chromium' }],
+					},
 				},
 			},
 			{

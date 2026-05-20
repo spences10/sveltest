@@ -45,19 +45,19 @@ Replace your existing test configuration with browser mode:
 
 ```typescript
 // vite.config.ts (Vitest v4)
-import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
+import { sveltekit } from '@sveltejs/kit/vite';
 import { playwright } from '@vitest/browser-playwright';
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-	plugins: [sveltekit(), tailwindcss()],
+	plugins: [tailwindcss(), sveltekit()],
 
 	test: {
 		projects: [
 			{
 				// Client-side tests (Svelte components)
-				extends: true,
+				extends: './vite.config.ts',
 				test: {
 					name: 'client',
 					// Timeout for browser tests - prevent hanging on element lookups
@@ -76,12 +76,12 @@ export default defineConfig({
 						'src/lib/server/**',
 						'src/**/*.ssr.{test,spec}.{js,ts}',
 					],
-					setupFiles: ['./src/vitest-setup-client.ts'],
+					setupFiles: ['vitest-browser-svelte'],
 				},
 			},
 			{
 				// SSR tests (Server-side rendering)
-				extends: true,
+				extends: './vite.config.ts',
 				test: {
 					name: 'ssr',
 					environment: 'node',
@@ -90,13 +90,13 @@ export default defineConfig({
 			},
 			{
 				// Server-side tests (Node.js utilities)
-				extends: true,
+				extends: './vite.config.ts',
 				test: {
 					name: 'server',
 					environment: 'node',
 					include: ['src/**/*.{test,spec}.{js,ts}'],
 					exclude: [
-						'src/**/*.svelte.{test,spec}.{js,ts}'],
+						'src/**/*.svelte.{test,spec}.{js,ts}',
 						'src/**/*.ssr.{test,spec}.{js,ts}',
 					],
 				},
@@ -106,28 +106,26 @@ export default defineConfig({
 });
 ```
 
-### Step 3: Update Setup Files
+### Step 3: Remove jsdom Setup Files
 
-Remove jsdom-specific polyfills in `src/vitest-setup-client.ts` since
-you're now using real browsers:
+Remove jsdom-specific polyfills such as `@testing-library/jest-dom`,
+`matchMedia` mocks, and local browser type-reference setup files. Use
+the official `vitest-browser-svelte` setup entry instead:
 
 ```typescript
-// BEFORE: src/vitest-setup-client.ts (remove these)
-import '@testing-library/jest-dom';
+// vite.config.ts
+setupFiles: ['vitest-browser-svelte'];
+```
 
-// Mock matchMedia for jsdom
-Object.defineProperty(window, 'matchMedia', {
-	writable: true,
-	value: vi.fn().mockImplementation((query) => ({
-		matches: false,
-		media: query,
-		// ... more jsdom polyfills
-	})),
-});
+If TypeScript does not pick up browser render/assertion types, add the
+package to `tsconfig.json`:
 
-// AFTER: src/vitest-setup-client.ts (minimal setup)
-/// <reference types="vitest/browser" />
-/// <reference types="@vitest/browser-playwright" />
+```json
+{
+	"compilerOptions": {
+		"types": ["vitest-browser-svelte"]
+	}
+}
 ```
 
 ## 🧪 Phase 2: Core Pattern Migration
