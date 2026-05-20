@@ -1,9 +1,25 @@
 packages:
   - 'apps/*'
   - 'packages/*'
+catalog:
+  '@changesets/cli': 2.31.0
+  '@playwright/test': ^1.60.0
+  '@types/node': ^25.6.0
+  eslint: ^10.4.0
+  eslint-plugin-svelte: ^3.17.1
+  playwright: ^1.60.0
+  prettier: ^3.8.3
+  prettier-plugin-svelte: ^3.5.2
+  prettier-plugin-tailwindcss: ^0.8.0
+  tsx: ^4.22.2
+  typescript: ^6.0.3
+  vite-plus: ^0.1.21
+  vitest: ^4.1.5
+  zod: ^4.4.3
+
 allowBuilds:
   esbuild: true
   sharp: true
   workerd: true
-minimumReleaseAgeExclude:
-  - tsx@4.22.2
+
+minimumReleaseAge: 2880

@@ -1,11 +1,12 @@
 # Validation System Implementation
 
-**Date:** 2025-11-10
-**Status:** ✅ Complete - Ready for Use
+**Date:** 2025-11-10 **Status:** ✅ Complete - Ready for Use
 
 ## 🎯 Overview
 
-A complete validation system that validates all test files against official documentation from Vitest, Playwright, Svelte 5, and SvelteKit.
+A complete validation system that validates all test files against
+official documentation from Vitest, Playwright, Svelte 5, and
+SvelteKit.
 
 ## ✨ What Was Built
 
@@ -30,8 +31,8 @@ A complete validation system that validates all test files against official docu
 
 ```json
 {
-  "validate:tests": "Validate all tests (first run)",
-  "validate:tests:cached": "Validate using cached docs (faster)"
+	"validate:tests": "Validate all tests (first run)",
+	"validate:tests:cached": "Validate using cached docs (faster)"
 }
 ```
 
@@ -60,6 +61,7 @@ validation-reports/
    Scripts automatically load this using `dotenv/config`.
 
 2. **Run Full Validation**
+
    ```bash
    pnpm validate:tests
    ```
@@ -92,34 +94,40 @@ pnpm validate:tests --dir apps/website/src/lib
 ## 📊 What Gets Validated
 
 ### ✅ API Usage
+
 - Current, non-deprecated APIs
 - Correct import statements
 - Proper function signatures
 - Version compatibility
 
 ### ✅ Anti-Patterns
+
 - Using containers instead of locators
 - Not handling strict mode violations
 - Testing implementation details
 - Missing await on async operations
 
 ### ✅ Accessibility
+
 - Semantic queries (getByRole, getByLabel)
 - Correct ARIA roles
 - Keyboard navigation testing
 
 ### ✅ Best Practices
+
 - untrack() with $derived values
 - Real FormData/Request objects
 - Proper error handling
 - Good test structure
 
 ### ✅ Svelte 5 Specific
+
 - Correct runes usage
 - No Svelte 4 patterns
 - flushSync() when needed
 
 ### ✅ Performance
+
 - Efficient selectors
 - Proper timeouts
 - Resource cleanup
@@ -148,6 +156,7 @@ graph TD
 ### Step-by-Step Process
 
 1. **Run Initial Validation**
+
    ```bash
    pnpm validate:tests
    ```
@@ -158,6 +167,7 @@ graph TD
    - Reference official documentation
 
 3. **Re-validate**
+
    ```bash
    pnpm validate:tests:cached
    ```
@@ -190,12 +200,12 @@ Tests are validated when:
 
 ## Summary
 
-| Metric | Count |
-|--------|-------|
-| Total Files Analyzed | 49 |
-| Valid Files | ✅ 42 |
-| Invalid Files | ❌ 7 |
-| Critical Issues | 🔴 3 |
+| Metric               | Count |
+| -------------------- | ----- |
+| Total Files Analyzed | 49    |
+| Valid Files          | ✅ 42 |
+| Invalid Files        | ❌ 7  |
+| Critical Issues      | 🔴 3  |
 
 ## Files Requiring Attention
 
@@ -205,11 +215,8 @@ Tests are validated when:
 
 **Issue:** Using deprecated container selector
 
-**Recommended Fix:**
-\`\`\`typescript
-render(Button);
-const button = page.getByRole('button', { name: /click/i });
-\`\`\`
+**Recommended Fix:** \`\`\`typescript render(Button); const button =
+page.getByRole('button', { name: /click/i }); \`\`\`
 
 **Reference:** https://vitest.dev/guide/browser/#locators
 ```
@@ -217,6 +224,7 @@ const button = page.getByRole('button', { name: /click/i });
 ## 🗑️ What Was Removed
 
 ### Old Scripts (Deleted)
+
 - ❌ `scripts/generate-ai-rules.ts`
 - ❌ `scripts/generate-llms.ts`
 - ❌ `scripts/last-evaluation.md`
@@ -224,6 +232,7 @@ const button = page.getByRole('button', { name: /click/i });
 - ❌ `apps/website/src/config/anthropic.ts`
 
 ### Replaced With
+
 - ✅ New validation system
 - ✅ Centralized config
 - ✅ Modular architecture
@@ -249,15 +258,18 @@ const button = page.getByRole('button', { name: /click/i });
 For a project with ~50 test files:
 
 **First Run** (with doc fetching):
+
 - Fetch docs: 5 sources × $0.01 = ~$0.05
 - Analyze tests: 50 files × $0.15 = ~$7.50
 - **Total: ~$7.55**
 
 **Cached Runs**:
+
 - Analyze tests: 50 files × $0.15 = ~$7.50
 - **Total: ~$7.50**
 
 **Per File**:
+
 - ~$0.15 per test file analyzed
 
 ## 🔮 Next Steps
@@ -265,6 +277,7 @@ For a project with ~50 test files:
 ### Immediate
 
 1. ✅ **Validate All Tests**
+
    ```bash
    pnpm validate:tests
    ```
@@ -309,7 +322,7 @@ After validation is complete:
 **Solution**: Increase delay between files in `validate-tests.ts`
 
 ```typescript
-await new Promise(resolve => setTimeout(resolve, 2000)); // 2s
+await new Promise((resolve) => setTimeout(resolve, 2000)); // 2s
 ```
 
 ### Issue: Incorrect Analysis
@@ -361,12 +374,10 @@ ls -la validation-reports/
 
 You now have a complete validation system that:
 
-✅ Validates tests against official docs
-✅ Uses latest Claude models (Haiku 4.5 + Sonnet 4.5)
-✅ Generates detailed reports
-✅ Provides specific fixes with code examples
-✅ Caches docs for faster re-runs
-✅ Follows snake_case/kebab-case conventions
-✅ Modular, maintainable architecture
+✅ Validates tests against official docs ✅ Uses latest Claude models
+(Haiku 4.5 + Sonnet 4.5) ✅ Generates detailed reports ✅ Provides
+specific fixes with code examples ✅ Caches docs for faster re-runs ✅
+Follows snake_case/kebab-case conventions ✅ Modular, maintainable
+architecture
 
 **Ready to validate your test suite!** 🚀
