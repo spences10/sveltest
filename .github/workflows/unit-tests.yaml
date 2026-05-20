@@ -54,8 +54,12 @@ jobs:
 
       - name: Verify Playwright versions match
         run: |
-          # Extract Playwright version from package.json
-          PACKAGE_VERSION=$(node -p "require('./apps/website/package.json').devDependencies.playwright.replace(/[\^~]/, '')")
+          # Extract Playwright version from package.json, resolving pnpm catalog: entries
+          PACKAGE_SPEC=$(node -p "require('./apps/website/package.json').devDependencies.playwright")
+          if [ "$PACKAGE_SPEC" = "catalog:" ]; then
+            PACKAGE_SPEC=$(node -e "const fs = require('node:fs'); const match = fs.readFileSync('pnpm-workspace.yaml', 'utf8').match(/^\s{2}playwright:\s*([^\n]+)/m); if (!match) process.exit(1); console.log(match[1].trim())")
+          fi
+          PACKAGE_VERSION=$(echo "$PACKAGE_SPEC" | sed 's/^[\^~]//')
 
           # Extract version from container image (from this workflow file)
           CONTAINER_VERSION=$(grep -o 'playwright:v[0-9.]*' .github/workflows/unit-tests.yaml | sed 's/playwright:v//')
