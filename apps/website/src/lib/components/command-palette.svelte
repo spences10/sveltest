@@ -2,8 +2,8 @@
 	import { goto } from '$app/navigation';
 	import { BookOpen, Code, Eye } from '$lib/icons';
 	import { search_site } from '$lib/search.remote';
-	import { command_palette_state } from '$lib/state/command-palette.svelte';
 	import type { SearchResult } from '$lib/server/search-index';
+	import { command_palette_state } from '$lib/state/command-palette.svelte';
 
 	let results = $state<SearchResult[]>([]);
 	let loading = $state(false);
@@ -134,9 +134,9 @@
 	aria-label="Search"
 >
 	<article
-		class="modal-box rounded-box flex h-auto max-h-[75dvh] w-full max-w-xl flex-col p-0 sm:max-h-[80vh] lg:max-w-3xl"
+		class="modal-box flex h-auto max-h-[75dvh] w-full max-w-xl flex-col rounded-box p-0 sm:max-h-[80vh] lg:max-w-3xl"
 	>
-		<search class="border-base-300 border-b p-4">
+		<search class="border-b border-base-300 p-4">
 			<label for="command-palette-search" class="sr-only">
 				Search docs, examples, and components
 			</label>
@@ -147,7 +147,7 @@
 				onkeydown={handle_keydown}
 				type="search"
 				placeholder="Search docs, examples, components..."
-				class="input input-ghost w-full text-lg focus:outline-none"
+				class="input w-full input-ghost text-lg focus:outline-none"
 			/>
 		</search>
 
@@ -157,7 +157,7 @@
 		>
 			{#if command_palette_state.query.trim() === '' && command_palette_state.recent.length > 0}
 				<div
-					class="text-base-content/50 px-3 py-2 text-xs font-semibold uppercase"
+					class="px-3 py-2 text-xs font-semibold text-base-content/50 uppercase"
 				>
 					Recent
 				</div>
@@ -171,7 +171,7 @@
 								data-index={index}
 							>
 								<button
-									class="hover:bg-base-200 flex w-full items-center gap-3 rounded-lg p-3 text-left transition-colors {index ===
+									class="flex w-full items-center gap-3 rounded-lg p-3 text-left transition-colors hover:bg-base-200 {index ===
 									selected_index
 										? 'bg-base-200'
 										: ''}"
@@ -195,7 +195,7 @@
 			{:else if command_palette_state.query.trim() !== ''}
 				{#if grouped_results.docs.length > 0}
 					<div
-						class="text-base-content/50 px-3 py-2 text-xs font-semibold uppercase"
+						class="px-3 py-2 text-xs font-semibold text-base-content/50 uppercase"
 					>
 						Docs
 					</div>
@@ -208,7 +208,7 @@
 								data-index={flat_index}
 							>
 								<button
-									class="hover:bg-base-200 flex w-full items-center gap-3 rounded-lg p-3 text-left transition-colors {flat_index ===
+									class="flex w-full items-center gap-3 rounded-lg p-3 text-left transition-colors hover:bg-base-200 {flat_index ===
 									selected_index
 										? 'bg-base-200'
 										: ''}"
@@ -227,7 +227,7 @@
 										</div>
 										{#if item.excerpt}
 											<div
-												class="text-base-content/50 truncate text-sm"
+												class="truncate text-sm text-base-content/50"
 											>
 												{item.excerpt}
 											</div>
@@ -241,7 +241,7 @@
 
 				{#if grouped_results.examples.length > 0}
 					<div
-						class="text-base-content/50 mt-2 px-3 py-2 text-xs font-semibold uppercase"
+						class="mt-2 px-3 py-2 text-xs font-semibold text-base-content/50 uppercase"
 					>
 						Examples
 					</div>
@@ -254,7 +254,7 @@
 								data-index={flat_index}
 							>
 								<button
-									class="hover:bg-base-200 flex w-full items-center gap-3 rounded-lg p-3 text-left transition-colors {flat_index ===
+									class="flex w-full items-center gap-3 rounded-lg p-3 text-left transition-colors hover:bg-base-200 {flat_index ===
 									selected_index
 										? 'bg-base-200'
 										: ''}"
@@ -271,7 +271,7 @@
 										<div class="truncate font-medium">
 											{item.title}
 										</div>
-										<div class="text-base-content/50 text-sm">
+										<div class="text-sm text-base-content/50">
 											{item.category}
 										</div>
 									</div>
@@ -283,7 +283,7 @@
 
 				{#if grouped_results.components.length > 0}
 					<div
-						class="text-base-content/50 mt-2 px-3 py-2 text-xs font-semibold uppercase"
+						class="mt-2 px-3 py-2 text-xs font-semibold text-base-content/50 uppercase"
 					>
 						Components
 					</div>
@@ -299,7 +299,7 @@
 								data-index={flat_index}
 							>
 								<button
-									class="hover:bg-base-200 flex w-full items-center gap-3 rounded-lg p-3 text-left transition-colors {flat_index ===
+									class="flex w-full items-center gap-3 rounded-lg p-3 text-left transition-colors hover:bg-base-200 {flat_index ===
 									selected_index
 										? 'bg-base-200'
 										: ''}"
@@ -324,26 +324,26 @@
 				{/if}
 
 				{#if flat_items.length === 0 && !loading}
-					<div class="text-base-content/50 p-4 text-center">
+					<div class="p-4 text-center text-base-content/50">
 						No results found
 					</div>
 				{/if}
 			{:else if loading}
 				<div
-					class="text-base-content/50 flex items-center justify-center gap-2 p-4"
+					class="flex items-center justify-center gap-2 p-4 text-base-content/50"
 				>
-					<span class="loading loading-spinner loading-sm"></span>
+					<span class="loading loading-sm loading-spinner"></span>
 					Loading...
 				</div>
 			{:else}
-				<div class="text-base-content/50 p-4 text-center">
+				<div class="p-4 text-center text-base-content/50">
 					Start typing to search...
 				</div>
 			{/if}
 		</nav>
 
 		<footer
-			class="border-base-300 text-base-content/50 flex gap-4 border-t p-3 text-xs"
+			class="flex gap-4 border-t border-base-300 p-3 text-xs text-base-content/50"
 		>
 			<span><kbd class="kbd kbd-xs">↑↓</kbd> navigate</span>
 			<span><kbd class="kbd kbd-xs">↵</kbd> select</span>

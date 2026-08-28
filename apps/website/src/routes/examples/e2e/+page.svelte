@@ -186,19 +186,19 @@
 		<!-- Hero Section -->
 		<div class="mb-16 text-center">
 			<div
-				class="bg-accent/10 mb-6 inline-flex items-center gap-2 rounded-full px-4 py-2"
+				class="mb-6 inline-flex items-center gap-2 rounded-full bg-accent/10 px-4 py-2"
 			>
 				<Calculator class_names="text-accent h-4 w-4" />
-				<span class="text-accent text-sm font-medium">
+				<span class="text-sm font-medium text-accent">
 					End-to-End Testing
 				</span>
 			</div>
 			<h1
-				class="from-accent via-primary to-secondary mb-4 bg-linear-to-r bg-clip-text text-6xl leading-normal font-black text-transparent"
+				class="mb-4 bg-linear-to-r from-accent via-primary to-secondary bg-clip-text text-6xl leading-normal font-black text-transparent"
 			>
 				E2E Testing
 			</h1>
-			<p class="text-base-content/70 mx-auto max-w-3xl text-xl">
+			<p class="mx-auto max-w-3xl text-xl text-base-content/70">
 				Master end-to-end testing with Playwright - from user journeys
 				to performance monitoring and accessibility validation
 			</p>
@@ -213,7 +213,7 @@
 				{#each e2e_categories as category}
 					<div class="group">
 						<div
-							class="card bg-base-100/80 border-base-300/50 hover:shadow-3xl border shadow-2xl backdrop-blur-sm transition-all duration-300 hover:-translate-y-2"
+							class="hover:shadow-3xl card border border-base-300/50 bg-base-100/80 shadow-2xl backdrop-blur-sm transition-all duration-300 hover:-translate-y-2"
 						>
 							<div class="card-body p-6">
 								<div
@@ -227,14 +227,14 @@
 									{category.title}
 								</h3>
 								<p
-									class="text-base-content/70 mb-4 text-sm leading-relaxed"
+									class="mb-4 text-sm leading-relaxed text-base-content/70"
 								>
 									{category.description}
 								</p>
 								<ul class="space-y-1 text-xs">
 									{#each category.examples as example}
 										<li
-											class="text-base-content/60 flex items-center gap-2"
+											class="flex items-center gap-2 text-base-content/60"
 										>
 											<CheckCircle
 												class_names="h-3 w-3 text-success"
@@ -274,7 +274,7 @@
 			<!-- Code Examples -->
 			<div class="grid gap-8 lg:grid-cols-2">
 				<div
-					class="card bg-base-100/90 border-base-300/50 border shadow-xl backdrop-blur-sm"
+					class="card border border-base-300/50 bg-base-100/90 shadow-xl backdrop-blur-sm"
 				>
 					<div class="card-body p-6">
 						<h3 class="mb-4 text-xl font-bold">Code Example</h3>
@@ -287,7 +287,7 @@
 				</div>
 
 				<div
-					class="card bg-base-100/90 border-base-300/50 border shadow-xl backdrop-blur-sm"
+					class="card border border-base-300/50 bg-base-100/90 shadow-xl backdrop-blur-sm"
 				>
 					<div class="card-body p-6">
 						<h3 class="mb-4 text-xl font-bold">Key Concepts</h3>
@@ -422,25 +422,25 @@
 			<h2 class="mb-8 text-center text-3xl font-bold">
 				Live E2E Test Examples
 			</h2>
-			<p class="text-base-content/70 mb-8 text-center">
+			<p class="mb-8 text-center text-base-content/70">
 				This project includes comprehensive E2E tests that you can run
 				and explore
 			</p>
 			<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 				{#each existing_tests as test}
 					<div
-						class="card bg-base-100/80 border-base-300/50 border shadow-xl backdrop-blur-sm"
+						class="card border border-base-300/50 bg-base-100/80 shadow-xl backdrop-blur-sm"
 					>
 						<div class="card-body p-6">
 							<div class="mb-4 flex items-center gap-3">
 								<div
-									class="from-accent/20 to-accent/10 flex h-10 w-10 items-center justify-center rounded-lg bg-linear-to-br"
+									class="flex h-10 w-10 items-center justify-center rounded-lg bg-linear-to-br from-accent/20 to-accent/10"
 								>
 									<Calculator class_names="text-accent h-5 w-5" />
 								</div>
 								<h3 class="text-lg font-bold">{test.name}</h3>
 							</div>
-							<p class="text-base-content/70 mb-4 text-sm">
+							<p class="mb-4 text-sm text-base-content/70">
 								{test.description}
 							</p>
 							<div class="mb-4">
@@ -453,7 +453,7 @@
 									{/each}
 								</div>
 							</div>
-							<div class="bg-base-200 rounded p-2">
+							<div class="rounded bg-base-200 p-2">
 								<code class="text-xs">{test.file}</code>
 							</div>
 						</div>
@@ -470,18 +470,18 @@
 			<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
 				{#each best_practices as practice}
 					<div
-						class="card bg-base-100/80 border-base-300/50 border shadow-xl backdrop-blur-sm"
+						class="card border border-base-300/50 bg-base-100/80 shadow-xl backdrop-blur-sm"
 					>
 						<div class="card-body p-6 text-center">
 							<div
-								class="from-primary/20 to-primary/10 mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br"
+								class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-primary/20 to-primary/10"
 							>
 								<practice.icon class_names="text-primary h-6 w-6" />
 							</div>
 							<h3 class="mb-2 text-lg font-bold">
 								{practice.title}
 							</h3>
-							<p class="text-base-content/70 text-sm">
+							<p class="text-sm text-base-content/70">
 								{practice.description}
 							</p>
 						</div>
@@ -497,18 +497,18 @@
 			</h2>
 			<div class="grid gap-8 lg:grid-cols-2">
 				<div
-					class="card bg-base-100/90 border-base-300/50 border shadow-xl backdrop-blur-sm"
+					class="card border border-base-300/50 bg-base-100/90 shadow-xl backdrop-blur-sm"
 				>
 					<div class="card-body p-8">
 						<div class="mb-4 flex items-center gap-3">
 							<div
-								class="from-primary/20 to-primary/10 flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br"
+								class="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-primary/20 to-primary/10"
 							>
 								<Clock class_names="text-primary h-6 w-6" />
 							</div>
 							<h3 class="text-xl font-bold">Quick Start</h3>
 						</div>
-						<p class="text-base-content/70 mb-6">
+						<p class="mb-6 text-base-content/70">
 							Get started with E2E testing in this project with these
 							simple commands
 						</p>
@@ -521,18 +521,18 @@
 				</div>
 
 				<div
-					class="card bg-base-100/90 border-base-300/50 border shadow-xl backdrop-blur-sm"
+					class="card border border-base-300/50 bg-base-100/90 shadow-xl backdrop-blur-sm"
 				>
 					<div class="card-body p-8">
 						<div class="mb-4 flex items-center gap-3">
 							<div
-								class="from-secondary/20 to-secondary/10 flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br"
+								class="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-secondary/20 to-secondary/10"
 							>
 								<Settings class_names="text-secondary h-6 w-6" />
 							</div>
 							<h3 class="text-xl font-bold">Configuration</h3>
 						</div>
-						<p class="text-base-content/70 mb-6">
+						<p class="mb-6 text-base-content/70">
 							E2E tests are configured with Playwright for maximum
 							reliability and cross-browser support
 						</p>
@@ -562,27 +562,27 @@
 		<!-- Call to Action -->
 		<div class="text-center">
 			<div
-				class="card bg-base-100/90 border-base-300/50 border shadow-2xl backdrop-blur-sm"
+				class="card border border-base-300/50 bg-base-100/90 shadow-2xl backdrop-blur-sm"
 			>
 				<div class="card-body p-8">
 					<h2 class="mb-4 text-2xl font-bold">
 						Explore More Testing Patterns
 					</h2>
-					<p class="text-base-content/70 mb-6">
+					<p class="mb-6 text-base-content/70">
 						Continue your testing journey with our comprehensive
 						documentation and component examples
 					</p>
 					<div class="flex flex-col justify-center gap-4 sm:flex-row">
 						<a
 							href="/docs"
-							class="btn btn-primary gap-2 transition-all duration-200 hover:scale-105"
+							class="btn gap-2 transition-all duration-200 btn-primary hover:scale-105"
 						>
 							<Eye class_names="h-4 w-4" />
 							View Documentation
 						</a>
 						<a
 							href="/components"
-							class="btn btn-outline gap-2 transition-all duration-200 hover:scale-105"
+							class="btn gap-2 btn-outline transition-all duration-200 hover:scale-105"
 						>
 							<Arrow direction="right" class_names="h-4 w-4" />
 							Component Showcase

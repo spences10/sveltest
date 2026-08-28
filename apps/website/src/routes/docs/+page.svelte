@@ -162,19 +162,19 @@
 
 <!-- Hero Section -->
 <section
-	class="from-primary/10 via-secondary/5 to-accent/10 bg-linear-to-br px-4 py-24"
+	class="bg-linear-to-br from-primary/10 via-secondary/5 to-accent/10 px-4 py-24"
 >
 	<div class="container mx-auto max-w-7xl text-center">
 		<div class="mb-8">
 			<h1 class="mb-6 text-6xl font-black tracking-tight">
 				<span
-					class="from-primary to-secondary bg-linear-to-r bg-clip-text text-transparent"
+					class="bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent"
 				>
 					Testing Documentation
 				</span>
 			</h1>
 			<p
-				class="text-base-content/70 mx-auto max-w-3xl text-xl leading-relaxed"
+				class="mx-auto max-w-3xl text-xl leading-relaxed text-base-content/70"
 			>
 				Master modern testing with Svelte 5 and vitest-browser-svelte.
 				From basic component tests to advanced E2E patterns, this
@@ -192,17 +192,17 @@
 
 <!-- Documentation Navigation - Prominent Section -->
 <section
-	class="from-primary/5 to-secondary/5 bg-linear-to-br px-4 py-24"
+	class="bg-linear-to-br from-primary/5 to-secondary/5 px-4 py-24"
 >
 	<div class="container mx-auto max-w-7xl">
 		<div class="mb-16 text-center">
 			<h2
-				class="from-primary to-secondary mb-4 bg-linear-to-r bg-clip-text text-5xl font-bold text-transparent"
+				class="mb-4 bg-linear-to-r from-primary to-secondary bg-clip-text text-5xl font-bold text-transparent"
 			>
 				Documentation Guide
 			</h2>
 			<p
-				class="text-base-content/80 mx-auto max-w-3xl text-xl leading-relaxed"
+				class="mx-auto max-w-3xl text-xl leading-relaxed text-base-content/80"
 			>
 				Complete testing documentation for Svelte 5 +
 				vitest-browser-svelte. Start with any section below - all
@@ -213,7 +213,7 @@
 		<!-- Grouped Documentation Links -->
 		{#each topic_categories as category}
 			<div class="mb-12">
-				<h3 class="text-base-content/80 mb-6 text-2xl font-bold">
+				<h3 class="mb-6 text-2xl font-bold text-base-content/80">
 					{category.name}
 				</h3>
 				<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -236,23 +236,23 @@
 
 		<!-- Quick Access Bar -->
 		<div
-			class="from-primary/5 via-secondary/5 to-accent/5 border-base-300/50 rounded-2xl border bg-linear-to-br p-8 shadow-lg backdrop-blur-sm"
+			class="rounded-2xl border border-base-300/50 bg-linear-to-br from-primary/5 via-secondary/5 to-accent/5 p-8 shadow-lg backdrop-blur-sm"
 		>
 			<div class="flex flex-col gap-6">
 				<!-- Content -->
 				<div>
 					<div
-						class="bg-primary/10 mb-6 inline-flex items-center gap-2 rounded-full px-4 py-2"
+						class="mb-6 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2"
 					>
 						<Code class_names="text-primary h-4 w-4" />
-						<span class="text-primary text-sm font-medium">
+						<span class="text-sm font-medium text-primary">
 							LLM Documentation
 						</span>
 					</div>
 					<h3 class="mb-4 text-3xl font-bold">
 						Documentation for LLMs
 					</h3>
-					<p class="text-base-content/70 mb-4">
+					<p class="mb-4 text-base-content/70">
 						We support the <a
 							href="https://llms.txt"
 							class="link"
@@ -264,12 +264,12 @@
 					<h4 class="mb-2 text-xl font-semibold">
 						Available Formats
 					</h4>
-					<p class="text-base-content/70 mb-3">
+					<p class="mb-3 text-base-content/70">
 						We provide documentation in two formats following the
 						llms.txt standard:
 					</p>
 
-					<ul class="text-base-content/70 mb-4 ml-5 list-disc">
+					<ul class="mb-4 ml-5 list-disc text-base-content/70">
 						{#each llm_formats.standard as format}
 							<li>
 								<strong>{format.title}</strong> - {format.description}
@@ -277,7 +277,7 @@
 						{/each}
 					</ul>
 
-					<p class="text-base-content/70 mt-4">
+					<p class="mt-4 text-base-content/70">
 						Using the appropriate format helps LLMs provide more
 						accurate assistance with less token usage, making
 						interactions more efficient and effective.
@@ -291,7 +291,7 @@
 					{#each llm_formats.standard as format}
 						<a
 							href={format.href}
-							class="btn {format.button_class} btn-lg flex-1 justify-between transition-all duration-300"
+							class="btn {format.button_class} flex-1 justify-between transition-all duration-300 btn-lg"
 							target="_blank"
 						>
 							{format.title}
@@ -306,15 +306,15 @@
 
 <!-- Documentation Navigation - Prominent Section -->
 <section
-	class="from-primary/10 to-secondary/10 bg-linear-to-r px-4 py-20"
+	class="bg-linear-to-r from-primary/10 to-secondary/10 px-4 py-20"
 >
 	<div class="container mx-auto max-w-7xl">
 		<div class="mb-12 text-center">
-			<h2 class="text-base-content mb-6 text-5xl font-bold">
+			<h2 class="mb-6 text-5xl font-bold text-base-content">
 				📚 Complete Documentation
 			</h2>
 			<p
-				class="text-base-content/80 mx-auto max-w-3xl text-xl leading-relaxed"
+				class="mx-auto max-w-3xl text-xl leading-relaxed text-base-content/80"
 			>
 				Jump to any section to master Svelte 5 testing with
 				vitest-browser-svelte. Each guide includes practical examples,
@@ -325,7 +325,7 @@
 		<!-- Grouped Documentation Links Grid -->
 		{#each topic_categories as category}
 			<div class="mb-10">
-				<h3 class="text-base-content/80 mb-4 text-xl font-bold">
+				<h3 class="mb-4 text-xl font-bold text-base-content/80">
 					{category.name}
 				</h3>
 				<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -350,29 +350,29 @@
 		<!-- Quick Access Info -->
 		<div class="mt-12 text-center">
 			<div
-				class="bg-base-100/50 border-base-300/50 rounded-xl border p-6 backdrop-blur-sm"
+				class="rounded-xl border border-base-300/50 bg-base-100/50 p-6 backdrop-blur-sm"
 			>
-				<p class="text-base-content/70 mb-4 text-lg">
+				<p class="mb-4 text-lg text-base-content/70">
 					🚀 <strong>Need something specific?</strong> All documentation
 					pages include:
 				</p>
 				<div class="flex flex-wrap justify-center gap-4 text-sm">
 					<span
-						class="bg-primary/10 text-primary rounded-full px-3 py-1"
+						class="rounded-full bg-primary/10 px-3 py-1 text-primary"
 					>
 						📋 Copy-paste examples
 					</span>
 					<span
-						class="bg-secondary/10 text-secondary rounded-full px-3 py-1"
+						class="rounded-full bg-secondary/10 px-3 py-1 text-secondary"
 					>
 						🔍 Comprehensive API coverage
 					</span>
 					<span
-						class="bg-accent/10 text-accent rounded-full px-3 py-1"
+						class="rounded-full bg-accent/10 px-3 py-1 text-accent"
 					>
 						♿ Accessibility patterns
 					</span>
-					<span class="bg-info/10 text-info rounded-full px-3 py-1">
+					<span class="rounded-full bg-info/10 px-3 py-1 text-info">
 						⚡ Performance tips
 					</span>
 				</div>
@@ -386,7 +386,7 @@
 	<div class="container mx-auto max-w-7xl">
 		<div class="mb-16 text-center">
 			<h2 class="mb-4 text-4xl font-bold">Quick Start</h2>
-			<p class="text-base-content/70 mx-auto max-w-2xl text-lg">
+			<p class="mx-auto max-w-2xl text-lg text-base-content/70">
 				Jump right in with these essential testing patterns. Copy and
 				paste these examples to get started immediately.
 			</p>
@@ -395,7 +395,7 @@
 		<div class="grid gap-8 lg:grid-cols-3">
 			{#each quick_start_examples as example}
 				<div
-					class="bg-base-100 border-base-300/50 rounded-xl border p-6 shadow-lg"
+					class="rounded-xl border border-base-300/50 bg-base-100 p-6 shadow-lg"
 				>
 					<div class="mb-4 flex items-center justify-between">
 						<h3
@@ -419,7 +419,7 @@
 							{/if}
 						</button>
 					</div>
-					<p class="text-base-content/70 mb-4 text-sm">
+					<p class="mb-4 text-sm text-base-content/70">
 						{example.description}
 					</p>
 					<CodeBlock
@@ -438,7 +438,7 @@
 	<div class="container mx-auto max-w-7xl">
 		<div class="mb-16 text-center">
 			<h2 class="mb-4 text-4xl font-bold">Core Testing Principles</h2>
-			<p class="text-base-content/70 mx-auto max-w-2xl text-lg">
+			<p class="mx-auto max-w-2xl text-lg text-base-content/70">
 				Our testing philosophy emphasizes reliability, accessibility,
 				and developer experience.
 			</p>
@@ -446,14 +446,14 @@
 
 		<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
 			{#each testing_principles as principle}
-				<div class="bg-base-100 rounded-xl p-6 text-center shadow-lg">
+				<div class="rounded-xl bg-base-100 p-6 text-center shadow-lg">
 					<div
-						class="bg-primary/10 text-primary mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full"
+						class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary"
 					>
 						<principle.icon class_names="h-8 w-8" />
 					</div>
 					<h3 class="mb-2 text-lg font-bold">{principle.title}</h3>
-					<p class="text-base-content/70 text-sm">
+					<p class="text-sm text-base-content/70">
 						{principle.description}
 					</p>
 				</div>
@@ -466,14 +466,14 @@
 <section class="bg-primary/5 px-4 py-24">
 	<div class="container mx-auto max-w-4xl text-center">
 		<h2 class="mb-4 text-4xl font-bold">Ready to Start Testing?</h2>
-		<p class="text-base-content/70 mb-8 text-lg">
+		<p class="mb-8 text-lg text-base-content/70">
 			Explore our interactive examples and start building reliable,
 			well-tested Svelte applications.
 		</p>
 		<div class="flex flex-wrap justify-center gap-4">
 			<a
 				href="/examples"
-				class="btn btn-primary btn-lg"
+				class="btn btn-lg btn-primary"
 				role="button"
 			>
 				<Code class_names="h-5 w-5" />

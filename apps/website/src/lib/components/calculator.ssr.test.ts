@@ -56,7 +56,7 @@ describe('Calculator SSR', () => {
 		// Test button classes are applied
 		expect(body).toContain('btn btn-outline btn-sm'); // Clear button
 		expect(body).toContain('btn btn-ghost btn-sm'); // Digit buttons
-		expect(body).toContain('btn btn-warning btn-sm'); // Operation buttons
+		expect(body).toContain('btn btn-sm btn-warning'); // Operation buttons
 		expect(body).toContain('btn btn-primary btn-sm'); // Equals button
 	});
 
@@ -65,7 +65,7 @@ describe('Calculator SSR', () => {
 
 		// Test display area structure
 		expect(body).toContain(
-			'bg-base-300/50 mb-4 rounded-lg p-4 text-right font-mono text-3xl',
+			'mb-4 rounded-lg bg-base-300/50 p-4 text-right font-mono text-3xl',
 		);
 	});
 
@@ -92,7 +92,7 @@ describe('Calculator SSR', () => {
 
 		// Test responsive and layout classes
 		expect(body).toContain(
-			'bg-base-200/50 border-base-300/50 rounded-xl border p-6',
+			'rounded-xl border border-base-300/50 bg-base-200/50 p-6',
 		);
 		expect(body).toContain('col-span-2'); // Zero button spans 2 columns
 	});

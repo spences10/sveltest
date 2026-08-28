@@ -101,10 +101,10 @@
 <div class="mx-auto w-full max-w-4xl">
 	<!-- Header -->
 	<div class="mb-8">
-		<h2 class="text-base-content mb-2 text-3xl font-bold">{title}</h2>
+		<h2 class="mb-2 text-3xl font-bold text-base-content">{title}</h2>
 		{#if showStats}
 			<div
-				class="stats stats-vertical lg:stats-horizontal bg-base-100 shadow"
+				class="stats stats-vertical bg-base-100 shadow lg:stats-horizontal"
 			>
 				<div class="stat">
 					<div class="stat-figure text-primary">
@@ -143,7 +143,7 @@
 					</div>
 					<div class="stat-desc">
 						<progress
-							class="progress progress-success w-20"
+							class="progress w-20 progress-success"
 							value={todo_state.stats.completionRate}
 							max="100"
 						></progress>
@@ -154,7 +154,7 @@
 	</div>
 
 	<!-- Add Todo Form -->
-	<div class="card bg-base-100 mb-6 shadow-xl">
+	<div class="card mb-6 bg-base-100 shadow-xl">
 		<div class="card-body">
 			<h3 class="card-title">
 				<Plus class_names="w-5 h-5" />
@@ -175,13 +175,13 @@
 							name="title"
 							type="text"
 							placeholder="Enter a new task..."
-							class="input input-bordered join-item flex-1"
+							class="input-bordered input join-item flex-1"
 							onkeydown={handle_keydown}
 							data-testid="new-todo-input"
 						/>
 						<button
 							onclick={handle_add_todo}
-							class="btn btn-primary join-item"
+							class="btn join-item btn-primary"
 							disabled={!newTodoText.trim()}
 							data-testid="add-todo-button"
 						>
@@ -202,7 +202,7 @@
 						</label>
 						<select
 							id="status-filter"
-							class="select select-bordered w-full"
+							class="select-bordered select w-full"
 							bind:value={filterStatus}
 							data-testid="status-filter"
 							onchange={handle_status_filter_change}
@@ -219,7 +219,7 @@
 							<span class="label-text">Search tasks</span>
 						</label>
 						<label
-							class="input input-bordered flex items-center gap-2"
+							class="input-bordered input flex items-center gap-2"
 						>
 							<Filter class_names="w-4 h-4 opacity-70" />
 							<input
@@ -240,7 +240,7 @@
 					<div class="tooltip" data-tip="Toggle all tasks">
 						<button
 							onclick={() => todo_state.toggle_all()}
-							class="btn btn-sm btn-outline"
+							class="btn btn-outline btn-sm"
 							disabled={todo_state.todos.length === 0}
 							data-testid="toggle-all-button"
 						>
@@ -252,7 +252,7 @@
 					<div class="tooltip" data-tip="Clear completed tasks">
 						<button
 							onclick={() => todo_state.clear_completed()}
-							class="btn btn-sm btn-outline btn-error"
+							class="btn btn-outline btn-error btn-sm"
 							disabled={todo_state.stats.completed === 0}
 							data-testid="clear-completed-button"
 						>
@@ -265,7 +265,7 @@
 						<div class="tooltip" data-tip="Load sample data">
 							<button
 								onclick={() => todo_state.load_sample_data()}
-								class="btn btn-sm btn-outline btn-info"
+								class="btn btn-outline btn-info btn-sm"
 								disabled={todo_state.todos.length > 0}
 								data-testid="load-sample-button"
 							>
@@ -278,7 +278,7 @@
 					<div class="tooltip" data-tip="Reset all tasks">
 						<button
 							onclick={() => todo_state.reset()}
-							class="btn btn-sm btn-outline btn-warning"
+							class="btn btn-outline btn-sm btn-warning"
 							disabled={todo_state.todos.length === 0}
 							data-testid="reset-button"
 						>
@@ -294,7 +294,7 @@
 	<!-- Todo List -->
 	<div class="card bg-base-100 shadow-xl">
 		<div class="card-body">
-			<h3 class="card-title mb-4">
+			<h3 class="mb-4 card-title">
 				<CheckCircle class_names="w-5 h-5" />
 				Your Tasks
 				<div class="badge badge-neutral">
@@ -308,11 +308,11 @@
 						<div class="w-full text-center">
 							<div class="mb-4 text-6xl">📝</div>
 							<h4
-								class="text-base-content/70 mb-2 text-xl font-semibold"
+								class="mb-2 text-xl font-semibold text-base-content/70"
 							>
 								No tasks yet
 							</h4>
-							<p class="text-base-content/50 mb-4">
+							<p class="mb-4 text-base-content/50">
 								Add your first task above to get started!
 							</p>
 							{#if enableSampleData}
@@ -330,7 +330,7 @@
 						<div class="w-full text-center">
 							<div class="mb-4 text-6xl">🔍</div>
 							<h4
-								class="text-base-content/70 mb-2 text-xl font-semibold"
+								class="mb-2 text-xl font-semibold text-base-content/70"
 							>
 								No matching tasks
 							</h4>
@@ -344,7 +344,7 @@
 				<div class="space-y-2">
 					{#each todo_state.filtered_todos as todo (todo.id)}
 						<div
-							class="card card-compact bg-base-50 hover:bg-base-100 border-base-300 border transition-all duration-200"
+							class="card-compact bg-base-50 card border border-base-300 transition-all duration-200 hover:bg-base-100"
 							data-testid="todo-item"
 							data-todo-id={todo.id}
 						>
@@ -371,7 +371,7 @@
 										{#if editingId === todo.id}
 											<input
 												type="text"
-												class="input input-bordered input-sm w-full"
+												class="input-bordered input w-full input-sm"
 												bind:value={editingText}
 												onkeydown={(e) => handle_edit_keydown(e)}
 												onblur={save_edit}
@@ -381,7 +381,7 @@
 										{:else}
 											<button
 												type="button"
-												class="hover:bg-base-200 w-full rounded p-2 text-left transition-colors"
+												class="w-full rounded p-2 text-left transition-colors hover:bg-base-200"
 												onclick={() =>
 													start_editing(todo.id, todo.text)}
 												data-testid="todo-text"
@@ -393,7 +393,7 @@
 												>
 													{todo.text}
 												</p>
-												<p class="text-base-content/40 mt-1 text-xs">
+												<p class="mt-1 text-xs text-base-content/40">
 													Created: {format_date(todo.createdAt)}
 													{#if todo.updatedAt.getTime() !== todo.createdAt.getTime()}
 														• Updated: {format_date(todo.updatedAt)}
@@ -415,7 +415,7 @@
 									<!-- Delete Button -->
 									<div class="tooltip" data-tip="Delete task">
 										<button
-											class="btn btn-ghost btn-sm btn-square text-error hover:bg-error hover:text-error-content"
+											class="btn btn-square btn-ghost text-error btn-sm hover:bg-error hover:text-error-content"
 											onclick={() => todo_state.delete_todo(todo.id)}
 											data-testid="delete-todo-button"
 										>

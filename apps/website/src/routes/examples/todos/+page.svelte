@@ -16,31 +16,31 @@
 		<!-- Page Header -->
 		<div class="mb-12 text-center">
 			<div
-				class="bg-base-100/80 border-base-300/50 mb-8 inline-flex items-center gap-3 rounded-full border px-6 py-3 shadow-lg backdrop-blur-sm"
+				class="mb-8 inline-flex items-center gap-3 rounded-full border border-base-300/50 bg-base-100/80 px-6 py-3 shadow-lg backdrop-blur-sm"
 			>
 				<div
-					class="from-success to-success/70 flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-br"
+					class="flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-br from-success to-success/70"
 				>
 					<Document class_names="text-success-content h-4 w-4" />
 				</div>
 				<span
-					class="text-base-content/70 text-sm font-medium tracking-wider uppercase"
+					class="text-sm font-medium tracking-wider text-base-content/70 uppercase"
 				>
 					Form Actions Testing
 				</span>
 			</div>
 
 			<h1
-				class="from-success via-success/80 to-success/60 mb-4 bg-linear-to-r bg-clip-text text-5xl leading-normal font-black text-transparent"
+				class="mb-4 bg-linear-to-r from-success via-success/80 to-success/60 bg-clip-text text-5xl leading-normal font-black text-transparent"
 			>
 				Form Actions Testing
 			</h1>
 			<p
-				class="text-base-content/70 mx-auto max-w-2xl text-lg leading-relaxed"
+				class="mx-auto max-w-2xl text-lg leading-relaxed text-base-content/70"
 			>
 				Interactive todo demonstration for testing form actions
 				<br />
-				<span class="text-base-content/60 text-base"
+				<span class="text-base text-base-content/60"
 					>Now using local storage with comprehensive testing
 					capabilities</span
 				>
@@ -49,7 +49,7 @@
 
 		<!-- Todo Manager Component -->
 		<div
-			class="bg-base-100/80 rounded-3xl p-8 shadow-2xl backdrop-blur-sm"
+			class="rounded-3xl bg-base-100/80 p-8 shadow-2xl backdrop-blur-sm"
 		>
 			<TodoManager
 				title="Form Actions Demo"
@@ -60,7 +60,7 @@
 
 		<!-- Navigation -->
 		<div class="mt-8 text-center">
-			<a href="/examples" class="btn btn-outline gap-2">
+			<a href="/examples" class="btn gap-2 btn-outline">
 				<Arrow direction="left" class_names="h-4 w-4" />
 				Back to Examples
 			</a>

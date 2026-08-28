@@ -1,26 +1,22 @@
+minimumReleaseAge: 2880
+
 packages:
-  - 'apps/*'
-  - 'packages/*'
+  - "apps/*"
+  - "packages/*"
+
 catalog:
-  '@changesets/cli': 2.31.0
-  '@playwright/test': ^1.60.0
-  '@types/node': ^25.6.0
-  eslint: ^10.4.0
-  eslint-plugin-svelte: ^3.17.1
-  playwright: ^1.60.0
-  prettier: ^3.8.3
-  prettier-plugin-svelte: ^3.5.2
-  prettier-plugin-tailwindcss: ^0.8.0
-  tsx: ^4.22.2
+  "@changesets/cli": ^3.0.1
+  "@playwright/test": ^1.62.1
+  "@types/node": ^26.3.0
+  "@typescript/native": npm:typescript@^7.0.2
+  playwright: ^1.62.1
+  tsx: ^4.23.12
   typescript: ^6.0.3
-  typescript-eslint: ^8.59.4
-  vite-plus: ^0.1.21
-  vitest: ^4.1.5
+  vite-plus: 0.3.0
+  vitest: 4.1.11
   zod: ^4.4.3
 
 allowBuilds:
   esbuild: true
   sharp: true
   workerd: true
-
-minimumReleaseAge: 2880

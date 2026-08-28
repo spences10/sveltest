@@ -180,7 +180,7 @@ describe('Button Component SSR', () => {
 				},
 			});
 
-			expect(body).toContain('loading loading-spinner loading-sm');
+			expect(body).toContain('loading loading-sm loading-spinner');
 		});
 	});
 

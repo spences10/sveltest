@@ -17,8 +17,8 @@
 		<!-- Site-wide Search -->
 		<section class="card bg-base-100 shadow-xl">
 			<div class="card-body">
-				<h2 class="card-title mb-4 text-2xl">Site-wide Search</h2>
-				<p class="text-base-content/70 mb-6">
+				<h2 class="mb-4 card-title text-2xl">Site-wide Search</h2>
+				<p class="mb-6 text-base-content/70">
 					Search across all content: documentation, examples, and
 					components.
 				</p>
@@ -33,8 +33,8 @@
 		<!-- Documentation Only -->
 		<section class="card bg-base-100 shadow-xl">
 			<div class="card-body">
-				<h2 class="card-title mb-4 text-2xl">Documentation Search</h2>
-				<p class="text-base-content/70 mb-6">
+				<h2 class="mb-4 card-title text-2xl">Documentation Search</h2>
+				<p class="mb-6 text-base-content/70">
 					Search only documentation topics and guides.
 				</p>
 				<SiteSearch
@@ -48,8 +48,8 @@
 		<!-- Examples Only -->
 		<section class="card bg-base-100 shadow-xl">
 			<div class="card-body">
-				<h2 class="card-title mb-4 text-2xl">Examples Search</h2>
-				<p class="text-base-content/70 mb-6">
+				<h2 class="mb-4 card-title text-2xl">Examples Search</h2>
+				<p class="mb-6 text-base-content/70">
 					Search only testing examples and code snippets.
 				</p>
 				<SiteSearch
@@ -63,8 +63,8 @@
 		<!-- Components Only -->
 		<section class="card bg-base-100 shadow-xl">
 			<div class="card-body">
-				<h2 class="card-title mb-4 text-2xl">Components Search</h2>
-				<p class="text-base-content/70 mb-6">
+				<h2 class="mb-4 card-title text-2xl">Components Search</h2>
+				<p class="mb-6 text-base-content/70">
 					Search only UI components and their examples.
 				</p>
 				<SiteSearch
@@ -77,7 +77,7 @@
 	</div>
 
 	<!-- Usage Instructions -->
-	<div class="alert alert-info mt-12">
+	<div class="mt-12 alert alert-info">
 		<div>
 			<h3 class="font-bold">Keyboard Shortcuts</h3>
 			<p>

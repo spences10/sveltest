@@ -19,7 +19,7 @@
 </script>
 
 <aside
-	class="bg-base-100 fixed top-42 right-4 z-10 my-3 hidden max-h-[50vh] w-[250px] rounded-lg p-3 text-base leading-7 shadow-lg lg:block"
+	class="fixed top-42 right-4 z-10 my-3 hidden max-h-[50vh] w-62.5 rounded-lg bg-base-100 p-3 text-base leading-7 shadow-lg lg:block"
 >
 	<div>
 		<h3 class="mb-4 flex items-center gap-2 text-lg font-bold">
@@ -34,10 +34,10 @@
 						<a
 							href="/docs/{topic.slug}"
 							data-sveltekit-preload-data="hover"
-							class="hover:bg-base-200 block cursor-pointer rounded-md px-3 py-2 text-sm transition-colors {is_active(
+							class="block cursor-pointer rounded-md px-3 py-2 text-sm transition-colors hover:bg-base-200 {is_active(
 								topic.slug,
 							)
-								? 'bg-primary/10 text-primary border-primary border-l-2 font-medium'
+								? 'border-l-2 border-primary bg-primary/10 font-medium text-primary'
 								: 'text-base-content/70'}"
 							title={topic.description}
 							style="pointer-events: auto;"

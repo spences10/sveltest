@@ -45,7 +45,7 @@
 
 <!-- Modern gradient background -->
 <div
-	class="from-primary/5 via-secondary/3 to-accent/5 min-h-screen overflow-x-hidden bg-linear-to-br"
+	class="min-h-screen overflow-x-hidden bg-linear-to-br from-primary/5 via-secondary/3 to-accent/5"
 >
 	<!-- Page content -->
 	<main class="min-h-screen overflow-x-hidden pb-20 lg:pb-0">
@@ -54,7 +54,7 @@
 
 	<!-- Footer -->
 	<footer
-		class="bg-base-200/50 border-base-300/50 border-t backdrop-blur-sm"
+		class="border-t border-base-300/50 bg-base-200/50 backdrop-blur-sm"
 	>
 		<div class="container mx-auto max-w-6xl px-4 py-8">
 			<div
@@ -75,7 +75,7 @@
 						href="https://scottspence.com"
 						target="_blank"
 						rel="noopener noreferrer"
-						class="text-base-content/70 link hover:text-base-content"
+						class="link text-base-content/70 hover:text-base-content"
 						onclick={() =>
 							Fathom.trackEvent('scott_spence_site_clicked')}
 					>
@@ -90,7 +90,7 @@
 						href="https://github.com/spences10/sveltest"
 						target="_blank"
 						rel="noopener noreferrer"
-						class="btn btn-ghost btn-sm hover:bg-base-300/50 gap-2"
+						class="btn gap-2 btn-ghost btn-sm hover:bg-base-300/50"
 						onclick={() => Fathom.trackEvent('github_repo_clicked')}
 					>
 						<GitHub class_names="h-4 w-4" />
@@ -112,7 +112,7 @@
 			</div>
 			<div class="divider my-4"></div>
 			<div class="text-center">
-				<p class="text-base-content/50 text-sm">
+				<p class="text-sm text-base-content/50">
 					© {new Date().getFullYear()} Sveltest - Open source testing resource
 					for Svelte applications
 				</p>

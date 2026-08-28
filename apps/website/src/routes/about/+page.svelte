@@ -16,6 +16,6 @@
 	/>
 </svelte:head>
 
-<div class="prose prose-lg mx-auto max-w-4xl p-6">
+<div class="mx-auto prose prose-lg max-w-4xl p-6">
 	<Copy />
 </div>

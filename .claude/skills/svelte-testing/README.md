@@ -16,7 +16,8 @@ SSR testing.
   Playwright
 - ✅ **Client-Server alignment** - Test with real FormData/Request
   objects
-- ✅ **Svelte 5 runes patterns** - Proper use of untrack(), $derived,
+- ✅ **Svelte 5 runes patterns** - Proper use of untrack(),
+  $derived,
   and $effect
 - ✅ **Common pitfalls solved** - Strict mode, form submission,
   accessibility

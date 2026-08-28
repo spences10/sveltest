@@ -146,19 +146,19 @@
 
 <!-- Hero Section -->
 <div
-	class="from-primary/10 via-secondary/5 to-accent/10 bg-linear-to-br px-4 py-24"
+	class="bg-linear-to-br from-primary/10 via-secondary/5 to-accent/10 px-4 py-24"
 >
 	<div class="container mx-auto max-w-7xl text-center">
 		<div class="mb-8">
 			<h1 class="mb-6 text-6xl font-black tracking-tight">
 				<span
-					class="from-primary to-secondary bg-linear-to-r bg-clip-text text-transparent"
+					class="bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent"
 				>
 					Component Library
 				</span>
 			</h1>
 			<p
-				class="text-base-content/70 mx-auto max-w-3xl text-xl leading-relaxed"
+				class="mx-auto max-w-3xl text-xl leading-relaxed text-base-content/70"
 			>
 				Explore our comprehensive collection of interactive UI
 				components. Each component is fully tested, accessible, and
@@ -173,7 +173,7 @@
 	<div class="container mx-auto max-w-7xl">
 		<div class="mb-12 text-center">
 			<h2 class="mb-4 text-4xl font-bold">Component Overview</h2>
-			<p class="text-base-content/70 mx-auto max-w-2xl text-lg">
+			<p class="mx-auto max-w-2xl text-lg text-base-content/70">
 				Quick reference for all available components with their key
 				features and test coverage.
 			</p>
@@ -182,7 +182,7 @@
 		<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
 			{#each components as component}
 				<div
-					class="bg-base-200/30 border-base-300/50 flex flex-col rounded-xl border p-6 transition-all hover:shadow-lg"
+					class="flex flex-col rounded-xl border border-base-300/50 bg-base-200/30 p-6 transition-all hover:shadow-lg"
 				>
 					<div class="mb-4 flex items-center gap-3">
 						<div
@@ -195,7 +195,7 @@
 						<h3 class="text-lg font-semibold">{component.name}</h3>
 					</div>
 
-					<p class="text-base-content/70 mb-4 text-sm">
+					<p class="mb-4 text-sm text-base-content/70">
 						{component.description}
 					</p>
 
@@ -205,7 +205,7 @@
 							{#each component.features.slice(0, 3) as feature}
 								<li class="flex items-center gap-2 text-xs">
 									<div
-										class="bg-success h-1.5 w-1.5 rounded-full"
+										class="h-1.5 w-1.5 rounded-full bg-success"
 									></div>
 									<span>{feature}</span>
 								</li>
@@ -220,7 +220,7 @@
 						>
 							View Demo
 						</a>
-						<div class="text-success text-xs">✓ Tested</div>
+						<div class="text-xs text-success">✓ Tested</div>
 					</div>
 				</div>
 			{/each}
@@ -236,13 +236,13 @@
 			<div class="mb-12 text-center">
 				<div class="mb-4 flex items-center justify-center gap-3">
 					<div
-						class="bg-primary/10 border-primary/20 flex h-12 w-12 items-center justify-center rounded-xl border"
+						class="flex h-12 w-12 items-center justify-center rounded-xl border border-primary/20 bg-primary/10"
 					>
 						<CalculatorIcon class_names="text-primary h-6 w-6" />
 					</div>
 					<h2 class="text-4xl font-bold">Calculator</h2>
 				</div>
-				<p class="text-base-content/70 mx-auto max-w-2xl text-lg">
+				<p class="mx-auto max-w-2xl text-lg text-base-content/70">
 					Interactive calculator demonstrating Svelte 5 state
 					management with reactive calculations and keyboard support.
 				</p>
@@ -252,7 +252,7 @@
 				<!-- Live Demo -->
 				<div class="space-y-4">
 					<h3 class="text-xl font-semibold">Live Demo</h3>
-					<div class="bg-base-200/30 rounded-xl p-6">
+					<div class="rounded-xl bg-base-200/30 p-6">
 						<Calculator />
 					</div>
 				</div>
@@ -263,19 +263,19 @@
 						<h3 class="mb-3 text-xl font-semibold">Features</h3>
 						<ul class="space-y-2">
 							<li class="flex items-center gap-2">
-								<div class="bg-success h-2 w-2 rounded-full"></div>
+								<div class="h-2 w-2 rounded-full bg-success"></div>
 								<span>Reactive state with Svelte 5 runes</span>
 							</li>
 							<li class="flex items-center gap-2">
-								<div class="bg-success h-2 w-2 rounded-full"></div>
+								<div class="h-2 w-2 rounded-full bg-success"></div>
 								<span>Mathematical operations (+, -, ×, ÷)</span>
 							</li>
 							<li class="flex items-center gap-2">
-								<div class="bg-success h-2 w-2 rounded-full"></div>
+								<div class="h-2 w-2 rounded-full bg-success"></div>
 								<span>Clear and reset functionality</span>
 							</li>
 							<li class="flex items-center gap-2">
-								<div class="bg-success h-2 w-2 rounded-full"></div>
+								<div class="h-2 w-2 rounded-full bg-success"></div>
 								<span>Responsive button layout</span>
 							</li>
 						</ul>
@@ -292,9 +292,9 @@
 
 					<div>
 						<h3 class="mb-3 text-xl font-semibold">Test Coverage</h3>
-						<p class="text-base-content/70 text-sm">
+						<p class="text-sm text-base-content/70">
 							Comprehensive tests available in <code
-								class="bg-base-300/50 rounded px-2 py-1"
+								class="rounded bg-base-300/50 px-2 py-1"
 								>calculator.svelte.test.ts</code
 							>
 						</p>
@@ -308,13 +308,13 @@
 			<div class="mb-12 text-center">
 				<div class="mb-4 flex items-center justify-center gap-3">
 					<div
-						class="bg-secondary/10 border-secondary/20 flex h-12 w-12 items-center justify-center rounded-xl border"
+						class="flex h-12 w-12 items-center justify-center rounded-xl border border-secondary/20 bg-secondary/10"
 					>
 						<Eye class_names="text-secondary h-6 w-6" />
 					</div>
 					<h2 class="text-4xl font-bold">Modal</h2>
 				</div>
-				<p class="text-base-content/70 mx-auto max-w-2xl text-lg">
+				<p class="mx-auto max-w-2xl text-lg text-base-content/70">
 					Accessible modal component with focus management, keyboard
 					navigation, and customizable sizes.
 				</p>
@@ -324,7 +324,7 @@
 				<!-- Live Demo -->
 				<div class="space-y-4">
 					<h3 class="text-xl font-semibold">Live Demo</h3>
-					<div class="bg-base-200/30 rounded-xl p-6">
+					<div class="rounded-xl bg-base-200/30 p-6">
 						<div class="space-y-4">
 							<Button variant="secondary" onclick={handle_modal_open}>
 								Open Modal
@@ -338,7 +338,7 @@
 									</label>
 									<select
 										id="modal-size-select"
-										class="select select-bordered w-full"
+										class="select-bordered select w-full"
 										bind:value={modal_size}
 									>
 										<option value="sm">Small</option>
@@ -354,7 +354,7 @@
 									<input
 										id="modal-title-input"
 										type="text"
-										class="input input-bordered w-full"
+										class="input-bordered input w-full"
 										bind:value={modal_title}
 									/>
 								</div>
@@ -364,9 +364,8 @@
 									</label>
 									<textarea
 										id="modal-content-textarea"
-										class="textarea textarea-bordered w-full"
-										bind:value={modal_content}
-									></textarea>
+										class="textarea-bordered textarea w-full"
+										bind:value={modal_content}></textarea>
 								</div>
 							</div>
 						</div>
@@ -379,23 +378,23 @@
 						<h3 class="mb-3 text-xl font-semibold">Features</h3>
 						<ul class="space-y-2">
 							<li class="flex items-center gap-2">
-								<div class="bg-success h-2 w-2 rounded-full"></div>
+								<div class="h-2 w-2 rounded-full bg-success"></div>
 								<span>Focus management and restoration</span>
 							</li>
 							<li class="flex items-center gap-2">
-								<div class="bg-success h-2 w-2 rounded-full"></div>
+								<div class="h-2 w-2 rounded-full bg-success"></div>
 								<span>Keyboard navigation (ESC to close)</span>
 							</li>
 							<li class="flex items-center gap-2">
-								<div class="bg-success h-2 w-2 rounded-full"></div>
+								<div class="h-2 w-2 rounded-full bg-success"></div>
 								<span>Backdrop click to close</span>
 							</li>
 							<li class="flex items-center gap-2">
-								<div class="bg-success h-2 w-2 rounded-full"></div>
+								<div class="h-2 w-2 rounded-full bg-success"></div>
 								<span>Multiple sizes (sm, md, lg, xl)</span>
 							</li>
 							<li class="flex items-center gap-2">
-								<div class="bg-success h-2 w-2 rounded-full"></div>
+								<div class="h-2 w-2 rounded-full bg-success"></div>
 								<span>Body scroll prevention</span>
 							</li>
 						</ul>
@@ -418,13 +417,13 @@
 			<div class="mb-12 text-center">
 				<div class="mb-4 flex items-center justify-center gap-3">
 					<div
-						class="bg-accent/10 border-accent/20 flex h-12 w-12 items-center justify-center rounded-xl border"
+						class="flex h-12 w-12 items-center justify-center rounded-xl border border-accent/20 bg-accent/10"
 					>
 						<Clipboard class_names="text-accent h-6 w-6" />
 					</div>
 					<h2 class="text-4xl font-bold">Card</h2>
 				</div>
-				<p class="text-base-content/70 mx-auto max-w-2xl text-lg">
+				<p class="mx-auto max-w-2xl text-lg text-base-content/70">
 					Flexible card component with multiple variants, clickable
 					options, and customizable content areas.
 				</p>
@@ -434,7 +433,7 @@
 				<!-- Live Demo -->
 				<div class="space-y-4">
 					<h3 class="text-xl font-semibold">Live Demo</h3>
-					<div class="bg-base-200/30 rounded-xl p-6">
+					<div class="rounded-xl bg-base-200/30 p-6">
 						<div class="space-y-4">
 							<Card
 								variant={card_variant}
@@ -453,7 +452,7 @@
 									</label>
 									<select
 										id="card-variant-select"
-										class="select select-bordered w-full"
+										class="select-bordered select w-full"
 										bind:value={card_variant}
 									>
 										<option value="default">Default</option>
@@ -479,7 +478,7 @@
 									<input
 										id="card-title-input"
 										type="text"
-										class="input input-bordered w-full"
+										class="input-bordered input w-full"
 										bind:value={card_title}
 									/>
 								</div>
@@ -490,7 +489,7 @@
 									<input
 										id="card-subtitle-input"
 										type="text"
-										class="input input-bordered w-full"
+										class="input-bordered input w-full"
 										bind:value={card_subtitle}
 									/>
 								</div>
@@ -505,23 +504,23 @@
 						<h3 class="mb-3 text-xl font-semibold">Features</h3>
 						<ul class="space-y-2">
 							<li class="flex items-center gap-2">
-								<div class="bg-success h-2 w-2 rounded-full"></div>
+								<div class="h-2 w-2 rounded-full bg-success"></div>
 								<span>Multiple visual variants</span>
 							</li>
 							<li class="flex items-center gap-2">
-								<div class="bg-success h-2 w-2 rounded-full"></div>
+								<div class="h-2 w-2 rounded-full bg-success"></div>
 								<span>Clickable with hover effects</span>
 							</li>
 							<li class="flex items-center gap-2">
-								<div class="bg-success h-2 w-2 rounded-full"></div>
+								<div class="h-2 w-2 rounded-full bg-success"></div>
 								<span>Image support</span>
 							</li>
 							<li class="flex items-center gap-2">
-								<div class="bg-success h-2 w-2 rounded-full"></div>
+								<div class="h-2 w-2 rounded-full bg-success"></div>
 								<span>Flexible content areas</span>
 							</li>
 							<li class="flex items-center gap-2">
-								<div class="bg-success h-2 w-2 rounded-full"></div>
+								<div class="h-2 w-2 rounded-full bg-success"></div>
 								<span>Keyboard accessible</span>
 							</li>
 						</ul>
@@ -530,8 +529,8 @@
 					<div>
 						<h3 class="mb-3 text-xl font-semibold">Variants</h3>
 						<div class="grid grid-cols-2 gap-2 text-sm">
-							<div class="bg-base-300/30 rounded p-2">Default</div>
-							<div class="bg-base-300/30 rounded p-2 shadow-md">
+							<div class="rounded bg-base-300/30 p-2">Default</div>
+							<div class="rounded bg-base-300/30 p-2 shadow-md">
 								Elevated
 							</div>
 							<div class="rounded border-2 border-gray-300 p-2">
@@ -562,13 +561,13 @@
 			<div class="mb-12 text-center">
 				<div class="mb-4 flex items-center justify-center gap-3">
 					<div
-						class="bg-info/10 border-info/20 flex h-12 w-12 items-center justify-center rounded-xl border"
+						class="flex h-12 w-12 items-center justify-center rounded-xl border border-info/20 bg-info/10"
 					>
 						<Settings class_names="text-info h-6 w-6" />
 					</div>
 					<h2 class="text-4xl font-bold">Login Form</h2>
 				</div>
-				<p class="text-base-content/70 mx-auto max-w-2xl text-lg">
+				<p class="mx-auto max-w-2xl text-lg text-base-content/70">
 					Complex form component with real-time validation, password
 					visibility toggle, and comprehensive accessibility features.
 				</p>
@@ -578,7 +577,7 @@
 				<!-- Live Demo -->
 				<div class="space-y-4">
 					<h3 class="text-xl font-semibold">Live Demo</h3>
-					<div class="bg-base-200/30 rounded-xl p-6">
+					<div class="rounded-xl bg-base-200/30 p-6">
 						<LoginForm
 							loading={login_loading}
 							remember_me_enabled={login_remember_enabled}
@@ -592,7 +591,7 @@
 					<!-- Props Configuration -->
 					<div class="space-y-3">
 						<h4 class="text-lg font-medium">Demo Configuration</h4>
-						<div class="bg-base-300/20 space-y-3 rounded-lg p-4">
+						<div class="space-y-3 rounded-lg bg-base-300/20 p-4">
 							<div class="form-control">
 								<label class="label cursor-pointer">
 									<span class="label-text"
@@ -627,27 +626,27 @@
 						<h3 class="mb-3 text-xl font-semibold">Features</h3>
 						<ul class="space-y-2">
 							<li class="flex items-center gap-2">
-								<div class="bg-success h-2 w-2 rounded-full"></div>
+								<div class="h-2 w-2 rounded-full bg-success"></div>
 								<span>Real-time email & password validation</span>
 							</li>
 							<li class="flex items-center gap-2">
-								<div class="bg-success h-2 w-2 rounded-full"></div>
+								<div class="h-2 w-2 rounded-full bg-success"></div>
 								<span>Password visibility toggle</span>
 							</li>
 							<li class="flex items-center gap-2">
-								<div class="bg-success h-2 w-2 rounded-full"></div>
+								<div class="h-2 w-2 rounded-full bg-success"></div>
 								<span>Remember me functionality</span>
 							</li>
 							<li class="flex items-center gap-2">
-								<div class="bg-success h-2 w-2 rounded-full"></div>
+								<div class="h-2 w-2 rounded-full bg-success"></div>
 								<span>Forgot password handling</span>
 							</li>
 							<li class="flex items-center gap-2">
-								<div class="bg-success h-2 w-2 rounded-full"></div>
+								<div class="h-2 w-2 rounded-full bg-success"></div>
 								<span>Loading states</span>
 							</li>
 							<li class="flex items-center gap-2">
-								<div class="bg-success h-2 w-2 rounded-full"></div>
+								<div class="h-2 w-2 rounded-full bg-success"></div>
 								<span>Accessibility compliant</span>
 							</li>
 						</ul>
@@ -658,10 +657,10 @@
 							Validation Rules
 						</h3>
 						<div class="space-y-2 text-sm">
-							<div class="bg-base-300/30 rounded p-2">
+							<div class="rounded bg-base-300/30 p-2">
 								<strong>Email:</strong> Valid email format required
 							</div>
-							<div class="bg-base-300/30 rounded p-2">
+							<div class="rounded bg-base-300/30 p-2">
 								<strong>Password:</strong> Minimum 8 characters, uppercase,
 								lowercase, number
 							</div>

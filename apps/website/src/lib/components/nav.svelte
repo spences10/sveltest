@@ -76,7 +76,7 @@
 <!-- Desktop Navigation -->
 <header class="sticky top-0 z-60 w-full md:h-0">
 	<nav
-		class="navbar bg-base-100/60 border-base-300/50 h-16 border-b shadow-lg backdrop-blur-md"
+		class="navbar h-16 border-b border-base-300/50 bg-base-100/60 shadow-lg backdrop-blur-md"
 		aria-label="Main navigation"
 	>
 		<!-- Navbar Start - Brand -->
@@ -92,7 +92,7 @@
 					class_names="mr-2 text-primary"
 				/>
 				<span
-					class="from-primary to-secondary bg-linear-to-r bg-clip-text text-transparent"
+					class="bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent"
 				>
 					Sveltest
 				</span>
@@ -128,7 +128,7 @@
 				<div
 					tabindex="0"
 					role="button"
-					class="btn btn-ghost btn-circle"
+					class="btn btn-circle btn-ghost"
 					aria-label="Open navigation menu"
 					aria-haspopup="true"
 					aria-expanded="false"
@@ -137,7 +137,7 @@
 				</div>
 				<ul
 					tabindex="0"
-					class="dropdown-content menu bg-base-100/95 rounded-box border-base-300/50 z-50 w-64 border p-2 shadow-xl backdrop-blur-sm"
+					class="menu dropdown-content z-50 w-64 rounded-box border border-base-300/50 bg-base-100/95 p-2 shadow-xl backdrop-blur-sm"
 					role="menu"
 					aria-label="Navigation menu"
 				>
@@ -185,7 +185,7 @@
 									class="flex items-center gap-2 text-xs opacity-70"
 								>
 									<div
-										class="loading loading-spinner loading-xs"
+										class="loading loading-xs loading-spinner"
 									></div>
 									<span>Loading status...</span>
 								</div>
@@ -194,7 +194,7 @@
 									class="flex items-center gap-2 text-xs opacity-70"
 								>
 									<div
-										class="bg-warning h-1.5 w-1.5 rounded-full"
+										class="h-1.5 w-1.5 rounded-full bg-warning"
 										aria-hidden="true"
 									></div>
 									<span>Status unavailable</span>
@@ -238,7 +238,7 @@
 									class="flex items-center gap-2 text-xs opacity-70"
 								>
 									<div
-										class="bg-warning h-1.5 w-1.5 rounded-full"
+										class="h-1.5 w-1.5 rounded-full bg-warning"
 										aria-hidden="true"
 									></div>
 									<span>Status unknown</span>
@@ -256,7 +256,7 @@
 								role="menuitem"
 							>
 								<div
-									class="loading loading-spinner loading-xs"
+									class="loading loading-xs loading-spinner"
 									class:hidden={!github_status.loading}
 								></div>
 								<span>Retry</span>
@@ -275,13 +275,13 @@
 	aria-label="Mobile navigation dock"
 >
 	<div
-		class="dock bg-primary rounded-box mx-auto mb-4 max-w-[95vw] shadow-xl"
+		class="dock mx-auto mb-4 max-w-[95vw] rounded-box bg-primary shadow-xl"
 		role="tablist"
 	>
 		{#each main_nav_items as link (link.href)}
 			<a
 				href={link.href}
-				class="text-primary-content flex flex-col items-center gap-1 {is_active(
+				class="flex flex-col items-center gap-1 text-primary-content {is_active(
 					link.href,
 				)
 					? 'dock-active'

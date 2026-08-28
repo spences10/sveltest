@@ -167,7 +167,7 @@
 			</span>
 		</div>
 		<label
-			class="input input-bordered flex w-full items-center gap-2"
+			class="input-bordered input flex w-full items-center gap-2"
 		>
 			<input
 				type={show_password ? 'text' : 'password'}
@@ -182,7 +182,7 @@
 			/>
 			<button
 				type="button"
-				class="btn btn-ghost btn-sm p-1"
+				class="btn btn-ghost p-1 btn-sm"
 				onclick={toggle_password_visibility}
 				data-testid="password-toggle"
 				aria-label={show_password ? 'Hide password' : 'Show password'}

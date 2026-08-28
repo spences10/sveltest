@@ -46,7 +46,7 @@
 
 <div class="group relative h-full">
 	<div
-		class="card bg-base-100/80 border-base-300/50 hover:shadow-3xl flex h-full flex-col border shadow-2xl backdrop-blur-sm transition-all duration-300 hover:-translate-y-2"
+		class="hover:shadow-3xl card flex h-full flex-col border border-base-300/50 bg-base-100/80 shadow-2xl backdrop-blur-sm transition-all duration-300 hover:-translate-y-2"
 	>
 		<div class="card-body flex flex-col p-8">
 			<div
@@ -55,7 +55,7 @@
 				<Icon class_names="text-{color_scheme} h-8 w-8" />
 			</div>
 			<h3 class="mb-4 text-2xl font-bold">{title}</h3>
-			<p class="text-base-content/70 mb-6 flex-1 leading-relaxed">
+			<p class="mb-6 flex-1 leading-relaxed text-base-content/70">
 				{description}
 			</p>
 			{#if badges.length > 0}

@@ -48,7 +48,7 @@
 	aria-disabled={disabled || loading}
 >
 	{#if loading}
-		<span class="loading loading-spinner loading-sm"></span>
+		<span class="loading loading-sm loading-spinner"></span>
 		Loading...
 	{:else}
 		{@render children?.()}

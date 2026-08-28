@@ -4,10 +4,10 @@
 
 <div class="space-y-6">
 	<div
-		class="bg-base-200/50 border-base-300/50 rounded-xl border p-6"
+		class="rounded-xl border border-base-300/50 bg-base-200/50 p-6"
 	>
 		<div
-			class="bg-base-300/50 mb-4 rounded-lg p-4 text-right font-mono text-3xl"
+			class="mb-4 rounded-lg bg-base-300/50 p-4 text-right font-mono text-3xl"
 		>
 			{calculator_state.current_value}
 		</div>
@@ -22,7 +22,7 @@
 			<button class="btn btn-outline btn-sm" disabled> ± </button>
 			<button class="btn btn-outline btn-sm" disabled> % </button>
 			<button
-				class="btn btn-warning btn-sm"
+				class="btn btn-sm btn-warning"
 				onclick={() => calculator_state.input_operation('/')}
 			>
 				÷
@@ -47,7 +47,7 @@
 				9
 			</button>
 			<button
-				class="btn btn-warning btn-sm"
+				class="btn btn-sm btn-warning"
 				onclick={() => calculator_state.input_operation('*')}
 			>
 				×
@@ -72,7 +72,7 @@
 				6
 			</button>
 			<button
-				class="btn btn-warning btn-sm"
+				class="btn btn-sm btn-warning"
 				onclick={() => calculator_state.input_operation('-')}
 			>
 				−
@@ -97,14 +97,14 @@
 				3
 			</button>
 			<button
-				class="btn btn-warning btn-sm"
+				class="btn btn-sm btn-warning"
 				onclick={() => calculator_state.input_operation('+')}
 			>
 				+
 			</button>
 
 			<button
-				class="btn btn-ghost btn-sm col-span-2"
+				class="btn col-span-2 btn-ghost btn-sm"
 				onclick={() => calculator_state.input_digit('0')}
 			>
 				0

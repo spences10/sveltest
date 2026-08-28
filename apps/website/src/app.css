@@ -1,16 +1,16 @@
 /* Import fonts */
-@import '@fontsource-variable/victor-mono';
-@import '@fontsource-variable/inter';
+@import "@fontsource-variable/victor-mono";
+@import "@fontsource-variable/inter";
 
-@import 'tailwindcss';
+@import "tailwindcss";
 
 /* Plugin configurations */
 @plugin '@tailwindcss/typography';
 @plugin 'daisyui';
 
 @theme {
-	--font-sans: 'Inter Variable', sans-serif;
-	--font-mono: 'Victor Mono Variable', monospace;
+	--font-sans: "Inter Variable", sans-serif;
+	--font-mono: "Victor Mono Variable", monospace;
 }
 
 @layer utilities {
@@ -18,17 +18,17 @@
 	/* Structure: <h1><a>content</a></h1> */
 	.prose h1 a,
 	.prose h1 {
-		@apply from-primary via-secondary to-accent bg-linear-to-r bg-clip-text leading-normal font-black tracking-wide text-transparent drop-shadow-lg;
+		@apply bg-linear-to-r from-primary via-secondary to-accent bg-clip-text leading-normal font-black tracking-wide text-transparent drop-shadow-lg;
 	}
 
 	.prose h2 a,
 	.prose h2 {
-		@apply text-secondary font-bold tracking-tight drop-shadow-sm;
+		@apply font-bold tracking-tight text-secondary drop-shadow-sm;
 	}
 
 	.prose h3 a,
 	.prose h3 {
-		@apply text-secondary font-semibold tracking-tight;
+		@apply font-semibold tracking-tight text-secondary;
 	}
 
 	.prose h4 a,
@@ -37,7 +37,7 @@
 	.prose h4,
 	.prose h5,
 	.prose h6 {
-		@apply text-secondary font-medium;
+		@apply font-medium text-secondary;
 	}
 
 	/* Ensure anchor links inside headers don't show underlines */
@@ -53,7 +53,7 @@
 
 	/* Add some nice text effects for emphasis */
 	.prose strong {
-		@apply text-accent font-bold;
+		@apply font-bold text-accent;
 	}
 
 	.prose em {
@@ -65,6 +65,6 @@
 	}
 
 	.prose blockquote {
-		@apply border-primary bg-primary/40 text-primary-content border-l-4 italic;
+		@apply border-l-4 border-primary bg-primary/40 text-primary-content italic;
 	}
 }

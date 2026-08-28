@@ -142,10 +142,10 @@
 			</span>
 		</label>
 		<label
-			class="input input-bordered input-lg rounded-box flex w-full items-center gap-2"
+			class="input-bordered input flex w-full items-center gap-2 rounded-box input-lg"
 		>
 			{#if is_searching}
-				<span class="loading loading-spinner loading-sm text-primary"
+				<span class="loading loading-sm loading-spinner text-primary"
 				></span>
 			{:else}
 				<Search class_names="h-[1em] opacity-50" />
@@ -172,12 +172,12 @@
 	<!-- Search Results Dropdown -->
 	{#if show_results && search_results.length > 0}
 		<div
-			class="border-base-300 bg-base-100 absolute top-full right-0 left-0 z-50 mt-2 max-h-96 overflow-y-auto rounded-lg border shadow-2xl"
+			class="absolute top-full right-0 left-0 z-50 mt-2 max-h-96 overflow-y-auto rounded-lg border border-base-300 bg-base-100 shadow-2xl"
 			data-testid="search-results"
 		>
 			<div class="p-2">
 				<div
-					class="text-base-content/70 mb-2 px-3 py-2 text-sm font-medium"
+					class="mb-2 px-3 py-2 text-sm font-medium text-base-content/70"
 				>
 					Found {search_results.length} result{search_results.length ===
 					1
@@ -188,20 +188,20 @@
 					{@const IconComponent = get_result_icon(result.type)}
 					<a
 						href={result.url}
-						class="hover:bg-base-200 flex items-center gap-3 rounded-lg p-3 transition-colors"
+						class="flex items-center gap-3 rounded-lg p-3 transition-colors hover:bg-base-200"
 						onclick={handle_result_click}
 						data-testid="search-result-{result.id}"
 					>
-						<div class="flex-shrink-0">
+						<div class="shrink-0">
 							<div
-								class="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-lg"
+								class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10"
 							>
 								<IconComponent class_names="h-5 w-5 text-primary" />
 							</div>
 						</div>
 						<div class="min-w-0 flex-1">
 							<div class="flex items-center gap-2">
-								<h4 class="text-base-content truncate font-medium">
+								<h4 class="truncate font-medium text-base-content">
 									{result.title}
 								</h4>
 								{#if result.category}
@@ -214,12 +214,12 @@
 									</span>
 								{/if}
 							</div>
-							<p class="text-base-content/70 truncate text-sm">
+							<p class="truncate text-sm text-base-content/70">
 								{result.description}
 							</p>
 							{#if result.excerpt}
 								<p
-									class="text-base-content/50 mt-1 truncate font-mono text-xs"
+									class="mt-1 truncate font-mono text-xs text-base-content/50"
 								>
 									{result.excerpt}
 								</p>
@@ -231,15 +231,15 @@
 		</div>
 	{:else if show_results && search_query.trim() && !is_searching}
 		<div
-			class="border-base-300 bg-base-100 absolute top-full right-0 left-0 z-50 mt-2 rounded-lg border p-4 shadow-2xl"
+			class="absolute top-full right-0 left-0 z-50 mt-2 rounded-lg border border-base-300 bg-base-100 p-4 shadow-2xl"
 			data-testid="no-results"
 		>
 			<div class="text-center">
 				<div class="mb-2 text-4xl">🔍</div>
-				<p class="text-base-content/70 font-medium">
+				<p class="font-medium text-base-content/70">
 					No results found
 				</p>
-				<p class="text-base-content/50 text-sm">
+				<p class="text-sm text-base-content/50">
 					Try different keywords or browse the documentation sections
 					below
 				</p>

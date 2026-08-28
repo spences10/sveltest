@@ -25,7 +25,7 @@
 
 <a
 	{href}
-	class="group bg-base-100 hover:bg-base-200 border-base-300/50 hover:border-{color_scheme}/50 transform rounded-2xl border p-8 shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
+	class="group border-base-300/50 bg-base-100 hover:bg-base-200 hover:border-{color_scheme}/50 transform rounded-2xl border p-8 shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
 	data-testid={test_id}
 >
 	<div class="mb-4 flex items-center justify-between">
@@ -49,12 +49,12 @@
 	</div>
 
 	<h3
-		class="text-base-content mb-3 text-2xl font-bold group-hover:text-{color_scheme} transition-colors"
+		class="mb-3 text-2xl font-bold text-base-content group-hover:text-{color_scheme} transition-colors"
 	>
 		{title}
 	</h3>
 
-	<p class="text-base-content/70 text-base leading-relaxed">
+	<p class="text-base leading-relaxed text-base-content/70">
 		{description}
 	</p>
 </a>
