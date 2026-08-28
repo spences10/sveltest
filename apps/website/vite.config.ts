@@ -1,3 +1,6 @@
+// Vitest's browser mocker can transform SvelteKit SSR imports before its
+// runner global is initialized. Provide a non-overwriting fallback until
+// https://github.com/vitest-dev/vitest/issues/10319 is resolved.
 const vitest_browser_runner = globalThis as typeof globalThis & {
 	__vitest_browser_runner__?: {
 		wrapDynamicImport: <T>(factory: () => Promise<T>) => Promise<T>;
