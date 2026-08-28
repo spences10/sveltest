@@ -27,8 +27,3 @@ vite.config.ts.timestamp-*
 
 # coverage
 coverage
-
-# validation reports
-validation-reports/*.md
-!validation-reports/.gitkeep
-!validation-reports/cached-official-docs.md

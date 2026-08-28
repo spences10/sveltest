@@ -28,7 +28,6 @@
 		"test": "pnpm --filter @sveltest/website test",
 		"test:e2e": "pnpm --filter @sveltest/website test:e2e",
 		"coverage": "pnpm --filter @sveltest/website coverage",
-		"validate:tests": "tsx scripts/validation/validate-tests.ts",
 		"cli:build": "pnpm --filter sveltest build",
 		"cli:dev": "pnpm --filter sveltest dev",
 		"changeset": "changeset",
@@ -36,11 +35,7 @@
 		"release": "pnpm cli:build && changeset publish"
 	},
 	"devDependencies": {
-		"@anthropic-ai/claude-agent-sdk": "^0.3.143",
-		"@anthropic-ai/sdk": "^0.96.0",
 		"@changesets/cli": "catalog:",
-		"dotenv": "^17.4.2",
-		"tsx": "catalog:",
 		"typescript": "catalog:",
 		"vite-plus": "catalog:",
 		"zod": "catalog:"
