@@ -1,16 +1,16 @@
 /* Import fonts */
-@import "@fontsource-variable/victor-mono";
-@import "@fontsource-variable/inter";
+@import '@fontsource-variable/victor-mono';
+@import '@fontsource-variable/inter';
 
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* Plugin configurations */
 @plugin '@tailwindcss/typography';
 @plugin 'daisyui';
 
 @theme {
-	--font-sans: "Inter Variable", sans-serif;
-	--font-mono: "Victor Mono Variable", monospace;
+	--font-sans: 'Inter Variable', sans-serif;
+	--font-mono: 'Victor Mono Variable', monospace;
 }
 
 @layer utilities {

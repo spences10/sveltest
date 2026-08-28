@@ -1,14 +1,14 @@
 minimumReleaseAge: 2880
 
 packages:
-  - "apps/*"
-  - "packages/*"
+  - 'apps/*'
+  - 'packages/*'
 
 catalog:
-  "@changesets/cli": ^3.0.1
-  "@playwright/test": ^1.62.1
-  "@types/node": ^26.3.0
-  "@typescript/native": npm:typescript@^7.0.2
+  '@changesets/cli': ^3.0.1
+  '@playwright/test': ^1.62.1
+  '@types/node': ^26.3.0
+  '@typescript/native': npm:typescript@^7.0.2
   playwright: ^1.62.1
   tsx: ^4.23.12
   typescript: ^6.0.3
