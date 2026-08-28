@@ -104,7 +104,7 @@ test.describe('Performance Tests', () => {
 
 	test('should load resources efficiently', async ({ page }) => {
 		const resourceSizes: ResourceInfo[] = [];
-		const resourceTypes: string[] = [];
+		const resource_types: string[] = [];
 
 		await test.step('Monitor resource loading', async () => {
 			page.on('response', (response) => {
@@ -120,7 +120,7 @@ test.describe('Performance Tests', () => {
 				});
 
 				if (type) {
-					resourceTypes.push(type);
+					resource_types.push(type);
 				}
 			});
 
@@ -154,18 +154,12 @@ test.describe('Performance Tests', () => {
 		});
 
 		await test.step('Check resource types', async () => {
-			// Verify we're loading expected resource types
-			const hasCSS = resourceTypes.some((type) =>
-				type?.includes('text/css'),
-			);
-			const hasJS = resourceTypes.some((type) =>
-				type?.includes('javascript'),
-			);
-			const hasHTML = resourceTypes.some((type) =>
+			// Verify we're loading the expected HTML resource.
+			const has_html = resource_types.some((type) =>
 				type?.includes('text/html'),
 			);
 
-			expect(hasHTML).toBeTruthy();
+			expect(has_html).toBeTruthy();
 			// CSS and JS might be inlined in SvelteKit, so we don't require them
 		});
 	});
@@ -362,7 +356,7 @@ test.describe('Performance Tests', () => {
 					try {
 						await page.goto('/todos', { timeout: 5000 });
 						await page.waitForTimeout(500);
-					} catch (error) {
+					} catch {
 						console.log(
 							'Skipping todos page in memory test due to loading issues',
 						);
@@ -388,7 +382,7 @@ test.describe('Performance Tests', () => {
 					const memoryGrowth =
 						finalMemory.usedJSHeapSize - initialMemory.usedJSHeapSize;
 					expect(memoryGrowth).toBeLessThan(10000000); // Less than 10MB growth
-				} catch (error) {
+				} catch {
 					console.log(
 						'Memory test navigation failed, but initial memory check passed',
 					);

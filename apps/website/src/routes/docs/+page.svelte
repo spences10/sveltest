@@ -15,8 +15,8 @@
 		LightningBolt,
 		Settings,
 	} from '$lib/icons';
-	const { data } = $props();
-	const { topics, topic_categories } = data;
+	let { data } = $props();
+	const topic_categories = $derived(data.topic_categories);
 
 	// Icon mapping for topics
 	const icon_map = {

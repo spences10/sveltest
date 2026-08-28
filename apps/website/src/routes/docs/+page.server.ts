@@ -8,8 +8,11 @@ import type { Actions } from './$types';
 export const actions: Actions = {
 	search: async ({ request }) => {
 		const form_data = await request.formData();
-		const query = form_data.get('q')?.toString() || '';
-		const filter = form_data.get('filter')?.toString() || 'all';
+		const query_value = form_data.get('q');
+		const filter_value = form_data.get('filter');
+		const query = typeof query_value === 'string' ? query_value : '';
+		const filter =
+			typeof filter_value === 'string' ? filter_value : 'all';
 
 		if (!query.trim()) {
 			return fail(400, {

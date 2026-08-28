@@ -20,7 +20,7 @@
 	let search_timeout: ReturnType<typeof setTimeout>;
 
 	// Reference to the search input for keyboard shortcuts
-	let search_input: HTMLInputElement;
+	let search_input = $state<HTMLInputElement>();
 
 	async function perform_search(
 		query: string,

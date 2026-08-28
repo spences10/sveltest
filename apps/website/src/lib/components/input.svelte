@@ -51,7 +51,7 @@
 		...rest
 	}: Props = $props();
 
-	const input_id = id || `input-${unique_id}`;
+	const input_id = $derived(id || `input-${unique_id}`);
 
 	// DaisyUI classes
 	const base_classes = 'input w-full max-w-full';

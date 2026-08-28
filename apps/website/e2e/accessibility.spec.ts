@@ -115,7 +115,7 @@ test.describe('Accessibility Tests', () => {
 						await expect(firstLink).toBeFocused();
 					}
 				}
-			} catch (error) {
+			} catch {
 				console.log(
 					'Focus test skipped - elements may not be focusable',
 				);
@@ -422,7 +422,6 @@ test.describe('Accessibility Tests', () => {
 					if ((await modal.count()) > 0) {
 						// Focus should be trapped in modal
 						await page.keyboard.press('Tab');
-						const focusedElement = page.locator(':focus');
 
 						// Focused element should be within modal
 						const isInModal =
@@ -506,7 +505,7 @@ test.describe('Accessibility Tests', () => {
 				const buttonCount = await buttons.count();
 				// Todos page should have buttons for interaction
 				expect(buttonCount).toBeGreaterThan(0);
-			} catch (error) {
+			} catch {
 				console.log(
 					'Todos page accessibility test skipped due to loading issues',
 				);

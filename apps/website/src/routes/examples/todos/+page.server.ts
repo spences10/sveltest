@@ -14,7 +14,9 @@ export const load: PageServerLoad = async () => {
 export const actions = {
 	add_todo: async ({ request }) => {
 		const form_data = await request.formData();
-		const title = form_data.get('title')?.toString();
+		const title_value = form_data.get('title');
+		const title =
+			typeof title_value === 'string' ? title_value : undefined;
 
 		if (!title) {
 			return fail(400, { error: 'Title is required' });

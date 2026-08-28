@@ -293,8 +293,11 @@ const testing_patterns = {
 export const POST: RequestHandler = async ({ request }) => {
 	// This endpoint accepts FormData to demonstrate form validation patterns
 	const formData = await request.formData();
-	const email = formData.get('email')?.toString() || '';
-	const password = formData.get('password')?.toString() || '';
+	const email_value = formData.get('email');
+	const password_value = formData.get('password');
+	const email = typeof email_value === 'string' ? email_value : '';
+	const password =
+		typeof password_value === 'string' ? password_value : '';
 
 	// Demonstrate validation
 	const errors: string[] = [];

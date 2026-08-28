@@ -56,7 +56,7 @@ test.describe('Smoke Tests', () => {
 			try {
 				await page.goto('/todos', { timeout: 10000 });
 				await expect(page).toHaveURL('/todos', { timeout: 5000 });
-			} catch (error) {
+			} catch {
 				console.log(
 					'Todos page failed to load, skipping functionality test',
 				);
@@ -77,7 +77,7 @@ test.describe('Smoke Tests', () => {
 				);
 				const todoCount = await todoElements.count();
 				expect(todoCount).toBeGreaterThan(0);
-			} catch (error) {
+			} catch {
 				console.log('Todos page content verification failed');
 				// Don't fail the test, just log the issue
 				test.skip(true, 'Todo functionality not available');
@@ -158,7 +158,7 @@ test.describe('Smoke Tests', () => {
 				await expect(page.getByRole('main').first()).toBeVisible({
 					timeout: 5000,
 				});
-			} catch (error) {
+			} catch {
 				console.log(
 					'Todos page navigation test skipped due to loading issues',
 				);

@@ -31,7 +31,7 @@ export class GitHubStatusManager {
 	constructor() {
 		// Auto-fetch on creation (client-side only)
 		if (browser) {
-			this.fetch_status();
+			void this.fetch_status();
 		}
 	}
 

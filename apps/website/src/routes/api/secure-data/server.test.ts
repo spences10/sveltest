@@ -222,7 +222,7 @@ describe('Secure Data Endpoint', () => {
 					headers: { authorization: 'Bearer wrong_token' },
 				});
 				await GET({ request: mock_request } as any);
-			} catch (e) {
+			} catch {
 				// Expected to fail
 			}
 

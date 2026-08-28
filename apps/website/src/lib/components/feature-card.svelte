@@ -35,7 +35,7 @@
 	}: Props = $props();
 
 	// Use button_icon if provided, otherwise use the main icon
-	const ButtonIcon = button_icon || Icon;
+	const ButtonIcon = $derived(button_icon || Icon);
 
 	// Check if the href is an external URL
 	const is_external_url = (url: string | undefined): boolean => {

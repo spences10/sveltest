@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import { page } from '$app/state';
+	import { afterNavigate } from '$app/navigation';
 	import {
 		PUBLIC_FATHOM_ID,
 		PUBLIC_FATHOM_URL,
@@ -27,8 +27,10 @@
 		});
 	});
 
-	$effect(() => {
-		(page.url.pathname, browser && Fathom.trackPageview());
+	afterNavigate(() => {
+		if (browser) {
+			Fathom.trackPageview();
+		}
 	});
 
 	function handle_keydown(event: KeyboardEvent) {

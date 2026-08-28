@@ -118,7 +118,7 @@ describe('Arrow', () => {
 			await expect.element(svg).toHaveAttribute('fill', 'none');
 
 			// ✅ Test structural elements users care about
-			const svg_element = await svg.element();
+			const svg_element = svg.element();
 			const path = svg_element.querySelector('path');
 			expect(path).toBeTruthy();
 

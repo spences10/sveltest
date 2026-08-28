@@ -37,7 +37,7 @@ describe('/+page.svelte', () => {
 
 			// Get all links and check that one has the correct href
 			const all_links = page.getByRole('link');
-			const cursor_link_exists = await all_links
+			const cursor_link_exists = all_links
 				.filter({ hasText: 'View Rules' })
 				.first();
 
@@ -55,7 +55,7 @@ describe('/+page.svelte', () => {
 
 			// Get all links and check that one has the correct href
 			const all_links = page.getByRole('link');
-			const windsurf_link_exists = await all_links
+			const windsurf_link_exists = all_links
 				.filter({ hasText: 'View Rules' })
 				.nth(1);
 

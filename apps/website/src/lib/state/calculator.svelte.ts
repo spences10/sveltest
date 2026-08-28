@@ -33,8 +33,6 @@ class CalculatorState {
 	}
 
 	input_operation(next_operation: string): void {
-		const input_value = parseFloat(this._current_value);
-
 		if (this._previous_value === '') {
 			this._previous_value = this._current_value;
 		} else if (this._operation) {

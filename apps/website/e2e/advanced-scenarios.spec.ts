@@ -13,7 +13,7 @@ test.describe('Advanced E2E Scenarios', () => {
 				// Page might show cached content or error state
 				const bodyContent = await page.textContent('body');
 				expect(bodyContent).toBeTruthy();
-			} catch (error) {
+			} catch {
 				// Network failure is expected in offline mode
 				console.log('Expected network failure in offline mode');
 			}
@@ -32,8 +32,9 @@ test.describe('Advanced E2E Scenarios', () => {
 	}) => {
 		await test.step('Simulate slow network', async () => {
 			// Throttle network to simulate slow connection
-			await page.route('**/*', (route) => {
-				setTimeout(() => route.continue(), 100);
+			await page.route('**/*', async (route) => {
+				await new Promise((resolve) => setTimeout(resolve, 100));
+				await route.continue();
 			});
 
 			await page.goto('/');
@@ -53,7 +54,7 @@ test.describe('Advanced E2E Scenarios', () => {
 				await expect(
 					page.getByRole('heading', { name: 'Todo Manager' }),
 				).toBeVisible({ timeout: 5000 });
-			} catch (error) {
+			} catch {
 				console.log('Todos page failed to load, skipping state test');
 				test.skip();
 			}
@@ -74,7 +75,7 @@ test.describe('Advanced E2E Scenarios', () => {
 						await page.waitForTimeout(1000);
 					}
 				}
-			} catch (error) {
+			} catch {
 				console.log(
 					'Todo functionality not available or not interactive',
 				);
@@ -93,7 +94,7 @@ test.describe('Advanced E2E Scenarios', () => {
 				await expect(
 					page.getByRole('heading', { name: 'Todo Manager' }),
 				).toBeVisible({ timeout: 5000 });
-			} catch (error) {
+			} catch {
 				console.log('Todos page failed to load on return navigation');
 			}
 		});
@@ -182,7 +183,7 @@ test.describe('Advanced E2E Scenarios', () => {
 				await expect(
 					page.getByRole('heading', { name: 'Todo Manager' }),
 				).toBeVisible({ timeout: 3000 });
-			} catch (error) {
+			} catch {
 				console.log('Skipping todos page in navigation test');
 				// Go back to examples instead
 				await page.goto('/examples');

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Eye, EyeOff } from '$lib/icons';
+	import { untrack } from 'svelte';
 	import {
 		validate_email,
 		validate_password,
@@ -33,7 +34,7 @@
 	}: Props = $props();
 
 	// Form state using Svelte 5 runes
-	let email = $state(initial_email);
+	let email = $state(untrack(() => initial_email));
 	let password = $state('');
 	let remember_me = $state(false);
 	let show_password = $state(false);

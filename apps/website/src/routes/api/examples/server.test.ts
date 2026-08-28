@@ -161,9 +161,12 @@ describe('Testing Scenarios Index Endpoint', () => {
 			const data = await response.json();
 
 			const categories = data.categories;
-			const sortedCategories = [...categories].sort();
+			const sorted_categories = [...categories].sort(
+				(category_a, category_b) =>
+					category_a.localeCompare(category_b),
+			);
 
-			expect(categories).toEqual(sortedCategories);
+			expect(categories).toEqual(sorted_categories);
 		});
 
 		it('should include expected category types', async () => {

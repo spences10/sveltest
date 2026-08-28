@@ -74,9 +74,8 @@ describe('Nav Component', () => {
 
 	describe('Initial Rendering', () => {
 		test('should render without errors', async () => {
-			expect(() => {
-				render(Nav);
-			}).not.toThrow();
+			// A rejected render fails the test.
+			await render(Nav);
 		});
 
 		test('should render brand logo and title', async () => {

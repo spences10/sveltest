@@ -16,12 +16,23 @@ vi.mock('$lib/state/calculator.svelte.ts', () => ({
 	},
 }));
 
+type CalculatorStateMock = {
+	current_value: string;
+	clear: ReturnType<typeof vi.fn>;
+	input_digit: ReturnType<typeof vi.fn>;
+	input_operation: ReturnType<typeof vi.fn>;
+	perform_calculation: ReturnType<typeof vi.fn>;
+};
+
+const calculator_state_mock =
+	calculator_state as unknown as CalculatorStateMock;
+
 describe('Calculator Component', () => {
 	beforeEach(() => {
 		// Reset all mocks before each test
 		vi.clearAllMocks();
 		// Reset mock state to ensure consistent starting point
-		(calculator_state as any).current_value = '0';
+		calculator_state_mock.current_value = '0';
 	});
 
 	describe('Initial Rendering', () => {
@@ -96,7 +107,9 @@ describe('Calculator Component', () => {
 			const button7 = page.getByRole('button', { name: '7' });
 			await button7.click({ force: true });
 
-			expect(calculator_state.input_digit).toHaveBeenCalledWith('7');
+			expect(calculator_state_mock.input_digit).toHaveBeenCalledWith(
+				'7',
+			);
 		});
 
 		test('should handle all digit button clicks', async () => {
@@ -108,9 +121,9 @@ describe('Calculator Component', () => {
 					name: i.toString(),
 				});
 				await button.click({ force: true });
-				expect(calculator_state.input_digit).toHaveBeenCalledWith(
-					i.toString(),
-				);
+				expect(
+					calculator_state_mock.input_digit,
+				).toHaveBeenCalledWith(i.toString());
 			}
 		});
 
@@ -120,7 +133,9 @@ describe('Calculator Component', () => {
 			const decimalButton = page.getByRole('button', { name: '.' });
 			await decimalButton.click({ force: true });
 
-			expect(calculator_state.input_digit).toHaveBeenCalledWith('.');
+			expect(calculator_state_mock.input_digit).toHaveBeenCalledWith(
+				'.',
+			);
 		});
 
 		test.skip('should handle rapid digit input', async () => {
@@ -139,9 +154,9 @@ describe('Calculator Component', () => {
 			const addButton = page.getByRole('button', { name: '+' });
 			await addButton.click({ force: true });
 
-			expect(calculator_state.input_operation).toHaveBeenCalledWith(
-				'+',
-			);
+			expect(
+				calculator_state_mock.input_operation,
+			).toHaveBeenCalledWith('+');
 		});
 
 		test('should call input_operation for subtraction', async () => {
@@ -150,9 +165,9 @@ describe('Calculator Component', () => {
 			const subtractButton = page.getByRole('button', { name: '−' });
 			await subtractButton.click({ force: true });
 
-			expect(calculator_state.input_operation).toHaveBeenCalledWith(
-				'-',
-			);
+			expect(
+				calculator_state_mock.input_operation,
+			).toHaveBeenCalledWith('-');
 		});
 
 		test('should call input_operation for multiplication', async () => {
@@ -161,9 +176,9 @@ describe('Calculator Component', () => {
 			const multiplyButton = page.getByRole('button', { name: '×' });
 			await multiplyButton.click({ force: true });
 
-			expect(calculator_state.input_operation).toHaveBeenCalledWith(
-				'*',
-			);
+			expect(
+				calculator_state_mock.input_operation,
+			).toHaveBeenCalledWith('*');
 		});
 
 		test('should call input_operation for division', async () => {
@@ -172,9 +187,9 @@ describe('Calculator Component', () => {
 			const divideButton = page.getByRole('button', { name: '÷' });
 			await divideButton.click({ force: true });
 
-			expect(calculator_state.input_operation).toHaveBeenCalledWith(
-				'/',
-			);
+			expect(
+				calculator_state_mock.input_operation,
+			).toHaveBeenCalledWith('/');
 		});
 
 		test.skip('should handle chained operations', async () => {
@@ -193,7 +208,7 @@ describe('Calculator Component', () => {
 			const clearButton = page.getByRole('button', { name: 'C' });
 			await clearButton.click({ force: true });
 
-			expect(calculator_state.clear).toHaveBeenCalled();
+			expect(calculator_state_mock.clear).toHaveBeenCalled();
 		});
 
 		test('should call perform_calculation when equals button is clicked', async () => {
@@ -202,7 +217,9 @@ describe('Calculator Component', () => {
 			const equalsButton = page.getByRole('button', { name: '=' });
 			await equalsButton.click({ force: true });
 
-			expect(calculator_state.perform_calculation).toHaveBeenCalled();
+			expect(
+				calculator_state_mock.perform_calculation,
+			).toHaveBeenCalled();
 		});
 
 		test.skip('should handle Enter key for calculation', async () => {
@@ -217,7 +234,7 @@ describe('Calculator Component', () => {
 	describe('Display Updates', () => {
 		test('should update display when current_value changes', async () => {
 			// Mock state with different value
-			(calculator_state as any).current_value = '123';
+			calculator_state_mock.current_value = '123';
 
 			await render(Calculator);
 
@@ -226,7 +243,7 @@ describe('Calculator Component', () => {
 
 		test('should handle long numbers in display', async () => {
 			// Mock state with long number
-			(calculator_state as any).current_value = '123456789.123';
+			calculator_state_mock.current_value = '123456789.123';
 
 			await render(Calculator);
 
@@ -289,12 +306,10 @@ describe('Calculator Component', () => {
 
 			const button5 = page.getByRole('button', { name: '5' });
 
-			// Rapid clicks should not cause errors - this is the main test
-			await expect(async () => {
-				for (let i = 0; i < 10; i++) {
-					await button5.click({ force: true });
-				}
-			}).not.toThrow();
+			// A rejected click fails the test.
+			for (let i = 0; i < 10; i++) {
+				await button5.click({ force: true });
+			}
 
 			// The important thing is that rapid clicking doesn't crash the component
 			// Mock verification doesn't work reliably in browser environment

@@ -21,7 +21,7 @@ vi.mock('$app/state', () => ({
 
 describe('/+page.svelte SSR', () => {
 	test('should render HTML correctly on server', () => {
-		const { body, head } = render(Page);
+		const { body } = render(Page);
 
 		// Test that main content is rendered
 		expect(body).toContain('Sveltest');
@@ -47,14 +47,10 @@ describe('/+page.svelte SSR', () => {
 	test('should generate CSS for styling', () => {
 		const result = render(Page);
 
-		// Svelte 5 render returns { head, html, body } structure
+		// Svelte 5 render returns head and body strings.
 		expect(result.head).toBeDefined();
-		expect(result.html).toBeDefined();
 		expect(result.body).toBeDefined();
-
-		// All should be strings
 		expect(typeof result.head).toBe('string');
-		expect(typeof result.html).toBe('string');
 		expect(typeof result.body).toBe('string');
 	});
 

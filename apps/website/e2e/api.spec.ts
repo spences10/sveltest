@@ -15,18 +15,18 @@ test.describe('API Integration Tests', () => {
 				if (healthResponse.status() !== 404) {
 					expect(healthResponse.ok()).toBeTruthy();
 				}
-			} catch (error) {
+			} catch {
 				console.log('No health endpoint found, skipping');
 			}
 		});
 
 		await test.step('Test API integration with UI', async () => {
 			// Mock API responses to test UI behavior
-			await page.route('**/api/**', (route) => {
+			await page.route('**/api/**', async (route) => {
 				const url = route.request().url();
 
 				if (url.includes('/api/todos')) {
-					route.fulfill({
+					await route.fulfill({
 						status: 200,
 						contentType: 'application/json',
 						body: JSON.stringify([
@@ -35,7 +35,7 @@ test.describe('API Integration Tests', () => {
 						]),
 					});
 				} else if (url.includes('/api/examples')) {
-					route.fulfill({
+					await route.fulfill({
 						status: 200,
 						contentType: 'application/json',
 						body: JSON.stringify({
@@ -43,7 +43,7 @@ test.describe('API Integration Tests', () => {
 						}),
 					});
 				} else {
-					route.continue();
+					await route.continue();
 				}
 			});
 
@@ -59,8 +59,8 @@ test.describe('API Integration Tests', () => {
 
 	test('should handle API errors gracefully', async ({ page }) => {
 		await test.step('Mock API error responses', async () => {
-			await page.route('**/api/**', (route) => {
-				route.fulfill({
+			await page.route('**/api/**', async (route) => {
+				await route.fulfill({
 					status: 500,
 					contentType: 'application/json',
 					body: JSON.stringify({ error: 'Internal Server Error' }),
@@ -83,14 +83,13 @@ test.describe('API Integration Tests', () => {
 
 	test('should handle slow API responses', async ({ page }) => {
 		await test.step('Mock slow API responses', async () => {
-			await page.route('**/api/**', (route) => {
-				setTimeout(() => {
-					route.fulfill({
-						status: 200,
-						contentType: 'application/json',
-						body: JSON.stringify({ data: 'slow response' }),
-					});
-				}, 2000); // 2 second delay
+			await page.route('**/api/**', async (route) => {
+				await new Promise((resolve) => setTimeout(resolve, 2000));
+				await route.fulfill({
+					status: 200,
+					contentType: 'application/json',
+					body: JSON.stringify({ data: 'slow response' }),
+				});
 			});
 		});
 
@@ -107,7 +106,7 @@ test.describe('API Integration Tests', () => {
 
 	test('should handle network timeouts', async ({ page }) => {
 		await test.step('Mock network timeout', async () => {
-			await page.route('**/api/**', (route) => {
+			await page.route('**/api/**', (_route) => {
 				// Simulate network timeout by not responding
 				// The request will hang and eventually timeout
 			});
@@ -125,24 +124,24 @@ test.describe('API Integration Tests', () => {
 
 	test('should handle different content types', async ({ page }) => {
 		await test.step('Mock various content types', async () => {
-			await page.route('**/api/json', (route) => {
-				route.fulfill({
+			await page.route('**/api/json', async (route) => {
+				await route.fulfill({
 					status: 200,
 					contentType: 'application/json',
 					body: JSON.stringify({ type: 'json' }),
 				});
 			});
 
-			await page.route('**/api/text', (route) => {
-				route.fulfill({
+			await page.route('**/api/text', async (route) => {
+				await route.fulfill({
 					status: 200,
 					contentType: 'text/plain',
 					body: 'plain text response',
 				});
 			});
 
-			await page.route('**/api/xml', (route) => {
-				route.fulfill({
+			await page.route('**/api/xml', async (route) => {
+				await route.fulfill({
 					status: 200,
 					contentType: 'application/xml',
 					body: '<?xml version="1.0"?><data>xml content</data>',
@@ -164,8 +163,8 @@ test.describe('API Integration Tests', () => {
 		page,
 	}) => {
 		await test.step('Mock CORS responses', async () => {
-			await page.route('**/api/**', (route) => {
-				route.fulfill({
+			await page.route('**/api/**', async (route) => {
+				await route.fulfill({
 					status: 200,
 					headers: {
 						'Access-Control-Allow-Origin': '*',
@@ -194,17 +193,17 @@ test.describe('API Integration Tests', () => {
 
 	test('should handle authentication scenarios', async ({ page }) => {
 		await test.step('Mock authenticated API calls', async () => {
-			await page.route('**/api/protected', (route) => {
+			await page.route('**/api/protected', async (route) => {
 				const authHeader = route.request().headers()['authorization'];
 
 				if (authHeader && authHeader.includes('Bearer')) {
-					route.fulfill({
+					await route.fulfill({
 						status: 200,
 						contentType: 'application/json',
 						body: JSON.stringify({ authenticated: true }),
 					});
 				} else {
-					route.fulfill({
+					await route.fulfill({
 						status: 401,
 						contentType: 'application/json',
 						body: JSON.stringify({ error: 'Unauthorized' }),
@@ -234,7 +233,7 @@ test.describe('API Integration Tests', () => {
 				postData: string | null;
 			}> = [];
 
-			await page.route('**/api/**', (route) => {
+			await page.route('**/api/**', async (route) => {
 				const request = route.request();
 				apiCalls.push({
 					url: request.url(),
@@ -243,7 +242,7 @@ test.describe('API Integration Tests', () => {
 					postData: request.postData(),
 				});
 
-				route.continue();
+				await route.continue();
 			});
 
 			await page.goto('/');

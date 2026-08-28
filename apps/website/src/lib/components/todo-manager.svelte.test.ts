@@ -106,9 +106,13 @@ describe('TodoManager', () => {
 				await import('$lib/state/todo.svelte.ts');
 
 			expect(todo_state).toBeDefined();
-			expect(vi.isMockFunction(todo_state.add_todo)).toBe(true);
-			expect(vi.isMockFunction(todo_state.toggle_todo)).toBe(true);
-			expect(vi.isMockFunction(todo_state.delete_todo)).toBe(true);
+			expect(vi.isMockFunction(mock_todo_state.add_todo)).toBe(true);
+			expect(vi.isMockFunction(mock_todo_state.toggle_todo)).toBe(
+				true,
+			);
+			expect(vi.isMockFunction(mock_todo_state.delete_todo)).toBe(
+				true,
+			);
 		});
 
 		test('should have icons mocked correctly', async () => {
@@ -123,9 +127,8 @@ describe('TodoManager', () => {
 
 	describe('Initial Rendering', () => {
 		test('should render without crashing', async () => {
-			expect(() => {
-				render(TodoManager);
-			}).not.toThrow();
+			// A rejected render fails the test.
+			await render(TodoManager);
 		});
 
 		test('should render with default props', async () => {
@@ -362,9 +365,8 @@ describe('TodoManager', () => {
 
 			await input.fill('New task');
 
-			await expect(async () => {
-				await add_button.click({ force: true });
-			}).not.toThrow();
+			// A rejected click fails the test.
+			await add_button.click({ force: true });
 
 			// Note: We don't test mock function calls here because Svelte 5 runes
 			// make it difficult to reliably test reactive state changes in this environment
@@ -375,9 +377,8 @@ describe('TodoManager', () => {
 
 			const status_filter = page.getByTestId('status-filter');
 
-			await expect(async () => {
-				await status_filter.selectOptions(['completed']);
-			}).not.toThrow();
+			// A rejected selection fails the test.
+			await status_filter.selectOptions(['completed']);
 
 			// Note: We don't test mock function calls here because Svelte 5 runes
 			// make it difficult to reliably test reactive state changes in this environment
@@ -398,9 +399,8 @@ describe('TodoManager', () => {
 
 			const toggle_button = page.getByTestId('toggle-all-button');
 
-			await expect(async () => {
-				await toggle_button.click({ force: true });
-			}).not.toThrow();
+			// A rejected click fails the test.
+			await toggle_button.click({ force: true });
 
 			// Note: We don't test mock function calls here because Svelte 5 runes
 			// make it difficult to reliably test reactive state changes in this environment
@@ -416,9 +416,8 @@ describe('TodoManager', () => {
 			await expect.element(add_button).toBeDisabled();
 
 			// Fill input - use smoke test approach for complex reactive behavior
-			await expect(async () => {
-				await input.fill('New task');
-			}).not.toThrow();
+			// A rejected fill fails the test.
+			await input.fill('New task');
 
 			// Note: Button state reactivity is complex with Svelte 5 runes
 			// Using smoke test approach instead of testing exact reactive behavior

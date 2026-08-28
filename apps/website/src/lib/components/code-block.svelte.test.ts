@@ -92,12 +92,10 @@ describe('CodeBlock Component', () => {
 		});
 
 		test('should handle empty code', async () => {
-			// Component should render without errors - just verify render doesn't throw
-			expect(() => {
-				render(CodeBlock, {
-					code: '',
-				});
-			}).not.toThrow();
+			// A rejected render fails the test.
+			await render(CodeBlock, {
+				code: '',
+			});
 		});
 
 		test.skip('should handle network errors gracefully', async () => {

@@ -1,11 +1,12 @@
 <script lang="ts">
-	const { data } = $props();
-	const { Copy, slug } = data;
+	let { data } = $props();
+	const Copy = $derived(data.Copy);
+	const slug = $derived(data.slug);
 
 	// Format the title from slug
-	const title = slug
-		.replace('-', ' ')
-		.replace(/\b\w/g, (l) => l.toUpperCase());
+	const title = $derived(
+		slug.replace('-', ' ').replace(/\b\w/g, (l) => l.toUpperCase()),
+	);
 </script>
 
 <svelte:head>

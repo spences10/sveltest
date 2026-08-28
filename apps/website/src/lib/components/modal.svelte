@@ -110,11 +110,13 @@
 		xl: 'sm:max-w-4xl',
 	};
 
-	const modal_classes = [
-		'relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all',
-		'sm:my-8 sm:w-full',
-		size_classes[size],
-	].join(' ');
+	const modal_classes = $derived.by(() =>
+		[
+			'relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all',
+			'sm:my-8 sm:w-full',
+			size_classes[size],
+		].join(' '),
+	);
 
 	const header_classes = 'bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4';
 	const title_classes = 'text-lg font-medium leading-6 text-gray-900';

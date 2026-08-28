@@ -85,16 +85,18 @@
 		'cursor-pointer hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2';
 	const disabled_classes = 'opacity-50 cursor-not-allowed';
 
-	const computed_classes = [
-		base_classes,
-		variant_classes[variant],
-		padding_classes[padding],
-		rounded_classes[rounded],
-		clickable && !disabled && clickable_classes,
-		disabled && disabled_classes,
-	]
-		.filter(Boolean)
-		.join(' ');
+	const computed_classes = $derived.by(() =>
+		[
+			base_classes,
+			variant_classes[variant],
+			padding_classes[padding],
+			rounded_classes[rounded],
+			clickable && !disabled && clickable_classes,
+			disabled && disabled_classes,
+		]
+			.filter(Boolean)
+			.join(' '),
+	);
 
 	// Content classes
 	const title_classes = 'text-lg font-semibold text-gray-900 mb-1';

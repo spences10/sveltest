@@ -1,3 +1,13 @@
+const vitest_browser_runner = globalThis as typeof globalThis & {
+	__vitest_browser_runner__?: {
+		wrapDynamicImport: <T>(factory: () => Promise<T>) => Promise<T>;
+	};
+};
+
+vitest_browser_runner.__vitest_browser_runner__ ??= {
+	wrapDynamicImport: (factory) => factory(),
+};
+
 import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
 import { playwright } from '@vitest/browser-playwright';
