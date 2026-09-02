@@ -35,7 +35,7 @@ catalogs:
       version: 4.1.11
     zod:
       specifier: ^4.4.3
-      version: 4.4.3
+      version: 4.5.4
 
 importers:
 
@@ -52,7 +52,7 @@ importers:
         version: 0.3.0(@types/node@26.4.0)(@vitest/browser-playwright@4.1.11(playwright@1.62.1)(vite@8.2.2(@types/node@26.4.0)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))(vitest@4.1.11))(@vitest/coverage-v8@4.1.11(@vitest/browser@4.1.11(vite@8.2.2(@types/node@26.4.0)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))(vitest@4.1.11))(vitest@4.1.11))(esbuild@0.28.0)(jiti@2.7.0)(jsdom@30.0.1)(svelte@5.56.10(@typescript-eslint/types@8.59.4))(tsx@4.23.12)(typescript@6.0.3)(vite@8.2.2(@types/node@26.4.0)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))(yaml@2.9.0)
       zod:
         specifier: 'catalog:'
-        version: 4.4.3
+        version: 4.5.4
 
   apps/website:
     devDependencies:
@@ -157,7 +157,7 @@ importers:
         version: 3.0.0(svelte@5.56.10(@typescript-eslint/types@8.59.4))(vitest@4.1.11)
       zod:
         specifier: 'catalog:'
-        version: 4.4.3
+        version: 4.5.4
 
   packages/cli:
     dependencies:
@@ -3013,8 +3013,8 @@ packages:
   zimmerframe@1.1.4:
     resolution: {integrity: sha512-B58NGBEoc8Y9MWWCQGl/gq9xBCe4IiKM0a2x7GZdQKOW5Exr8S1W24J6OgM1njK8xCRGvAJIL/MxXHf6SkmQKQ==}
 
-  zod@4.4.3:
-    resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
+  zod@4.5.4:
+    resolution: {integrity: sha512-sC95tT5iHHH9gtpj6A81kh+NEaRAUFN+qlUPDUbRfOMvNf5QCBqsb3WgvnpVtK5Y+4UfA6KqufotuTvMGiTlsA==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
@@ -5577,6 +5577,6 @@ snapshots:
 
   zimmerframe@1.1.4: {}
 
-  zod@4.4.3: {}
+  zod@4.5.4: {}
 
   zwitch@2.0.4: {}
