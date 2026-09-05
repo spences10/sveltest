@@ -13,7 +13,7 @@ catalog:
   tsx: ^4.23.12
   typescript: ^6.0.3
   vite-plus: 0.3.0
-  vitest: 4.1.11
+  vitest: 5.0.0
   zod: ^4.4.3
 
 allowBuilds:
