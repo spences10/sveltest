@@ -103,7 +103,7 @@ importers:
         version: 4.1.11(@vitest/browser@4.1.11)(vitest@4.1.11)
       daisyui:
         specifier: ^5.7.22
-        version: 5.7.25
+        version: 5.7.28
       fathom-client:
         specifier: ^3.7.2
         version: 3.7.2
@@ -2039,8 +2039,8 @@ packages:
     engines: {node: '>=4'}
     hasBin: true
 
-  daisyui@5.7.25:
-    resolution: {integrity: sha512-lE5kR8FjHxUHiCb3/PAPuaNkv0MSm6B8GWd5x/l7SLDsH58IxYCiPG8wrcRgdZCI5q8jxpeA2Utx6O6X/kpLnw==}
+  daisyui@5.7.28:
+    resolution: {integrity: sha512-BxQap2QOj7NQy5nEsjTHRmybmUZP3t+O5G6vfdidZuptBsh/QyKN9wbdrGDZk198fMI3UyYnA/rCWlggZIhGnw==}
 
   data-urls@7.0.0:
     resolution: {integrity: sha512-23XHcCF+coGYevirZceTVD7NdJOqVn+49IHyxgszm+JIiHLoB2TkmPtsYkNWT1pvRSGkc35L6NHs0yHkN2SumA==}
@@ -4318,7 +4318,7 @@ snapshots:
 
   cssesc@3.0.0: {}
 
-  daisyui@5.7.25: {}
+  daisyui@5.7.28: {}
 
   data-urls@7.0.0:
     dependencies:
