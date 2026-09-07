@@ -1,4 +1,19 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
+
+async function fill_search(page: Page, query: string) {
+	const search_response = page.waitForResponse((response) => {
+		const url = new URL(response.url());
+		return (
+			url.pathname === '/api/search' &&
+			url.searchParams.get('q') === query &&
+			url.searchParams.get('filter') === 'docs' &&
+			response.ok()
+		);
+	});
+
+	await page.getByTestId('docs-search-input').fill(query);
+	await search_response;
+}
 
 test.describe('Search Navigation Fix - Issue #522', () => {
 	test.beforeEach(async ({ page }) => {
@@ -12,32 +27,32 @@ test.describe('Search Navigation Fix - Issue #522', () => {
 		// This test verifies the fix for issue #522
 		// When searching for "form" and clicking "Form Testing", it should navigate to the specific section
 
-		const searchInput = page.getByTestId('docs-search-input');
-		await expect(searchInput).toBeVisible();
+		const search_input = page.getByTestId('docs-search-input');
+		await expect(search_input).toBeVisible();
 
 		// Search for "form" which should return "Form Testing (Quick Start)" result
-		await searchInput.fill('form');
+		await fill_search(page, 'form');
 
 		// Wait for search results to appear
-		const searchResults = page.getByTestId('search-results');
-		await expect(searchResults).toBeVisible();
+		const search_results = page.getByTestId('search-results');
+		await expect(search_results).toBeVisible();
 
 		// Look for the "Form Testing" result specifically using the actual test ID
-		const formTestingResult = page.getByTestId(
+		const form_testing_result = page.getByTestId(
 			'search-result-example-quick-start-form_testing',
 		);
 
-		await expect(formTestingResult).toBeVisible();
+		await expect(form_testing_result).toBeVisible();
 
 		// Get the href attribute to verify it has a hash fragment
-		const href = await formTestingResult.getAttribute('href');
+		const href = await form_testing_result.getAttribute('href');
 
 		// Verify the URL contains a hash fragment (the fix)
 		expect(href).toContain('#');
 		expect(href).toBe('/docs/getting-started#testing-form-inputs');
 
 		// Click the result
-		await formTestingResult.click();
+		await form_testing_result.click();
 
 		// Verify navigation occurred to the specific section
 		await expect(page).toHaveURL(
@@ -57,17 +72,17 @@ test.describe('Search Navigation Fix - Issue #522', () => {
 		const response = await page.request.get('/search-index.json');
 		expect(response.status()).toBe(200);
 
-		const searchIndex = await response.json();
+		const search_index = await response.json();
 
 		// Find documentation examples (Quick Start category)
-		const quickStartExamples = searchIndex.items.filter(
+		const quick_start_examples = search_index.items.filter(
 			(item: any) => item.category === 'Quick Start',
 		);
 
-		expect(quickStartExamples.length).toBeGreaterThan(0);
+		expect(quick_start_examples.length).toBeGreaterThan(0);
 
 		// Verify that Quick Start examples have specific URLs with hash fragments
-		for (const example of quickStartExamples) {
+		for (const example of quick_start_examples) {
 			if (
 				example.title.toLowerCase().includes('form') ||
 				example.title.toLowerCase().includes('state') ||
@@ -83,27 +98,24 @@ test.describe('Search Navigation Fix - Issue #522', () => {
 	test('should handle search results with hash navigation correctly', async ({
 		page,
 	}) => {
-		// Test that form search returns results with hash fragments
-		const searchInput = page.getByTestId('docs-search-input');
-
 		// Search for "form" which should return results with hash fragments
-		await searchInput.fill('form');
+		await fill_search(page, 'form');
 
-		const searchResults = page.getByTestId('search-results');
-		await expect(searchResults).toBeVisible();
+		const search_results = page.getByTestId('search-results');
+		await expect(search_results).toBeVisible();
 
 		// Check if the Form Testing result has a hash fragment
-		const formTestingResult = page.getByTestId(
+		const form_testing_result = page.getByTestId(
 			'search-result-example-quick-start-form_testing',
 		);
-		await expect(formTestingResult).toBeVisible();
+		await expect(form_testing_result).toBeVisible();
 
-		const href = await formTestingResult.getAttribute('href');
+		const href = await form_testing_result.getAttribute('href');
 		expect(href).toContain('#');
 		expect(href).toBe('/docs/getting-started#testing-form-inputs');
 
 		// Test navigation to hash link
-		await formTestingResult.click();
+		await form_testing_result.click();
 
 		// Verify URL contains hash
 		await expect(page).toHaveURL(
@@ -112,28 +124,26 @@ test.describe('Search Navigation Fix - Issue #522', () => {
 
 		// Verify we can navigate back and search still works
 		await page.goto('/docs');
-		await searchInput.fill('component');
+		await fill_search(page, 'component');
 
 		// Should show results for component search
-		await expect(searchResults).toBeVisible();
+		const search_results_after_navigation =
+			page.getByTestId('search-results');
+		await expect(search_results_after_navigation).toBeVisible();
 	});
 
 	test('should maintain search functionality after navigation', async ({
 		page,
 	}) => {
 		// Test that search still works after navigating via hash links
-
-		const searchInput = page.getByTestId('docs-search-input');
-
-		// Search for form
-		await searchInput.fill('form');
+		await fill_search(page, 'form');
 
 		// Click on the Form Testing result
-		const formResult = page.getByTestId(
+		const form_result = page.getByTestId(
 			'search-result-example-quick-start-form_testing',
 		);
-		await expect(formResult).toBeVisible();
-		await formResult.click();
+		await expect(form_result).toBeVisible();
+		await form_result.click();
 
 		// Verify we navigated to the correct page
 		await expect(page).toHaveURL(
@@ -144,15 +154,17 @@ test.describe('Search Navigation Fix - Issue #522', () => {
 		await page.goto('/docs');
 
 		// Search should still be functional
-		const searchInputAfterNav = page.getByTestId('docs-search-input');
-		await expect(searchInputAfterNav).toBeVisible();
+		const search_input_after_nav = page.getByTestId(
+			'docs-search-input',
+		);
+		await expect(search_input_after_nav).toBeVisible();
 
 		// Try another search
-		await searchInputAfterNav.fill('component');
+		await fill_search(page, 'component');
 
 		// Results should appear
-		const newResults = page.getByTestId('search-results');
-		await expect(newResults).toBeVisible();
+		const new_results = page.getByTestId('search-results');
+		await expect(new_results).toBeVisible();
 	});
 
 	test('should handle edge cases in search navigation', async ({
@@ -160,33 +172,33 @@ test.describe('Search Navigation Fix - Issue #522', () => {
 	}) => {
 		// Test edge cases that might break navigation
 
-		const searchInput = page.getByTestId('docs-search-input');
+		const search_input = page.getByTestId('docs-search-input');
 
 		// Test empty search
-		await searchInput.fill('');
+		await search_input.fill('');
 
-		const noResults = page.getByTestId('search-results');
-		await expect(noResults).not.toBeVisible();
+		const no_results = page.getByTestId('search-results');
+		await expect(no_results).not.toBeVisible();
 
 		// Test search with special characters
-		await searchInput.fill('form#test');
+		await search_input.fill('form#test');
 
 		// Should handle gracefully without breaking
 		// Test search with very long query
-		await searchInput.fill('a'.repeat(100));
+		await search_input.fill('a'.repeat(100));
 
 		// Should handle gracefully
 
 		// Test rapid search changes
-		await searchInput.fill('f');
-		await searchInput.fill('fo');
-		await searchInput.fill('for');
-		await searchInput.fill('form');
+		await search_input.fill('f');
+		await search_input.fill('fo');
+		await search_input.fill('for');
+		await search_input.fill('form');
 
 		// Should show results for final query after debounce
-		const searchResults = page.getByTestId('search-results');
-		if (await searchResults.isVisible({ timeout: 1000 })) {
-			await expect(searchResults).toBeVisible();
+		const search_results = page.getByTestId('search-results');
+		if (await search_results.isVisible({ timeout: 1000 })) {
+			await expect(search_results).toBeVisible();
 		}
 	});
 });
@@ -198,27 +210,27 @@ test.describe('Search Index API Validation', () => {
 		const response = await request.get('/search-index.json');
 		expect(response.status()).toBe(200);
 
-		const searchIndex = await response.json();
-		expect(searchIndex).toHaveProperty('items');
-		expect(searchIndex).toHaveProperty('total_items');
-		expect(Array.isArray(searchIndex.items)).toBe(true);
+		const search_index = await response.json();
+		expect(search_index).toHaveProperty('items');
+		expect(search_index).toHaveProperty('total_items');
+		expect(Array.isArray(search_index.items)).toBe(true);
 
 		// Verify the fix: documentation examples should have specific URLs
-		const documentationExamples = searchIndex.items.filter(
+		const documentation_examples = search_index.items.filter(
 			(item: any) => item.category === 'Quick Start',
 		);
 
-		expect(documentationExamples.length).toBeGreaterThan(0);
+		expect(documentation_examples.length).toBeGreaterThan(0);
 
 		// Check that form testing example has specific URL with hash
-		const formExample = documentationExamples.find((item: any) =>
+		const form_example = documentation_examples.find((item: any) =>
 			item.title.toLowerCase().includes('form'),
 		);
 
-		if (formExample) {
-			expect(formExample.url).toContain('#');
-			expect(formExample.url).toContain('getting-started');
-			expect(formExample.url).toMatch(/form/i);
+		if (form_example) {
+			expect(form_example.url).toContain('#');
+			expect(form_example.url).toContain('getting-started');
+			expect(form_example.url).toMatch(/form/i);
 		}
 	});
 
@@ -231,14 +243,14 @@ test.describe('Search Index API Validation', () => {
 		);
 		expect(response.status()).toBe(200);
 
-		const searchData = await response.json();
-		expect(searchData).toHaveProperty('results');
-		expect(searchData).toHaveProperty('query', 'form');
-		expect(searchData).toHaveProperty('filter', 'docs');
+		const search_data = await response.json();
+		expect(search_data).toHaveProperty('results');
+		expect(search_data).toHaveProperty('query', 'form');
+		expect(search_data).toHaveProperty('filter', 'docs');
 
 		// Verify results have proper structure
-		if (searchData.results.length > 0) {
-			const result = searchData.results[0];
+		if (search_data.results.length > 0) {
+			const result = search_data.results[0];
 			expect(result).toHaveProperty('id');
 			expect(result).toHaveProperty('title');
 			expect(result).toHaveProperty('url');

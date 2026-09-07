@@ -18,6 +18,11 @@ jobs:
       image: mcr.microsoft.com/playwright:v1.63.0-noble
       options: --user 1001
     timeout-minutes: 10
+    env:
+      API_SECRET: ${{ secrets.API_SECRET }}
+      PUBLIC_FATHOM_ID: ${{ secrets.PUBLIC_FATHOM_ID }}
+      PUBLIC_FATHOM_URL: ${{ secrets.PUBLIC_FATHOM_URL }}
+      LLM_GEN_SECRET: ${{ secrets.LLM_GEN_SECRET }}
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
@@ -81,11 +86,6 @@ jobs:
 
       - name: Build application
         run: pnpm --filter @sveltest/website build
-        env:
-          API_SECRET: ${{ secrets.API_SECRET }}
-          PUBLIC_FATHOM_ID: ${{ secrets.PUBLIC_FATHOM_ID }}
-          PUBLIC_FATHOM_URL: ${{ secrets.PUBLIC_FATHOM_URL }}
-          LLM_GEN_SECRET: ${{ secrets.LLM_GEN_SECRET }}
 
       - name: Coverage
         run:
