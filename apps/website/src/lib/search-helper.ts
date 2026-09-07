@@ -2,7 +2,7 @@ import {
 	generate_search_index,
 	search_full_text,
 	type SearchResult,
-} from '$lib/server/search-index';
+} from '#lib/server/search-index.js';
 import { z } from 'zod';
 
 export const search_schema = z.object({

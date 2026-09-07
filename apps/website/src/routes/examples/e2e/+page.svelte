@@ -1,6 +1,6 @@
 <script lang="ts">
-	import CodeBlock from '$lib/components/code-block.svelte';
-	import { e2e_test_examples } from '$lib/examples/code-examples';
+	import CodeBlock from '#lib/components/code-block.svelte';
+	import { e2e_test_examples } from '#lib/examples/code-examples.js';
 	import {
 		Arrow,
 		Calculator,
@@ -10,7 +10,7 @@
 		LightningBolt,
 		Server,
 		Settings,
-	} from '$lib/icons';
+	} from '#lib/icons/index.js';
 
 	// E2E testing categories
 	const e2e_categories = [

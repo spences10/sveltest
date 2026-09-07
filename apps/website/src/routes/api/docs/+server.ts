@@ -1,9 +1,8 @@
-import { content_map, topics } from '$lib/server/content';
-import { json } from '@sveltejs/kit';
+import { content_map, topics } from '#lib/server/content.js';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async () => {
-	return json({
+	return Response.json({
 		title: 'Sveltest Documentation Topics',
 		description:
 			'All available documentation topics for Svelte 5 testing with vitest-browser-svelte',

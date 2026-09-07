@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { github_status } from '$lib/state/github-status.svelte.ts';
+	import { github_status } from '#lib/state/github-status.svelte.ts';
 </script>
 
 {#if github_status.data && github_status.data.unit_tests && github_status.data.e2e_tests}

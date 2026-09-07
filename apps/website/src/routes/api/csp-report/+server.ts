@@ -1,4 +1,3 @@
-import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request }) => {
@@ -25,9 +24,12 @@ export const POST: RequestHandler = async ({ request }) => {
 		// - Aggregate violation data for analysis
 		// - Filter out known false positives
 
-		return json({ received: true }, { status: 200 });
+		return Response.json({ received: true }, { status: 200 });
 	} catch (error) {
 		console.error('Error processing CSP report:', error);
-		return json({ error: 'Invalid report format' }, { status: 400 });
+		return Response.json(
+			{ error: 'Invalid report format' },
+			{ status: 400 },
+		);
 	}
 };

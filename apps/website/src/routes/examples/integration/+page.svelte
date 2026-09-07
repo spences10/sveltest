@@ -1,6 +1,6 @@
 <script lang="ts">
-	import CodeBlock from '$lib/components/code-block.svelte';
-	import { integration_test_examples } from '$lib/examples/code-examples';
+	import CodeBlock from '#lib/components/code-block.svelte';
+	import { integration_test_examples } from '#lib/examples/code-examples.js';
 	import {
 		Arrow,
 		BarChart,
@@ -10,7 +10,7 @@
 		LightningBolt,
 		Server,
 		Settings,
-	} from '$lib/icons';
+	} from '#lib/icons/index.js';
 
 	// Integration testing categories
 	const integration_categories = [

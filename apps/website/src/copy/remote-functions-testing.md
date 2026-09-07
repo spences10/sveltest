@@ -132,7 +132,7 @@ describe('calculate_total', () => {
 // src/lib/items/items.remote.ts
 import { form } from '@sveltejs/kit';
 import { validate_item } from './items.remote.helper';
-import { db } from '$lib/db';
+import { db } from '#lib/db.js';
 
 export const createItem = form(async ({ request }) => {
 	const data = await request.formData();
@@ -162,7 +162,7 @@ Inject remote functions as props to enable mocking in tests.
 ```svelte
 <!-- src/lib/components/item-form.svelte -->
 <script lang="ts">
-	import { createItem as defaultCreateItem } from '$lib/items.remote';
+	import { createItem as defaultCreateItem } from '#lib/items.remote.js';
 
 	let {
 		form = defaultCreateItem,
@@ -378,7 +378,7 @@ import {
 import { render } from 'vitest-browser-svelte';
 import { page } from 'vitest/browser';
 import { setupServer } from 'msw/node';
-import { handlers } from '$lib/mocks/handlers';
+import { handlers } from '#lib/mocks/handlers.js';
 import ItemForm from './item-form.svelte';
 
 const server = setupServer(...handlers);

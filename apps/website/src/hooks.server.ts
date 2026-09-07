@@ -1,5 +1,4 @@
-import type { Handle } from '@sveltejs/kit';
-import { sequence } from '@sveltejs/kit/hooks';
+import { sequence, type Handle } from '@sveltejs/kit/hooks';
 import { csp_directives } from './csp-directives';
 
 // Handle function for security headers

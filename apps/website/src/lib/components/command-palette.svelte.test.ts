@@ -1,4 +1,4 @@
-import { command_palette_state } from '$lib/state/command-palette.svelte';
+import { command_palette_state } from '#lib/state/command-palette.svelte.js';
 import {
 	afterEach,
 	beforeEach,
@@ -12,7 +12,7 @@ import { page } from 'vitest/browser';
 import CommandPalette from './command-palette.svelte';
 
 // Mock search_site - use vi.stubGlobal for CI compatibility
-vi.mock('$lib/search.remote', () => ({
+vi.mock('#lib/search.remote.js', () => ({
 	search_site: vi.fn().mockResolvedValue([]),
 }));
 
@@ -192,7 +192,7 @@ describe('CommandPalette', () => {
 
 	describe('Search Results', () => {
 		test('should show no results message when query has no matches', async () => {
-			const { search_site } = await import('$lib/search.remote');
+			const { search_site } = await import('#lib/search.remote.js');
 			vi.mocked(search_site).mockResolvedValue([]);
 
 			await render(CommandPalette);

@@ -335,7 +335,7 @@ describe('Parent Component', () => {
 
 ```typescript
 // Mock utility functions with realistic return values
-vi.mock('$lib/utils/api', () => ({
+vi.mock('#lib/utils/api.js', () => ({
 	fetch_user_data: vi.fn(() =>
 		Promise.resolve({
 			id: 1,
@@ -364,7 +364,7 @@ describe('User Profile Component', () => {
 
 ```typescript
 // Mock Svelte stores
-vi.mock('$lib/stores/user', () => ({
+vi.mock('#lib/stores/user.js', () => ({
 	user_store: {
 		subscribe: vi.fn((callback) => {
 			callback({ id: 1, name: 'Test User' });

@@ -1,20 +1,20 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
+	import { browser } from '$app/env';
 	import { afterNavigate } from '$app/navigation';
 	import {
 		PUBLIC_FATHOM_ID,
 		PUBLIC_FATHOM_URL,
-	} from '$env/static/public';
-	import CommandPalette from '$lib/components/command-palette.svelte';
-	import Nav from '$lib/components/nav.svelte';
+	} from '$app/env/public';
+	import CommandPalette from '#lib/components/command-palette.svelte';
+	import Nav from '#lib/components/nav.svelte';
 	import {
 		CircleDot,
 		ExternalLink,
 		GitHub,
 		Heart,
 		Robot,
-	} from '$lib/icons';
-	import { command_palette_state } from '$lib/state/command-palette.svelte';
+	} from '#lib/icons/index.js';
+	import { command_palette_state } from '#lib/state/command-palette.svelte.js';
 	import * as Fathom from 'fathom-client';
 	import { onMount } from 'svelte';
 	import '../app.css';
@@ -27,7 +27,9 @@
 		});
 	});
 
-	afterNavigate(() => {
+	afterNavigate(({ shallow }) => {
+		if (shallow) return;
+
 		if (browser) {
 			Fathom.trackPageview();
 		}

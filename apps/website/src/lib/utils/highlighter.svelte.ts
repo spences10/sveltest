@@ -1,4 +1,4 @@
-import { browser } from '$app/environment';
+import { browser } from '$app/env';
 import { createHighlighter } from 'shiki';
 
 // Module-level singleton highlighter (shared across all component instances)

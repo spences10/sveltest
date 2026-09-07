@@ -1,4 +1,3 @@
-import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
 /**
@@ -74,8 +73,8 @@ const stats = untrack(() => todo_state.stats);`,
 
 const mocking_patterns = {
 	browser_environment: {
-		pattern: 'Mock $app/environment before import',
-		example: `vi.mock('$app/environment', () => ({
+		pattern: 'Mock $app/env before import',
+		example: `vi.mock('$app/env', () => ({
   browser: true,
 }));`,
 	},
@@ -107,10 +106,10 @@ const common_pitfalls = {
 		solution: 'Set up all mocks first, then import',
 		example: `// ❌ WRONG order
 import { todo_state } from './todo.svelte';
-vi.mock('$app/environment');
+vi.mock('$app/env');
 
 // ✅ CORRECT order
-vi.mock('$app/environment');
+vi.mock('$app/env');
 const { todo_state } = await import('./todo.svelte');`,
 	},
 	expecting_immediate_updates: {
@@ -120,7 +119,7 @@ const { todo_state } = await import('./todo.svelte');`,
 };
 
 export const GET: RequestHandler = async () => {
-	return json({
+	return Response.json({
 		title: 'Svelte 5 Runes Testing Scenarios',
 		description:
 			'Testing patterns for $state, $derived, and $effect runes',

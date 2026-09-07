@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { BookOpen, Code, Eye } from '$lib/icons';
-	import { search_site } from '$lib/search.remote';
-	import type { SearchResult } from '$lib/server/search-index';
-	import { command_palette_state } from '$lib/state/command-palette.svelte';
+	import { BookOpen, Code, Eye } from '#lib/icons/index.js';
+	import { search_site } from '#lib/search.remote.js';
+	import type { SearchResult } from '#lib/server/search-index.js';
+	import { command_palette_state } from '#lib/state/command-palette.svelte.js';
 
 	let results = $state<SearchResult[]>([]);
 	let loading = $state(false);

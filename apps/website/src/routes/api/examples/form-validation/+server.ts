@@ -1,4 +1,3 @@
-import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
 /**
@@ -315,14 +314,14 @@ export const POST: RequestHandler = async ({ request }) => {
 	}
 
 	if (errors.length > 0) {
-		return json({ valid: false, errors }, { status: 400 });
+		return Response.json({ valid: false, errors }, { status: 400 });
 	}
 
-	return json({ valid: true, message: 'Validation passed' });
+	return Response.json({ valid: true, message: 'Validation passed' });
 };
 
 export const GET: RequestHandler = async () => {
-	return json({
+	return Response.json({
 		title: 'Form Validation Testing Scenarios',
 		description:
 			'Testing patterns for form validation, user input, and validation lifecycle using vitest-browser-svelte',

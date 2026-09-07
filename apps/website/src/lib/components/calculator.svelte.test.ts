@@ -1,11 +1,11 @@
-import { calculator_state } from '$lib/state/calculator.svelte.ts';
+import { calculator_state } from '#lib/state/calculator.svelte.ts';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import { page } from 'vitest/browser';
 import Calculator from './calculator.svelte';
 
 // Mock the calculator state to isolate component testing
-vi.mock('$lib/state/calculator.svelte.ts', () => ({
+vi.mock('#lib/state/calculator.svelte.ts', () => ({
 	calculator_state: {
 		current_value: '0',
 		clear: vi.fn(),

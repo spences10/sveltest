@@ -1,4 +1,3 @@
-import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
 /**
@@ -285,7 +284,7 @@ const testing_patterns = {
 };
 
 export const GET: RequestHandler = async () => {
-	return json({
+	return Response.json({
 		title: 'Button Component Testing Scenarios',
 		description:
 			'Testing patterns for Svelte 5 button components using vitest-browser-svelte',

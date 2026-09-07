@@ -27,7 +27,7 @@ export { default as MoreVertical } from './more-vertical.svelte';
 export { default as Plus } from './plus.svelte';
 export { default as Robot } from './robot.svelte';
 export { default as Search } from './search.svelte';
-export { default as Server } from './server.svelte';
+export { default as Server } from './server-icon.svelte';
 export { default as Settings } from './settings.svelte';
 export { default as Trash } from './trash.svelte';
 export { default as User } from './user.svelte';

@@ -1,12 +1,12 @@
 <script lang="ts">
-	import TodoManager from '$lib/components/todo-manager.svelte';
+	import TodoManager from '#lib/components/todo-manager.svelte';
 	import {
 		BarChart,
 		CheckCircle,
 		Clipboard,
 		Heart,
 		LightningBolt,
-	} from '$lib/icons';
+	} from '#lib/icons/index.js';
 </script>
 
 <svelte:head>

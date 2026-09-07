@@ -1,4 +1,3 @@
-import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
 interface GitHubStatus {
@@ -83,7 +82,7 @@ export const GET: RequestHandler = async () => {
 
 		// Return 500 if there were errors fetching status
 		if (has_errors) {
-			return json(status, {
+			return Response.json(status, {
 				status: 500,
 				headers: {
 					'Cache-Control': 'public, max-age=60', // Shorter cache for errors
@@ -91,7 +90,7 @@ export const GET: RequestHandler = async () => {
 			});
 		}
 
-		return json(status, {
+		return Response.json(status, {
 			headers: {
 				'Cache-Control': 'public, max-age=300', // Cache for 5 minutes
 			},
@@ -100,7 +99,7 @@ export const GET: RequestHandler = async () => {
 		console.error('Error fetching GitHub status:', error);
 
 		// Return fallback status
-		return json(
+		return Response.json(
 			{
 				unit_tests: {
 					status: 'unknown' as const,

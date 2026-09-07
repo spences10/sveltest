@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { BookOpen, Code, Eye, Search } from '$lib/icons';
+	import { BookOpen, Code, Eye, Search } from '#lib/icons/index.js';
 
 	interface SearchResult {
 		id: string;

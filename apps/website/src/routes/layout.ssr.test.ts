@@ -3,8 +3,8 @@ import { render } from 'svelte/server';
 import { describe, expect, test, vi } from 'vitest';
 import Layout from './+layout.svelte';
 
-// Mock the $app/environment module for SSR testing
-vi.mock('$app/environment', () => ({
+// Mock the $app/env module for SSR testing
+vi.mock('$app/env', () => ({
 	browser: false,
 	building: false,
 	dev: true,

@@ -11,6 +11,10 @@
 		"url": "https://github.com/spences10/sveltest.git"
 	},
 	"type": "module",
+	"imports": {
+		"#lib": "./src/lib/index.js",
+		"#lib/*": "./src/lib/*"
+	},
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
@@ -34,9 +38,9 @@
 		"@fontsource-variable/inter": "^5.3.0",
 		"@fontsource-variable/victor-mono": "^5.3.0",
 		"@playwright/test": "catalog:",
-		"@sveltejs/adapter-auto": "^7.0.1",
-		"@sveltejs/adapter-cloudflare": "^7.2.9",
-		"@sveltejs/kit": "^2.70.3",
+		"@sveltejs/adapter-auto": "^8.0.0-next.0",
+		"@sveltejs/adapter-cloudflare": "^8.0.0-next.0",
+		"@sveltejs/kit": "^3.0.0-next.0",
 		"@sveltejs/vite-plugin-svelte": "^7.3.0",
 		"@tailwindcss/typography": "^0.5.20",
 		"@tailwindcss/vite": "^4.3.3",

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { topics } from '$lib/data/topics';
-	import { Document } from '$lib/icons';
+	import { topics } from '#lib/data/topics.js';
+	import { Document } from '#lib/icons/index.js';
 
 	interface Props {
 		current_topic?: string;

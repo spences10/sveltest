@@ -352,7 +352,7 @@ vi.mock('./utils', () => ({
 }));
 
 // ✅ Correct absolute path
-vi.mock('$lib/utils', () => ({
+vi.mock('#lib/utils.js', () => ({
 	// mock implementation
 }));
 ```
@@ -366,7 +366,7 @@ running.
 
 ```typescript
 // ✅ Mocks at top of file, before other imports
-vi.mock('$lib/api', () => ({
+vi.mock('#lib/api.js', () => ({
 	fetch_data: vi.fn(() => Promise.resolve({})),
 }));
 
@@ -381,7 +381,7 @@ import Component from './component.svelte';
 **Solution**: Use `importOriginal`:
 
 ```typescript
-vi.mock('$lib/utils', async (importOriginal) => {
+vi.mock('#lib/utils.js', async (importOriginal) => {
 	const actual = await importOriginal();
 	return {
 		...actual,
@@ -474,7 +474,7 @@ export default defineConfig({
 
 ```typescript
 // Mock heavy dependencies
-vi.mock('$lib/heavy-chart-component.svelte', () => ({
+vi.mock('#lib/heavy-chart-component.svelte', () => ({
 	default: vi.fn().mockImplementation(() => ({
 		$$: {},
 		$set: vi.fn(),

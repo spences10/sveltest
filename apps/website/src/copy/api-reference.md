@@ -403,7 +403,7 @@ vi.mock('@external/heavy-chart', () => ({
 }));
 
 // ✅ Mock STATELESS presentational components in unit tests
-vi.mock('$lib/components/icon.svelte', () => ({
+vi.mock('#lib/components/icon.svelte', () => ({
 	default: vi.fn(() => ({
 		$$: {},
 		$set: vi.fn(),
@@ -427,7 +427,7 @@ const mock_api_call = vi.fn((user_id: string) => ({
 }));
 
 // ✅ Mock external APIs and services
-vi.mock('$lib/api', () => ({
+vi.mock('#lib/api.js', () => ({
 	fetch_user_data: vi.fn(() => Promise.resolve({ user_id: 1 })),
 	send_analytics: vi.fn(),
 }));

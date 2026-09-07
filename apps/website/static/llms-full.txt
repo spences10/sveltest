@@ -517,7 +517,7 @@ Always verify your mocks work:
 ```typescript
 describe('Mock Verification', () => {
 	it('should have utility functions mocked correctly', async () => {
-		const { my_util_function } = await import('$lib/utils/my-utils');
+		const { my_util_function } = await import('#lib/utils/my-utils.js');
 
 		expect(my_util_function).toBeDefined();
 		expect(vi.isMockFunction(my_util_function)).toBe(true);
@@ -579,12 +579,12 @@ Your mock function signature doesn't match the real function:
 
 ```typescript
 // ❌ Wrong signature
-vi.mock('$lib/utils', () => ({
+vi.mock('#lib/utils.js', () => ({
 	my_function: vi.fn(),
 }));
 
 // ✅ Correct signature
-vi.mock('$lib/utils', () => ({
+vi.mock('#lib/utils.js', () => ({
 	my_function: vi.fn((param1: string, param2: number) => 'result'),
 }));
 ```
@@ -1640,7 +1640,7 @@ describe('Parent Component', () => {
 
 ```typescript
 // Mock utility functions with realistic return values
-vi.mock('$lib/utils/api', () => ({
+vi.mock('#lib/utils/api.js', () => ({
 	fetch_user_data: vi.fn(() =>
 		Promise.resolve({
 			id: 1,
@@ -1669,7 +1669,7 @@ describe('User Profile Component', () => {
 
 ```typescript
 // Mock Svelte stores
-vi.mock('$lib/stores/user', () => ({
+vi.mock('#lib/stores/user.js', () => ({
 	user_store: {
 		subscribe: vi.fn((callback) => {
 			callback({ id: 1, name: 'Test User' });
@@ -2112,7 +2112,7 @@ test('full registration flow', async ({ page }) => {
 
 ```typescript
 // Database operations
-vi.mock('$lib/database', () => ({
+vi.mock('#lib/database.js', () => ({
 	users: {
 		create: vi.fn(),
 		find_by_email: vi.fn(),
@@ -2120,7 +2120,7 @@ vi.mock('$lib/database', () => ({
 }));
 
 // External APIs
-vi.mock('$lib/email-service', () => ({
+vi.mock('#lib/email-service.js', () => ({
 	send_welcome_email: vi.fn(),
 }));
 
@@ -2477,7 +2477,7 @@ describe('Component Props and Events', () => {
 ```typescript
 describe('Mocking Patterns', () => {
 	// ✅ Mock utility functions with realistic return values
-	vi.mock('$lib/utils/data-fetcher', () => ({
+	vi.mock('#lib/utils/data-fetcher.js', () => ({
 		fetch_user_data: vi.fn(() =>
 			Promise.resolve({
 				id: '1',
@@ -2494,7 +2494,7 @@ describe('Mocking Patterns', () => {
 
 	it('should verify mocks are working correctly', async () => {
 		const { fetch_user_data } = await import(
-			'$lib/utils/data-fetcher'
+			'#lib/utils/data-fetcher.js'
 		);
 
 		expect(fetch_user_data).toBeDefined();
@@ -3097,7 +3097,7 @@ vi.mock('@external/heavy-chart', () => ({
 }));
 
 // ✅ Mock STATELESS presentational components in unit tests
-vi.mock('$lib/components/icon.svelte', () => ({
+vi.mock('#lib/components/icon.svelte', () => ({
 	default: vi.fn(() => ({
 		$$: {},
 		$set: vi.fn(),
@@ -3121,7 +3121,7 @@ const mock_api_call = vi.fn((user_id: string) => ({
 }));
 
 // ✅ Mock external APIs and services
-vi.mock('$lib/api', () => ({
+vi.mock('#lib/api.js', () => ({
 	fetch_user_data: vi.fn(() => Promise.resolve({ user_id: 1 })),
 	send_analytics: vi.fn(),
 }));
@@ -3747,7 +3747,7 @@ test('navigation links', async () => {
 
 ```typescript
 // Mock utility functions with realistic return values
-vi.mock('$lib/utils/validation', () => ({
+vi.mock('#lib/utils.js/validation.js', () => ({
 	validate_email: vi.fn(() => ({ valid: true, message: '' })),
 	validate_password: vi.fn(() => ({ valid: true, message: '' })),
 }));
@@ -4656,7 +4656,7 @@ vi.mock('./utils', () => ({
 }));
 
 // ✅ Correct absolute path
-vi.mock('$lib/utils', () => ({
+vi.mock('#lib/utils.js', () => ({
 	// mock implementation
 }));
 ```
@@ -4670,7 +4670,7 @@ running.
 
 ```typescript
 // ✅ Mocks at top of file, before other imports
-vi.mock('$lib/api', () => ({
+vi.mock('#lib/api.js', () => ({
 	fetch_data: vi.fn(() => Promise.resolve({})),
 }));
 
@@ -4685,7 +4685,7 @@ import Component from './component.svelte';
 **Solution**: Use `importOriginal`:
 
 ```typescript
-vi.mock('$lib/utils', async (importOriginal) => {
+vi.mock('#lib/utils.js', async (importOriginal) => {
 	const actual = await importOriginal();
 	return {
 		...actual,
@@ -4778,7 +4778,7 @@ export default defineConfig({
 
 ```typescript
 // Mock heavy dependencies
-vi.mock('$lib/heavy-chart-component.svelte', () => ({
+vi.mock('#lib/heavy-chart-component.svelte', () => ({
 	default: vi.fn().mockImplementation(() => ({
 		$$: {},
 		$set: vi.fn(),

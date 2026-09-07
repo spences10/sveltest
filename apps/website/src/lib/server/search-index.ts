@@ -1,11 +1,11 @@
-import { topics } from '$lib/data/topics';
+import { topics } from '#lib/data/topics.js';
 import {
 	component_examples,
 	documentation_examples,
 	e2e_test_examples,
 	integration_test_examples,
 	unit_test_examples,
-} from '$lib/examples/code-examples';
+} from '#lib/examples/code-examples.js';
 
 export interface SearchIndexItem {
 	id: string;

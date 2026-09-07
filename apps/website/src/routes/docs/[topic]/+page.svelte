@@ -1,5 +1,5 @@
 <script lang="ts">
-	import DocsToc from '$lib/components/docs-toc.svelte';
+	import DocsToc from '#lib/components/docs-toc.svelte';
 	import './prism.css';
 
 	let { data } = $props();

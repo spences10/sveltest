@@ -1,4 +1,3 @@
-import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
 /**
@@ -140,7 +139,7 @@ const testing_patterns = {
 };
 
 export const GET: RequestHandler = async () => {
-	return json({
+	return Response.json({
 		title: 'Modal Component Testing Scenarios',
 		description:
 			'State management and interaction patterns for modal components',

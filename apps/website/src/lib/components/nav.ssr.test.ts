@@ -2,8 +2,8 @@ import { render } from 'svelte/server';
 import { describe, expect, test, vi } from 'vitest';
 import Nav from './nav.svelte';
 
-// Mock the $app/environment module for SSR testing
-vi.mock('$app/environment', () => ({
+// Mock the $app/env module for SSR testing
+vi.mock('$app/env', () => ({
 	browser: false,
 	building: false,
 	dev: true,
@@ -20,7 +20,7 @@ vi.mock('$app/state', () => ({
 }));
 
 // Mock all icon components for SSR
-vi.mock('$lib/icons', () => ({
+vi.mock('#lib/icons/index.js', () => ({
 	Arrow: vi.fn().mockImplementation(() => ({
 		$$: {},
 		$set: vi.fn(),

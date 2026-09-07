@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 </script>
 
 <svelte:head>
@@ -23,10 +23,9 @@
 		</div>
 
 		<div class="space-y-4">
-			<a href="/" class="btn btn-lg btn-primary"> Go Home </a>
+			<a href="/" class="btn btn-lg btn-primary">Go Home</a>
 			<div class="text-sm text-base-content/50">
-				Error {$page.status}: {$page.error?.message ||
-					'Page not found'}
+				Error {page.status}: {page.error?.message || 'Page not found'}
 			</div>
 		</div>
 	</div>

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import CalculatorComponent from '$lib/components/calculator.svelte';
-	import CodeBlock from '$lib/components/code-block.svelte';
-	import { unit_test_examples } from '$lib/examples/code-examples';
+	import CalculatorComponent from '#lib/components/calculator.svelte';
+	import CodeBlock from '#lib/components/code-block.svelte';
+	import { unit_test_examples } from '#lib/examples/code-examples.js';
 	import {
 		Arrow,
 		BarChart,
@@ -12,7 +12,7 @@
 		Eye,
 		LightningBolt,
 		Settings,
-	} from '$lib/icons';
+	} from '#lib/icons/index.js';
 </script>
 
 <svelte:head>

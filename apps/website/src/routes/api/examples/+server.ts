@@ -1,4 +1,3 @@
-import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
 /**
@@ -140,7 +139,7 @@ const scenarios: TestingScenario[] = [
 ];
 
 export const GET: RequestHandler = async () => {
-	return json({
+	return Response.json({
 		title: 'Sveltest Testing Scenarios',
 		description:
 			'A catalog of testing scenario endpoints demonstrating real-world testing patterns for Svelte 5 applications using vitest-browser-svelte',

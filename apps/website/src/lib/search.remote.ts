@@ -1,8 +1,5 @@
 import { query } from '$app/server';
-import {
-	perform_search,
-	search_schema,
-} from './search.remote.helper';
+import { perform_search, search_schema } from './search-helper';
 
 export const search_site = query(
 	search_schema,

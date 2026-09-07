@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { Button, Calculator, Card, LoginForm, Modal } from '$lib';
-	import CodeBlock from '$lib/components/code-block.svelte';
-	import { component_examples } from '$lib/examples/code-examples';
+	import { Button, Calculator, Card, LoginForm, Modal } from '#lib';
+	import CodeBlock from '#lib/components/code-block.svelte';
+	import { component_examples } from '#lib/examples/code-examples.js';
 	import {
 		Calculator as CalculatorIcon,
 		Clipboard,
 		Eye,
 		Settings,
-	} from '$lib/icons';
+	} from '#lib/icons/index.js';
 
 	// Component showcase state
 	let modal_open = $state(false);

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { X } from '$lib/icons';
+	import { X } from '#lib/icons/index.js';
 
 	interface Props {
 		is_open?: boolean;

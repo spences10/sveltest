@@ -1,5 +1,4 @@
-import { generate_search_index } from '$lib/server/search-index';
-import { json } from '@sveltejs/kit';
+import { generate_search_index } from '#lib/server/search-index.js';
 import type { RequestHandler } from './$types';
 
 export const prerender = true;
@@ -8,7 +7,7 @@ export const GET: RequestHandler = async () => {
 	try {
 		const search_index = await generate_search_index();
 
-		return json(search_index, {
+		return Response.json(search_index, {
 			headers: {
 				'Content-Type': 'application/json; charset=utf-8',
 				'Cache-Control': 'public, max-age=3600',
@@ -18,7 +17,7 @@ export const GET: RequestHandler = async () => {
 	} catch (error) {
 		console.error('Failed to generate search index:', error);
 
-		return json(
+		return Response.json(
 			{
 				items: [],
 				generated_at: new Date().toISOString(),

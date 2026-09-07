@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Arrow, ExternalLink } from '$lib/icons';
+	import { Arrow, ExternalLink } from '#lib/icons/index.js';
 	import type { Component } from 'svelte';
 
 	interface Props {

@@ -1,7 +1,7 @@
 import {
 	generate_search_index,
 	search_full_text,
-} from '$lib/server/search-index';
+} from '#lib/server/search-index.js';
 import { fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
 

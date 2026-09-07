@@ -15,7 +15,7 @@ beforeEach(() => {
 });
 
 // Mock the todo state module with simple static data
-vi.mock('$lib/state/todo.svelte.ts', () => ({
+vi.mock('#lib/state/todo.svelte.ts', () => ({
 	todo_state: {
 		todos: [],
 		filtered_todos: [],
@@ -34,7 +34,7 @@ vi.mock('$lib/state/todo.svelte.ts', () => ({
 }));
 
 // Mock the icons with simple implementations
-vi.mock('$lib/icons', () => ({
+vi.mock('#lib/icons/index.js', () => ({
 	BarChart: vi.fn().mockImplementation(() => ({
 		$$: {},
 		$set: vi.fn(),
@@ -82,7 +82,7 @@ describe('TodoManager', () => {
 
 	beforeEach(async () => {
 		// Get the mocked todo_state
-		const { todo_state } = await import('$lib/state/todo.svelte.ts');
+		const { todo_state } = await import('#lib/state/todo.svelte.ts');
 		mock_todo_state = todo_state;
 
 		// Reset mocks before each test
@@ -103,7 +103,7 @@ describe('TodoManager', () => {
 	describe('Mock Verification', () => {
 		test('should have todo_state mocked correctly', async () => {
 			const { todo_state } =
-				await import('$lib/state/todo.svelte.ts');
+				await import('#lib/state/todo.svelte.ts');
 
 			expect(todo_state).toBeDefined();
 			expect(vi.isMockFunction(mock_todo_state.add_todo)).toBe(true);
@@ -116,7 +116,8 @@ describe('TodoManager', () => {
 		});
 
 		test('should have icons mocked correctly', async () => {
-			const { Plus, Check, Trash } = await import('$lib/icons');
+			const { Plus, Check, Trash } =
+				await import('#lib/icons/index.js');
 
 			expect(Plus).toBeDefined();
 			expect(Check).toBeDefined();

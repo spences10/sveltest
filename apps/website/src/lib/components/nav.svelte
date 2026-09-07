@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import Logo from '$lib/components/logo.svelte';
+	import Logo from '#lib/components/logo.svelte';
 	import {
 		BarChart,
 		Calculator,
@@ -11,8 +11,8 @@
 		GitHub,
 		Home,
 		Menu,
-	} from '$lib/icons';
-	import { github_status } from '$lib/state/github-status.svelte';
+	} from '#lib/icons/index.js';
+	import { github_status } from '#lib/state/github-status.svelte.js';
 	import * as Fathom from 'fathom-client';
 
 	const nav_links = [

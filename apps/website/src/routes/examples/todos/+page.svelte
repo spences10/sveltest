@@ -1,6 +1,6 @@
 <script lang="ts">
-	import TodoManager from '$lib/components/todo-manager.svelte';
-	import { Arrow, Document } from '$lib/icons';
+	import TodoManager from '#lib/components/todo-manager.svelte';
+	import { Arrow, Document } from '#lib/icons/index.js';
 </script>
 
 <svelte:head>

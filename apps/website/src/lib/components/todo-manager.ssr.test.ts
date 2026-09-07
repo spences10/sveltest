@@ -3,7 +3,7 @@ import { describe, expect, test, vi } from 'vitest';
 import TodoManager from './todo-manager.svelte';
 
 // Mock the todo state module for SSR with minimal static data
-vi.mock('$lib/state/todo.svelte.ts', () => ({
+vi.mock('#lib/state/todo.svelte.ts', () => ({
 	todo_state: {
 		todos: [],
 		filtered_todos: [],
@@ -22,7 +22,7 @@ vi.mock('$lib/state/todo.svelte.ts', () => ({
 }));
 
 // Mock the icons for SSR - simpler approach
-vi.mock('$lib/icons', () => ({
+vi.mock('#lib/icons/index.js', () => ({
 	BarChart: vi.fn().mockImplementation(() => ({
 		$$: {},
 		$set: vi.fn(),

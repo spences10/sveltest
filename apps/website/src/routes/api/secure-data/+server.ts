@@ -1,5 +1,5 @@
-import { API_SECRET } from '$env/static/private';
-import { error, json } from '@sveltejs/kit';
+import { API_SECRET } from '$app/env/private';
+import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async ({ request }) => {
@@ -9,7 +9,7 @@ export const GET: RequestHandler = async ({ request }) => {
 		throw error(401, 'Unauthorized');
 	}
 
-	return json({
+	return Response.json({
 		message: 'Secret data retrieved successfully',
 		data: {
 			items: ['secret1', 'secret2', 'secret3'],

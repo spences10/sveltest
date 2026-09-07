@@ -1,11 +1,11 @@
 import { describe, expect, it, vi } from 'vitest';
 
 // Mock the environment variable
-vi.mock('$env/static/private', () => ({
+vi.mock('$app/env/private', () => ({
 	API_SECRET: 'test_secret_123',
 }));
 
-import { API_SECRET } from '$env/static/private';
+import { API_SECRET } from '$app/env/private';
 import { GET } from './+server';
 
 describe('Secure Data Endpoint', () => {

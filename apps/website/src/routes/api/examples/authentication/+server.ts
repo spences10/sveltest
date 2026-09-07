@@ -1,4 +1,3 @@
-import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
 /**
@@ -115,21 +114,24 @@ export const POST: RequestHandler = async ({ request }) => {
 	const authHeader = request.headers.get('authorization');
 
 	if (!authHeader || !authHeader.startsWith('Bearer ')) {
-		return json({ error: 'Unauthorized' }, { status: 401 });
+		return Response.json({ error: 'Unauthorized' }, { status: 401 });
 	}
 
 	const token = authHeader.substring(7);
 
 	// Simple validation (in real app, verify against database/secret)
 	if (token !== 'demo_secret_token') {
-		return json({ error: 'Unauthorized' }, { status: 401 });
+		return Response.json({ error: 'Unauthorized' }, { status: 401 });
 	}
 
-	return json({ authenticated: true, message: 'Access granted' });
+	return Response.json({
+		authenticated: true,
+		message: 'Access granted',
+	});
 };
 
 export const GET: RequestHandler = async () => {
-	return json({
+	return Response.json({
 		title: 'Authentication Testing Scenarios',
 		description:
 			'API authentication and authorization testing patterns with Bearer tokens',

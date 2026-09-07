@@ -1,4 +1,3 @@
-import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
 /**
@@ -105,7 +104,7 @@ const anti_patterns = {
 };
 
 export const GET: RequestHandler = async () => {
-	return json({
+	return Response.json({
 		title: 'Locator Patterns Testing Scenarios',
 		description:
 			'vitest-browser-svelte locator strategies and best practices',

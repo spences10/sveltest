@@ -9,7 +9,7 @@ import {
 
 // Mock browser environment first
 const mock_browser = vi.hoisted(() => ({ value: true }));
-vi.mock('$app/environment', () => ({
+vi.mock('$app/env', () => ({
 	get browser() {
 		return mock_browser.value;
 	},

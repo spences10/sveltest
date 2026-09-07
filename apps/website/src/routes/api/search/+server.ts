@@ -3,8 +3,7 @@ import {
 	search_full_text,
 	type SearchIndex,
 	type SearchIndexItem,
-} from '$lib/server/search-index';
-import { json } from '@sveltejs/kit';
+} from '#lib/server/search-index.js';
 import type { RequestHandler } from './$types';
 
 export interface SearchResult {
@@ -45,7 +44,7 @@ export const GET: RequestHandler = async ({ url }) => {
 		}),
 	);
 
-	return json({
+	return Response.json({
 		query,
 		filter,
 		results: api_results,

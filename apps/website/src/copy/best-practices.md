@@ -257,7 +257,7 @@ test('full registration flow', async ({ page }) => {
 
 ```typescript
 // Database operations
-vi.mock('$lib/database', () => ({
+vi.mock('#lib/database.js', () => ({
 	users: {
 		create: vi.fn(),
 		find_by_email: vi.fn(),
@@ -265,7 +265,7 @@ vi.mock('$lib/database', () => ({
 }));
 
 // External APIs
-vi.mock('$lib/email-service', () => ({
+vi.mock('#lib/email-service.js', () => ({
 	send_welcome_email: vi.fn(),
 }));
 
@@ -622,7 +622,7 @@ describe('Component Props and Events', () => {
 ```typescript
 describe('Mocking Patterns', () => {
 	// ✅ Mock utility functions with realistic return values
-	vi.mock('$lib/utils/data-fetcher', () => ({
+	vi.mock('#lib/utils/data-fetcher.js', () => ({
 		fetch_user_data: vi.fn(() =>
 			Promise.resolve({
 				id: '1',
@@ -639,7 +639,7 @@ describe('Mocking Patterns', () => {
 
 	it('should verify mocks are working correctly', async () => {
 		const { fetch_user_data } =
-			await import('$lib/utils/data-fetcher');
+			await import('#lib/utils/data-fetcher.js');
 
 		expect(fetch_user_data).toBeDefined();
 		expect(vi.isMockFunction(fetch_user_data)).toBe(true);

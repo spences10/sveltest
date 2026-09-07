@@ -347,7 +347,7 @@ test('navigation links', async () => {
 
 ```typescript
 // Mock utility functions with realistic return values
-vi.mock('$lib/utils/validation', () => ({
+vi.mock('#lib/utils/validation.js', () => ({
 	validate_email: vi.fn(() => ({ valid: true, message: '' })),
 	validate_password: vi.fn(() => ({ valid: true, message: '' })),
 }));

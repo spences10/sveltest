@@ -1,8 +1,8 @@
 <script lang="ts">
-	import CodeBlock from '$lib/components/code-block.svelte';
-	import DocCard from '$lib/components/doc-card.svelte';
-	import DocsSearch from '$lib/components/docs-search.svelte';
-	import { documentation_examples } from '$lib/examples/code-examples';
+	import CodeBlock from '#lib/components/code-block.svelte';
+	import DocCard from '#lib/components/doc-card.svelte';
+	import DocsSearch from '#lib/components/docs-search.svelte';
+	import { documentation_examples } from '#lib/examples/code-examples.js';
 	import {
 		Arrow,
 		BookOpen,
@@ -14,7 +14,7 @@
 		Eye,
 		LightningBolt,
 		Settings,
-	} from '$lib/icons';
+	} from '#lib/icons/index.js';
 	let { data } = $props();
 	const topic_categories = $derived(data.topic_categories);
 

@@ -8,8 +8,8 @@
 		Plus,
 		Trash,
 		XCircle,
-	} from '$lib/icons';
-	import { todo_state } from '$lib/state/todo.svelte.ts';
+	} from '#lib/icons/index.js';
+	import { todo_state } from '#lib/state/todo.svelte.ts';
 
 	interface Props {
 		title?: string;

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import { get_highlighter } from '$lib/utils/highlighter.svelte.ts';
+	import { browser } from '$app/env';
+	import { get_highlighter } from '#lib/utils/highlighter.svelte.ts';
 	import { onMount } from 'svelte';
 
 	// Props using Svelte 5 syntax

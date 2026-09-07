@@ -13,7 +13,7 @@ vi.mock('$app/state', () => ({
 }));
 
 // Mock all icon components with simpler structure that renders actual content
-vi.mock('$lib/icons', () => ({
+vi.mock('#lib/icons/index.js', () => ({
 	Arrow: vi.fn(() => 'Arrow'),
 	BarChart: vi.fn(() => 'BarChart'),
 	Calculator: vi.fn(() => 'Calculator'),
@@ -35,7 +35,7 @@ describe('Nav Component', () => {
 
 	describe('Mock Verification', () => {
 		test('should have all icon components mocked correctly', async () => {
-			const icons = await import('$lib/icons');
+			const icons = await import('#lib/icons/index.js');
 
 			expect(icons.Arrow).toBeDefined();
 			expect(vi.isMockFunction(icons.Arrow)).toBe(true);

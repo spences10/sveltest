@@ -513,7 +513,8 @@ Always verify your mocks work:
 ```typescript
 describe('Mock Verification', () => {
 	it('should have utility functions mocked correctly', async () => {
-		const { my_util_function } = await import('$lib/utils/my-utils');
+		const { my_util_function } =
+			await import('#lib/utils/my-utils.js');
 
 		expect(my_util_function).toBeDefined();
 		expect(vi.isMockFunction(my_util_function)).toBe(true);
@@ -575,12 +576,12 @@ Your mock function signature doesn't match the real function:
 
 ```typescript
 // ❌ Wrong signature
-vi.mock('$lib/utils', () => ({
+vi.mock('#lib/utils.js', () => ({
 	my_function: vi.fn(),
 }));
 
 // ✅ Correct signature
-vi.mock('$lib/utils', () => ({
+vi.mock('#lib/utils.js', () => ({
 	my_function: vi.fn((param1: string, param2: number) => 'result'),
 }));
 ```

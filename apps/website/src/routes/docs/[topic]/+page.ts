@@ -1,4 +1,4 @@
-import { topics } from '$lib/data/topics';
+import { topics } from '#lib/data/topics.js';
 import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 

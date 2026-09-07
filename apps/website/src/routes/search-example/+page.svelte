@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SiteSearch } from '$lib';
+	import { SiteSearch } from '#lib';
 </script>
 
 <svelte:head>

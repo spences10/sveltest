@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Eye, EyeOff } from '$lib/icons';
+	import { Eye, EyeOff } from '#lib/icons/index.js';
 	import { untrack } from 'svelte';
 	import {
 		validate_email,

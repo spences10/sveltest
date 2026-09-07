@@ -1,5 +1,5 @@
 <script lang="ts">
-	import FeatureCard from '$lib/components/feature-card.svelte';
+	import FeatureCard from '#lib/components/feature-card.svelte';
 	import {
 		Arrow,
 		BarChart,
@@ -12,7 +12,7 @@
 		LightningBolt,
 		Server,
 		Settings,
-	} from '$lib/icons';
+	} from '#lib/icons/index.js';
 </script>
 
 <svelte:head>

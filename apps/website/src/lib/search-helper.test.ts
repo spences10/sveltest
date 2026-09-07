@@ -1,10 +1,7 @@
 import { describe, expect, test } from 'vitest';
-import {
-	perform_search,
-	search_schema,
-} from './search.remote.helper';
+import { perform_search, search_schema } from './search-helper';
 
-describe('search.remote helpers', () => {
+describe('search helpers', () => {
 	describe('search_schema validation', () => {
 		test('should accept valid query with filter', () => {
 			const result = search_schema.parse({

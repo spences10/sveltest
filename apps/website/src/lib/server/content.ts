@@ -1,4 +1,4 @@
-import { topics } from '$lib/data/topics';
+import { topics } from '#lib/data/topics.js';
 
 // Import all markdown files using Vite's ?raw imports
 import about from '../../copy/about.md?raw';

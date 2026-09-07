@@ -1,3 +1,8 @@
+import adapter from '@sveltejs/adapter-auto';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import { mdsvex } from 'mdsvex';
+import mdsvex_config from './mdsvex.config.js';
+
 // Vitest's browser mocker can transform SvelteKit SSR imports before its
 // runner global is initialized. Provide a non-overwriting fallback until
 // https://github.com/vitest-dev/vitest/issues/10319 is resolved.
@@ -17,8 +22,16 @@ import { playwright } from '@vitest/browser-playwright';
 import { coverageConfigDefaults, defineConfig } from 'vitest/config';
 
 export default defineConfig({
-	plugins: [sveltekit(), tailwindcss()],
-
+	plugins: [
+		sveltekit({
+			preprocess: [vitePreprocess(), mdsvex(mdsvex_config)],
+			compilerOptions: { experimental: { async: true } },
+			extensions: ['.svelte', '.md'],
+			adapter: adapter(),
+			experimental: { remoteFunctions: true },
+		}),
+		tailwindcss(),
+	],
 	test: {
 		projects: [
 			{

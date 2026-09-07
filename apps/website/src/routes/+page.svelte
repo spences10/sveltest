@@ -1,7 +1,7 @@
 <script lang="ts">
-	import FeatureCard from '$lib/components/feature-card.svelte';
-	import GitHubStatusPills from '$lib/components/github-status-pills.svelte';
-	import Logo from '$lib/components/logo.svelte';
+	import FeatureCard from '#lib/components/feature-card.svelte';
+	import GitHubStatusPills from '#lib/components/github-status-pills.svelte';
+	import Logo from '#lib/components/logo.svelte';
 	import {
 		BarChart,
 		BookOpen,
@@ -17,7 +17,7 @@
 		Heart,
 		LightningBolt,
 		Windsurf,
-	} from '$lib/icons';
+	} from '#lib/icons/index.js';
 	import * as Fathom from 'fathom-client';
 </script>
 

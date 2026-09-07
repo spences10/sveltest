@@ -3,7 +3,7 @@ import { describe, expect, test, vi } from 'vitest';
 import Calculator from './calculator.svelte';
 
 // Mock the calculator state for SSR testing
-vi.mock('$lib/state/calculator.svelte.ts', () => ({
+vi.mock('#lib/state/calculator.svelte.ts', () => ({
 	calculator_state: {
 		current_value: '0',
 		clear: vi.fn(),

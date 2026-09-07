@@ -1,5 +1,4 @@
-import { content_map, topics } from '$lib/server/content';
-import { json } from '@sveltejs/kit';
+import { content_map, topics } from '#lib/server/content.js';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async ({ params, url }) => {
@@ -8,7 +7,7 @@ export const GET: RequestHandler = async ({ params, url }) => {
 
 	const content = content_map[topic];
 	if (!content) {
-		return json(
+		return Response.json(
 			{
 				error: `Topic '${topic}' not found`,
 				available_topics: topics.map((t) => t.slug),
@@ -20,7 +19,7 @@ export const GET: RequestHandler = async ({ params, url }) => {
 	const topic_meta = topics.find((t) => t.slug === topic);
 
 	if (format === 'json') {
-		return json({
+		return Response.json({
 			slug: topic,
 			title: topic_meta?.title ?? topic,
 			description: topic_meta?.description ?? '',
