@@ -292,10 +292,11 @@ Cursor, Devin Desktop, etc.):
 
 ### Cursor Rules (`.cursor/rules/testing.mdc`)
 
-- Comprehensive testing patterns for Cursor AI
-- Complete vitest-browser-svelte best practices
-- Code style enforcement (snake_case, kebab-case conventions)
-- Common error solutions and troubleshooting
+The Cursor rule points to the shared testing skill rather than
+maintaining a separate copy of its guidance. To use it in another
+project, copy both `.cursor/rules/testing.mdc` and the entire
+`.agents/skills/svelte-testing/` directory. Keep project conventions
+in your own `AGENTS.md`.
 
 ### Devin Desktop (Formerly Windsurf)
 
@@ -313,7 +314,7 @@ This repository's `.claude/skills/svelte-testing` symlink points to
 the same source. Keep project conventions in `AGENTS.md` and reusable
 testing guidance in the skill.
 
-The rules and shared skill cover:
+The shared skill covers:
 
 - **Foundation First** testing approach guidelines
 - Complete vitest-browser-svelte patterns and anti-patterns
@@ -323,9 +324,9 @@ The rules and shared skill cover:
 - Quick reference DO's and DON'Ts
 
 **For Teams**: Use the CLI for on-demand access, or install the shared
-skill in compatible clients. Cursor-specific rules remain available.
-Check your client's skill discovery settings; directory support and
-activation behavior vary between clients.
+skill in compatible clients. A Cursor rule provides an entry point to
+the same skill. Check your client's skill discovery settings;
+directory support and activation behavior vary between clients.
 
 ## 🎨 Testing Conventions
 
@@ -362,7 +363,8 @@ story in my blog post:
 [Migrating from @testing-library/svelte to vitest-browser-svelte](https://scottspence.com/posts/migrating-from-testing-library-svelte-to-vitest-browser-svelte).
 
 You can also check the comprehensive
-[Migration Guide](./MIGRATION_GUIDE.md) which documents:
+[Migration Guide](apps/website/src/copy/migration-guide.md) which
+documents:
 
 - Step-by-step migration process
 - Before/after code examples

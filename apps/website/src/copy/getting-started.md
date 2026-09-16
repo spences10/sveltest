@@ -605,7 +605,8 @@ here scale from simple buttons to complex applications.
   in action
 - Check out the [todo application](/todos) for a complete testing
   example
-- Review the comprehensive [testing rules](/.cursor/rules/testing.mdc)
-  for advanced patterns
+- Review the
+  [shared testing skill](https://github.com/spences10/sveltest/tree/main/.agents/skills/svelte-testing)
+  and its references for advanced patterns
 
 Happy testing! 🧪✨
