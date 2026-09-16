@@ -1,6 +1,6 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'vite-plus/test';
 import { render } from 'vitest-browser-svelte';
-import { page } from 'vitest/browser';
+import { page } from 'vite-plus/test/browser';
 import Card from './card.svelte';
 
 describe('Card Component', () => {

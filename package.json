@@ -37,6 +37,7 @@
 	"devDependencies": {
 		"@changesets/cli": "catalog:",
 		"typescript": "catalog:",
+		"vite": "catalog:",
 		"vite-plus": "catalog:"
 	},
 	"engines": {

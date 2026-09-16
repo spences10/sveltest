@@ -5,7 +5,7 @@ import {
 	expect,
 	test,
 	vi,
-} from 'vitest';
+} from 'vite-plus/test';
 
 // Mock browser environment first
 const mock_browser = vi.hoisted(() => ({ value: true }));

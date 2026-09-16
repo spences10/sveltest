@@ -1,6 +1,6 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'vite-plus/test';
 import { render } from 'vitest-browser-svelte';
-import { page } from 'vitest/browser';
+import { page } from 'vite-plus/test/browser';
 import DocsPage from './+page.svelte';
 
 // Mock data that matches the expected structure from +page.ts
@@ -267,7 +267,7 @@ describe('Documentation Page', () => {
 				.element(page.getByText('vitest-browser-svelte').first())
 				.toBeInTheDocument();
 			await expect
-				.element(page.getByText('expect.element').first())
+				.element(page.getByText(/expect\.element/).first())
 				.toBeInTheDocument();
 		}, 10000); // Increase test timeout to 10 seconds
 	});

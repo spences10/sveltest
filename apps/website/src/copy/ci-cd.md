@@ -85,22 +85,24 @@ Using Playwright containers ensures:
 
 ### Version Synchronization
 
-Both workflows include automatic version verification:
+Both workflows compare the **installed** Playwright versions with the
+container tag. Checking only the version range in `package.json`
+misses lockfile updates and catalog references:
 
 ```bash
-# Extract Playwright version from package.json
-PACKAGE_VERSION=$(node -p "require('./package.json').devDependencies.playwright.replace(/[\^~]/, '')")
+playwright_version=$(node -p "require('./apps/website/node_modules/playwright/package.json').version")
+test_version=$(node -p "require('./apps/website/node_modules/@playwright/test/package.json').version")
+container_version=$(grep -o 'playwright:v[0-9.]*' .github/workflows/unit-tests.yaml | sed 's/playwright:v//')
 
-# Extract version from container image
-CONTAINER_VERSION=$(grep -o 'playwright:v[0-9.]*' .github/workflows/unit-tests.yaml | sed 's/playwright:v//')
-
-if [ "$PACKAGE_VERSION" != "$CONTAINER_VERSION" ]; then
-  echo "❌ ERROR: Playwright versions don't match!"
+if [ "$playwright_version" != "$container_version" ] || [ "$test_version" != "$container_version" ]; then
+  echo "Update the installed Playwright packages and CI images together."
   exit 1
 fi
 ```
 
-This prevents version mismatches that could cause test failures.
+Pin Playwright's package versions and group their Renovate updates
+with the container images. A lockfile refresh should not silently
+select a browser revision absent from the CI image.
 
 ## Caching Strategy
 

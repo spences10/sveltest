@@ -1,5 +1,5 @@
 import { createRawSnippet } from 'svelte';
-import { describe, expect, test, vi } from 'vitest';
+import { describe, expect, test, vi } from 'vite-plus/test';
 import { render } from 'vitest-browser-svelte';
 import Button from './button.svelte';
 

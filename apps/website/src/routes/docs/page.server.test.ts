@@ -1,5 +1,5 @@
 import type { ActionFailure } from '@sveltejs/kit';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vite-plus/test';
 import { actions } from './+page.server';
 
 describe('Docs Search Action', () => {

@@ -1,6 +1,6 @@
-import { describe, expect, test, vi } from 'vitest';
+import { describe, expect, test, vi } from 'vite-plus/test';
 import { render } from 'vitest-browser-svelte';
-import { page, userEvent } from 'vitest/browser';
+import { page, userEvent } from 'vite-plus/test/browser';
 import LoginForm from './login-form.svelte';
 
 describe('LoginForm Component', () => {
@@ -335,7 +335,7 @@ describe('LoginForm Component', () => {
 		test('should have proper form labels', async () => {
 			await render(LoginForm);
 
-			const email_input = page.getByLabelText('Email Address');
+			const email_input = page.getByLabelText(/^Email Address/);
 			const password_input = page.getByTestId('password-input');
 			const remember_checkbox = page.getByLabelText('Remember me');
 

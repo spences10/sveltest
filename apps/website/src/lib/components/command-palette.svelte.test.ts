@@ -6,9 +6,9 @@ import {
 	expect,
 	test,
 	vi,
-} from 'vitest';
+} from 'vite-plus/test';
 import { render } from 'vitest-browser-svelte';
-import { page } from 'vitest/browser';
+import { page } from 'vite-plus/test/browser';
 import CommandPalette from './command-palette.svelte';
 
 // Mock search_site - use vi.stubGlobal for CI compatibility
@@ -169,14 +169,13 @@ describe('CommandPalette', () => {
 			command_palette_state.open();
 
 			await expect
-				.element(page.getByText('navigate'))
+				.element(page.getByText(/navigate/))
 				.toBeInTheDocument();
 			await expect
-				.element(page.getByText('select'))
+				.element(page.getByText(/select/))
 				.toBeInTheDocument();
-			// close text appears multiple times (footer + backdrop button)
 			await expect
-				.element(page.getByText('close').first())
+				.element(page.getByText('esc close'))
 				.toBeInTheDocument();
 		});
 

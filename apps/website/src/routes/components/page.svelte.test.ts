@@ -1,6 +1,6 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'vite-plus/test';
 import { render } from 'vitest-browser-svelte';
-import { page } from 'vitest/browser';
+import { page } from 'vite-plus/test/browser';
 import ComponentsPage from './+page.svelte';
 
 describe('Components Page', () => {
@@ -14,7 +14,7 @@ describe('Components Page', () => {
 				.toBeInTheDocument();
 			await expect
 				.element(
-					page.getByText('Explore our comprehensive collection'),
+					page.getByText(/Explore our comprehensive collection/),
 				)
 				.toBeInTheDocument();
 		});
@@ -28,7 +28,7 @@ describe('Components Page', () => {
 				.toBeInTheDocument();
 			await expect
 				.element(
-					page.getByText('Explore our comprehensive collection'),
+					page.getByText(/Explore our comprehensive collection/),
 				)
 				.toBeInTheDocument();
 
@@ -73,7 +73,7 @@ describe('Components Page', () => {
 
 			// Check calculator is rendered
 			const calculatorSection = page.getByText(
-				'Interactive calculator demonstrating',
+				/Interactive calculator demonstrating/,
 			);
 			await expect.element(calculatorSection).toBeInTheDocument();
 
@@ -271,12 +271,13 @@ describe('Components Page', () => {
 			await render(ComponentsPage);
 
 			await expect
-				.element(page.getByText('Valid email format required'))
+				.element(page.getByText(/Valid email format required/))
 				.toBeInTheDocument();
 			await expect
 				.element(
 					page.getByText(
 						'Minimum 8 characters, uppercase, lowercase, number',
+						{ exact: false },
 					),
 				)
 				.toBeInTheDocument();
@@ -294,7 +295,7 @@ describe('Components Page', () => {
 			await expect
 				.element(
 					page.getByText(
-						'Quick reference for all available components',
+						/Quick reference for all available components/,
 					),
 				)
 				.toBeInTheDocument();

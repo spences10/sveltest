@@ -1,5 +1,5 @@
 import { render } from 'svelte/server';
-import { describe, expect, test, vi } from 'vitest';
+import { describe, expect, test, vi } from 'vite-plus/test';
 import Calculator from './calculator.svelte';
 
 // Mock the calculator state for SSR testing

@@ -1,7 +1,13 @@
 import { calculator_state } from '#lib/state/calculator.svelte.ts';
-import { beforeEach, describe, expect, test, vi } from 'vitest';
+import {
+	beforeEach,
+	describe,
+	expect,
+	test,
+	vi,
+} from 'vite-plus/test';
 import { render } from 'vitest-browser-svelte';
-import { page } from 'vitest/browser';
+import { page } from 'vite-plus/test/browser';
 import Calculator from './calculator.svelte';
 
 // Mock the calculator state to isolate component testing

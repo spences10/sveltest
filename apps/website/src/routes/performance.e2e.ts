@@ -150,7 +150,16 @@ test.describe('Performance Tests', () => {
 					!r.url.includes('/api/github-status') &&
 					!r.url.includes('cdn.usefathom.com'),
 			);
-			expect(failedResources.length).toBe(0);
+			expect(
+				failedResources.map(({ url, status }) => {
+					const resource_url = new URL(url);
+					return {
+						host: resource_url.host,
+						path: resource_url.pathname,
+						status,
+					};
+				}),
+			).toEqual([]);
 		});
 
 		await test.step('Check resource types', async () => {

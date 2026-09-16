@@ -18,8 +18,8 @@ vitest_browser_runner.__vitest_browser_runner__ ??= {
 
 import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
-import { playwright } from '@vitest/browser-playwright';
-import { coverageConfigDefaults, defineConfig } from 'vitest/config';
+import { coverageConfigDefaults, defineConfig } from 'vite-plus';
+import { playwright } from 'vite-plus/test/browser-playwright';
 
 export default defineConfig({
 	plugins: [
@@ -42,6 +42,8 @@ export default defineConfig({
 					name: 'client',
 					browser: {
 						enabled: true,
+						// Avoid scaling headless click targets inside the runner UI.
+						ui: false,
 						provider: playwright(),
 						instances: [{ browser: 'chromium', headless: true }],
 					},
@@ -75,7 +77,7 @@ export default defineConfig({
 		coverage: {
 			reporter: ['text-summary', 'html'],
 			provider: 'v8',
-			include: ['src/**/*'],
+			include: ['src/**/*.{js,ts,svelte}'],
 			exclude: [
 				...coverageConfigDefaults.exclude,
 				'**/*.e2e.{js,ts}',

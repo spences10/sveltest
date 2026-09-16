@@ -4,6 +4,29 @@ A comprehensive, step-by-step guide for migrating your Svelte testing
 setup from `@testing-library/svelte` to `vitest-browser-svelte`, based
 on real-world migration experience and current best practices.
 
+## Projects Using Vite+
+
+Sveltest uses Vite+ for development, builds, tests, linting, and
+packaging. Keep the Vite core alias, Vitest, browser provider, and
+coverage package aligned with its bundled versions. Upgrade them
+through the toolchain migration, not as independent packages.
+
+In a Vite+ project, import configuration from `vite-plus`, test APIs
+from `vite-plus/test`, and browser locators from
+`vite-plus/test/browser`. Keep build and test configuration together
+in `vite.config.ts`. The renderer remains `vitest-browser-svelte`.
+
+The examples below retain standard Vitest imports for portability with
+the official Svelte CLI scaffold.
+
+Run `vp migrate` when upgrading, review its changes, and preserve the
+project's dependency security policies. Overrides do not install
+missing peers: keep the package-local dependencies it provisions. See
+the [Vite+ migration guide](https://viteplus.dev/guide/migrate).
+
+Coverage should include executable source files, not HTML templates or
+Markdown guides.
+
 ## 🎯 Why Migrate to vitest-browser-svelte?
 
 - **Real Browser Environment**: Tests run in actual Playwright
@@ -32,7 +55,7 @@ supports the **Client-Server Alignment Strategy**:
 ### Step 1: Update Dependencies
 
 ```bash
-# Install vitest-browser-svelte and related packages (Vitest v4)
+# Install vitest-browser-svelte and matching Vitest browser packages
 pnpm add -D @vitest/browser-playwright vitest-browser-svelte playwright
 
 # Remove old testing library dependencies
@@ -48,7 +71,7 @@ below follows that baseline with Sveltest's optional SSR project
 added. Keep SSR files excluded from `server` so they run only once.
 
 ```typescript
-// vite.config.ts (Vitest v4)
+// vite.config.ts
 import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { playwright } from '@vitest/browser-playwright';

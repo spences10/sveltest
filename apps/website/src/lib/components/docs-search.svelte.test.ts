@@ -1,6 +1,6 @@
-import { describe, expect, test, vi } from 'vitest';
+import { describe, expect, test, vi } from 'vite-plus/test';
 import { render } from 'vitest-browser-svelte';
-import { page } from 'vitest/browser';
+import { page } from 'vite-plus/test/browser';
 import DocsSearch from './docs-search.svelte';
 
 // Mock fetch for API calls - use vi.stubGlobal for better CI compatibility
@@ -13,7 +13,7 @@ describe('DocsSearch', () => {
 			await render(DocsSearch);
 
 			await expect
-				.element(page.getByLabelText('Search Documentation'))
+				.element(page.getByLabelText(/^Search Documentation/))
 				.toBeInTheDocument();
 
 			await expect

@@ -1,5 +1,5 @@
 import { flushSync, untrack } from 'svelte';
-import { beforeEach, describe, expect, test } from 'vitest';
+import { beforeEach, describe, expect, test } from 'vite-plus/test';
 import { calculator_state } from './calculator.svelte.ts';
 
 describe('Calculator State', () => {

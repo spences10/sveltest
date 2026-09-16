@@ -264,9 +264,13 @@ it cannot collect Vitest's `.test`/`.spec` files. Cross-route E2E
 suites live at `src/routes/`; docs-specific journeys live at
 `src/routes/docs/`.
 
-Sveltest's separate `ssr` project, Vite+ wrappers, Foundation First
-workflow, and temporary browser-runner workaround are extensions to
-that baseline, not requirements for a new Svelte project. See the
+Sveltest's separate `ssr` project, Foundation First workflow, and
+temporary browser-runner workaround are extensions to that baseline,
+not requirements for a new Svelte project. Vite+ provides the unified
+dev/build/test toolchain, linting, formatting, and CLI packaging. Keep
+its Vite core alias and Vitest/browser/coverage dependencies aligned
+with the bundled versions rather than upgrading them independently.
+See the
 [getting-started guide](apps/website/src/copy/getting-started.md).
 
 ## 🤖 AI Assistant Rules for Teams

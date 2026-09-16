@@ -4,6 +4,9 @@
   functions. Preserve framework-required filenames and external API
   names.
 - Colocate tests with the code they exercise.
+- Use Vite+ for the toolchain. Align Vite, Vitest, browser providers,
+  and coverage with its bundled versions; do not introduce a parallel
+  test runtime to chase independent version upgrades.
 - Use the
   [shared testing skill](.agents/skills/svelte-testing/SKILL.md) for
   testing guidance. Do not duplicate it into editor-specific

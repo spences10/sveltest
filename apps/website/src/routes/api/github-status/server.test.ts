@@ -1,4 +1,10 @@
-import { beforeEach, describe, expect, test, vi } from 'vitest';
+import {
+	beforeEach,
+	describe,
+	expect,
+	test,
+	vi,
+} from 'vite-plus/test';
 import { GET } from './+server';
 
 // Mock fetch globally

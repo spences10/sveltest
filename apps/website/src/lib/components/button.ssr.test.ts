@@ -1,6 +1,6 @@
 import { render } from 'svelte/server';
 import { createRawSnippet } from 'svelte';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'vite-plus/test';
 import Button from './button.svelte';
 
 describe('Button Component SSR', () => {

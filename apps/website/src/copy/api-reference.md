@@ -580,7 +580,7 @@ expect.extend({
 ### Vitest Browser Config
 
 ```typescript
-// vite.config.ts (Vitest v4)
+// vite.config.ts
 import { sveltekit } from '@sveltejs/kit/vite';
 import { playwright } from '@vitest/browser-playwright';
 import { defineConfig } from 'vitest/config';
@@ -623,6 +623,11 @@ project. Playwright uses `testMatch: '**/*.e2e.{ts,js}'` independently
 of Vitest, so E2E tests can also live beside routes. Importing
 `render` registers cleanup without a setup file; await it with
 renderer version 3.
+
+For Vite+ projects, import configuration from `vite-plus`, test APIs
+from `vite-plus/test`, and browser APIs from `vite-plus/test/browser`.
+Keep providers and coverage aligned with its bundled Vitest version.
+See the [migration guide](/docs/migration-guide#projects-using-vite).
 
 ### Test Environment Setup
 

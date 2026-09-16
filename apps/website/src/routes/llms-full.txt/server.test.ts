@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vite-plus/test';
 import { content_map } from '#lib/server/content.js';
 import { GET, prerender } from './+server';
 

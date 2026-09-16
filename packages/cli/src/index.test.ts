@@ -1,6 +1,6 @@
 import { execFile } from 'node:child_process';
 import { join } from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vite-plus/test';
 
 const CLI_PATH = join(import.meta.dirname, '..', 'dist', 'index.js');
 

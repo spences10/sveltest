@@ -1,5 +1,5 @@
 import { flushSync, untrack } from 'svelte';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vite-plus/test';
 import { validate_email, validate_password } from './validation.ts';
 
 // Mock the validation utilities

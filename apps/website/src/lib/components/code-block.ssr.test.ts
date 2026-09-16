@@ -1,5 +1,5 @@
 import { render } from 'svelte/server';
-import { describe, expect, test, vi } from 'vitest';
+import { describe, expect, test, vi } from 'vite-plus/test';
 import CodeBlock from './code-block.svelte';
 
 // Mock the $app/env module for SSR testing

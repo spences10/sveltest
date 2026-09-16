@@ -1,6 +1,6 @@
 import { createRawSnippet } from 'svelte';
 import { render } from 'svelte/server';
-import { describe, expect, test, vi } from 'vitest';
+import { describe, expect, test, vi } from 'vite-plus/test';
 import Layout from './+layout.svelte';
 
 // Mock the $app/env module for SSR testing

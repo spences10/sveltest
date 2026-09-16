@@ -1,5 +1,11 @@
 import { flushSync, untrack } from 'svelte';
-import { beforeEach, describe, expect, test, vi } from 'vitest';
+import {
+	beforeEach,
+	describe,
+	expect,
+	test,
+	vi,
+} from 'vite-plus/test';
 
 // Mock browser environment BEFORE importing the module
 vi.mock('$app/env', () => ({

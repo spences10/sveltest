@@ -1,5 +1,5 @@
 import { flushSync, untrack } from 'svelte';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vite-plus/test';
 import { email_schema } from '../utils/validation';
 import { create_form_state } from './form-state.svelte.ts';
 

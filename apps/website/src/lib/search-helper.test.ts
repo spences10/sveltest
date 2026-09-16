@@ -1,5 +1,5 @@
 import * as v from 'valibot';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'vite-plus/test';
 import { perform_search, search_schema } from './search-helper';
 
 describe('search helpers', () => {

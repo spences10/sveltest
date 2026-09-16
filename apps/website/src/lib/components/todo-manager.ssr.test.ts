@@ -1,5 +1,5 @@
 import { render } from 'svelte/server';
-import { describe, expect, test, vi } from 'vitest';
+import { describe, expect, test, vi } from 'vite-plus/test';
 import TodoManager from './todo-manager.svelte';
 
 // Mock the todo state module for SSR with minimal static data

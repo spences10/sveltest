@@ -1,7 +1,7 @@
 import { createRawSnippet } from 'svelte';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'vite-plus/test';
 import { render } from 'vitest-browser-svelte';
-import { page } from 'vitest/browser';
+import { page } from 'vite-plus/test/browser';
 import Input from './input.svelte';
 
 describe('Input Component', () => {
@@ -41,7 +41,9 @@ describe('Input Component', () => {
 				.element(input)
 				.toHaveAttribute('placeholder', 'Enter email');
 			await expect.element(input).toHaveAttribute('required');
-			await expect.element(label).toHaveTextContent('Email Address');
+			await expect
+				.element(label)
+				.toHaveTextContent('Email Address *');
 			await expect.element(required_indicator).toBeInTheDocument();
 			await expect.element(input).toHaveClass('input-lg');
 			await expect.element(input).toHaveClass('input-success');

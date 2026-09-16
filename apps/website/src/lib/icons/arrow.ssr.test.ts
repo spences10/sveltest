@@ -1,5 +1,5 @@
 import { render } from 'svelte/server';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'vite-plus/test';
 import Arrow from './arrow.svelte';
 
 describe('Arrow SSR', () => {

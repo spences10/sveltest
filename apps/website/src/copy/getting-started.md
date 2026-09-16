@@ -132,9 +132,17 @@ include pattern and exclude those files from `server` to avoid
 duplicate runs; see [SSR testing](/docs/ssr-testing) for the
 configuration.
 
-Sveltest also uses Vite+ command wrappers and a temporary Vitest
-browser runner workaround. These are repository-specific, not scaffold
-requirements. You do not need to copy them into a new project.
+Sveltest uses Vite+ for development, builds, tests, linting,
+formatting, and CLI packaging. Its Vite core alias and Vitest
+dependencies are aligned with the bundled toolchain. Repository tests
+import from `vite-plus/test` and `vite-plus/test/browser`; the guide
+examples keep standard Vitest imports so they work with the official
+Svelte CLI scaffold. See
+[Vite+ migration notes](/docs/migration-guide#projects-using-vite).
+
+Our headless browser tests disable the runner UI to avoid scaled click
+targets. This and the temporary browser runner workaround are
+repository-specific, not scaffold requirements.
 
 ## Run Tests
 
