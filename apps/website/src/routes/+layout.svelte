@@ -22,6 +22,7 @@
 	let { children } = $props();
 
 	onMount(() => {
+		document.documentElement.toggleAttribute('hydrated', true);
 		Fathom.load(PUBLIC_FATHOM_ID!, {
 			url: PUBLIC_FATHOM_URL,
 		});

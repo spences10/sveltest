@@ -41,7 +41,11 @@ pnpm remove @testing-library/svelte @testing-library/jest-dom jsdom
 
 ### Step 2: Update Vitest Configuration
 
-Replace your existing test configuration with browser mode:
+For a new project, use
+`sv add vitest="usages:unit,component" playwright` instead; the CLI
+already provides browser testing. For a migration, the configuration
+below follows that baseline with Sveltest's optional SSR project
+added. Keep SSR files excluded from `server` so they run only once.
 
 ```typescript
 // vite.config.ts (Vitest v4)
@@ -54,29 +58,20 @@ export default defineConfig({
 	plugins: [tailwindcss(), sveltekit()],
 
 	test: {
+		expect: { requireAssertions: true },
 		projects: [
 			{
 				// Client-side tests (Svelte components)
 				extends: './vite.config.ts',
 				test: {
 					name: 'client',
-					// Timeout for browser tests - prevent hanging on element lookups
-					testTimeout: 2000,
 					browser: {
 						enabled: true,
 						provider: playwright(),
-						instances: [
-							{ browser: 'chromium' },
-							// { browser: 'firefox' },
-							// { browser: 'webkit' },
-						],
+						instances: [{ browser: 'chromium', headless: true }],
 					},
 					include: ['src/**/*.svelte.{test,spec}.{js,ts}'],
-					exclude: [
-						'src/lib/server/**',
-						'src/**/*.ssr.{test,spec}.{js,ts}',
-					],
-					setupFiles: ['vitest-browser-svelte'],
+					exclude: ['src/lib/server/**'],
 				},
 			},
 			{
@@ -109,13 +104,12 @@ export default defineConfig({
 ### Step 3: Remove jsdom Setup Files
 
 Remove jsdom-specific polyfills such as `@testing-library/jest-dom`,
-`matchMedia` mocks, and local browser type-reference setup files. Use
-the official `vitest-browser-svelte` setup entry instead:
-
-```typescript
-// vite.config.ts
-setupFiles: ['vitest-browser-svelte'];
-```
+`matchMedia` mocks, and obsolete type-reference setup files. Importing
+`render` from `vitest-browser-svelte` registers cleanup automatically;
+no setup file is required for that pattern. With renderer version 3,
+await `render(...)`. Only add `setupFiles: ['vitest-browser-svelte']`
+to the client project if you use `page.render(...)` without importing
+the renderer.
 
 If TypeScript does not pick up browser render/assertion types, add the
 package to `tsconfig.json`:
@@ -127,6 +121,16 @@ package to `tsconfig.json`:
 	}
 }
 ```
+
+### Step 4: Colocate Playwright Tests
+
+Use `testMatch: '**/*.e2e.{ts,js}'` in `playwright.config.ts` instead
+of `testDir: 'e2e'`. Move tests beside their routes and rename them
+from `*.spec.ts` to `*.e2e.ts`, for example
+`src/routes/contact/page.svelte.e2e.ts`. Update relative imports and
+any CI file filters when moving files. Vitest's `.test`/`.spec`
+patterns will not collect `.e2e` files. Exclude `**/*.e2e.{js,ts}`
+from coverage if you collect all source files.
 
 ## 🧪 Phase 2: Core Pattern Migration
 

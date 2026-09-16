@@ -231,7 +231,7 @@ importers:
         version: 8.0.0-next.3(@sveltejs/kit@3.0.0-next.25(@sveltejs/vite-plugin-svelte@7.3.0(svelte@5.57.0(@typescript-eslint/types@8.59.4))(vite@8.2.2(@types/node@26.4.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)))(svelte@5.57.0(@typescript-eslint/types@8.59.4))(typescript@6.0.3)(vite@8.2.2(@types/node@26.4.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)))
       '@sveltejs/adapter-cloudflare':
         specifier: ^8.0.0-next.0
-        version: 8.0.0-next.6(@sveltejs/kit@3.0.0-next.25(@sveltejs/vite-plugin-svelte@7.3.0(svelte@5.57.0(@typescript-eslint/types@8.59.4))(vite@8.2.2(@types/node@26.4.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)))(svelte@5.57.0(@typescript-eslint/types@8.59.4))(typescript@6.0.3)(vite@8.2.2(@types/node@26.4.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)))(wrangler@4.129.0)
+        version: 8.0.0-next.6(@sveltejs/kit@3.0.0-next.25(@sveltejs/vite-plugin-svelte@7.3.0(svelte@5.57.0(@typescript-eslint/types@8.59.4))(vite@8.2.2(@types/node@26.4.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)))(svelte@5.57.0(@typescript-eslint/types@8.59.4))(typescript@6.0.3)(vite@8.2.2(@types/node@26.4.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)))(wrangler@4.129.0(@cloudflare/workers-types@5.20260905.1))
       '@sveltejs/kit':
         specifier: ^3.0.0-next.0
         version: 3.0.0-next.25(@sveltejs/vite-plugin-svelte@7.3.0(svelte@5.57.0(@typescript-eslint/types@8.59.4))(vite@8.2.2(@types/node@26.4.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)))(svelte@5.57.0(@typescript-eslint/types@8.59.4))(typescript@6.0.3)(vite@8.2.2(@types/node@26.4.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))
@@ -250,9 +250,6 @@ importers:
       '@typescript/native':
         specifier: 'catalog:'
         version: typescript@7.0.2
-      '@vitest/browser':
-        specifier: ^4.1.11
-        version: 4.1.11(vite@8.2.2(@types/node@26.4.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))(vitest@4.1.11)
       '@vitest/browser-playwright':
         specifier: ^4.1.11
         version: 4.1.11(playwright@1.63.0)(vite@8.2.2(@types/node@26.4.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))(vitest@4.1.11)
@@ -265,9 +262,6 @@ importers:
       fathom-client:
         specifier: ^3.7.2
         version: 3.7.2
-      jsdom:
-        specifier: ^30.0.1
-        version: 30.0.1
       mdsvex:
         specifier: ^0.12.8
         version: 0.12.8(svelte@5.57.0(@typescript-eslint/types@8.59.4))
@@ -3201,6 +3195,7 @@ snapshots:
       '@csstools/css-parser-algorithms': 4.0.0(@csstools/css-tokenizer@4.0.0)
       '@csstools/css-tokenizer': 4.0.0
       lru-cache: 11.5.2
+    optional: true
 
   '@asamuzakjp/dom-selector@8.3.2':
     dependencies:
@@ -3208,6 +3203,7 @@ snapshots:
       css-tree: 3.2.1
       is-potential-custom-element-name: 1.0.1
       lru-cache: 11.5.2
+    optional: true
 
   '@babel/code-frame@7.29.7':
     dependencies:
@@ -3237,6 +3233,7 @@ snapshots:
   '@bramus/specificity@2.4.2':
     dependencies:
       css-tree: 3.2.1
+    optional: true
 
   '@changesets/apply-release-plan@8.1.0':
     dependencies:
@@ -3383,12 +3380,14 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
 
-  '@csstools/color-helpers@6.1.1': {}
+  '@csstools/color-helpers@6.1.1':
+    optional: true
 
   '@csstools/css-calc@3.3.0(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.0))(@csstools/css-tokenizer@4.0.0)':
     dependencies:
       '@csstools/css-parser-algorithms': 4.0.0(@csstools/css-tokenizer@4.0.0)
       '@csstools/css-tokenizer': 4.0.0
+    optional: true
 
   '@csstools/css-color-parser@4.2.1(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.0))(@csstools/css-tokenizer@4.0.0)':
     dependencies:
@@ -3396,16 +3395,20 @@ snapshots:
       '@csstools/css-calc': 3.3.0(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.0))(@csstools/css-tokenizer@4.0.0)
       '@csstools/css-parser-algorithms': 4.0.0(@csstools/css-tokenizer@4.0.0)
       '@csstools/css-tokenizer': 4.0.0
+    optional: true
 
   '@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.0)':
     dependencies:
       '@csstools/css-tokenizer': 4.0.0
+    optional: true
 
   '@csstools/css-syntax-patches-for-csstree@1.1.9(css-tree@3.2.1)':
     optionalDependencies:
       css-tree: 3.2.1
+    optional: true
 
-  '@csstools/css-tokenizer@4.0.0': {}
+  '@csstools/css-tokenizer@4.0.0':
+    optional: true
 
   '@emnapi/runtime@1.11.3':
     dependencies:
@@ -3568,7 +3571,8 @@ snapshots:
   '@esbuild/win32-x64@0.28.1':
     optional: true
 
-  '@exodus/bytes@1.15.1': {}
+  '@exodus/bytes@1.15.1':
+    optional: true
 
   '@fontsource-variable/inter@5.3.0': {}
 
@@ -3984,11 +3988,11 @@ snapshots:
     dependencies:
       '@sveltejs/kit': 3.0.0-next.25(@sveltejs/vite-plugin-svelte@7.3.0(svelte@5.57.0(@typescript-eslint/types@8.59.4))(vite@8.2.2(@types/node@26.4.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)))(svelte@5.57.0(@typescript-eslint/types@8.59.4))(typescript@6.0.3)(vite@8.2.2(@types/node@26.4.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))
 
-  '@sveltejs/adapter-cloudflare@8.0.0-next.6(@sveltejs/kit@3.0.0-next.25(@sveltejs/vite-plugin-svelte@7.3.0(svelte@5.57.0(@typescript-eslint/types@8.59.4))(vite@8.2.2(@types/node@26.4.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)))(svelte@5.57.0(@typescript-eslint/types@8.59.4))(typescript@6.0.3)(vite@8.2.2(@types/node@26.4.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)))(wrangler@4.129.0)':
+  '@sveltejs/adapter-cloudflare@8.0.0-next.6(@sveltejs/kit@3.0.0-next.25(@sveltejs/vite-plugin-svelte@7.3.0(svelte@5.57.0(@typescript-eslint/types@8.59.4))(vite@8.2.2(@types/node@26.4.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)))(svelte@5.57.0(@typescript-eslint/types@8.59.4))(typescript@6.0.3)(vite@8.2.2(@types/node@26.4.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)))(wrangler@4.129.0(@cloudflare/workers-types@5.20260905.1))':
     dependencies:
       '@cloudflare/workers-types': 5.20260905.1
       '@sveltejs/kit': 3.0.0-next.25(@sveltejs/vite-plugin-svelte@7.3.0(svelte@5.57.0(@typescript-eslint/types@8.59.4))(vite@8.2.2(@types/node@26.4.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)))(svelte@5.57.0(@typescript-eslint/types@8.59.4))(typescript@6.0.3)(vite@8.2.2(@types/node@26.4.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))
-      wrangler: 4.129.0
+      wrangler: 4.129.0(@cloudflare/workers-types@5.20260905.1)
 
   '@sveltejs/kit@3.0.0-next.25(@sveltejs/vite-plugin-svelte@7.3.0(svelte@5.57.0(@typescript-eslint/types@8.59.4))(vite@8.2.2(@types/node@26.4.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)))(svelte@5.57.0(@typescript-eslint/types@8.59.4))(typescript@6.0.3)(vite@8.2.2(@types/node@26.4.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))':
     dependencies:
@@ -4452,6 +4456,7 @@ snapshots:
   bidi-js@1.0.3:
     dependencies:
       require-from-string: 2.0.2
+    optional: true
 
   blake3-wasm@2.1.5: {}
 
@@ -4485,6 +4490,7 @@ snapshots:
     dependencies:
       mdn-data: 2.27.1
       source-map-js: 1.2.1
+    optional: true
 
   cssesc@3.0.0: {}
 
@@ -4496,8 +4502,10 @@ snapshots:
       whatwg-url: 16.0.1
     transitivePeerDependencies:
       - '@noble/hashes'
+    optional: true
 
-  decimal.js@10.6.0: {}
+  decimal.js@10.6.0:
+    optional: true
 
   deepmerge@4.3.1: {}
 
@@ -4520,7 +4528,8 @@ snapshots:
       graceful-fs: 4.2.11
       tapable: 2.3.3
 
-  entities@8.0.0: {}
+  entities@8.0.0:
+    optional: true
 
   error-stack-parser-es@1.0.5: {}
 
@@ -4660,6 +4669,7 @@ snapshots:
       '@exodus/bytes': 1.15.1
     transitivePeerDependencies:
       - '@noble/hashes'
+    optional: true
 
   html-escaper@2.0.2: {}
 
@@ -4673,7 +4683,8 @@ snapshots:
 
   is-plain-obj@4.1.0: {}
 
-  is-potential-custom-element-name@1.0.1: {}
+  is-potential-custom-element-name@1.0.1:
+    optional: true
 
   is-reference@3.0.3:
     dependencies:
@@ -4725,6 +4736,7 @@ snapshots:
       xml-name-validator: 5.0.0
     transitivePeerDependencies:
       - '@noble/hashes'
+    optional: true
 
   jsonc-parser@3.3.1: {}
 
@@ -4835,7 +4847,8 @@ snapshots:
 
   locate-character@3.0.0: {}
 
-  lru-cache@11.5.2: {}
+  lru-cache@11.5.2:
+    optional: true
 
   lz-string@1.5.0: {}
 
@@ -4869,7 +4882,8 @@ snapshots:
       unist-util-visit: 5.1.0
       vfile: 6.0.3
 
-  mdn-data@2.27.1: {}
+  mdn-data@2.27.1:
+    optional: true
 
   mdsvex@0.12.8(svelte@5.57.0(@typescript-eslint/types@8.59.4)):
     dependencies:
@@ -4992,6 +5006,7 @@ snapshots:
   parse5@8.0.1:
     dependencies:
       entities: 8.0.0
+    optional: true
 
   path-to-regexp@6.3.0: {}
 
@@ -5032,7 +5047,8 @@ snapshots:
 
   property-information@7.1.0: {}
 
-  punycode@2.3.1: {}
+  punycode@2.3.1:
+    optional: true
 
   react-is@17.0.2: {}
 
@@ -5074,7 +5090,8 @@ snapshots:
       hast-util-to-string: 3.0.1
       unist-util-visit: 5.1.0
 
-  require-from-string@2.0.2: {}
+  require-from-string@2.0.2:
+    optional: true
 
   rolldown@1.2.6:
     dependencies:
@@ -5104,6 +5121,7 @@ snapshots:
   saxes@6.0.0:
     dependencies:
       xmlchars: 2.2.0
+    optional: true
 
   semver@7.8.2: {}
 
@@ -5218,7 +5236,8 @@ snapshots:
     transitivePeerDependencies:
       - '@typescript-eslint/types'
 
-  symbol-tree@3.2.4: {}
+  symbol-tree@3.2.4:
+    optional: true
 
   tailwindcss@4.3.3: {}
 
@@ -5241,21 +5260,25 @@ snapshots:
 
   tinyrainbow@3.1.1: {}
 
-  tldts-core@7.0.30: {}
+  tldts-core@7.0.30:
+    optional: true
 
   tldts@7.0.30:
     dependencies:
       tldts-core: 7.0.30
+    optional: true
 
   totalist@3.0.1: {}
 
   tough-cookie@6.0.2:
     dependencies:
       tldts: 7.0.30
+    optional: true
 
   tr46@6.0.0:
     dependencies:
       punycode: 2.3.1
+    optional: true
 
   trim-lines@3.0.1: {}
 
@@ -5299,7 +5322,8 @@ snapshots:
 
   undici@7.29.0: {}
 
-  undici@8.10.0: {}
+  undici@8.10.0:
+    optional: true
 
   unenv@2.0.0-rc.24:
     dependencies:
@@ -5490,10 +5514,13 @@ snapshots:
   w3c-xmlserializer@5.0.0:
     dependencies:
       xml-name-validator: 5.0.0
+    optional: true
 
-  webidl-conversions@8.0.1: {}
+  webidl-conversions@8.0.1:
+    optional: true
 
-  whatwg-mimetype@5.0.0: {}
+  whatwg-mimetype@5.0.0:
+    optional: true
 
   whatwg-url@16.0.1:
     dependencies:
@@ -5502,6 +5529,7 @@ snapshots:
       webidl-conversions: 8.0.1
     transitivePeerDependencies:
       - '@noble/hashes'
+    optional: true
 
   whatwg-url@17.1.0:
     dependencies:
@@ -5510,6 +5538,7 @@ snapshots:
       webidl-conversions: 8.0.1
     transitivePeerDependencies:
       - '@noble/hashes'
+    optional: true
 
   why-is-node-running@2.3.0:
     dependencies:
@@ -5524,7 +5553,7 @@ snapshots:
       '@cloudflare/workerd-linux-arm64': 1.20260903.1
       '@cloudflare/workerd-windows-64': 1.20260903.1
 
-  wrangler@4.129.0:
+  wrangler@4.129.0(@cloudflare/workers-types@5.20260905.1):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.5.0
       '@cloudflare/unenv-preset': 2.16.1(unenv@2.0.0-rc.24)(workerd@1.20260903.1)
@@ -5535,6 +5564,7 @@ snapshots:
       unenv: 2.0.0-rc.24
       workerd: 1.20260903.1
     optionalDependencies:
+      '@cloudflare/workers-types': 5.20260905.1
       fsevents: 2.3.3
     transitivePeerDependencies:
       - bufferutil
@@ -5544,9 +5574,11 @@ snapshots:
 
   ws@8.21.0: {}
 
-  xml-name-validator@5.0.0: {}
+  xml-name-validator@5.0.0:
+    optional: true
 
-  xmlchars@2.2.0: {}
+  xmlchars@2.2.0:
+    optional: true
 
   yaml@2.9.0: {}
 

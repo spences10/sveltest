@@ -230,7 +230,7 @@ export interface UserResponse {
 #### 4. E2E Safety Net
 
 ```typescript
-// e2e/registration.spec.ts
+// src/routes/register/page.svelte.e2e.ts
 test('full registration flow', async ({ page }) => {
 	await page.goto('/register');
 

@@ -100,7 +100,7 @@
 	const existing_tests = [
 		{
 			name: 'Homepage Tests',
-			file: 'e2e/homepage.spec.ts',
+			file: 'src/routes/page.svelte.e2e.ts',
 			description: 'Basic navigation and content verification',
 			coverage: [
 				'Navigation',
@@ -110,19 +110,19 @@
 		},
 		{
 			name: 'Smoke Tests',
-			file: 'e2e/smoke-test.spec.ts',
+			file: 'src/routes/smoke-test.e2e.ts',
 			description: 'Critical functionality verification',
 			coverage: ['Page loading', 'Error handling', '404 pages'],
 		},
 		{
 			name: 'API Integration',
-			file: 'e2e/api.spec.ts',
+			file: 'src/routes/api.e2e.ts',
 			description: 'Frontend-backend communication testing',
 			coverage: ['API responses', 'Error handling', 'Authentication'],
 		},
 		{
 			name: 'Performance Tests',
-			file: 'e2e/performance.spec.ts',
+			file: 'src/routes/performance.e2e.ts',
 			description: 'Core Web Vitals and loading performance',
 			coverage: [
 				'Load times',
@@ -132,7 +132,7 @@
 		},
 		{
 			name: 'Accessibility Tests',
-			file: 'e2e/accessibility.spec.ts',
+			file: 'src/routes/accessibility.e2e.ts',
 			description: 'Automated accessibility validation',
 			coverage: [
 				'ARIA attributes',
@@ -142,7 +142,7 @@
 		},
 		{
 			name: 'Advanced Scenarios',
-			file: 'e2e/advanced-scenarios.spec.ts',
+			file: 'src/routes/advanced-scenarios.e2e.ts',
 			description: 'Complex user workflows and edge cases',
 			coverage: [
 				'Network failures',
@@ -210,7 +210,7 @@
 				E2E Testing Categories
 			</h2>
 			<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-				{#each e2e_categories as category}
+				{#each e2e_categories as category (category.id)}
 					<div class="group">
 						<div
 							class="hover:shadow-3xl card border border-base-300/50 bg-base-100/80 shadow-2xl backdrop-blur-sm transition-all duration-300 hover:-translate-y-2"
@@ -232,7 +232,7 @@
 									{category.description}
 								</p>
 								<ul class="space-y-1 text-xs">
-									{#each category.examples as example}
+									{#each category.examples as example (example)}
 										<li
 											class="flex items-center gap-2 text-base-content/60"
 										>
@@ -258,7 +258,7 @@
 
 			<!-- Category Navigation -->
 			<div class="mb-8 flex flex-wrap justify-center gap-2">
-				{#each e2e_categories as category}
+				{#each e2e_categories as category (category.id)}
 					<button
 						class="btn btn-sm {active_category === category.id
 							? `btn-${category.color}`
@@ -427,7 +427,7 @@
 				and explore
 			</p>
 			<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-				{#each existing_tests as test}
+				{#each existing_tests as test (test.file)}
 					<div
 						class="card border border-base-300/50 bg-base-100/80 shadow-xl backdrop-blur-sm"
 					>
@@ -446,7 +446,7 @@
 							<div class="mb-4">
 								<h4 class="mb-2 text-sm font-semibold">Coverage:</h4>
 								<div class="flex flex-wrap gap-1">
-									{#each test.coverage as item}
+									{#each test.coverage as item (item)}
 										<span class="badge badge-outline badge-xs">
 											{item}
 										</span>
@@ -468,7 +468,7 @@
 				E2E Testing Best Practices
 			</h2>
 			<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-				{#each best_practices as practice}
+				{#each best_practices as practice (practice.title)}
 					<div
 						class="card border border-base-300/50 bg-base-100/80 shadow-xl backdrop-blur-sm"
 					>

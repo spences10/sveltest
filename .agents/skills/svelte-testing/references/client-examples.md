@@ -8,7 +8,7 @@ Real browser testing with user interactions:
 // button.svelte.test.ts
 import { render } from 'vitest-browser-svelte';
 import { test, expect, describe } from 'vitest';
-import { userEvent } from '@vitest/browser/context';
+import { userEvent } from 'vitest/browser';
 import Button from './button.svelte';
 
 describe('Button Component', () => {

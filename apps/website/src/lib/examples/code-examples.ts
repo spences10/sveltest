@@ -20,15 +20,13 @@ test('adds two numbers', () => {
 
 	component_test: `// button.svelte.test.ts
 import { render } from 'vitest-browser-svelte';
-import { page } from 'vitest-browser/context';
+import { page } from 'vitest/browser';
 import { expect, test, vi } from 'vitest';
 import Button from './button.svelte';
 
 test('calls on_click when clicked', async () => {
   const on_click = vi.fn();
-  render(Button, {
-    props: { on_click }
-  });
+  await render(Button, { onclick: on_click });
   
   const button = page.getByRole('button');
   await button.click();
@@ -52,15 +50,15 @@ test('should add new todo', () => {
   expect(new_count).toBe(initial_count + 1);
 });`,
 
-	form_validation_test: `// form-validation.test.ts
+	form_validation_test: `// form-validation.svelte.test.ts
 import { render } from 'vitest-browser-svelte';
-import { page } from 'vitest-browser/context';
+import { page } from 'vitest/browser';
 import { expect, test } from 'vitest';
 import { untrack } from 'svelte';
 import LoginForm from './login-form.svelte';
 
 test('form validation lifecycle', async () => {
-  render(LoginForm);
+  await render(LoginForm);
   
   const email_input = page.getByRole('textbox', { name: /email/i });
   const submit_button = page.getByRole('button', { name: /submit/i });
@@ -83,14 +81,14 @@ test('form validation lifecycle', async () => {
   await expect.element(page.getByText('Invalid email')).not.toBeInTheDocument();
 });`,
 
-	async_test: `// async-component.test.ts
+	async_test: `// async-component.svelte.test.ts
 import { render } from 'vitest-browser-svelte';
-import { page } from 'vitest-browser/context';
+import { page } from 'vitest/browser';
 import { expect, test } from 'vitest';
 import AsyncComponent from './async-component.svelte';
 
 test('handles async data loading', async () => {
-  render(AsyncComponent);
+  await render(AsyncComponent);
   
   // Should show loading state initially
   await expect.element(page.getByText('Loading...')).toBeInTheDocument();
@@ -102,18 +100,17 @@ test('handles async data loading', async () => {
   await expect.element(page.getByText('Loading...')).not.toBeInTheDocument();
 });`,
 
-	accessibility_test: `// accessibility.test.ts
+	accessibility_test: `// accessibility.svelte.test.ts
 import { render } from 'vitest-browser-svelte';
-import { page } from 'vitest-browser/context';
+import { page } from 'vitest/browser';
 import { expect, test } from 'vitest';
 import Button from './button.svelte';
+import { createRawSnippet } from 'svelte';
 
 test('button has proper accessibility attributes', async () => {
-  render(Button, { 
-    props: { 
-      text: 'Save Changes',
-      disabled: false 
-    } 
+  await render(Button, {
+    children: createRawSnippet(() => ({ render: () => '<span>Save Changes</span>' })),
+    disabled: false
   });
   
   const button = page.getByRole('button', { name: 'Save Changes' });
@@ -125,14 +122,14 @@ test('button has proper accessibility attributes', async () => {
 };
 
 export const integration_test_examples = {
-	component_integration: `// login-form.integration.test.ts
+	component_integration: `// login-form.integration.svelte.test.ts
 import { render } from 'vitest-browser-svelte';
-import { page } from 'vitest-browser/context';
+import { page } from 'vitest/browser';
 import { expect, test } from 'vitest';
 import LoginForm from './login-form.svelte';
 
 test('should handle complete login flow', async () => {
-  render(LoginForm);
+  await render(LoginForm);
   
   // Fill form
   await page.getByRole('textbox', { name: /email/i }).fill('user@example.com');
@@ -147,26 +144,30 @@ test('should handle complete login flow', async () => {
 
 	api_integration: `// api-integration.test.ts
 import { expect, test } from 'vitest';
-import { POST } from './+page.server.ts';
+import { POST } from './+server.ts';
 
 test('should handle form submission', async () => {
   const form_data = new FormData();
   form_data.append('email', 'test@example.com');
   
-  const response = await POST({ request: { formData: () => form_data } });
+  const request = new Request('http://localhost/api/contact', {
+    method: 'POST',
+    body: form_data
+  });
+  const response = await POST({ request });
   const result = await response.json();
   
   expect(result.success).toBe(true);
 });`,
 
-	state_management: `// state-integration.test.ts
+	state_management: `// state-integration.svelte.test.ts
 import { render } from 'vitest-browser-svelte';
-import { page } from 'vitest-browser/context';
+import { page } from 'vitest/browser';
 import { expect, test } from 'vitest';
 import TodoApp from './todo-app.svelte';
 
 test('should sync state across components', async () => {
-  render(TodoApp);
+  await render(TodoApp);
   
   // Add todo in one component
   await page.getByRole('textbox').fill('New task');
@@ -176,14 +177,14 @@ test('should sync state across components', async () => {
   await expect.element(page.getByText('New task')).toBeVisible();
 });`,
 
-	form_workflows: `// multi-step-form.test.ts
+	form_workflows: `// multi-step-form.svelte.test.ts
 import { render } from 'vitest-browser-svelte';
-import { page } from 'vitest-browser/context';
+import { page } from 'vitest/browser';
 import { expect, test } from 'vitest';
 import MultiStepForm from './multi-step-form.svelte';
 
 test('should complete multi-step workflow', async () => {
-  render(MultiStepForm);
+  await render(MultiStepForm);
   
   // Step 1: Personal info
   await page.getByRole('textbox', { name: /name/i }).fill('John Doe');
@@ -203,7 +204,7 @@ test('should complete multi-step workflow', async () => {
 };
 
 export const e2e_test_examples = {
-	quick_start: `// basic-e2e.test.ts
+	quick_start: `// src/routes/page.svelte.e2e.ts
 import { expect, test } from '@playwright/test';
 
 test('homepage loads correctly', async ({ page }) => {
@@ -213,7 +214,7 @@ test('homepage loads correctly', async ({ page }) => {
   await expect(page.getByText('Modern testing patterns')).toBeVisible();
 });`,
 
-	user_journey: `// user-journey.test.ts
+	user_journey: `// src/routes/todos/page.svelte.e2e.ts
 import { expect, test } from '@playwright/test';
 
 test('complete user workflow', async ({ page }) => {
@@ -244,7 +245,7 @@ export default defineConfig({
   ]
 });`,
 
-	performance: `// performance.test.ts
+	performance: `// src/routes/performance.e2e.ts
 import { expect, test } from '@playwright/test';
 
 test('page loads within performance budget', async ({ page }) => {
@@ -275,7 +276,7 @@ test('page loads within performance budget', async ({ page }) => {
   expect(performance_metrics.lcp).toBeLessThan(2500); // 2.5s budget
 });`,
 
-	accessibility: `// accessibility.test.ts
+	accessibility: `// src/routes/accessibility.e2e.ts
 import { expect, test } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
@@ -367,34 +368,37 @@ test('should render button text', () => {
 export const documentation_examples = {
 	essential_imports: `import { describe, expect, test, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
-import { page } from 'vitest-browser/context';`,
+import { page } from 'vitest/browser';`,
 
 	first_test: `import { render } from 'vitest-browser-svelte';
-import { page } from 'vitest-browser/context';
+import { page } from 'vitest/browser';
+import { createRawSnippet } from 'svelte';
 import { expect, test } from 'vitest';
 import Button from './button.svelte';
 
 test('renders button with correct text', async () => {
-  render(Button, { props: { text: 'Click me' } });
-  
-  await expect.element(page.getByRole('button')).toHaveText('Click me');
+  await render(Button, {
+    children: createRawSnippet(() => ({ render: () => '<span>Click me</span>' }))
+  });
+
+  await expect.element(page.getByRole('button')).toHaveTextContent('Click me');
 });`,
 
 	component_testing: `import { render } from 'vitest-browser-svelte';
-import { page } from 'vitest-browser/context';
+import { page } from 'vitest/browser';
 import { expect, test, vi } from 'vitest';
 import Button from './button.svelte';
 
 test('calls on_click when clicked', async () => {
   const on_click = vi.fn();
-  render(Button, { props: { on_click } });
+  await render(Button, { onclick: on_click });
   
   await page.getByRole('button').click();
   expect(on_click).toHaveBeenCalled();
 });`,
 
 	form_testing: `test('form validation works', async () => {
-  render(LoginForm);
+  await render(LoginForm);
   
   const email_input = page.getByRole('textbox', { name: /email/i });
   const submit_button = page.getByRole('button', { name: /submit/i });
@@ -406,7 +410,7 @@ test('calls on_click when clicked', async () => {
 });`,
 
 	state_testing: `test('component state updates', async () => {
-  render(Counter, { initial_count: 0 });
+  await render(Counter, { initial_count: 0 });
   
   const button = page.getByRole('button', { name: 'Increment' });
   const display = page.getByTestId('count-display');

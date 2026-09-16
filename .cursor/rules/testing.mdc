@@ -1,6 +1,6 @@
 ---
 description: Comprehensive Testing Best Practices for Svelte 5 + vitest-browser-svelte
-globs: **/*.test.ts,**/*.svelte.test.ts,**/*.ssr.test.ts
+globs: **/*.test.ts,**/*.spec.ts,**/*.e2e.ts
 alwaysApply: false
 ---
 
@@ -20,6 +20,17 @@ You are an expert in Svelte 5, SvelteKit, TypeScript, and modern testing with vi
 - **Component Tests**: `*.svelte.test.ts` - Real browser testing
 - **SSR Tests**: `*.ssr.test.ts` - Server-side rendering validation
 - **Server Tests**: `*.test.ts` - API routes, utilities, business logic
+- **E2E Tests**: `*.e2e.ts` - Playwright journeys beside routes
+
+Follow the official CLI baseline: Vitest `client` (Playwright Chromium,
+headless) and `server` (Node) projects, `expect: { requireAssertions: true }`,
+and Playwright `testMatch: '**/*.e2e.{ts,js}'`. Colocate all test types.
+A separate `ssr` project is optional; exclude its files from `server`.
+Import `page` from `vitest/browser`; await `render` with renderer v3.
+Importing `render` registers cleanup; no extra setup file is needed.
+Foundation First is Sveltest's planning convention, not a CLI requirement.
+Use `await expect.element()` in Vitest browser tests; Playwright uses
+`await expect(locator)` and can submit real SvelteKit forms.
 
 ## CRITICAL: vitest-browser-svelte Patterns
 

@@ -244,8 +244,30 @@ sveltest/
         └── README.md         # CLI documentation
 ```
 
-Each component is co-located with its tests (`.svelte.test.ts` for
-client tests, `.ssr.test.ts` for SSR tests).
+All test types are colocated with their source, including Playwright:
+
+```text
+src/routes/
+├── +page.svelte
+├── +page.server.ts
+├── page.svelte.test.ts   # Vitest browser component test
+├── page.server.test.ts   # Vitest Node test
+├── page.ssr.test.ts      # Optional SSR coverage
+└── page.svelte.e2e.ts    # Playwright E2E test
+```
+
+The baseline follows the
+[official Svelte CLI](https://svelte.dev/docs/cli/vitest): `client`
+browser tests, `server` Node tests, assertion enforcement, and
+headless Chromium. Playwright uses `testMatch: '**/*.e2e.{ts,js}'`, so
+it cannot collect Vitest's `.test`/`.spec` files. Cross-route E2E
+suites live at `src/routes/`; docs-specific journeys live at
+`src/routes/docs/`.
+
+Sveltest's separate `ssr` project, Vite+ wrappers, Foundation First
+workflow, and temporary browser-runner workaround are extensions to
+that baseline, not requirements for a new Svelte project. See the
+[getting-started guide](apps/website/src/copy/getting-started.md).
 
 ## 🤖 AI Assistant Rules for Teams
 
@@ -260,7 +282,8 @@ Cursor, Windsurf, etc.):
 
 - **Universal access** - No project setup required
 - **Instant patterns** - Get testing examples in seconds
-- **Always up-to-date** - Pulls latest patterns from the repository
+- **Live documentation** - Fetches the currently deployed website;
+  source changes become available after deployment
 - **Context-aware** - Search and filter for your specific needs
 
 ### Cursor Rules (`.cursor/rules/testing.mdc`)
@@ -313,8 +336,8 @@ written versus external libraries:
 
 ## 📊 Test Coverage
 
-- **32 test files** across client, server, and SSR
-- **576 passing tests** with comprehensive component coverage
+- Colocated client, server, SSR, and E2E coverage
+- Run `pnpm test:unit --run` and `pnpm test:e2e` for current results
 - **Full server-side testing** for API routes and hooks
 - **SSR validation** for critical rendering paths
 

@@ -11,6 +11,30 @@ For component testing patterns, see
 [Testing Patterns](./testing-patterns). For best practices, see
 [Best Practices](./best-practices).
 
+## Optional Extension to the CLI Scaffold
+
+The official CLI creates `client` and `server` Vitest projects. SSR
+tests can run in its Node `server` project. Sveltest separates them so
+`pnpm test:ssr` can run rendering coverage independently.
+
+To do the same, add this entry to `test.projects`:
+
+```typescript
+{
+	extends: './vite.config.ts',
+	test: {
+		name: 'ssr',
+		environment: 'node',
+		include: ['src/**/*.ssr.{test,spec}.{js,ts}'],
+	},
+}
+```
+
+Also add `src/**/*.ssr.{test,spec}.{js,ts}` to the `server` project's
+`exclude`, alongside its component-test exclusion. This prevents
+running SSR tests twice. Keep `expect: { requireAssertions: true }` at
+the root of `test`, as in the official scaffold.
+
 ## When to Add SSR Tests
 
 ### Always Add SSR Tests For:

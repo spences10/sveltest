@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
 async function fill_search(page: Page, query: string) {
+	await expect(page.locator(':root')).toHaveAttribute('hydrated');
 	const search_response = page.waitForResponse((response) => {
 		const url = new URL(response.url());
 		return (

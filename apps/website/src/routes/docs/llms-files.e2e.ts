@@ -31,6 +31,9 @@ test.describe('LLMs Files Accessibility', () => {
 		expect(content).toContain('# Getting Started');
 		expect(content).toContain('# Testing Patterns');
 		expect(content).toContain('# Best Practices');
+		expect(content).toContain('requireAssertions: true');
+		expect(content).toContain("testMatch: '**/*.e2e.{ts,js}'");
+		expect(content).not.toContain('@vitest/browser/context');
 		// Verify it's the full content, not just the index
 		expect(content?.length).toBeGreaterThan(10000);
 	});

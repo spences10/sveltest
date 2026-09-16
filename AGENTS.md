@@ -17,13 +17,16 @@ approaches.
 - Always use `untrack()` when accessing `$derived` values in tests
 - Use real FormData/Request objects in server tests - minimal mocking
   only
-- Co-locate tests with components (`.svelte.test.ts`, `.ssr.test.ts`)
+- Colocate all tests: `.svelte.test.ts` (browser), `.test.ts` (Node),
+  `.ssr.test.ts` (optional SSR), `.e2e.ts` (Playwright)
 - Follow naming conventions: kebab-case files, snake_case variables
 - Start tests with "Foundation First" approach using `.skip` blocks
   for planning
 - Always run `pnpm lint` after making changes
-- Never click SvelteKit form submit buttons - test state directly
-- Use `await expect.element()` for all locator assertions
+- In component tests, never submit SvelteKit forms - test state
+  directly; use Playwright E2E tests for real form submissions
+- Use `await expect.element()` for Vitest browser locator assertions;
+  Playwright E2E uses `await expect(locator)`
 
 ---
 
@@ -205,6 +208,24 @@ frontend and backend to prevent integration issues.
 
 ### Test Organization
 
+Follow the official Svelte CLI baseline: Vitest `client` (headless
+Chromium) and `server` (Node) projects with assertion enforcement.
+Sveltest's separate `ssr` project is optional and excludes SSR files
+from `server`. Playwright uses `testMatch: '**/*.e2e.{ts,js}'`,
+allowing E2E colocation without Vitest collecting those files.
+Cross-route journeys belong at the nearest shared route directory.
+
+Import `page` from `vitest/browser`. Importing `render` from
+`vitest-browser-svelte` registers cleanup; await it with renderer v3.
+No setup file is required for this pattern. Vite+ wrappers, Foundation
+First, and the temporary browser-runner workaround are repository
+conventions, not scaffold requirements.
+
+The CLI fetches deployed website content. Update
+`apps/website/src/copy/` for guides and `/api/docs`; `/llms-full.txt`
+prerenders from the same content map. Keep CLI context guidance and AI
+rules aligned.
+
 ```
 src/
 ├── lib/components/          # Component files with co-located tests
@@ -216,7 +237,8 @@ src/
 │   ├── api/*/server.test.ts       # Server-side API tests
 │   ├── +page.svelte
 │   ├── page.svelte.test.ts        # Component tests
-│   └── page.ssr.test.ts           # SSR tests
+│   ├── page.ssr.test.ts           # SSR tests
+│   └── page.svelte.e2e.ts         # Playwright E2E tests
 ```
 
 ### Key Technologies

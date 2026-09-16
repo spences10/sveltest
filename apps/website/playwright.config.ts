@@ -9,5 +9,5 @@ export default defineConfig({
 		port,
 	},
 
-	testDir: 'e2e',
+	testMatch: '**/*.e2e.{ts,js}',
 });

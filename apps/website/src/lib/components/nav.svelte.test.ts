@@ -74,8 +74,10 @@ describe('Nav Component', () => {
 
 	describe('Initial Rendering', () => {
 		test('should render without errors', async () => {
-			// A rejected render fails the test.
 			await render(Nav);
+			await expect
+				.element(page.getByRole('navigation').first())
+				.toBeVisible();
 		});
 
 		test('should render brand logo and title', async () => {

@@ -22,11 +22,10 @@
 		"directory": "packages/cli"
 	},
 	"bin": {
-		"sveltest": "./bin/sveltest.js"
+		"sveltest": "./dist/index.js"
 	},
 	"files": [
 		"dist",
-		"bin",
 		"README.md"
 	],
 	"type": "module",

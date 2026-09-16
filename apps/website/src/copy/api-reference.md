@@ -581,41 +581,34 @@ expect.extend({
 
 ```typescript
 // vite.config.ts (Vitest v4)
+import { sveltekit } from '@sveltejs/kit/vite';
 import { playwright } from '@vitest/browser-playwright';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
+	plugins: [sveltekit()],
 	test: {
-		browser: {
-			enabled: true,
-			name: 'chromium',
-			provider: playwright({
-				// Debugging options
-				launchOptions: {
-					slowMo: 100, // Slow down for debugging
-				},
-			}),
-			screenshot: 'only-on-failure',
-			// Headless mode
-			headless: true,
-		},
-		// Projects configuration (workspace renamed to projects in v4)
+		expect: { requireAssertions: true },
 		projects: [
 			{
+				extends: './vite.config.ts',
 				test: {
-					include: ['**/*.svelte.test.ts'],
+					include: ['src/**/*.svelte.{test,spec}.{js,ts}'],
+					exclude: ['src/lib/server/**'],
 					name: 'client',
 					browser: {
 						enabled: true,
 						provider: playwright(),
-						instances: [{ browser: 'chromium' }],
+						instances: [{ browser: 'chromium', headless: true }],
 					},
 				},
 			},
 			{
+				extends: './vite.config.ts',
 				test: {
-					include: ['**/*.ssr.test.ts'],
-					name: 'ssr',
+					include: ['src/**/*.{test,spec}.{js,ts}'],
+					exclude: ['src/**/*.svelte.{test,spec}.{js,ts}'],
+					name: 'server',
 					environment: 'node',
 				},
 			},
@@ -623,6 +616,13 @@ export default defineConfig({
 	},
 });
 ```
+
+This follows the CLI's two-project baseline. See
+[SSR testing](/docs/ssr-testing) for Sveltest's optional third
+project. Playwright uses `testMatch: '**/*.e2e.{ts,js}'` independently
+of Vitest, so E2E tests can also live beside routes. Importing
+`render` registers cleanup without a setup file; await it with
+renderer version 3.
 
 ### Test Environment Setup
 

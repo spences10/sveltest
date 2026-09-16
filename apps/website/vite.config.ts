@@ -33,33 +33,24 @@ export default defineConfig({
 		tailwindcss(),
 	],
 	test: {
+		expect: { requireAssertions: true },
 		projects: [
 			{
 				// Client-side tests (Svelte components)
 				extends: './vite.config.ts',
 				test: {
 					name: 'client',
-					// Timeout for browser tests - prevent hanging on element lookups
-					testTimeout: 2000,
 					browser: {
 						enabled: true,
 						provider: playwright(),
-						instances: [
-							{ browser: 'chromium' },
-							// { browser: 'firefox' },
-							// { browser: 'webkit' },
-						],
+						instances: [{ browser: 'chromium', headless: true }],
 					},
 					include: ['src/**/*.svelte.{test,spec}.{js,ts}'],
-					exclude: [
-						'src/lib/server/**',
-						'src/**/*.ssr.{test,spec}.{js,ts}',
-					],
-					setupFiles: ['vitest-browser-svelte'],
+					exclude: ['src/lib/server/**'],
 				},
 			},
 			{
-				// SSR tests (Server-side rendering)
+				// Optional extension to the CLI scaffold: isolated SSR coverage
 				extends: './vite.config.ts',
 				test: {
 					name: 'ssr',
@@ -87,6 +78,7 @@ export default defineConfig({
 			include: ['src/**/*'],
 			exclude: [
 				...coverageConfigDefaults.exclude,
+				'**/*.e2e.{js,ts}',
 				'**/+page.svelte',
 				'**/+layout.svelte',
 				'**/+error.svelte',

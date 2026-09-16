@@ -153,6 +153,28 @@ sveltest get button-variants,form-validation --json
 sveltest search "runes" --filter examples
 ```
 
+## Testing Baseline
+
+The CLI serves guidance based on the official Svelte CLI scaffold:
+Vitest Browser Mode with `vitest-browser-svelte` for components, Node
+for unit/server tests, and Playwright for E2E workflows. All test
+types can be colocated. Use `.svelte.test.ts` for browser tests,
+`.test.ts` for Node tests, and `.e2e.ts` for Playwright. Sveltest's
+separate `.ssr.test.ts` project is an optional extension.
+
+```bash
+sveltest docs getting-started --context
+sveltest docs e2e-testing --context
+sveltest docs ssr-testing --context
+sveltest llms --full --context
+```
+
+The CLI fetches the deployed website; it does not bundle a separate
+copy of the guides. `/api/docs` reads the same Markdown as the
+website, and `/llms-full.txt` is generated from those sources at build
+time. Documentation changes reach CLI users when the website is
+deployed.
+
 ## LLM Integration
 
 This CLI is designed for AI assistants with tool-calling capabilities.

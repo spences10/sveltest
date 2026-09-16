@@ -301,18 +301,20 @@ describe('Calculator Component', () => {
 	});
 
 	describe('Edge Cases', () => {
-		test('should handle rapid button clicking without errors', async () => {
+		test('should pass every repeated digit click to the calculator', async () => {
 			await render(Calculator);
 
-			const button5 = page.getByRole('button', { name: '5' });
-
-			// A rejected click fails the test.
+			const digit_button = page.getByRole('button', { name: '5' });
 			for (let i = 0; i < 10; i++) {
-				await button5.click({ force: true });
+				await digit_button.click();
 			}
 
-			// The important thing is that rapid clicking doesn't crash the component
-			// Mock verification doesn't work reliably in browser environment
+			expect(calculator_state_mock.input_digit).toHaveBeenCalledTimes(
+				10,
+			);
+			expect(
+				calculator_state_mock.input_digit,
+			).toHaveBeenLastCalledWith('5');
 		});
 
 		test.skip('should handle state errors gracefully', async () => {

@@ -14,17 +14,46 @@ E2E tests validate:
 - Real network requests
 - Full user workflows
 
+## Configuration and Colocation
+
+The official Svelte CLI Playwright add-on uses a filename pattern, not
+a dedicated test directory:
+
+```typescript
+// playwright.config.ts
+import { defineConfig } from '@playwright/test';
+
+export default defineConfig({
+	webServer: {
+		command: 'npm run build && npm run preview',
+		port: 4173,
+	},
+	testMatch: '**/*.e2e.{ts,js}',
+});
+```
+
+Keep E2E tests beside the route they exercise, for example
+`src/routes/contact/page.svelte.e2e.ts`. Cross-route journeys can live
+at `src/routes/`. Component tests use `.svelte.test.ts`, Node tests
+use `.test.ts`, and optional SSR tests use `.ssr.test.ts`. Vitest does
+not match `.e2e.ts`, so all four types can safely share a directory.
+
+Run `pnpm exec playwright install chromium` once, then
+`pnpm test:e2e`. Use `pnpm test:e2e --list` to check collection
+without starting the app. Unlike isolated component tests, E2E tests
+should submit real forms.
+
 ## Basic Pattern
 
 ```typescript
-// e2e/registration.spec.ts
+// src/routes/register/page.svelte.e2e.ts
 import { test, expect } from '@playwright/test';
 
 test('user registration flow', async ({ page }) => {
 	await page.goto('/register');
 
-	await page.getByLabelText('Email').fill('user@example.com');
-	await page.getByLabelText('Password').fill('secure123');
+	await page.getByLabel('Email').fill('user@example.com');
+	await page.getByLabel('Password').fill('secure123');
 	await page.getByRole('button', { name: 'Register' }).click();
 
 	// Tests the complete client-server integration
@@ -94,7 +123,7 @@ perfect hook for this signal.
 **Step 2: Assert hydration in your tests**
 
 ```typescript
-// e2e/contact.spec.ts
+// src/routes/contact/page.svelte.e2e.ts
 import { test, expect } from '@playwright/test';
 
 test('submit form after hydration', async ({ page }) => {
@@ -115,7 +144,7 @@ Extract the hydration check into a base Page Object Model class so
 every test gets it for free:
 
 ```typescript
-// e2e/models/base-page.ts
+// src/lib/testing/base-page.ts
 import { type Page, type Locator, expect } from '@playwright/test';
 
 export class BasePage {
@@ -139,7 +168,7 @@ export class BasePage {
 ```
 
 ```typescript
-// e2e/models/contact-page.ts
+// src/lib/testing/contact-page.ts
 import { BasePage } from './base-page';
 
 export class ContactPage extends BasePage {
@@ -153,9 +182,9 @@ export class ContactPage extends BasePage {
 ```
 
 ```typescript
-// e2e/contact.spec.ts
+// src/routes/contact/page.svelte.e2e.ts
 import { test, expect } from '@playwright/test';
-import { ContactPage } from './models/contact-page';
+import { ContactPage } from '../../lib/testing/contact-page';
 
 test('submit contact form', async ({ page }) => {
 	const contact = new ContactPage(page);

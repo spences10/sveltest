@@ -63,7 +63,7 @@ wrapper. This is the recommended approach.
 ```typescript
 import { describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
-import { page } from '@vitest/browser/context';
+import { page } from 'vitest/browser';
 
 import UserProfileTestWrapper from './user-profile.test-wrapper.svelte';
 
@@ -164,7 +164,7 @@ For testing page components that depend on layout context:
 ```typescript
 import { describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
-import { page } from '@vitest/browser/context';
+import { page } from 'vitest/browser';
 
 import DashboardTestWrapper from './dashboard-page.test-wrapper.svelte';
 

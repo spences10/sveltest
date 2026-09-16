@@ -128,8 +128,10 @@ describe('TodoManager', () => {
 
 	describe('Initial Rendering', () => {
 		test('should render without crashing', async () => {
-			// A rejected render fails the test.
 			await render(TodoManager);
+			await expect
+				.element(page.getByRole('heading', { name: 'Todo Manager' }))
+				.toBeVisible();
 		});
 
 		test('should render with default props', async () => {
@@ -366,11 +368,12 @@ describe('TodoManager', () => {
 
 			await input.fill('New task');
 
-			// A rejected click fails the test.
-			await add_button.click({ force: true });
-
-			// Note: We don't test mock function calls here because Svelte 5 runes
-			// make it difficult to reliably test reactive state changes in this environment
+			await add_button.click();
+			expect(mock_todo_state.add_todo).toHaveBeenCalledWith(
+				'New task',
+			);
+			await expect.element(input).toHaveValue('');
+			await expect.element(add_button).toBeDisabled();
 		});
 
 		test('should handle filter change without errors', async () => {
@@ -378,11 +381,11 @@ describe('TodoManager', () => {
 
 			const status_filter = page.getByTestId('status-filter');
 
-			// A rejected selection fails the test.
 			await status_filter.selectOptions(['completed']);
-
-			// Note: We don't test mock function calls here because Svelte 5 runes
-			// make it difficult to reliably test reactive state changes in this environment
+			await expect.element(status_filter).toHaveValue('completed');
+			expect(mock_todo_state.set_filter).toHaveBeenCalledWith({
+				status: 'completed',
+			});
 		});
 
 		test('should handle bulk action clicks without errors', async () => {
@@ -400,11 +403,8 @@ describe('TodoManager', () => {
 
 			const toggle_button = page.getByTestId('toggle-all-button');
 
-			// A rejected click fails the test.
-			await toggle_button.click({ force: true });
-
-			// Note: We don't test mock function calls here because Svelte 5 runes
-			// make it difficult to reliably test reactive state changes in this environment
+			await toggle_button.click();
+			expect(mock_todo_state.toggle_all).toHaveBeenCalledOnce();
 		});
 
 		test('should enable add button when input has text', async () => {

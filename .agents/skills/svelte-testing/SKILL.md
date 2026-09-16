@@ -15,7 +15,7 @@ import { expect } from 'vitest';
 import Button from './button.svelte';
 
 test('button click increments counter', async () => {
-	const { page } = render(Button);
+	const page = await render(Button);
 	const button = page.getByRole('button', { name: /click me/i });
 
 	await button.click();
@@ -43,10 +43,15 @@ test('button click increments counter', async () => {
 
 ## Notes
 
-- Never click SvelteKit form submit buttons - Always use
-  `await expect.element()`
-- Test files: `.svelte.test.ts` (client), `.ssr.test.ts` (SSR),
-  `server.test.ts` (API)
+- In component tests, test form state without submitting SvelteKit
+  forms; use `await expect.element()` for locator assertions
+- In Playwright E2E, submit real forms and use `await expect(locator)`
+- Colocate `.svelte.test.ts` (client), `.test.ts` (Node),
+  `.ssr.test.ts` (optional SSR), and `.e2e.ts` (Playwright)
+- CLI baseline: `client`/`server` projects and assertion enforcement;
+  Playwright matches `**/*.e2e.{ts,js}`
+- Import `page` from `vitest/browser`; await `render` with renderer v3
+- Importing `render` registers cleanup without a setup file
 
 <!--
 PROGRESSIVE DISCLOSURE GUIDELINES:

@@ -542,13 +542,16 @@ await expect.element(element).toBeInTheDocument({
 3. **Different viewport sizes**:
 
 ```typescript
-// Set consistent viewport
+// In the client project's browser config
+import { playwright } from '@vitest/browser-playwright';
+import { defineConfig } from 'vitest/config';
+
 export default defineConfig({
 	test: {
 		browser: {
 			enabled: true,
-			name: 'chromium',
-			provider: 'playwright',
+			provider: playwright(),
+			instances: [{ browser: 'chromium', headless: true }],
 			viewport: { width: 1280, height: 720 },
 		},
 	},
@@ -632,15 +635,16 @@ test('debug content', async () => {
 ### Step-by-Step Debugging
 
 ```typescript
-// Slow down tests for debugging
+// In the client project's browser config
+import { playwright } from '@vitest/browser-playwright';
+import { defineConfig } from 'vitest/config';
+
 export default defineConfig({
 	test: {
 		browser: {
 			enabled: true,
-			name: 'chromium',
-			provider: 'playwright',
-			slowMo: 1000, // 1 second between actions
-			headless: false, // Show browser
+			provider: playwright({ launchOptions: { slowMo: 1000 } }),
+			instances: [{ browser: 'chromium', headless: false }],
 		},
 	},
 });

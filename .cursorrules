@@ -38,7 +38,7 @@ testing with vitest-browser-svelte.
 ```typescript
 import { describe, expect, test, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
-import { page } from '@vitest/browser/context';
+import { page } from 'vitest/browser';
 import { createRawSnippet } from 'svelte';
 import { flushSync, untrack } from 'svelte';
 ```
@@ -296,32 +296,49 @@ test('should not crash when rendered', async () => {
 
 ```typescript
 // vite.config.ts
+import { sveltekit } from '@sveltejs/kit/vite';
+import { playwright } from '@vitest/browser-playwright';
+import { defineConfig } from 'vitest/config';
+
 export default defineConfig({
+	plugins: [sveltekit()],
 	test: {
-		browser: {
-			enabled: true,
-			name: 'chromium',
-			provider: 'playwright',
-		},
-		workspace: [
+		expect: { requireAssertions: true },
+		projects: [
 			{
+				extends: './vite.config.ts',
 				test: {
-					include: ['**/*.svelte.test.ts'],
 					name: 'client',
-					browser: { enabled: true },
+					include: ['src/**/*.svelte.{test,spec}.{js,ts}'],
+					exclude: ['src/lib/server/**'],
+					browser: {
+						enabled: true,
+						provider: playwright(),
+						instances: [{ browser: 'chromium', headless: true }],
+					},
 				},
 			},
 			{
+				extends: './vite.config.ts',
 				test: {
-					include: ['**/*.ssr.test.ts'],
-					name: 'ssr',
+					name: 'server',
 					environment: 'node',
+					include: ['src/**/*.{test,spec}.{js,ts}'],
+					exclude: ['src/**/*.svelte.{test,spec}.{js,ts}'],
 				},
 			},
 		],
 	},
 });
 ```
+
+This is the official CLI baseline. Sveltest's separate `ssr` project is
+optional; exclude SSR files from `server` when adding it. Importing
+`render` registers cleanup automatically; await it with renderer v3.
+Colocate Playwright tests using `.e2e.ts` and
+`testMatch: '**/*.e2e.{ts,js}'` in `playwright.config.ts`. Vitest matches
+`.test`/`.spec`, keeping the runners separate. Use Playwright's
+`await expect(locator)` for E2E assertions and real form submissions.
 
 ## Quick Reference Checklist
 

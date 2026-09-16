@@ -1,6 +1,6 @@
 ---
 trigger: glob
-globs: **/*.test.ts,**/*.svelte.test.ts,**/*.ssr.test.ts
+globs: **/*.test.ts,**/*.spec.ts,**/*.e2e.ts
 ---
 
 # Testing Rules & Best Practices for Windsurf
@@ -25,6 +25,18 @@ testing with vitest-browser-svelte.
 - **SSR Tests**: `*.ssr.test.ts` - Server-side rendering validation
 - **Server Tests**: `*.test.ts` - API routes, utilities, business
   logic
+- **E2E Tests**: `*.e2e.ts` - Playwright journeys beside routes
+
+Follow the official CLI baseline: Vitest `client` (headless Playwright
+Chromium) and `server` (Node), with
+`expect: { requireAssertions: true }`. Playwright uses
+`testMatch: '**/*.e2e.{ts,js}'`, allowing colocation of all test
+types. A separate `ssr` project is optional; exclude its files from
+`server`. Import `page` from `vitest/browser` and await `render` with
+renderer v3. Importing `render` registers cleanup automatically.
+Foundation First is Sveltest's convention, not a CLI requirement. Use
+`await expect.element()` in Vitest browser tests; Playwright uses
+`await expect(locator)` and can submit real SvelteKit forms.
 
 ## CRITICAL: vitest-browser-svelte Patterns
 

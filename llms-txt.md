@@ -9,7 +9,14 @@ implements:
 ### Existing Routes
 
 - `/llms.txt` - Index file with structured navigation links
-- `/llms-full.txt` - Complete documentation in a single file
+- `/llms-full.txt` - Complete documentation in a single file,
+  prerendered by `apps/website/src/routes/llms-full.txt/+server.ts`
+
+The full document is generated from `content_map` in
+`apps/website/src/lib/server/content.ts`, the same Markdown sources
+used by the website and `/api/docs`. Do not maintain a separate static
+copy. The CLI fetches the deployed endpoints, so website deployment is
+required before updated guidance reaches CLI users.
 
 ### Current Structure
 

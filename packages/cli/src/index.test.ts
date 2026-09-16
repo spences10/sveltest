@@ -2,12 +2,7 @@ import { execFile } from 'node:child_process';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-const CLI_PATH = join(
-	import.meta.dirname,
-	'..',
-	'bin',
-	'sveltest.js',
-);
+const CLI_PATH = join(import.meta.dirname, '..', 'dist', 'index.js');
 
 interface CliResult {
 	stdout: string;
@@ -15,9 +10,9 @@ interface CliResult {
 	code: number | null;
 }
 
-function run_cli(...args: string[]): Promise<CliResult> {
+function run_node(args: string[]): Promise<CliResult> {
 	return new Promise((resolve) => {
-		execFile('node', [CLI_PATH, ...args], (error, stdout, stderr) => {
+		execFile('node', args, (error, stdout, stderr) => {
 			resolve({
 				stdout,
 				stderr,
@@ -25,6 +20,25 @@ function run_cli(...args: string[]): Promise<CliResult> {
 			});
 		});
 	});
+}
+
+function run_cli(...args: string[]): Promise<CliResult> {
+	return run_node([CLI_PATH, ...args]);
+}
+
+function run_with_docs(...args: string[]): Promise<CliResult> {
+	const mock_fetch = `globalThis.fetch = async (url) => {
+		if (!['https://sveltest.dev/api/docs/getting-started', 'https://sveltest.dev/llms-full.txt'].includes(String(url))) {
+			throw new Error('Unexpected documentation URL: ' + url);
+		}
+		return new Response('# Documentation fixture');
+	};`;
+	return run_node([
+		'--import',
+		`data:text/javascript,${encodeURIComponent(mock_fetch)}`,
+		CLI_PATH,
+		...args,
+	]);
 }
 
 // Citty writes help/usage to stderr and exits with code 1
@@ -97,6 +111,27 @@ describe('sveltest CLI', () => {
 			const result = await run_cli('list', '--help');
 			const output = get_output(result);
 			expect(output).toContain('--plain');
+		});
+	});
+
+	describe('documentation context', () => {
+		it.each([
+			['docs', 'getting-started', '--context'],
+			['llms', '--full', '--context'],
+		])('includes the scaffold baseline for %s', async (...args) => {
+			const result = await run_with_docs(...args);
+			expect(result.code).toBe(0);
+			expect(result.stdout).toContain('Official Svelte CLI');
+			expect(result.stdout).toContain('*.e2e.ts');
+			expect(result.stdout).toContain('requireAssertions: true');
+			expect(result.stdout).toContain('vitest/browser');
+			expect(result.stdout).toContain('# Documentation fixture');
+		});
+
+		it('omits the context header unless requested', async () => {
+			const result = await run_with_docs('llms', '--full');
+			expect(result.code).toBe(0);
+			expect(result.stdout).toBe('# Documentation fixture');
 		});
 	});
 

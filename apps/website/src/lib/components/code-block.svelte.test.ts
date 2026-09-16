@@ -92,10 +92,13 @@ describe('CodeBlock Component', () => {
 		});
 
 		test('should handle empty code', async () => {
-			// A rejected render fails the test.
-			await render(CodeBlock, {
-				code: '',
-			});
+			await render(CodeBlock, { code: '' });
+			await expect
+				.element(page.getByRole('code'))
+				.toHaveTextContent('');
+			await expect
+				.element(page.getByText('Loading...'))
+				.not.toBeInTheDocument();
 		});
 
 		test.skip('should handle network errors gracefully', async () => {

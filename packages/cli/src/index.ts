@@ -16,6 +16,10 @@ function is_plain(explicit?: boolean): boolean {
 }
 
 const CONTEXT_HEADER = `# Context: Svelte 5 Testing with vitest-browser-svelte
+# Baseline: Official Svelte CLI client/browser + server/Node Vitest projects; Playwright E2E
+# Files: Colocate *.svelte.test.ts, *.test.ts, and *.e2e.ts; *.ssr.test.ts is an optional extension
+# Config: requireAssertions: true; Playwright testMatch: **/*.e2e.{ts,js}
+# Key: Import page from vitest/browser; await render() and expect.element() for component tests
 # Key: Use page.getByRole() locators, never container queries
 # Key: Use untrack() for $derived values in tests
 ---

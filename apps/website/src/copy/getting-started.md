@@ -1,148 +1,66 @@
 # Getting Started
 
-## Learn Modern Svelte Testing
+Sveltest is a reference guide and example project for testing Svelte
+and SvelteKit. Its baseline follows the official Svelte CLI: Vitest
+for unit and browser component tests, plus Playwright for E2E tests.
+This is the CLI default, not the only supported testing approach.
 
-This guide goes through getting set up for testing Svelte 5
-applications using `vitest-browser-svelte` - the modern testing
-solution that runs your tests in real browsers instead of simulated
-environments.
-
-**You'll learn:**
-
-- Essential testing patterns that work in real browsers
-- Best practices for testing Svelte 5 components with runes
-- How to avoid common pitfalls and write reliable tests
-- The **Client-Server Alignment Strategy** for reliable full-stack
-  testing
-
-### What is Sveltest?
-
-Sveltest is a **reference guide and example project** that
-demonstrates real-world testing patterns with `vitest-browser-svelte`.
-You don't install Sveltest - you learn from it and apply these
-patterns to your own Svelte applications.
-
-**Use this guide to:**
-
-- Learn `vitest-browser-svelte` testing patterns
-- Understand best practices through working code
-- See comprehensive test coverage in action
-
-### Who is Sveltest For?
-
-- **Svelte developers** wanting to learn modern testing approaches
-- **Teams** looking to establish consistent testing patterns
-- **Developers migrating** from @testing-library/svelte or other
-  testing tools
-- **Anyone** who wants to test Svelte components in real browser
-  environments
-
-## Setup Your Own Project
-
-To follow along, you'll need a Svelte project with
-`vitest-browser-svelte` configured. This may _soon_ be the default,
-currently (at the time of writing) it is not. To start testing
-components in an actual browser using `vitest-browser-svelte` create a
-new project using the `sv` CLI:
+## Set Up Your Project
 
 ```bash
-# Create a new SvelteKit project with sv
 pnpm dlx sv@latest create my-testing-app
-```
-
-These are the options that will be used in these examples:
-
-```bash
-┌  Welcome to the Svelte CLI! (v0.8.7)
-│
-◆  Which template would you like?
-│  ● SvelteKit minimal (barebones scaffolding for your new app)
-│
-◆  Add type checking with TypeScript?
-│  ● Yes, using TypeScript syntax
-│
-◆  What would you like to add to your project?
-│  ◼ prettier
-│  ◼ eslint
-│  ◼ vitest (unit testing)
-│  ◼ playwright
-│  ◼ tailwindcss
-└
-```
-
-### Install Browser Testing Dependencies
-
-```bash
 cd my-testing-app
-# Add vitest browser playwright provider, Svelte testing and playwright (Vitest v4)
-pnpm install -D @vitest/browser-playwright vitest-browser-svelte playwright
-
-# remove testing library and jsdom
-pnpm un @testing-library/jest-dom @testing-library/svelte jsdom
+pnpm dlx sv@latest add vitest="usages:unit,component" playwright
+pnpm exec playwright install chromium
 ```
 
-### Configure Vitest Browser Mode
+You can also select these add-ons during project creation. Choose both
+unit and component testing for Vitest. The CLI installs Vitest,
+`@vitest/browser-playwright`, `vitest-browser-svelte`, and Playwright.
+A fresh scaffold does not need a Testing Library or jsdom migration.
+For an existing setup, see the
+[migration guide](/docs/migration-guide).
 
-Update your `vite.config.ts` to use the official Vitest Browser
-configuration. This multi-project setup supports the **Client-Server
-Alignment Strategy** - testing client components in real browsers
-while keeping server tests fast with minimal mocking:
+Official references:
+[Vitest add-on](https://svelte.dev/docs/cli/vitest) and
+[Playwright add-on](https://svelte.dev/docs/cli/playwright).
+
+## Vitest Configuration
+
+The generated configuration separates tests by filename. Keep your
+existing application plugins; the important part is `test`:
 
 ```typescript
-import tailwindcss from '@tailwindcss/vite';
+// vite.config.ts
 import { sveltekit } from '@sveltejs/kit/vite';
 import { playwright } from '@vitest/browser-playwright';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-	plugins: [tailwindcss(), sveltekit()],
-
+	plugins: [sveltekit()],
 	test: {
+		expect: { requireAssertions: true },
 		projects: [
 			{
-				// Client-side tests (Svelte components)
 				extends: './vite.config.ts',
 				test: {
 					name: 'client',
-					// Timeout for browser tests - prevent hanging on element lookups
-					testTimeout: 2000,
 					browser: {
 						enabled: true,
 						provider: playwright(),
-						instances: [
-							{ browser: 'chromium' },
-							// { browser: 'firefox' },
-							// { browser: 'webkit' },
-						],
+						instances: [{ browser: 'chromium', headless: true }],
 					},
 					include: ['src/**/*.svelte.{test,spec}.{js,ts}'],
-					exclude: [
-						'src/lib/server/**',
-						'src/**/*.ssr.{test,spec}.{js,ts}',
-					],
-					setupFiles: ['vitest-browser-svelte'],
+					exclude: ['src/lib/server/**'],
 				},
 			},
 			{
-				// SSR tests (Server-side rendering)
-				extends: './vite.config.ts',
-				test: {
-					name: 'ssr',
-					environment: 'node',
-					include: ['src/**/*.ssr.{test,spec}.{js,ts}'],
-				},
-			},
-			{
-				// Server-side tests (Node.js utilities)
 				extends: './vite.config.ts',
 				test: {
 					name: 'server',
 					environment: 'node',
 					include: ['src/**/*.{test,spec}.{js,ts}'],
-					exclude: [
-						'src/**/*.svelte.{test,spec}.{js,ts}',
-						'src/**/*.ssr.{test,spec}.{js,ts}',
-					],
+					exclude: ['src/**/*.svelte.{test,spec}.{js,ts}'],
 				},
 			},
 		],
@@ -150,48 +68,83 @@ export default defineConfig({
 });
 ```
 
-> **Setup Note**: `setupFiles: ['vitest-browser-svelte']` is the
-> official setup entry. It registers cleanup and browser helpers; you
-> no longer need a local `src/vitest-setup-client.ts` file just for
-> type references.
+Importing `render` from `vitest-browser-svelte` registers automatic
+cleanup; this pattern does not require `setupFiles`. Sveltest uses
+version 3 of the renderer, so its examples use `await render(...)`. If
+you use `page.render(...)` instead of importing `render`, register
+`vitest-browser-svelte` in the client project's `setupFiles`.
 
-### Add TypeScript Browser Test Types
+If TypeScript cannot find the renderer's browser types, add
+`vitest-browser-svelte` to your existing `compilerOptions.types`.
 
-If TypeScript does not pick up the browser render/assertion types, add
-`vitest-browser-svelte` to your `tsconfig.json`:
+## Colocate Every Test Type
 
-```json
-{
-	"compilerOptions": {
-		"types": ["vitest-browser-svelte"]
-	}
-}
+```text
+src/
+├── lib/components/
+│   ├── button.svelte
+│   ├── button.svelte.test.ts
+│   └── button.ssr.test.ts
+└── routes/
+    ├── +page.svelte
+    ├── +page.server.ts
+    ├── page.svelte.test.ts
+    ├── page.server.test.ts
+    ├── page.ssr.test.ts
+    └── page.svelte.e2e.ts
 ```
 
-### Run the tests
+| Filename                              | Runner                                     | Purpose                                       |
+| ------------------------------------- | ------------------------------------------ | --------------------------------------------- |
+| `*.svelte.test.ts`                    | Vitest client                              | Components in real Chromium                   |
+| `*.test.ts` excluding component tests | Vitest server                              | Utilities, load functions, actions, endpoints |
+| `*.ssr.test.ts`                       | Vitest Node; optional separate SSR project | Server-rendered HTML                          |
+| `*.e2e.ts`                            | Playwright                                 | Complete application workflows                |
 
-Running `pnpm run test:unit` on the project now is going to fail! The
-`page.svelte.test.ts` file is still configured to use
-`@testing-library/svelte`, replace the contents with this:
+Vitest also accepts `.spec.ts` and JavaScript equivalents. Playwright
+uses `.e2e.ts` or `.e2e.js`, not `.spec.ts` in this setup, so neither
+runner collects the other's tests. Colocation is supported, not newly
+required. Put cross-route journeys at the nearest shared route
+directory; no separate `e2e/` directory is needed.
 
-```ts
-import { page } from 'vitest/browser';
-import { describe, expect, it } from 'vitest';
-import { render } from 'vitest-browser-svelte';
-import Page from './+page.svelte';
+### Playwright Configuration
 
-describe('/+page.svelte', () => {
-	it('should render h1', async () => {
-		await render(Page);
+```typescript
+// playwright.config.ts
+import { defineConfig } from '@playwright/test';
 
-		const heading = page.getByRole('heading', { level: 1 });
-		await expect.element(heading).toBeInTheDocument();
-	});
+export default defineConfig({
+	webServer: {
+		command: 'npm run build && npm run preview',
+		port: 4173,
+	},
+	testMatch: '**/*.e2e.{ts,js}',
 });
 ```
 
-Running `pnpm run test:unit` should run the `page.svelte.test.ts` file
-in the browser and pass!
+See [E2E testing](/docs/e2e-testing) for full browser workflows.
+
+### Optional SSR Project
+
+The CLI scaffold has two Vitest projects, `client` and `server`.
+Sveltest adds `ssr` to run rendering tests independently. Add its
+include pattern and exclude those files from `server` to avoid
+duplicate runs; see [SSR testing](/docs/ssr-testing) for the
+configuration.
+
+Sveltest also uses Vite+ command wrappers and a temporary Vitest
+browser runner workaround. These are repository-specific, not scaffold
+requirements. You do not need to copy them into a new project.
+
+## Run Tests
+
+```bash
+pnpm test:unit --run
+pnpm test:e2e
+```
+
+In this repository, `pnpm test:ssr --run` runs the optional SSR
+project.
 
 ## Understanding the Client-Server Alignment Strategy
 
@@ -478,13 +431,15 @@ it('should handle reactive state', () => {
 
 ### The Foundation First Template
 
-Start every component test with this structure:
+This is Sveltest's planning convention, not a Svelte CLI requirement.
+Keep unfinished cases skipped; every enabled test must assert a
+meaningful outcome because `expect.requireAssertions` is enabled.
 
 ```typescript
 describe('ComponentName', () => {
 	describe('Initial Rendering', () => {
-		it('should render with default props', async () => {
-			// Your first test here
+		it.skip('should render with default props', async () => {
+			// Implement the test and add assertions before enabling it
 		});
 
 		it.skip('should render with all prop variants', async () => {
