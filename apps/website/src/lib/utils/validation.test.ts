@@ -16,6 +16,32 @@ import {
 } from './validation';
 
 describe('Validation Utilities', () => {
+	describe('email format compatibility', () => {
+		it.each([
+			"o'connor@example.com",
+			'_name@example.com',
+			'user@two--hyphens.example',
+		])('accepts %s', (email) => {
+			expect(validate_email(email)).toEqual({
+				is_valid: true,
+				error_message: '',
+			});
+		});
+
+		it.each([
+			'.user@example.com',
+			'user..name@example.com',
+			'user.@example.com',
+			'user@-domain.com',
+			'user@domain.c',
+		])('rejects %s', (email) => {
+			expect(validate_email(email)).toEqual({
+				is_valid: false,
+				error_message: 'Invalid email format',
+			});
+		});
+	});
+
 	describe('validate_with_schema', () => {
 		it('should return valid result for correct input', () => {
 			const result = validate_with_schema(

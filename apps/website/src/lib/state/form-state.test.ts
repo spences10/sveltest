@@ -1,11 +1,52 @@
 import { flushSync, untrack } from 'svelte';
 import { describe, expect, it } from 'vitest';
+import { email_schema } from '../utils/validation';
 import { create_form_state } from './form-state.svelte.ts';
 
-// Mock the validation utility - no longer needed since we removed validate_field
-// The form state now uses validate_email and validate_password directly
-
 describe('create_form_state', () => {
+	describe('validation rule compatibility', () => {
+		it.each([
+			['', ''],
+			['ab', 'Must be at least 3 characters'],
+			['abcdef', 'Must be no more than 5 characters'],
+			['123', 'Invalid format'],
+			['abc', ''],
+		])('validates optional value %j', (value, error_message) => {
+			const form = create_form_state({
+				name: {
+					validation_rules: {
+						min_length: 3,
+						max_length: 5,
+						pattern: /^[a-z]+$/,
+					},
+				},
+			});
+
+			form.update_field('name', value);
+			expect(form.form_state.name.validation_result).toEqual({
+				is_valid: error_message === '',
+				error_message,
+			});
+			expect(form.validate_all_fields()).toBe(error_message === '');
+		});
+
+		it('reports required before length and pattern errors', () => {
+			const form = create_form_state({
+				name: {
+					validation_rules: {
+						required: true,
+						min_length: 3,
+						pattern: /^[a-z]+$/,
+					},
+				},
+			});
+			expect(form.validate_all_fields()).toBe(false);
+			expect(
+				form.form_state.name.validation_result?.error_message,
+			).toBe('This field is required');
+		});
+	});
+
 	describe('Initial State Creation', () => {
 		it('should create form state with default values', () => {
 			const form = create_form_state({
@@ -448,8 +489,27 @@ describe('create_form_state', () => {
 			// TODO: Test when validation utility throws errors
 		});
 
-		it.skip('should work with Zod schemas directly', () => {
-			// TODO: Test using { schema: email_schema } instead of legacy rules
+		it('uses a supplied schema instead of rule options', () => {
+			const form = create_form_state({
+				email: {
+					validation_rules: {
+						schema: email_schema,
+						required: true,
+						max_length: 1,
+					},
+				},
+			});
+			expect(form.validate_all_fields()).toBe(false);
+			expect(
+				form.form_state.email.validation_result?.error_message,
+			).toBe('Invalid email format');
+
+			form.update_field('email', 'user@example.com');
+			expect(form.form_state.email.validation_result).toEqual({
+				is_valid: true,
+				error_message: '',
+			});
+			expect(form.validate_all_fields()).toBe(true);
 		});
 
 		it.skip('should handle complex validation combinations', () => {

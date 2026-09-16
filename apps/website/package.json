@@ -61,10 +61,10 @@
 		"tailwindcss": "^4.3.3",
 		"tsx": "catalog:",
 		"typescript": "catalog:",
+		"valibot": "catalog:",
 		"vite": "^8.2.2",
 		"vite-plus": "catalog:",
 		"vitest": "catalog:",
-		"vitest-browser-svelte": "^3.1.0",
-		"zod": "catalog:"
+		"vitest-browser-svelte": "^3.1.0"
 	}
 }

@@ -185,15 +185,15 @@ catalogs:
     typescript:
       specifier: ^6.0.3
       version: 6.0.3
+    valibot:
+      specifier: ^1.5.0
+      version: 1.5.0
     vite-plus:
       specifier: 0.3.0
       version: 0.3.0
     vitest:
       specifier: 4.1.11
       version: 4.1.11
-    zod:
-      specifier: ^4.4.3
-      version: 4.5.4
 
 importers:
 
@@ -208,9 +208,6 @@ importers:
       vite-plus:
         specifier: 'catalog:'
         version: 0.3.0(@types/node@26.4.1)(@vitest/browser-playwright@4.1.11)(@vitest/coverage-v8@4.1.11)(esbuild@0.28.0)(jiti@2.7.0)(jsdom@30.0.1)(svelte@5.57.0(@typescript-eslint/types@8.59.4))(tsx@4.23.12)(typescript@6.0.3)(vite@8.2.2(@types/node@26.4.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))(yaml@2.9.0)
-      zod:
-        specifier: 'catalog:'
-        version: 4.5.4
 
   apps/website:
     devDependencies:
@@ -295,6 +292,9 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
+      valibot:
+        specifier: 'catalog:'
+        version: 1.5.0(typescript@6.0.3)
       vite:
         specifier: ^8.2.2
         version: 8.2.2(@types/node@26.4.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)
@@ -307,9 +307,6 @@ importers:
       vitest-browser-svelte:
         specifier: ^3.1.0
         version: 3.1.0(svelte@5.57.0(@typescript-eslint/types@8.59.4))(vitest@4.1.11)
-      zod:
-        specifier: 'catalog:'
-        version: 4.5.4
 
   packages/cli:
     dependencies:
@@ -2969,6 +2966,14 @@ packages:
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
+  valibot@1.5.0:
+    resolution: {integrity: sha512-nil6AkP2TChWL43Z5uJ6GTxX01CUA+g8LWUM+N/rB9NBbkUMaUsi9PUNzlUPgoKASgmx9f7eGOYpJ04/fSa6FQ==}
+    peerDependencies:
+      typescript: '>=5'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
   vfile-message@2.0.4:
     resolution: {integrity: sha512-DjssxRGkMvifUOJre00juHoP9DPWuzjxKuMDrhNbk2TdaYYBNMStsNhEOt3idrtI12VQYM/1+iM0KOzXi4pxwQ==}
 
@@ -3179,9 +3184,6 @@ packages:
 
   zimmerframe@1.1.4:
     resolution: {integrity: sha512-B58NGBEoc8Y9MWWCQGl/gq9xBCe4IiKM0a2x7GZdQKOW5Exr8S1W24J6OgM1njK8xCRGvAJIL/MxXHf6SkmQKQ==}
-
-  zod@4.5.4:
-    resolution: {integrity: sha512-sC95tT5iHHH9gtpj6A81kh+NEaRAUFN+qlUPDUbRfOMvNf5QCBqsb3WgvnpVtK5Y+4UfA6KqufotuTvMGiTlsA==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
@@ -5381,6 +5383,10 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
+  valibot@1.5.0(typescript@6.0.3):
+    optionalDependencies:
+      typescript: 6.0.3
+
   vfile-message@2.0.4:
     dependencies:
       '@types/unist': 2.0.11
@@ -5628,7 +5634,5 @@ snapshots:
       '@yuku-parser/binding-win32-x64': 0.5.48
 
   zimmerframe@1.1.4: {}
-
-  zod@4.5.4: {}
 
   zwitch@2.0.4: {}

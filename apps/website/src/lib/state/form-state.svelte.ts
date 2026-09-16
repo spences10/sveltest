@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 import {
 	validate_with_schema,
 	type ValidationResult,
@@ -16,42 +16,46 @@ export interface FormState {
 	[key: string]: FormField;
 }
 
-// Helper function to convert legacy rules to Zod schema
 function create_schema_from_rules(
 	rules: ValidationRule,
-): z.ZodSchema<any> {
+): v.GenericSchema {
 	if (rules.schema) {
 		return rules.schema;
 	}
 
-	// Convert legacy rules to Zod schema
-	let schema = z.string();
+	let schema: v.GenericSchema<string> = v.string();
 
 	if (rules.required) {
-		schema = schema.min(1, 'This field is required');
+		schema = v.pipe(schema, v.minLength(1, 'This field is required'));
 	}
 
 	if (rules.min_length) {
-		schema = schema.min(
-			rules.min_length,
-			`Must be at least ${rules.min_length} characters`,
+		schema = v.pipe(
+			schema,
+			v.minLength(
+				rules.min_length,
+				`Must be at least ${rules.min_length} characters`,
+			),
 		);
 	}
 
 	if (rules.max_length) {
-		schema = schema.max(
-			rules.max_length,
-			`Must be no more than ${rules.max_length} characters`,
+		schema = v.pipe(
+			schema,
+			v.maxLength(
+				rules.max_length,
+				`Must be no more than ${rules.max_length} characters`,
+			),
 		);
 	}
 
 	if (rules.pattern) {
-		schema = schema.regex(rules.pattern, 'Invalid format');
+		schema = v.pipe(schema, v.regex(rules.pattern, 'Invalid format'));
 	}
 
 	return rules.required
 		? schema
-		: schema.optional().or(z.literal(''));
+		: v.optional(v.union([schema, v.literal('')]));
 }
 
 export function create_form_state(

@@ -3,16 +3,17 @@ import {
 	search_full_text,
 	type SearchResult,
 } from '#lib/server/search-index.js';
-import { z } from 'zod';
+import * as v from 'valibot';
 
-export const search_schema = z.object({
-	q: z.string().min(1),
-	filter: z
-		.enum(['all', 'docs', 'examples', 'components'])
-		.default('all'),
+export const search_schema = v.object({
+	q: v.pipe(v.string(), v.minLength(1)),
+	filter: v.optional(
+		v.picklist(['all', 'docs', 'examples', 'components']),
+		'all',
+	),
 });
 
-export type SearchParams = z.infer<typeof search_schema>;
+export type SearchParams = v.InferOutput<typeof search_schema>;
 
 export async function perform_search({
 	q,

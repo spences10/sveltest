@@ -12,9 +12,9 @@ catalog:
   playwright: ^1.63.0
   tsx: ^4.23.12
   typescript: ^6.0.3
+  valibot: ^1.5.0
   vite-plus: 0.3.0
   vitest: 4.1.11
-  zod: ^4.4.3
 
 allowBuilds:
   esbuild: true

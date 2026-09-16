@@ -1,23 +1,31 @@
-import { z } from 'zod';
+import * as v from 'valibot';
 
-export const email_schema = z.string().email('Invalid email format');
+// Preserve the existing email policy rather than changing accepted formats.
+export const email_schema = v.pipe(
+	v.string(),
+	v.regex(
+		/^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9-]*\.)+[A-Za-z]{2,}$/,
+		'Invalid email format',
+	),
+);
 
-export const password_schema = z
-	.string()
-	.min(8, 'Password must be at least 8 characters')
-	.regex(
+export const password_schema = v.pipe(
+	v.string(),
+	v.minLength(8, 'Password must be at least 8 characters'),
+	v.regex(
 		/[A-Z]/,
 		'Password must contain at least one uppercase letter',
-	)
-	.regex(
+	),
+	v.regex(
 		/[a-z]/,
 		'Password must contain at least one lowercase letter',
-	)
-	.regex(/[0-9]/, 'Password must contain at least one number');
+	),
+	v.regex(/[0-9]/, 'Password must contain at least one number'),
+);
 
 // Legacy ValidationRule interface for backward compatibility
 export interface ValidationRule {
-	schema?: z.ZodSchema<any>;
+	schema?: v.GenericSchema;
 	required?: boolean;
 	min_length?: number;
 	max_length?: number;
@@ -29,17 +37,16 @@ export interface ValidationResult {
 	error_message: string;
 }
 
-// Helper to convert Zod results to ValidationResult format
 export function validate_with_schema<T>(
-	schema: z.ZodSchema<T>,
+	schema: v.GenericSchema<unknown, T>,
 	value: unknown,
 ): ValidationResult {
-	const result = schema.safeParse(value);
+	const result = v.safeParse(schema, value);
 	return {
 		is_valid: result.success,
 		error_message: result.success
 			? ''
-			: result.error.issues[0]?.message || 'Invalid input',
+			: result.issues[0]?.message || 'Invalid input',
 	};
 }
 

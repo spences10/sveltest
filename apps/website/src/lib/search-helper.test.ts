@@ -1,10 +1,11 @@
+import * as v from 'valibot';
 import { describe, expect, test } from 'vitest';
 import { perform_search, search_schema } from './search-helper';
 
 describe('search helpers', () => {
 	describe('search_schema validation', () => {
 		test('should accept valid query with filter', () => {
-			const result = search_schema.parse({
+			const result = v.parse(search_schema, {
 				q: 'testing',
 				filter: 'docs',
 			});
@@ -14,22 +15,22 @@ describe('search helpers', () => {
 		});
 
 		test('should default filter to all', () => {
-			const result = search_schema.parse({ q: 'mock' });
+			const result = v.parse(search_schema, { q: 'mock' });
 
 			expect(result.filter).toBe('all');
 		});
 
 		test('should reject empty query', () => {
-			expect(() => search_schema.parse({ q: '' })).toThrow();
+			expect(() => v.parse(search_schema, { q: '' })).toThrow();
 		});
 
 		test('should reject missing query', () => {
-			expect(() => search_schema.parse({})).toThrow();
+			expect(() => v.parse(search_schema, {})).toThrow();
 		});
 
 		test('should reject invalid filter', () => {
 			expect(() =>
-				search_schema.parse({ q: 'test', filter: 'invalid' }),
+				v.parse(search_schema, { q: 'test', filter: 'invalid' }),
 			).toThrow();
 		});
 
@@ -42,9 +43,42 @@ describe('search helpers', () => {
 			] as const;
 
 			for (const filter of filters) {
-				const result = search_schema.parse({ q: 'query', filter });
+				const result = v.parse(search_schema, { q: 'query', filter });
 				expect(result.filter).toBe(filter);
 			}
+		});
+	});
+
+	describe('schema migration contracts', () => {
+		test('supports Standard Schema validation for remote queries', async () => {
+			const result = await search_schema['~standard'].validate({
+				q: 'vitest',
+			});
+			expect(result.issues).toBeUndefined();
+			expect(result).toHaveProperty('value', {
+				q: 'vitest',
+				filter: 'all',
+			});
+			const invalid = await search_schema['~standard'].validate({
+				q: '',
+			});
+			expect(invalid.issues?.length).toBeGreaterThan(0);
+		});
+
+		test('defaults undefined filters but rejects null', () => {
+			expect(
+				v.parse(search_schema, { q: 'query', filter: undefined })
+					.filter,
+			).toBe('all');
+			expect(() =>
+				v.parse(search_schema, { q: 'query', filter: null }),
+			).toThrow();
+		});
+
+		test('strips unknown keys without trimming the query', () => {
+			expect(
+				v.parse(search_schema, { q: ' query ', extra: true }),
+			).toEqual({ q: ' query ', filter: 'all' });
 		});
 	});
 
