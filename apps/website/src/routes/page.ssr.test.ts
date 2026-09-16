@@ -44,6 +44,16 @@ describe('/+page.svelte SSR', () => {
 		expect(body).toContain('Battle-Tested in Production');
 	});
 
+	test('should advertise Devin Desktop and the shared skill', () => {
+		const { body } = render(Page);
+
+		expect(body).toContain('Devin Desktop');
+		expect(body).toContain('Shared Testing Skill');
+		expect(body).toContain('.agents/skills/svelte-testing/README.md');
+		expect(body).not.toContain('.windsurf/rules/testing.md');
+		expect(body).not.toContain('Windsurf Rules');
+	});
+
 	test('should generate CSS for styling', () => {
 		const result = render(Page);
 

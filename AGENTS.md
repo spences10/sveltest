@@ -226,6 +226,12 @@ The CLI fetches deployed website content. Update
 prerenders from the same content map. Keep CLI context guidance and AI
 rules aligned.
 
+Devin Desktop (formerly Windsurf) uses
+`.agents/skills/svelte-testing/` directly. Keep that whole directory,
+including references, as the shared skill source. Do not create
+Windsurf compatibility files or a separate Devin skill copy. Claude
+Code's skill symlink uses the same source.
+
 ```
 src/
 ├── lib/components/          # Component files with co-located tests

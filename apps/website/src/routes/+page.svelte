@@ -16,7 +16,7 @@
 		GitHubFork,
 		Heart,
 		LightningBolt,
-		Windsurf,
+		Robot,
 	} from '#lib/icons/index.js';
 	import * as Fathom from 'fathom-client';
 </script>
@@ -287,20 +287,19 @@
 					Fathom.trackEvent('cursor_rules_clicked')}
 			/>
 
-			<!-- Windsurf Rules Card -->
+			<!-- Devin Desktop uses the shared skill directory. -->
 			<FeatureCard
-				icon={Windsurf}
-				title="Windsurf Rules"
-				description="Modern rule system with trigger-based activation for Windsurf. Same comprehensive patterns optimized for advanced AI capabilities"
-				href="https://github.com/spences10/sveltest/blob/main/.windsurf/rules/testing.md"
-				button_text="View Rules"
+				icon={Robot}
+				title="Devin Desktop"
+				description="Formerly Windsurf. Use the shared Svelte testing skill in .agents/skills instead of maintaining separate editor-specific rules."
+				href="https://github.com/spences10/sveltest/blob/main/.agents/skills/svelte-testing/README.md"
+				button_text="View Devin Setup"
 				color_scheme="info"
 				button_icon={GitHub}
 				button_size="btn-lg"
 				button_classes="w-full text-lg"
 				button_icon_classes="h-5 w-5"
-				onclick_event={() =>
-					Fathom.trackEvent('windsurf_rules_clicked')}
+				onclick_event={() => Fathom.trackEvent('devin_setup_clicked')}
 			/>
 
 			<!-- Claude Code Rules Card -->
@@ -319,11 +318,11 @@
 					Fathom.trackEvent('claude_guide_clicked')}
 			/>
 
-			<!-- Claude Skill Card -->
+			<!-- Shared Agent Skill -->
 			<FeatureCard
-				icon={Claude}
-				title="Claude Code Skill"
-				description="Comprehensive testing tools and examples for building robust Svelte applications. Auto-invoked skill for Claude Code with complete test patterns"
+				icon={Robot}
+				title="Shared Testing Skill"
+				description="One Svelte testing skill with detailed references in .agents/skills. Reuse it across compatible agents, including Devin Desktop and Claude Code."
 				href="https://github.com/spences10/sveltest/tree/main/.agents/skills/svelte-testing"
 				button_text="View Skill"
 				color_scheme="info"
@@ -332,7 +331,7 @@
 				button_classes="w-full text-lg"
 				button_icon_classes="h-5 w-5"
 				onclick_event={() =>
-					Fathom.trackEvent('claude_skill_clicked')}
+					Fathom.trackEvent('shared_skill_clicked')}
 			/>
 		</div>
 

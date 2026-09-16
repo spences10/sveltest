@@ -44,7 +44,9 @@
 
 ### Primary Documentation
 - **Markdown Documentation** - Complete human-readable guides with examples and best practices
-- **Testing Rules (MDC)** - Comprehensive AI assistant rules for consistent team adoption across Cursor, Windsurf, and other AI editors
+- **Shared Testing Skill** - `.agents/skills/svelte-testing/` contains the skill and references for compatible agents, including Devin Desktop (formerly Windsurf). Install the whole directory; no separate Windsurf skill copy is needed.
+- **Cursor Rules (MDC)** - Editor-specific rules remain available for Cursor.
+- **Devin Desktop Setup** - https://github.com/spences10/sveltest/blob/main/.agents/skills/svelte-testing/README.md
 
 ### Code Examples
 - **Live Component Examples** - Working Svelte components with accompanying test files demonstrating real-world patterns

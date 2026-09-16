@@ -36,10 +36,17 @@ use in your own projects.
 ## Empowering Teams with AI
 
 One of the most exciting outcomes has been creating comprehensive AI
-assistant rules that help entire teams adopt these testing
-methodologies. Whether you're using Cursor, Windsurf, or other
-AI-powered editors, these rules ensure consistent, high-quality
-testing patterns across your team.
+assistant guidance that helps teams adopt these testing methodologies.
+Devin Desktop (formerly Windsurf) uses our shared testing skill in
+`.agents/skills/svelte-testing/`, rather than a separate
+editor-specific copy. Copy the entire directory, including `SKILL.md`
+and `references/`, into your project. See the
+[Devin Desktop setup guide](https://github.com/spences10/sveltest/blob/main/.agents/skills/svelte-testing/README.md).
+
+The skill is also available to other compatible agents; this
+repository provides a Claude Code symlink to the same source. Cursor
+rules and the CLI offer additional ways to access the guidance.
+Project-specific conventions belong in `AGENTS.md`.
 
 ## Community-Driven Development
 

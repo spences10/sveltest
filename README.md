@@ -278,7 +278,7 @@ methodology more easily. I'm onboarding my team to use this approach!
 ### CLI Tool for Any AI Assistant
 
 The `pnpx sveltest` CLI works with any AI assistant (Claude, ChatGPT,
-Cursor, Windsurf, etc.):
+Cursor, Devin Desktop, etc.):
 
 - **Universal access** - No project setup required
 - **Instant patterns** - Get testing examples in seconds
@@ -293,14 +293,23 @@ Cursor, Windsurf, etc.):
 - Code style enforcement (snake_case, kebab-case conventions)
 - Common error solutions and troubleshooting
 
-### Windsurf Rules (`.windsurf/rules/testing.md`)
+### Devin Desktop (Formerly Windsurf)
 
-- Adapted for Windsurf's modern rule system
-- Trigger-based activation for test files
-- Same comprehensive patterns as Cursor rules
-- Team-ready configuration
+Devin Desktop discovers the shared testing skill in
+[`.agents/skills/svelte-testing/`](.agents/skills/svelte-testing/).
+Copy the entire directory, including `SKILL.md` and `references/`,
+into the same location in your project. No separate Devin or Windsurf
+skill copy is needed. See the
+[setup guide](.agents/skills/svelte-testing/README.md).
 
-These rules files contain:
+### Shared Testing Skill
+
+The skill uses the Agent Skills format and is not Claude-specific.
+This repository's `.claude/skills/svelte-testing` symlink points to
+the same source. Keep project conventions in `AGENTS.md` and reusable
+testing guidance in the skill.
+
+The rules and shared skill cover:
 
 - **Foundation First** testing approach guidelines
 - Complete vitest-browser-svelte patterns and anti-patterns
@@ -309,10 +318,10 @@ These rules files contain:
 - Form validation lifecycle patterns
 - Quick reference DO's and DON'Ts
 
-**For Teams**: Use the CLI for on-demand access, or copy the rule
-files to your projects to ensure consistent testing patterns across
-your team. The AI assistants will automatically follow the established
-patterns when writing or reviewing tests.
+**For Teams**: Use the CLI for on-demand access, or install the shared
+skill in compatible clients. Cursor-specific rules remain available.
+Check your client's skill discovery settings; directory support and
+activation behavior vary between clients.
 
 ## 🎨 Testing Conventions
 

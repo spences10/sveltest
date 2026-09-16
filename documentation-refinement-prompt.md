@@ -15,9 +15,10 @@ testing information:
    high-level patterns
 2. **testing.mdc** (Cursor Rules) - Comprehensive testing rules and
    patterns for AI assistants
-3. **testing.md** (Windsurf Rules) - Condensed testing rules for AI
-   assistants
-4. **Current Documentation Files** in `/src/copy/`:
+3. **.agents/skills/svelte-testing/** - Shared testing skill and
+   references, used by Devin Desktop (formerly Windsurf) and other
+   compatible agents. Do not duplicate it into editor-specific rules.
+4. **Current Documentation Files** in `apps/website/src/copy/`:
    - `about.md` - Project background and philosophy
    - `getting-started.md` - Installation and first steps
    - `best-practices.md` - Comprehensive best practices

@@ -175,6 +175,15 @@ website, and `/llms-full.txt` is generated from those sources at build
 time. Documentation changes reach CLI users when the website is
 deployed.
 
+## Devin Desktop and Shared Skills
+
+Devin Desktop (formerly Windsurf) can use the same CLI commands as
+other agents. For reusable local guidance, install the complete
+[shared testing skill](https://github.com/spences10/sveltest/tree/main/.agents/skills/svelte-testing)
+at `.agents/skills/svelte-testing/`, including its `references/`. The
+CLI does not install skills or create editor-specific rules. See the
+[setup guide](https://github.com/spences10/sveltest/blob/main/.agents/skills/svelte-testing/README.md).
+
 ## LLM Integration
 
 This CLI is designed for AI assistants with tool-calling capabilities.
