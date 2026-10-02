@@ -15,9 +15,9 @@ catalog:
   tsx: ^4.23.13
   typescript: ^6.0.3
   valibot: ^1.5.0
-  vite-plus: 0.3.3
+  vite-plus: 1.0.0
   vitest: 4.1.11
-  vite: npm:@voidzero-dev/vite-plus-core@0.3.3
+  vite: npm:@voidzero-dev/vite-plus-core@1.0.0
 
 allowBuilds:
   esbuild: true
