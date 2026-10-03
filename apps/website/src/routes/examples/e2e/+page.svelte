@@ -281,7 +281,6 @@
 						<CodeBlock
 							code={current_code_example}
 							lang="typescript"
-							theme="night-owl"
 						/>
 					</div>
 				</div>
@@ -515,7 +514,6 @@
 						<CodeBlock
 							code={e2e_test_examples.quick_start}
 							lang="bash"
-							theme="night-owl"
 						/>
 					</div>
 				</div>

@@ -99,10 +99,11 @@ describe('E2E Testing Page SSR', () => {
 		test('should render code examples', () => {
 			const { body } = render(E2EPage);
 
-			// Check for code examples
-			expect(body).toContain('import { expect, test }');
+			expect(body).toContain(
+				'class="twinkleplop language-typescript"',
+			);
 			expect(body).toContain('@playwright/test');
-			expect(body).toContain('page.goto');
+			expect(body).toContain('homepage loads correctly');
 		});
 
 		test('should render category information', () => {

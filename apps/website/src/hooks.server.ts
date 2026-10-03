@@ -1,4 +1,5 @@
 import { sequence, type Handle } from '@sveltejs/kit/hooks';
+import { LINE_NUMBERS_COOKIE } from '#lib/state/line-numbers.svelte.js';
 import { csp_directives } from './csp-directives';
 
 // Handle function for security headers
@@ -54,8 +55,23 @@ export const handle_errors: Handle = async ({ event, resolve }) => {
 	}
 };
 
+export const handle_line_numbers: Handle = async ({
+	event,
+	resolve,
+}) => {
+	const visible = event.cookies.get(LINE_NUMBERS_COOKIE) === '1';
+
+	return resolve(event, {
+		transformPageChunk: ({ html }) =>
+			visible
+				? html.replace('<html ', '<html data-line-numbers ')
+				: html,
+	});
+};
+
 // Combine all handle functions in sequence
 export const handle = sequence(
 	handle_security_headers,
 	handle_errors,
+	handle_line_numbers,
 );

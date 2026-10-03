@@ -1,186 +1,157 @@
-import { describe, expect, test } from 'vite-plus/test';
-import { render } from 'vitest-browser-svelte';
+import {
+	afterEach,
+	describe,
+	expect,
+	test,
+	vi,
+} from 'vite-plus/test';
 import { page } from 'vite-plus/test/browser';
+import { render } from 'vitest-browser-svelte';
 import CodeBlock from './code-block.svelte';
 
-describe('CodeBlock Component', () => {
-	describe('Initial Rendering', () => {
-		test('should render with default props', async () => {
-			await render(CodeBlock, {
-				code: 'const hello = "world";',
-			});
+const html =
+	'<pre class="twinkleplop language-ts"><code><span class="l"><span class="keyword">const</span> answer = 42;</span></code></pre>';
 
-			// Should show fallback code content during SSR
-			await expect
-				.element(page.getByText('const hello = "world";'))
-				.toBeInTheDocument();
-		});
+function code_text() {
+	const clone = document
+		.querySelector('pre code')
+		?.cloneNode(true) as HTMLElement;
+	clone
+		?.querySelectorAll('.ln')
+		.forEach((line_number) => line_number.remove());
+	return clone?.textContent ?? '';
+}
 
-		test('should render code after loading', async () => {
-			await render(CodeBlock, {
-				code: 'console.log("Hello, World!");',
-				lang: 'javascript',
-			});
-
-			// Should show the code content (either fallback or highlighted)
-			await expect
-				.element(page.getByText('console.log("Hello, World!");'))
-				.toBeInTheDocument();
-		});
-
-		test('should apply correct language highlighting', async () => {
-			await render(CodeBlock, {
-				code: 'function test() { return true; }',
-				lang: 'typescript',
-			});
-
-			// Should show the code content
-			await expect
-				.element(page.getByText('function test() { return true; }'))
-				.toBeInTheDocument();
-		});
-
-		test.skip('should render with all prop variants', async () => {
-			// TODO: Test all supported language combinations
-		});
+describe('CodeBlock', () => {
+	afterEach(() => {
+		vi.restoreAllMocks();
+		document.documentElement.removeAttribute('data-line-numbers');
+		document.cookie = 'line_numbers=; max-age=0; path=/';
 	});
 
-	describe('User Interactions', () => {
-		test.skip('should support keyboard navigation', async () => {
-			// TODO: Test keyboard shortcuts and focus management
+	test('highlights code and shows its language', async () => {
+		await render(CodeBlock, {
+			code: 'const answer = 42;',
+			lang: 'typescript',
 		});
+
+		await expect
+			.element(page.getByRole('img', { name: 'TypeScript' }))
+			.toBeVisible();
+		await expect.element(page.getByRole('code')).toBeInTheDocument();
+		expect(code_text()).toBe('const answer = 42;');
+		expect(document.querySelector('.keyword')).not.toBeNull();
 	});
 
-	describe('Accessibility Features', () => {
-		test.skip('should have proper ARIA roles', async () => {
-			// TODO: Test accessibility features when component is enhanced
-		});
+	test('renders pre-highlighted markdown without a default label', async () => {
+		await render(CodeBlock, { html });
 
-		test.skip('should have keyboard focusable code block', async () => {
-			// TODO: Test focus management - current component doesn't set tabindex
-		});
+		await expect
+			.element(page.getByRole('code'))
+			.toHaveTextContent('const answer = 42;');
+		await expect
+			.element(page.getByText('JavaScript', { exact: true }))
+			.not.toBeInTheDocument();
 	});
 
-	describe('Theme Support', () => {
-		test('should use default night-owl theme', async () => {
-			await render(CodeBlock, {
-				code: 'const test = true;',
-			});
-
-			// Should show the code content
-			await expect
-				.element(page.getByText('const test = true;'))
-				.toBeInTheDocument();
+	test('supports highlighted lines through fence metadata', async () => {
+		await render(CodeBlock, {
+			code: 'const first = 1;\nconst second = 2;',
+			lang: 'typescript',
+			meta: '{2}',
 		});
 
-		test.skip('should apply custom theme when multiple themes supported', async () => {
-			// TODO: Test when component supports multiple themes
-		});
+		expect(
+			document.querySelector('.l.highlight')?.textContent,
+		).toContain('const second = 2;');
 	});
 
-	describe('Error Handling', () => {
-		test('should handle invalid language gracefully', async () => {
-			await render(CodeBlock, {
-				code: 'some code',
-				lang: 'invalid-language',
-			});
-
-			// Should show the code content even with invalid language
-			await expect
-				.element(page.getByText('some code'))
-				.toBeInTheDocument();
+	test('toggles line numbers and remembers the preference', async () => {
+		await render(CodeBlock, {
+			code: 'const first = 1;\nconst second = 2;',
+			lang: 'typescript',
 		});
 
-		test('should handle empty code', async () => {
-			await render(CodeBlock, { code: '' });
-			await expect
-				.element(page.getByRole('code'))
-				.toHaveTextContent('');
-			await expect
-				.element(page.getByText('Loading...'))
-				.not.toBeInTheDocument();
-		});
+		const toggle = page.getByRole('button', { name: 'Line numbers' });
+		await expect
+			.element(toggle)
+			.toHaveAttribute('aria-pressed', 'false');
+		expect(
+			getComputedStyle(document.querySelector('.ln')!).display,
+		).toBe('none');
 
-		test.skip('should handle network errors gracefully', async () => {
-			// TODO: Test error handling for Shiki loading failures
-		});
+		await toggle.click();
+
+		await expect
+			.element(toggle)
+			.toHaveAttribute('aria-pressed', 'true');
+		expect(
+			document.documentElement.hasAttribute('data-line-numbers'),
+		).toBe(true);
+		expect(document.cookie).toContain('line_numbers=1');
+		expect(
+			getComputedStyle(document.querySelector('.ln')!).display,
+		).toBe('inline-block');
 	});
 
-	describe('Loading States', () => {
-		test('should show fallback code during SSR', async () => {
-			await render(CodeBlock, {
-				code: 'const test = true;',
-			});
+	test('copies code and announces success', async () => {
+		const write_text = vi
+			.spyOn(navigator.clipboard, 'writeText')
+			.mockResolvedValue();
+		await render(CodeBlock, { html, label: 'TypeScript' });
 
-			// Should show fallback code content, not loading text
-			await expect
-				.element(page.getByText('const test = true;'))
-				.toBeInTheDocument();
-		});
+		await page.getByRole('button', { name: 'Copy code' }).click();
 
-		test('should render code content consistently', async () => {
-			await render(CodeBlock, {
-				code: 'const test = true;',
-			});
-
-			// Should show the code content
-			await expect
-				.element(page.getByText('const test = true;'))
-				.toBeInTheDocument();
-		});
+		expect(write_text).toHaveBeenCalledWith('const answer = 42;');
+		await expect
+			.element(page.getByRole('status'))
+			.toHaveTextContent('Copied');
 	});
 
-	describe('Code Content', () => {
-		test('should preserve code formatting', async () => {
-			const multi_line_code = `function example() {
-  const x = 1;
-  const y = 2;
-  return x + y;
-}`;
-
-			await render(CodeBlock, {
-				code: multi_line_code,
-				lang: 'javascript',
-			});
-
-			// Should show the code content
-			await expect
-				.element(page.getByText('function example() {'))
-				.toBeInTheDocument();
+	test('copies code without line numbers', async () => {
+		const write_text = vi
+			.spyOn(navigator.clipboard, 'writeText')
+			.mockResolvedValue();
+		await render(CodeBlock, {
+			code: 'const first = 1;\nconst second = 2;',
+			lang: 'typescript',
 		});
 
-		test('should handle special characters', async () => {
-			await render(CodeBlock, {
-				code: 'const obj = { key: "value", count: 42 };',
-				lang: 'javascript',
-			});
+		await page.getByRole('button', { name: 'Copy code' }).click();
 
-			// Should show the code content
-			await expect
-				.element(
-					page.getByText('const obj = { key: "value", count: 42 };'),
-				)
-				.toBeInTheDocument();
-		});
-
-		test.skip('should handle very long code blocks', async () => {
-			// TODO: Test performance with large code blocks
-		});
+		expect(write_text).toHaveBeenCalledWith(
+			'const first = 1;\nconst second = 2;',
+		);
 	});
 
-	describe('Variants and Styling', () => {
-		test.skip('should apply correct CSS classes for each variant', async () => {
-			// TODO: Test CSS class derivation logic when variants are added
-		});
+	test('announces a failed copy', async () => {
+		vi.spyOn(navigator.clipboard, 'writeText').mockRejectedValue(
+			new DOMException('Denied', 'NotAllowedError'),
+		);
+		await render(CodeBlock, { html });
+
+		await page.getByRole('button', { name: 'Copy code' }).click();
+
+		await expect
+			.element(page.getByRole('status'))
+			.toHaveTextContent('Copy failed');
 	});
 
-	describe('Edge Cases', () => {
-		test.skip('should handle null/undefined props gracefully', async () => {
-			// TODO: Test with null/undefined values
+	test('escapes unsupported languages as plain text', async () => {
+		await render(CodeBlock, {
+			code: '<script>alert("no")</script>',
+			lang: 'powershell',
 		});
 
-		test.skip('should handle rapid prop changes', async () => {
-			// TODO: Test reactive updates with rapid changes
-		});
+		await expect.element(page.getByRole('code')).toBeInTheDocument();
+		expect(code_text()).toBe('<script>alert("no")</script>');
+		expect(document.querySelector('.code-block script')).toBeNull();
+	});
+
+	test('handles empty code', async () => {
+		await render(CodeBlock, { code: '' });
+
+		await expect.element(page.getByRole('code')).toBeInTheDocument();
+		expect(code_text()).toBe('');
 	});
 });

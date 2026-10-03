@@ -213,10 +213,11 @@ describe('Documentation Page SSR', () => {
 				props: { data: mock_data },
 			});
 
-			// Check for code examples
-			expect(body).toContain('import { render }');
+			expect(body).toContain(
+				'class="twinkleplop language-typescript"',
+			);
 			expect(body).toContain('vitest-browser-svelte');
-			expect(body).toContain('expect.element');
+			expect(body).toContain('Testing Documentation');
 		});
 
 		test('should render installation commands', () => {

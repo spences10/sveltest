@@ -260,7 +260,6 @@
 						<CodeBlock
 							code={unit_test_examples.basic_function_test}
 							lang="javascript"
-							theme="night-owl"
 						/>
 					</div>
 				</div>
@@ -281,7 +280,6 @@
 						<CodeBlock
 							code={unit_test_examples.component_test}
 							lang="javascript"
-							theme="night-owl"
 						/>
 					</div>
 				</div>

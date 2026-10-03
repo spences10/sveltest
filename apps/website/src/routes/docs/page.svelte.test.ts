@@ -261,13 +261,18 @@ describe('Documentation Page', () => {
 				)
 				.toBeInTheDocument();
 
-			// Check for code blocks - use first() to avoid multiple matches
-			// These should be present either as highlighted code or fallback code
+			const code_blocks = page.getByRole('code');
 			await expect
-				.element(page.getByText('vitest-browser-svelte').first())
+				.element(
+					code_blocks
+						.filter({ hasText: 'vitest-browser-svelte' })
+						.first(),
+				)
 				.toBeInTheDocument();
 			await expect
-				.element(page.getByText(/expect\.element/).first())
+				.element(
+					code_blocks.filter({ hasText: 'expect.element' }).first(),
+				)
 				.toBeInTheDocument();
 		}, 10000); // Increase test timeout to 10 seconds
 	});

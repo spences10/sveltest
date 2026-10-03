@@ -3,6 +3,7 @@ import { csp_directives } from './csp-directives';
 import {
 	handle,
 	handle_errors,
+	handle_line_numbers,
 	handle_security_headers,
 } from './hooks.server';
 
@@ -27,6 +28,7 @@ describe('Server Hooks', () => {
 			url: new URL('http://localhost/test'),
 			params: {},
 			route: { id: '/test' },
+			cookies: { get: vi.fn() },
 		};
 	});
 
@@ -167,6 +169,28 @@ describe('Server Hooks', () => {
 			expect(response.status).toBe(201);
 			expect(response.statusText).toBe('Created');
 			expect(await response.text()).toBe('custom body content');
+		});
+	});
+
+	describe('Line Number Preference', () => {
+		it('adds the HTML attribute when the cookie is enabled', async () => {
+			mock_event.cookies.get.mockReturnValue('1');
+			const resolve = vi.fn(async (_event: any, options: any) => {
+				const html = options.transformPageChunk({
+					html: '<html lang="en"><body></body></html>',
+					done: true,
+				});
+				return new Response(html);
+			});
+
+			const response = await handle_line_numbers({
+				event: mock_event,
+				resolve,
+			});
+
+			expect(await response.text()).toContain(
+				'<html data-line-numbers lang="en">',
+			);
 		});
 	});
 

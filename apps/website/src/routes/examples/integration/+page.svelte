@@ -225,7 +225,6 @@
 						<CodeBlock
 							code={integration_test_examples.component_integration}
 							lang="javascript"
-							theme="night-owl"
 						/>
 					</div>
 				</div>

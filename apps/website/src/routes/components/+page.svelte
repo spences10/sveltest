@@ -286,7 +286,6 @@
 						<CodeBlock
 							code={component_examples.calculator_usage}
 							lang="svelte"
-							theme="night-owl"
 						/>
 					</div>
 
@@ -405,7 +404,6 @@
 						<CodeBlock
 							code={component_examples.modal_props}
 							lang="typescript"
-							theme="night-owl"
 						/>
 					</div>
 				</div>
@@ -549,7 +547,6 @@
 						<CodeBlock
 							code={component_examples.card_usage}
 							lang="svelte"
-							theme="night-owl"
 						/>
 					</div>
 				</div>
@@ -672,7 +669,6 @@
 						<CodeBlock
 							code={component_examples.login_form_usage}
 							lang="svelte"
-							theme="night-owl"
 						/>
 					</div>
 				</div>

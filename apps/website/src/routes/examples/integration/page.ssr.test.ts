@@ -102,10 +102,11 @@ describe('Integration Testing Page SSR', () => {
 		test('should render code examples', () => {
 			const { body } = render(IntegrationPage);
 
-			// Check for code examples
-			expect(body).toContain('import { render }');
+			expect(body).toContain(
+				'class="twinkleplop language-javascript"',
+			);
 			expect(body).toContain('vitest-browser-svelte');
-			expect(body).toContain('expect.element');
+			expect(body).toContain('login-form.integration.svelte.test.ts');
 		});
 
 		test('should render category information', () => {

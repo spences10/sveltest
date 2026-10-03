@@ -422,11 +422,7 @@
 					<p class="mb-4 text-sm text-base-content/70">
 						{example.description}
 					</p>
-					<CodeBlock
-						code={example.code}
-						lang="typescript"
-						theme="night-owl"
-					/>
+					<CodeBlock code={example.code} lang="typescript" />
 				</div>
 			{/each}
 		</div>
