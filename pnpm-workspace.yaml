@@ -9,15 +9,15 @@ catalog:
   '@playwright/test': 1.63.0
   '@types/node': ^26.5.1
   '@typescript/native': npm:typescript@^7.0.2
-  '@vitest/browser-playwright': 4.1.11
-  '@vitest/coverage-v8': 4.1.11
+  '@vitest/browser-playwright': 5.0.1
+  '@vitest/coverage-v8': 5.0.1
   playwright: 1.63.0
   tsx: ^4.23.13
   typescript: ^6.0.3
   valibot: ^1.5.0
-  vite-plus: 0.3.3
-  vitest: 4.1.11
-  vite: npm:@voidzero-dev/vite-plus-core@0.3.3
+  vite-plus: 1.0.0
+  vitest: 5.0.1
+  vite: npm:@voidzero-dev/vite-plus-core@1.0.0
 
 allowBuilds:
   esbuild: true
@@ -29,4 +29,4 @@ overrides:
 peerDependencyRules:
   allowedVersions:
     # Vite+ core exposes Vite 8 APIs but uses Vite+'s package version.
-    vite: '0.3.2'
+    vite: '1.0.0'
