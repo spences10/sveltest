@@ -244,7 +244,7 @@ importers:
         version: 8.0.0-next.4(@sveltejs/kit@3.0.0-next.31(@sveltejs/vite-plugin-svelte@7.3.1(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.15)(typescript@6.0.3)(yaml@2.9.0))(svelte@5.57.1(@typescript-eslint/types@8.59.4)))(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.15)(typescript@6.0.3)(yaml@2.9.0))(svelte@5.57.1(@typescript-eslint/types@8.59.4))(typescript@6.0.3))
       '@sveltejs/adapter-cloudflare':
         specifier: ^8.0.0-next.7
-        version: 8.0.0-next.8(@sveltejs/kit@3.0.0-next.31(@sveltejs/vite-plugin-svelte@7.3.1(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.15)(typescript@6.0.3)(yaml@2.9.0))(svelte@5.57.1(@typescript-eslint/types@8.59.4)))(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.15)(typescript@6.0.3)(yaml@2.9.0))(svelte@5.57.1(@typescript-eslint/types@8.59.4))(typescript@6.0.3))(wrangler@4.129.0(@cloudflare/workers-types@5.20260905.1))
+        version: 8.0.0(@sveltejs/kit@3.0.0-next.31(@sveltejs/vite-plugin-svelte@7.3.1(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.15)(typescript@6.0.3)(yaml@2.9.0))(svelte@5.57.1(@typescript-eslint/types@8.59.4)))(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.15)(typescript@6.0.3)(yaml@2.9.0))(svelte@5.57.1(@typescript-eslint/types@8.59.4))(typescript@6.0.3))(wrangler@4.129.0(@cloudflare/workers-types@5.20260905.1))
       '@sveltejs/kit':
         specifier: ^3.0.0-next.27
         version: 3.0.0-next.31(@sveltejs/vite-plugin-svelte@7.3.1(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.15)(typescript@6.0.3)(yaml@2.9.0))(svelte@5.57.1(@typescript-eslint/types@8.59.4)))(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.15)(typescript@6.0.3)(yaml@2.9.0))(svelte@5.57.1(@typescript-eslint/types@8.59.4))(typescript@6.0.3)
@@ -1417,8 +1417,8 @@ packages:
     peerDependencies:
       '@sveltejs/kit': ^3.0.0-next.0
 
-  '@sveltejs/adapter-cloudflare@8.0.0-next.8':
-    resolution: {integrity: sha512-kW3RpjL0xeZAFeOjAI3xOBHwxUVEs6gPaQYchiIJHMfBr4EEwgBGTqsPdJlyCiisDY9lUGlNLsxy9AmxfNYQ+g==}
+  '@sveltejs/adapter-cloudflare@8.0.0':
+    resolution: {integrity: sha512-68jVq1x4nya+/Dpg1NrWlz6LFWAX/F3DrsR8KQGl1bOt4G8oUp0kLLeMx+LI4AZQccGEmE7Nt2tOZwsParE6FA==}
     peerDependencies:
       '@sveltejs/kit': ^3.0.0-next.0
       wrangler: ^4.118.0
@@ -3710,7 +3710,7 @@ snapshots:
     dependencies:
       '@sveltejs/kit': 3.0.0-next.31(@sveltejs/vite-plugin-svelte@7.3.1(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.15)(typescript@6.0.3)(yaml@2.9.0))(svelte@5.57.1(@typescript-eslint/types@8.59.4)))(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.15)(typescript@6.0.3)(yaml@2.9.0))(svelte@5.57.1(@typescript-eslint/types@8.59.4))(typescript@6.0.3)
 
-  '@sveltejs/adapter-cloudflare@8.0.0-next.8(@sveltejs/kit@3.0.0-next.31(@sveltejs/vite-plugin-svelte@7.3.1(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.15)(typescript@6.0.3)(yaml@2.9.0))(svelte@5.57.1(@typescript-eslint/types@8.59.4)))(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.15)(typescript@6.0.3)(yaml@2.9.0))(svelte@5.57.1(@typescript-eslint/types@8.59.4))(typescript@6.0.3))(wrangler@4.129.0(@cloudflare/workers-types@5.20260905.1))':
+  '@sveltejs/adapter-cloudflare@8.0.0(@sveltejs/kit@3.0.0-next.31(@sveltejs/vite-plugin-svelte@7.3.1(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.15)(typescript@6.0.3)(yaml@2.9.0))(svelte@5.57.1(@typescript-eslint/types@8.59.4)))(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.15)(typescript@6.0.3)(yaml@2.9.0))(svelte@5.57.1(@typescript-eslint/types@8.59.4))(typescript@6.0.3))(wrangler@4.129.0(@cloudflare/workers-types@5.20260905.1))':
     dependencies:
       '@cloudflare/workers-types': 5.20260905.1
       '@rolldown/pluginutils': 1.0.1
