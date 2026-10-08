@@ -265,7 +265,7 @@ importers:
         version: 0.1.5
       '@twinkleplop/json':
         specifier: ^0.1.5
-        version: 0.1.5
+        version: 0.1.7
       '@twinkleplop/markdown-core':
         specifier: ^0.1.5
         version: 0.1.5
@@ -1583,8 +1583,8 @@ packages:
   '@twinkleplop/javascript@0.1.5':
     resolution: {integrity: sha512-0gynjT75JRAuR9EkD/ljRCSJ+qdWjTNXLYUptmwncsfiyHEulfHbSr0k7uo5GmxkvyOx08bqTxZdFlrBzmJN0w==}
 
-  '@twinkleplop/json@0.1.5':
-    resolution: {integrity: sha512-qXB8HgDThT8dYHT/4+S/EcQK4R8qbi6Ezb/h5bZEUK2yh0G3170W9QXF8iDp1JChQ9upyn8BivIAwQZGgcx28g==}
+  '@twinkleplop/json@0.1.7':
+    resolution: {integrity: sha512-3V2BmcvHCF7MTmDxNSk0sliZqwW1BDB29ZQY2W07auiOGyPQJVhYPiyeoIIN51Q02YnvSg+hxfXSRY9FptMJKg==}
 
   '@twinkleplop/markdown-core@0.1.5':
     resolution: {integrity: sha512-znzz7XFyDakQ4FguwOJwCCXFP9EQAhmdTiQKfdqn/hQ68lWLT9fWnUZpmX/dzZEIhSPQXFHrw9mfaczw/Dm17A==}
@@ -3863,9 +3863,9 @@ snapshots:
       '@twinkleplop/css': 0.1.5
       '@twinkleplop/html': 0.1.5
 
-  '@twinkleplop/json@0.1.5':
+  '@twinkleplop/json@0.1.7':
     dependencies:
-      '@twinkleplop/core': 0.2.2
+      '@twinkleplop/core': 0.3.1
 
   '@twinkleplop/markdown-core@0.1.5':
     dependencies:
