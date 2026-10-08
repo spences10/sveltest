@@ -259,7 +259,7 @@ importers:
         version: 4.3.3(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.15)(typescript@6.0.3)(yaml@2.9.0))
       '@twinkleplop/bash':
         specifier: ^0.1.5
-        version: 0.1.5
+        version: 0.1.7
       '@twinkleplop/javascript':
         specifier: ^0.1.5
         version: 0.1.5
@@ -1565,8 +1565,8 @@ packages:
     peerDependencies:
       '@testing-library/dom': '>=7.21.4'
 
-  '@twinkleplop/bash@0.1.5':
-    resolution: {integrity: sha512-LAfsYYtjI3N38BMBcfg7ZT2Nxeql2zyezfG+aYtptgNt6D0dmKkysDYGbnGJY2885Woz1i1k9iif4/R6D3bizA==}
+  '@twinkleplop/bash@0.1.7':
+    resolution: {integrity: sha512-/cBFzqKcfffT6aaWlSeUhjoXJS3VhG4Tz1sg1oJILooVlbD3WX2Ke+zRWFLS+GmoXrl8hlQF/ZsMNmila41/Jw==}
 
   '@twinkleplop/core@0.2.2':
     resolution: {integrity: sha512-xJpsL0QdgZ0gKDkTW+S1FAzVzyTns+jKPXER52vc/69qCe6gXCpsoclhTjERnFUbkZgTBEA/iVJxaufhY8Oqrw==}
@@ -3839,9 +3839,9 @@ snapshots:
     dependencies:
       '@testing-library/dom': 10.4.1
 
-  '@twinkleplop/bash@0.1.5':
+  '@twinkleplop/bash@0.1.7':
     dependencies:
-      '@twinkleplop/core': 0.2.2
+      '@twinkleplop/core': 0.3.1
 
   '@twinkleplop/core@0.2.2': {}
 
