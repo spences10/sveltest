@@ -271,7 +271,7 @@ importers:
         version: 0.1.5
       '@twinkleplop/svelte':
         specifier: ^0.1.5
-        version: 0.1.5
+        version: 0.1.7
       '@twinkleplop/typescript':
         specifier: ^0.1.5
         version: 0.1.7
@@ -1598,8 +1598,8 @@ packages:
   '@twinkleplop/markdown-core@0.1.5':
     resolution: {integrity: sha512-znzz7XFyDakQ4FguwOJwCCXFP9EQAhmdTiQKfdqn/hQ68lWLT9fWnUZpmX/dzZEIhSPQXFHrw9mfaczw/Dm17A==}
 
-  '@twinkleplop/svelte@0.1.5':
-    resolution: {integrity: sha512-3iFVdusZBMeG8GRB5AjqcspFQRBCJdN7dt4P5P1l8DZwetSqqsTXHbOQfllHyEp7pr92FWmBtjL5oiZc2bBSEg==}
+  '@twinkleplop/svelte@0.1.7':
+    resolution: {integrity: sha512-8Zz7WYm7ERGNTZeCjiceRWDB+spcrDA9ToUV/AtavMl68ZM28E1AIPOdo2ddKkBDnHim8Vs7tVlFr9T3Mq1NlA==}
 
   '@twinkleplop/typescript@0.1.7':
     resolution: {integrity: sha512-3lVdFUnOc40QQUJPnmTsiyTf7+RSEoXhDnmMwkUQ5Kzgemkk6eeXQGietPjxro8k+QuTAY/aQuWOtR/nUgfENw==}
@@ -3896,11 +3896,11 @@ snapshots:
     dependencies:
       '@twinkleplop/core': 0.2.2
 
-  '@twinkleplop/svelte@0.1.5':
+  '@twinkleplop/svelte@0.1.7':
     dependencies:
-      '@twinkleplop/core': 0.2.2
-      '@twinkleplop/css': 0.1.5
-      '@twinkleplop/javascript': 0.1.5
+      '@twinkleplop/core': 0.3.1
+      '@twinkleplop/css': 0.1.7
+      '@twinkleplop/javascript': 0.1.7
 
   '@twinkleplop/typescript@0.1.7':
     dependencies:
