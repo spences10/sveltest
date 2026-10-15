@@ -47,7 +47,7 @@
 		"@twinkleplop/bash": "^0.1.5",
 		"@twinkleplop/javascript": "^0.1.5",
 		"@twinkleplop/json": "^0.1.5",
-		"@twinkleplop/markdown-core": "^0.1.5",
+		"@twinkleplop/markdown-core": "^0.2.0",
 		"@twinkleplop/svelte": "^0.1.5",
 		"@twinkleplop/typescript": "^0.1.5",
 		"@twinkleplop/yaml": "^0.1.5",
