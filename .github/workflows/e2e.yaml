@@ -13,7 +13,7 @@ env:
 jobs:
   e2e:
     name: End-to-End Tests
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     container:
       image: mcr.microsoft.com/playwright:v1.63.0-noble
       options: --user 1001
