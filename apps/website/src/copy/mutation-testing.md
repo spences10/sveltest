@@ -256,7 +256,9 @@ The
 runs the same command on pull requests and pushes to `main`, and can
 also be started from GitHub Actions using **Run workflow**. It runs
 only the Node example, so no Playwright browser installation or
-application credentials are needed.
+application credentials are needed. The workflow supplies fake values
+for the app environment variables required when SvelteKit loads the
+shared configuration; the utility tests do not use those values.
 
 In a completed workflow run, download the **mutation-report**
 artifact, unzip it, and open `mutation.html`. `mutation.json` is

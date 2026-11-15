@@ -23,6 +23,12 @@ jobs:
     name: Validation Mutation Report
     runs-on: ubuntu-26.04
     timeout-minutes: 10
+    # SvelteKit validates app env while loading the shared Vite config.
+    # These fixtures are unused by the utility tests, not credentials.
+    env:
+      PUBLIC_FATHOM_ID: mutation-test
+      PUBLIC_FATHOM_URL: https://example.invalid/script.js
+      API_SECRET: mutation-test-only-not-a-secret
 
     steps:
       - name: Checkout repository
