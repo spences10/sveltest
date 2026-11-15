@@ -1,14 +1,12 @@
 <script lang="ts">
 	import { SiteSearch } from '#lib';
+	import SocialMeta from '#lib/components/social-meta.svelte';
 </script>
 
-<svelte:head>
-	<title>Search Examples - SvelTest</title>
-	<meta
-		name="description"
-		content="Examples of different search filters"
-	/>
-</svelte:head>
+<SocialMeta
+	title="Search Examples - SvelTest"
+	description="Examples of different search filters"
+/>
 
 <div class="container mx-auto px-4 py-8">
 	<h1 class="mb-8 text-4xl font-bold">Search Examples</h1>

@@ -1,7 +1,11 @@
-import { describe, expect, test } from 'vite-plus/test';
-import { render } from 'vitest-browser-svelte';
+import { describe, expect, test, vi } from 'vite-plus/test';
 import { page } from 'vite-plus/test/browser';
+import { render } from 'vitest-browser-svelte';
 import DocsPage from './+page.svelte';
+
+vi.mock('$app/state', () => ({
+	page: { url: new URL('https://sveltest.dev/docs') },
+}));
 
 // Mock data that matches the expected structure from +page.ts
 const mock_topics = [

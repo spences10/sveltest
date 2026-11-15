@@ -7,6 +7,8 @@ describe('social metadata', () => {
 	test.each(topics)('uses the $slug documentation card', (topic) => {
 		const { head } = render(SocialMeta, {
 			props: {
+				title: `${topic.title} — Sveltest Docs`,
+				description: topic.description,
 				url: new URL(
 					`https://sveltest.dev/docs/${topic.slug}?ref=share`,
 				),
@@ -27,6 +29,14 @@ describe('social metadata', () => {
 		expect(head).toContain(
 			`property="og:url" content="https://sveltest.dev/docs/${topic.slug}"`,
 		);
+		expect(head).toContain(
+			`<title>${topic.title} — Sveltest Docs</title>`,
+		);
+		expect(head).toContain(
+			`rel="canonical" href="https://sveltest.dev/docs/${topic.slug}"`,
+		);
+		expect(head.match(/<title>/g)).toHaveLength(1);
+		expect(head.match(/name="description"/g)).toHaveLength(1);
 		expect(head.match(/property="og:image"/g)).toHaveLength(1);
 		expect(head.indexOf('property="og:image"')).toBeLessThan(
 			head.indexOf('property="og:image:width"'),
@@ -37,7 +47,11 @@ describe('social metadata', () => {
 		'uses the site card for %s',
 		(pathname) => {
 			const { head } = render(SocialMeta, {
-				props: { url: new URL(pathname, 'http://localhost:5173') },
+				props: {
+					title: 'Sveltest — Svelte testing guides',
+					description: 'Practical Svelte testing guides',
+					url: new URL(pathname, 'http://localhost:5173'),
+				},
 			});
 			expect(head).toContain(
 				'property="og:image" content="http://localhost:5173/api/og-image/site.png"',
@@ -57,6 +71,8 @@ describe('social metadata', () => {
 	test('handles a trailing slash', () => {
 		const { head } = render(SocialMeta, {
 			props: {
+				title: 'Getting Started',
+				description: 'Setup your first test',
 				url: new URL('http://localhost:5173/docs/getting-started/'),
 			},
 		});

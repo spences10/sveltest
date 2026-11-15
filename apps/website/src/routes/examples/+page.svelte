@@ -1,5 +1,6 @@
 <script lang="ts">
 	import FeatureCard from '#lib/components/feature-card.svelte';
+	import SocialMeta from '#lib/components/social-meta.svelte';
 	import {
 		Arrow,
 		BarChart,
@@ -15,13 +16,10 @@
 	} from '#lib/icons/index.js';
 </script>
 
-<svelte:head>
-	<title>Testing Examples - Sveltest</title>
-	<meta
-		name="description"
-		content="Comprehensive testing examples and patterns for Svelte applications"
-	/>
-</svelte:head>
+<SocialMeta
+	title="Testing Examples - Sveltest"
+	description="Comprehensive testing examples and patterns for Svelte applications"
+/>
 
 <!-- Enhanced Examples Page -->
 <div class="min-h-screen px-4 py-8">

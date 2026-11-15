@@ -2,6 +2,7 @@
 	import CodeBlock from '#lib/components/code-block.svelte';
 	import DocCard from '#lib/components/doc-card.svelte';
 	import DocsSearch from '#lib/components/docs-search.svelte';
+	import SocialMeta from '#lib/components/social-meta.svelte';
 	import { documentation_examples } from '#lib/examples/code-examples.js';
 	import {
 		Arrow,
@@ -148,12 +149,12 @@
 	}
 </script>
 
+<SocialMeta
+	title="Documentation - Sveltest"
+	description="Comprehensive testing documentation for Svelte 5 + vitest-browser-svelte. Learn testing patterns, best practices, and advanced techniques."
+/>
+
 <svelte:head>
-	<title>Documentation - Sveltest</title>
-	<meta
-		name="description"
-		content="Comprehensive testing documentation for Svelte 5 + vitest-browser-svelte. Learn testing patterns, best practices, and advanced techniques."
-	/>
 	<meta
 		name="keywords"
 		content="svelte testing, vitest, browser testing, component testing, SSR testing, API testing"

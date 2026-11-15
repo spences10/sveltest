@@ -2,6 +2,10 @@ import { render } from 'svelte/server';
 import { describe, expect, test, vi } from 'vite-plus/test';
 import E2EPage from './+page.svelte';
 
+vi.mock('$app/state', () => ({
+	page: { url: new URL('https://sveltest.dev/examples/e2e') },
+}));
+
 // Mock the $app/env module for SSR testing
 vi.mock('$app/env', () => ({
 	browser: false,

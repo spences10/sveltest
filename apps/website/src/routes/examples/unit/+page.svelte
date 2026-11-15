@@ -1,6 +1,7 @@
 <script lang="ts">
 	import CalculatorComponent from '#lib/components/calculator.svelte';
 	import CodeBlock from '#lib/components/code-block.svelte';
+	import SocialMeta from '#lib/components/social-meta.svelte';
 	import { unit_test_examples } from '#lib/examples/code-examples.js';
 	import {
 		Arrow,
@@ -15,13 +16,10 @@
 	} from '#lib/icons/index.js';
 </script>
 
-<svelte:head>
-	<title>Unit Testing Examples - Sveltest</title>
-	<meta
-		name="description"
-		content="Learn unit testing with practical examples using Vitest and vitest-browser-svelte"
-	/>
-</svelte:head>
+<SocialMeta
+	title="Unit Testing Examples - Sveltest"
+	description="Learn unit testing with practical examples using Vitest and vitest-browser-svelte"
+/>
 
 <!-- Unit Testing Examples Page -->
 <div class="min-h-screen px-4 py-8">

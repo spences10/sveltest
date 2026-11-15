@@ -1,17 +1,15 @@
 <script lang="ts">
 	import DocsToc from '#lib/components/docs-toc.svelte';
+	import SocialMeta from '#lib/components/social-meta.svelte';
 
 	let { data } = $props();
 </script>
 
-<svelte:head>
-	<title>{data.topic_info.title} - Sveltest Docs</title>
-	<meta
-		name="description"
-		content="{data.topic_info
-			.description} - Comprehensive testing documentation for Svelte 5 + vitest-browser-svelte."
-	/>
-</svelte:head>
+<SocialMeta
+	title="{data.topic_info.title} - Sveltest Docs"
+	description="{data.topic_info
+		.description} - Comprehensive testing documentation for Svelte 5 + vitest-browser-svelte."
+/>
 
 <!-- Fixed positioned TOC -->
 <DocsToc current_topic={data.slug} />

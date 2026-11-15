@@ -1,37 +1,34 @@
 <script lang="ts">
-	import {
-		card_for_path,
-		card_height,
-		card_width,
-	} from '#lib/og/cards.js';
+	import { card_for_path } from '#lib/og/cards.js';
+	import { page } from '$app/state';
+	import { Head, type SeoConfig } from 'svead';
+	import ShareCardSize from './share-card-size.svelte';
 
-	let { url }: { url: Pick<URL, 'pathname' | 'origin'> } = $props();
-	const card = $derived(card_for_path(url.pathname));
-	const image_url = $derived(
-		new URL(`/api/og-image/${card.slug}.png`, url.origin).href,
-	);
-	const page_url = $derived(new URL(url.pathname, url.origin).href);
-	const title = $derived(
-		card.slug === 'site'
-			? 'Sveltest — Svelte testing guides'
-			: `${card.title} — Sveltest Docs`,
-	);
+	let {
+		title,
+		description,
+		url,
+	}: {
+		title: string;
+		description: string;
+		url?: Pick<URL, 'pathname' | 'origin'>;
+	} = $props();
+
+	const current_url = $derived(url ?? page.url);
+	const card = $derived(card_for_path(current_url.pathname));
+	const seo_config: SeoConfig = $derived({
+		title,
+		description,
+		url: new URL(current_url.pathname, current_url.origin).href,
+		site_name: 'Sveltest',
+		open_graph_image: new URL(
+			`/api/og-image/${card.slug}.png`,
+			current_url.origin,
+		).href,
+		open_graph_image_alt: card.title,
+		twitter_card_type: 'summary_large_image',
+	});
 </script>
 
-<svelte:head>
-	<meta property="og:type" content="website" />
-	<meta property="og:site_name" content="Sveltest" />
-	<meta property="og:url" content={page_url} />
-	<meta property="og:title" content={title} />
-	<meta property="og:description" content={card.description} />
-	<meta property="og:image" content={image_url} />
-	<meta property="og:image:type" content="image/png" />
-	<meta property="og:image:width" content={String(card_width)} />
-	<meta property="og:image:height" content={String(card_height)} />
-	<meta property="og:image:alt" content={card.title} />
-	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:title" content={title} />
-	<meta name="twitter:description" content={card.description} />
-	<meta name="twitter:image" content={image_url} />
-	<meta name="twitter:image:alt" content={card.title} />
-</svelte:head>
+<Head {seo_config} />
+<ShareCardSize alt={card.title} />

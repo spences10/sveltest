@@ -1,4 +1,5 @@
 <script lang="ts">
+	import SocialMeta from '#lib/components/social-meta.svelte';
 	import TodoManager from '#lib/components/todo-manager.svelte';
 	import {
 		BarChart,
@@ -9,13 +10,10 @@
 	} from '#lib/icons/index.js';
 </script>
 
-<svelte:head>
-	<title>Todo Manager - Sveltest</title>
-	<meta
-		name="description"
-		content="Interactive todo management with comprehensive testing examples"
-	/>
-</svelte:head>
+<SocialMeta
+	title="Todo Manager - Sveltest"
+	description="Interactive todo management with comprehensive testing examples"
+/>
 
 <!-- Modern gradient background with glass morphism -->
 <div

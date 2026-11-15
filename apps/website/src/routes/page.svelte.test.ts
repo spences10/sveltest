@@ -1,7 +1,11 @@
-import { describe, expect, it } from 'vite-plus/test';
-import { render } from 'vitest-browser-svelte';
+import { describe, expect, it, vi } from 'vite-plus/test';
 import { page } from 'vite-plus/test/browser';
+import { render } from 'vitest-browser-svelte';
 import Page from './+page.svelte';
+
+vi.mock('$app/state', () => ({
+	page: { url: new URL('https://sveltest.dev/') },
+}));
 
 const skill_url =
 	'https://github.com/spences10/sveltest/tree/main/.agents/skills/svelte-testing';

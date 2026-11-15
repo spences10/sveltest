@@ -1,5 +1,6 @@
 <script lang="ts">
 	import CodeBlock from '#lib/components/code-block.svelte';
+	import SocialMeta from '#lib/components/social-meta.svelte';
 	import { e2e_test_examples } from '#lib/examples/code-examples.js';
 	import {
 		Arrow,
@@ -173,13 +174,10 @@
 	);
 </script>
 
-<svelte:head>
-	<title>E2E Testing - Sveltest</title>
-	<meta
-		name="description"
-		content="Learn end-to-end testing patterns with Playwright - user journeys, cross-browser testing, performance monitoring, and accessibility validation"
-	/>
-</svelte:head>
+<SocialMeta
+	title="E2E Testing - Sveltest"
+	description="Learn end-to-end testing patterns with Playwright - user journeys, cross-browser testing, performance monitoring, and accessibility validation"
+/>
 
 <div class="min-h-screen px-4 py-8">
 	<div class="container mx-auto max-w-7xl">

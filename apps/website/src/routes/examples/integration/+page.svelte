@@ -1,5 +1,6 @@
 <script lang="ts">
 	import CodeBlock from '#lib/components/code-block.svelte';
+	import SocialMeta from '#lib/components/social-meta.svelte';
 	import { integration_test_examples } from '#lib/examples/code-examples.js';
 	import {
 		Arrow,
@@ -117,13 +118,10 @@
 	);
 </script>
 
-<svelte:head>
-	<title>Integration Testing - Sveltest</title>
-	<meta
-		name="description"
-		content="Learn integration testing patterns for Svelte applications - component integration, API testing, state management, and form workflows"
-	/>
-</svelte:head>
+<SocialMeta
+	title="Integration Testing - Sveltest"
+	description="Learn integration testing patterns for Svelte applications - component integration, API testing, state management, and form workflows"
+/>
 
 <div class="min-h-screen px-4 py-8">
 	<div class="container mx-auto max-w-7xl">

@@ -1,14 +1,12 @@
 <script lang="ts">
+	import SocialMeta from '#lib/components/social-meta.svelte';
 	import { page } from '$app/state';
 </script>
 
-<svelte:head>
-	<title>404 - Page Not Found | Sveltest</title>
-	<meta
-		name="description"
-		content="The page you're looking for could not be found."
-	/>
-</svelte:head>
+<SocialMeta
+	title="404 - Page Not Found | Sveltest"
+	description="The page you're looking for could not be found."
+/>
 
 <main class="flex min-h-screen items-center justify-center px-4">
 	<div class="max-w-md text-center">

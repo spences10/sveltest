@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Button, Calculator, Card, LoginForm, Modal } from '#lib';
 	import CodeBlock from '#lib/components/code-block.svelte';
+	import SocialMeta from '#lib/components/social-meta.svelte';
 	import { component_examples } from '#lib/examples/code-examples.js';
 	import {
 		Calculator as CalculatorIcon,
@@ -136,13 +137,10 @@
 	}
 </script>
 
-<svelte:head>
-	<title>Components - Sveltest</title>
-	<meta
-		name="description"
-		content="Interactive component library showcasing all available UI components with live examples and customizable props."
-	/>
-</svelte:head>
+<SocialMeta
+	title="Components - Sveltest"
+	description="Interactive component library showcasing all available UI components with live examples and customizable props."
+/>
 
 <!-- Hero Section -->
 <div
@@ -199,7 +197,7 @@
 						{component.description}
 					</p>
 
-					<div class="mb-4 flex-grow">
+					<div class="mb-4 grow">
 						<h4 class="mb-2 text-sm font-medium">Key Features:</h4>
 						<ul class="space-y-1">
 							{#each component.features.slice(0, 3) as feature}

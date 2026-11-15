@@ -2,6 +2,7 @@
 	import FeatureCard from '#lib/components/feature-card.svelte';
 	import GitHubStatusPills from '#lib/components/github-status-pills.svelte';
 	import Logo from '#lib/components/logo.svelte';
+	import SocialMeta from '#lib/components/social-meta.svelte';
 	import {
 		BarChart,
 		BookOpen,
@@ -21,12 +22,12 @@
 	import * as Fathom from 'fathom-client';
 </script>
 
+<SocialMeta
+	title="Sveltest - Comprehensive Testing Suite for Svelte"
+	description="A comprehensive collection of testing patterns and examples for modern Svelte applications"
+/>
+
 <svelte:head>
-	<title>Sveltest - Comprehensive Testing Suite for Svelte</title>
-	<meta
-		name="description"
-		content="A comprehensive collection of testing patterns and examples for modern Svelte applications"
-	/>
 	<meta
 		name="viewport"
 		content="width=device-width, initial-scale=1"

@@ -1,14 +1,6 @@
 <script lang="ts">
-	import { browser } from '$app/env';
-	import { afterNavigate } from '$app/navigation';
-	import { page } from '$app/state';
-	import {
-		PUBLIC_FATHOM_ID,
-		PUBLIC_FATHOM_URL,
-	} from '$app/env/public';
 	import CommandPalette from '#lib/components/command-palette.svelte';
 	import Nav from '#lib/components/nav.svelte';
-	import SocialMeta from '#lib/components/social-meta.svelte';
 	import {
 		CircleDot,
 		ExternalLink,
@@ -17,6 +9,12 @@
 		Robot,
 	} from '#lib/icons/index.js';
 	import { command_palette_state } from '#lib/state/command-palette.svelte.js';
+	import { browser } from '$app/env';
+	import {
+		PUBLIC_FATHOM_ID,
+		PUBLIC_FATHOM_URL,
+	} from '$app/env/public';
+	import { afterNavigate } from '$app/navigation';
 	import * as Fathom from 'fathom-client';
 	import { onMount } from 'svelte';
 	import '../app.css';
@@ -47,8 +45,6 @@
 </script>
 
 <svelte:window onkeydown={handle_keydown} />
-
-<SocialMeta url={page.url} />
 
 <Nav />
 

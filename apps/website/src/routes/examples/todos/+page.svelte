@@ -1,15 +1,13 @@
 <script lang="ts">
+	import SocialMeta from '#lib/components/social-meta.svelte';
 	import TodoManager from '#lib/components/todo-manager.svelte';
 	import { Arrow, Document } from '#lib/icons/index.js';
 </script>
 
-<svelte:head>
-	<title>Form Actions Testing - Sveltest</title>
-	<meta
-		name="description"
-		content="Interactive todo demonstration for testing form actions with server-side validation"
-	/>
-</svelte:head>
+<SocialMeta
+	title="Form Actions Testing - Sveltest"
+	description="Interactive todo demonstration for testing form actions with server-side validation"
+/>
 
 <div class="min-h-screen px-4 py-12">
 	<div class="container mx-auto max-w-4xl">
