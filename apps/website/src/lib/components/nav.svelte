@@ -137,7 +137,7 @@
 				</div>
 				<ul
 					tabindex="0"
-					class="menu dropdown-content z-50 w-64 rounded-box border border-base-300/50 bg-base-100/95 p-2 shadow-xl backdrop-blur-sm"
+					class="dropdown-content menu z-50 w-64 rounded-box border border-base-300/50 bg-base-100/95 p-2 shadow-xl backdrop-blur-sm"
 					role="menu"
 					aria-label="Navigation menu"
 				>
@@ -256,8 +256,10 @@
 								role="menuitem"
 							>
 								<div
-									class="loading loading-xs loading-spinner"
-									class:hidden={!github_status.loading}
+									class={[
+										'loading loading-xs loading-spinner',
+										{ hidden: !github_status.loading },
+									]}
 								></div>
 								<span>Retry</span>
 							</button>
