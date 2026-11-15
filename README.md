@@ -273,6 +273,32 @@ with the bundled versions rather than upgrading them independently.
 See the
 [getting-started guide](apps/website/src/copy/getting-started.md).
 
+### Mutation testing pilot
+
+Run the optional StrykerJS pilot against `validation.ts` and its
+existing unit tests:
+
+```bash
+pnpm --filter @sveltest/website test:mutation
+```
+
+Open `apps/website/reports/mutation/mutation.html` for the report. The
+pilot reuses the Vite+ configuration and bundled Vitest version; no CI
+gate or minimum mutation score is enforced. Production code and tests
+are copied into a temporary sandbox, not mutated in place.
+
+Test selection lives in `apps/website/vite-mutation.config.ts`. Avoid
+Stryker 10.1.1's `testFiles` option here: it activates mutations too
+late for the module-level validation schemas and reports false
+survivors. `disableBail` records all failing tests for each mutant,
+rather than crediting only the first failure.
+
+Use survivors to investigate assertion gaps, not to chase 100%. A
+surviving mutation can be behaviourally equivalent, and a test that
+kills mutations can still enforce an unjustified requirement. No
+recorded kills alone is not grounds to delete a test; the generated
+mutations do not cover every possible defect.
+
 ## 🤖 AI Assistant Rules for Teams
 
 One of the key outcomes of this project was creating comprehensive AI

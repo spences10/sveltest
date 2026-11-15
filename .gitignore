@@ -27,3 +27,7 @@ vite.config.ts.timestamp-*
 
 # coverage
 coverage
+
+# Mutation testing
+.stryker-tmp
+**/reports/mutation/

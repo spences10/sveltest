@@ -1,6 +1,6 @@
 import { describe, expect, test, vi } from 'vite-plus/test';
-import { render } from 'vitest-browser-svelte';
 import { page, userEvent } from 'vite-plus/test/browser';
+import { render } from 'vitest-browser-svelte';
 import LoginForm from './login-form.svelte';
 
 describe('LoginForm Component', () => {
@@ -85,74 +85,115 @@ describe('LoginForm Component', () => {
 	});
 
 	describe('Form Validation', () => {
-		test.skip('should show validation errors for empty fields', async () => {
+		test('shows empty-field errors only after each field is blurred', async () => {
 			await render(LoginForm);
 
+			const email_input = page.getByRole('textbox', {
+				name: /email address/i,
+			});
+			const password_input = page.getByPlaceholder(
+				'Enter your password',
+			);
+			const email_error = page.getByText('Invalid email format', {
+				exact: true,
+			});
+			const password_error = page.getByText(
+				'Password must be at least 8 characters',
+				{ exact: true },
+			);
 			const submit_button = page.getByRole('button', {
 				name: 'Sign In',
 			});
-			await submit_button.click({ force: true });
 
-			await expect
-				.element(page.getByText('This field is required'))
-				.toBeInTheDocument();
+			await expect.element(email_error).not.toBeInTheDocument();
+			await expect.element(password_error).not.toBeInTheDocument();
+			await expect.element(submit_button).toBeDisabled();
+
+			await email_input.click();
+			await password_input.click();
+
+			await expect.element(email_error).toBeVisible();
+			await expect.element(password_error).not.toBeInTheDocument();
+
+			await userEvent.tab();
+
+			await expect.element(password_error).toBeVisible();
+			await expect.element(submit_button).toBeDisabled();
 		});
 
-		test.skip('should show validation error for invalid email', async () => {
+		test('shows an invalid-email error while entering an address', async () => {
 			await render(LoginForm);
 
-			const email_input = page.getByTestId('input');
+			await page
+				.getByRole('textbox', { name: /email address/i })
+				.fill('invalid-email');
+
+			await expect
+				.element(
+					page.getByText('Invalid email format', { exact: true }),
+				)
+				.toBeVisible();
+			await expect
+				.element(page.getByRole('button', { name: 'Sign In' }))
+				.toBeDisabled();
+		});
+
+		test('shows a length error while entering a short password', async () => {
+			await render(LoginForm);
+
+			await page
+				.getByPlaceholder('Enter your password')
+				.fill('Abcdef1');
+
+			await expect
+				.element(
+					page.getByText('Password must be at least 8 characters', {
+						exact: true,
+					}),
+				)
+				.toBeVisible();
+			await expect
+				.element(page.getByRole('button', { name: 'Sign In' }))
+				.toBeDisabled();
+		});
+
+		test('clears errors and enables sign-in when both fields become valid', async () => {
+			await render(LoginForm);
+
+			const email_input = page.getByRole('textbox', {
+				name: /email address/i,
+			});
+			const password_input = page.getByPlaceholder(
+				'Enter your password',
+			);
+			const email_error = page.getByText('Invalid email format', {
+				exact: true,
+			});
+			const password_error = page.getByText(
+				'Password must be at least 8 characters',
+				{ exact: true },
+			);
 			const submit_button = page.getByRole('button', {
 				name: 'Sign In',
 			});
 
 			await email_input.fill('invalid-email');
-			await submit_button.click({ force: true });
+			await password_input.fill('Abcdef1');
 
-			await expect
-				.element(page.getByText('Invalid format'))
-				.toBeInTheDocument();
-		});
+			await expect.element(email_error).toBeVisible();
+			await expect.element(password_error).toBeVisible();
+			await expect.element(submit_button).toBeDisabled();
 
-		test.skip('should show validation error for short password', async () => {
-			await render(LoginForm);
-
-			const password_input = page.getByTestId('password-input');
-			const submit_button = page.getByRole('button', {
-				name: 'Sign In',
-			});
-
-			await password_input.fill('123');
-			await submit_button.click({ force: true });
-
-			await expect
-				.element(page.getByText('Must be at least 8 characters'))
-				.toBeInTheDocument();
-		});
-
-		test.skip('should clear validation errors when valid input is provided', async () => {
-			await render(LoginForm);
-
-			const email_input = page.getByTestId('input');
-			const password_input = page.getByTestId('password-input');
-			const submit_button = page.getByRole('button', {
-				name: 'Sign In',
-			});
-
-			// First trigger validation errors
-			await submit_button.click({ force: true });
-			await expect
-				.element(page.getByText('This field is required'))
-				.toBeInTheDocument();
-
-			// Then provide valid input
 			await email_input.fill('test@example.com');
-			await password_input.fill('Password123');
 
-			// Errors should be cleared
-			await expect
-				.element(page.getByText('This field is required'))
-				.not.toBeInTheDocument();
+			await expect.element(email_error).not.toBeInTheDocument();
+			await expect.element(password_error).toBeVisible();
+			await expect.element(submit_button).toBeDisabled();
+
+			await password_input.fill('Abcdefg1');
+
+			await expect.element(password_error).not.toBeInTheDocument();
+			await expect.element(submit_button).toBeEnabled();
 		});
 	});
 
