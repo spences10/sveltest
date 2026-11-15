@@ -69,6 +69,7 @@
 - [E2E Testing](https://sveltest.dev/docs/e2e-testing) - End-to-end testing patterns and integration validation
 
 ### Advanced Patterns
+- [Mutation Testing](https://sveltest.dev/docs/mutation-testing) - Use surviving mutations to improve tests, not just scores
 - [Context Testing](https://sveltest.dev/docs/context-testing) - Testing Svelte context and stores
 - [Remote Functions Testing](https://sveltest.dev/docs/remote-functions-testing) - Testing SvelteKit remote functions
 - [Runes Testing](https://sveltest.dev/docs/runes-testing) - Testing Svelte 5 runes and reactivity

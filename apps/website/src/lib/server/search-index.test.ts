@@ -31,6 +31,20 @@ describe('Search Index', () => {
 		expect(api_reference!.keywords).toContain('mock');
 	});
 
+	test('finds the mutation guide with its full content', async () => {
+		const index = await generate_search_index();
+		const results = search_full_text('mutation', index, 'docs');
+		const guide = results.find(
+			(item) => item.id === 'topic-mutation-testing',
+		);
+
+		expect(guide).toMatchObject({
+			title: 'Mutation Testing',
+			url: '/docs/mutation-testing',
+		});
+		expect(guide?.content).toContain('user@example.com!');
+	});
+
 	test('should find "mock" in documentation', async () => {
 		const index = await generate_search_index();
 		const results = search_full_text('mock', index);

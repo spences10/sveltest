@@ -58,6 +58,13 @@ const test_types: Topic[] = [
 // Advanced Patterns
 const advanced_patterns: Topic[] = [
 	{
+		slug: 'mutation-testing',
+		title: 'Mutation Testing',
+		description:
+			'Use surviving mutations to improve tests, not just scores',
+		category: 'Advanced Patterns',
+	},
+	{
 		slug: 'context-testing',
 		title: 'Context Testing',
 		description: 'Testing Svelte context and stores',

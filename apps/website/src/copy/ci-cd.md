@@ -11,7 +11,8 @@ testing with **vitest-browser-svelte** and Playwright, supporting the
 The CI/CD setup uses:
 
 - **Playwright containers** for consistent browser environments
-- **Separate workflows** for unit tests and E2E tests
+- **Separate workflows** for unit tests, E2E tests, and mutation
+  testing
 - **Automatic version synchronization** between dependencies and
   containers
 - **Optimized caching** for fast pipeline execution
@@ -71,6 +72,18 @@ jobs:
 - Validates complete Client-Server integration
 - Longer timeout for full user journeys
 - Same container for consistency with unit tests
+
+### Mutation Testing Workflow (`mutation-testing.yaml`)
+
+The mutation workflow runs the small Node-only validation example on
+pull requests, pushes to `main`, and manual dispatch. It uploads HTML
+and JSON reports as the `mutation-report` artifact. No browser
+container or application secrets are needed for this example.
+
+The mutation score is informational, but baseline test failures and
+tooling errors fail the job. See
+[Mutation Testing](./mutation-testing) for the runnable examples,
+report interpretation, and configuration.
 
 ## Playwright Container Strategy
 

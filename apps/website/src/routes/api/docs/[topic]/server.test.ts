@@ -62,6 +62,23 @@ describe('Documentation Topic Content Endpoint', () => {
 		});
 	});
 
+	it('serves the mutation guide to documentation and CLI clients', async () => {
+		const response = await GET(
+			make_request('mutation-testing', 'json') as any,
+		);
+
+		expect(response.status).toBe(200);
+		const data = await response.json();
+		expect(data).toMatchObject({
+			slug: 'mutation-testing',
+			title: 'Mutation Testing',
+			category: 'Advanced Patterns',
+		});
+		expect(data.content).toContain('# Mutation Testing');
+		expect(data.content).toContain('user@example.com!');
+		expect(data.content).toContain('test:mutation');
+	});
+
 	describe('Error handling', () => {
 		it('should return 404 for unknown topic', async () => {
 			const response = await GET(

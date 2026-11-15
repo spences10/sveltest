@@ -10,6 +10,7 @@ import context_testing from '../../copy/context-testing.md?raw';
 import e2e_testing from '../../copy/e2e-testing.md?raw';
 import getting_started from '../../copy/getting-started.md?raw';
 import migration_guide from '../../copy/migration-guide.md?raw';
+import mutation_testing from '../../copy/mutation-testing.md?raw';
 import remote_functions_testing from '../../copy/remote-functions-testing.md?raw';
 import runes_testing from '../../copy/runes-testing.md?raw';
 import server_testing from '../../copy/server-testing.md?raw';
@@ -30,6 +31,7 @@ export const content_map: Record<string, string> = {
 	'remote-functions-testing': remote_functions_testing,
 	'runes-testing': runes_testing,
 	'migration-guide': migration_guide,
+	'mutation-testing': mutation_testing,
 	troubleshooting: troubleshooting,
 	'ci-cd': ci_cd,
 	'best-practices': best_practices,

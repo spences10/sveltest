@@ -68,6 +68,7 @@ describe('Documentation Topics Index Endpoint', () => {
 			expect(slugs).toContain('getting-started');
 			expect(slugs).toContain('runes-testing');
 			expect(slugs).toContain('component-testing');
+			expect(slugs).toContain('mutation-testing');
 		});
 	});
 });

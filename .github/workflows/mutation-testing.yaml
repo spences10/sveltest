@@ -1,0 +1,55 @@
+---
+name: Mutation Testing
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CI: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  mutation:
+    name: Validation Mutation Report
+    runs-on: ubuntu-26.04
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '26'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate SvelteKit configuration
+        run: pnpm --filter @sveltest/website exec svelte-kit sync
+
+      - name: Run mutation testing
+        id: mutation
+        run: pnpm --filter @sveltest/website test:mutation
+
+      - name: Upload mutation report
+        if: ${{ !cancelled() && steps.mutation.outcome != 'skipped' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: mutation-report
+          path: apps/website/reports/mutation/
+          if-no-files-found: error
