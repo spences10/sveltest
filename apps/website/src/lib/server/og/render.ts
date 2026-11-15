@@ -3,30 +3,40 @@ import {
 	card_width,
 	type site_card,
 } from '#lib/og/cards.js';
-import { Resvg } from '@resvg/resvg-js';
-import { mkdirSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { initWasm, Resvg } from '@resvg/resvg-wasm';
 import regular_font from './fonts/inter-400.ttf?inline';
 import bold_font from './fonts/inter-700.ttf?inline';
 
-// Bundle the fonts with the server. Native resvg reads fonts from disk.
-const font_dir = join(tmpdir(), 'sveltest-og-fonts');
-mkdirSync(font_dir, { recursive: true });
-const font_files = [regular_font, bold_font].map(
-	(data_url, index) => {
-		const path = join(font_dir, `inter-${index}.ttf`);
-		writeFileSync(
-			path,
-			Buffer.from(data_url.split(',')[1], 'base64'),
-		);
-		return path;
-	},
-);
+function decode_data_url(data_url: string) {
+	return Uint8Array.from(atob(data_url.split(',')[1]), (character) =>
+		character.charCodeAt(0),
+	);
+}
+
+// Fonts stay in memory in both Node and Workers.
+const font_buffers = [regular_font, bold_font].map(decode_data_url);
+let wasm_ready: Promise<void> | undefined;
+
+async function initialize_wasm() {
+	// Share initialization across concurrent requests in this isolate.
+	wasm_ready ??= (async () => {
+		if (import.meta.env.CF_PAGES) {
+			// Wrangler supplies a precompiled module; Workers cannot compile bytes.
+			const { default: wasm } =
+				await import('@resvg/resvg-wasm/index_bg.wasm');
+			await initWasm(wasm);
+		} else {
+			// Vite dev, preview and Vitest run in Node, without Wrangler's loader.
+			const { default: data_url } =
+				await import('@resvg/resvg-wasm/index_bg.wasm?url&inline');
+			await initWasm(decode_data_url(data_url));
+		}
+	})();
+	await wasm_ready;
+}
 const font_options = {
 	font: {
-		fontFiles: font_files,
-		loadSystemFonts: false,
+		fontBuffers: font_buffers,
 		defaultFontFamily: 'Inter',
 	},
 };
@@ -51,7 +61,18 @@ function wrap_text(text: string, size: number, weight: number) {
 	for (const word of text.split(/\s+/)) {
 		const candidate = line ? `${line} ${word}` : word;
 		const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="160"><text y="100" font-family="Inter" font-size="${size}" font-weight="${weight}">${escape_xml(candidate)}</text></svg>`;
-		const width = new Resvg(svg, font_options).getBBox()?.width ?? 0;
+		const renderer = new Resvg(svg, font_options);
+		let width: number;
+		try {
+			const bounds = renderer.getBBox();
+			try {
+				width = bounds?.width ?? 0;
+			} finally {
+				bounds?.free();
+			}
+		} finally {
+			renderer.free();
+		}
 		if (line && width > 1040) {
 			lines.push(line);
 			line = word;
@@ -63,9 +84,10 @@ function wrap_text(text: string, size: number, weight: number) {
 	return lines;
 }
 
-export function render_card(
+export async function render_card(
 	card: typeof site_card,
-): Uint8Array<ArrayBuffer> {
+): Promise<Uint8Array<ArrayBuffer>> {
+	await initialize_wasm();
 	const title_lines = wrap_text(card.title, 72, 700);
 	const description_lines = wrap_text(card.description, 30, 400);
 	const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${card_width}" height="${card_height}">
@@ -87,7 +109,15 @@ export function render_card(
 			<text x="1120" y="578" text-anchor="end" font-size="24" fill="#6d28d9">Svelte 5 · Vitest · Playwright</text>
 		</g>
 	</svg>`;
-	return new Uint8Array(
-		new Resvg(svg, font_options).render().asPng(),
-	);
+	const renderer = new Resvg(svg, font_options);
+	try {
+		const image = renderer.render();
+		try {
+			return new Uint8Array(image.asPng());
+		} finally {
+			image.free();
+		}
+	} finally {
+		renderer.free();
+	}
 }

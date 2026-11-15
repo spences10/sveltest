@@ -22,6 +22,17 @@ import { coverageConfigDefaults, defineConfig } from 'vite-plus';
 import { playwright } from 'vite-plus/test/browser-playwright';
 
 export default defineConfig({
+	// Leave the WASM import for Wrangler on Pages; Node uses inline bytes.
+	define: {
+		'import.meta.env.CF_PAGES': JSON.stringify(
+			process.env.CF_PAGES || '',
+		),
+	},
+	build: {
+		rolldownOptions: {
+			external: ['@resvg/resvg-wasm/index_bg.wasm'],
+		},
+	},
 	plugins: [
 		sveltekit({
 			preprocess: [vitePreprocess(), mdsvex(mdsvex_config)],

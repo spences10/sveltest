@@ -5,5 +5,6 @@ Static Inter weights 400 and 700, derived from the Latin WOFF2 in
 `instantiateVariableFont` (weight pinned, other axes at their
 defaults). The SIL Open Font License is included in `OFL.txt`.
 
-These TTF files are bundled into the Node server so card rendering
-does not depend on system fonts or network access.
+These TTF files are bundled as inline data and passed to WASM Resvg as
+in-memory font buffers. Card rendering needs neither filesystem access
+nor network requests in Node or Cloudflare Workers.

@@ -3,11 +3,11 @@ import { render_card } from '#lib/server/og/render.js';
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
-const get: RequestHandler = ({ params }) => {
+const get: RequestHandler = async ({ params }) => {
 	const card = card_for_slug(params.slug);
 	if (!card) error(404, 'Share card not found');
 
-	return new Response(render_card(card), {
+	return new Response(await render_card(card), {
 		headers: {
 			'Content-Type': 'image/png',
 			'Cache-Control': 'public, max-age=86400, s-maxage=604800',

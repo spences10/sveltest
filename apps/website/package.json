@@ -35,7 +35,7 @@
 		"coverage": "vp test --run --coverage"
 	},
 	"dependencies": {
-		"@resvg/resvg-js": "^2.6.2"
+		"@resvg/resvg-wasm": "^2.6.2"
 	},
 	"devDependencies": {
 		"@changesets/cli": "catalog:",

@@ -8,6 +8,20 @@ async function request_card(slug: string) {
 }
 
 describe('dynamic share cards', () => {
+	test('shares WASM initialization across simultaneous first requests', async () => {
+		const responses = await Promise.all([
+			request_card('site'),
+			request_card('getting-started'),
+		]);
+		for (const response of responses) {
+			expect(response.status).toBe(200);
+			expect(response.headers.get('content-type')).toBe('image/png');
+			const png = Buffer.from(await response.arrayBuffer());
+			expect(png.readUInt32BE(16)).toBe(card_width);
+			expect(png.readUInt32BE(20)).toBe(card_height);
+		}
+	});
+
 	test.each([site_card, ...topics])(
 		'renders a PNG for $slug',
 		async ({ slug }) => {
