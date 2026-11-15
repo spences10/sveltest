@@ -268,8 +268,10 @@ describe('Documentation Page SSR', () => {
 				'<title>Documentation - Sveltest</title>',
 			);
 			expect(head).toContain('name="description"');
-			expect(head).toContain('name="keywords"');
-			expect(head).toContain('svelte testing');
+			expect(head).not.toContain('name="keywords"');
+			expect(head).toContain(
+				'Comprehensive testing documentation for Svelte 5',
+			);
 		});
 
 		test('should render accessible button and link elements', () => {

@@ -42,6 +42,22 @@ describe('/+page.svelte SSR', () => {
 		expect(body).toContain('Battle-Tested in Production');
 	});
 
+	test('keeps share-card metadata without duplicating the app viewport', () => {
+		const { head } = render(Page);
+
+		expect(head).not.toContain('name="viewport"');
+		expect(head).toContain(
+			'property="og:image:width" content="1200"',
+		);
+		expect(head).toContain(
+			'property="og:image:height" content="630"',
+		);
+		expect(head).toContain(
+			'property="og:image:type" content="image/png"',
+		);
+		expect(head).toContain('name="twitter:image:alt"');
+	});
+
 	test('should advertise Devin Desktop and the shared skill', () => {
 		const { body } = render(Page);
 

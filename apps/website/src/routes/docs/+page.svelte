@@ -154,13 +154,6 @@
 	description="Comprehensive testing documentation for Svelte 5 + vitest-browser-svelte. Learn testing patterns, best practices, and advanced techniques."
 />
 
-<svelte:head>
-	<meta
-		name="keywords"
-		content="svelte testing, vitest, browser testing, component testing, SSR testing, API testing"
-	/>
-</svelte:head>
-
 <!-- Hero Section -->
 <section
 	class="bg-linear-to-br from-primary/10 via-secondary/5 to-accent/10 px-4 py-24"

@@ -27,13 +27,6 @@
 	description="A comprehensive collection of testing patterns and examples for modern Svelte applications"
 />
 
-<svelte:head>
-	<meta
-		name="viewport"
-		content="width=device-width, initial-scale=1"
-	/>
-</svelte:head>
-
 <!-- Hero section with enhanced design -->
 <div class="relative overflow-hidden">
 	<!-- Background decorative elements -->
