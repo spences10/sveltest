@@ -14,9 +14,7 @@ vi.mock('$app/env', () => ({
 // Mock the $app/state module for SSR testing
 vi.mock('$app/state', () => ({
 	page: {
-		url: {
-			pathname: '/',
-		},
+		url: new URL('https://sveltest.dev/'),
 	},
 }));
 

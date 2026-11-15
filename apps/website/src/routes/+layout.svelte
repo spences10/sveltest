@@ -1,12 +1,14 @@
 <script lang="ts">
 	import { browser } from '$app/env';
 	import { afterNavigate } from '$app/navigation';
+	import { page } from '$app/state';
 	import {
 		PUBLIC_FATHOM_ID,
 		PUBLIC_FATHOM_URL,
 	} from '$app/env/public';
 	import CommandPalette from '#lib/components/command-palette.svelte';
 	import Nav from '#lib/components/nav.svelte';
+	import SocialMeta from '#lib/components/social-meta.svelte';
 	import {
 		CircleDot,
 		ExternalLink,
@@ -45,6 +47,8 @@
 </script>
 
 <svelte:window onkeydown={handle_keydown} />
+
+<SocialMeta url={page.url} />
 
 <Nav />
 
