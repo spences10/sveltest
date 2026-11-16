@@ -176,7 +176,12 @@ test.describe('API Integration Tests', () => {
 						'X-XSS-Protection': '1; mode=block',
 					},
 					contentType: 'application/json',
-					body: JSON.stringify({ secure: true }),
+					// Keep the status payload valid for the layout's API consumer.
+					body: JSON.stringify({
+						secure: true,
+						unit_tests: { status: 'passing', badge_url: '' },
+						e2e_tests: { status: 'passing', badge_url: '' },
+					}),
 				});
 			});
 		});
