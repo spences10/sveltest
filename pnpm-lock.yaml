@@ -293,7 +293,7 @@ importers:
         version: 0.1.7
       '@twinkleplop/yaml':
         specifier: ^0.1.5
-        version: 0.1.7
+        version: 0.1.8
       '@types/node':
         specifier: 'catalog:'
         version: 26.6.6
@@ -1854,6 +1854,9 @@ packages:
   '@twinkleplop/core@0.3.1':
     resolution: {integrity: sha512-fMbce7NcJlVROsyI34tz3DCWkAWRWLRlBNCbgwz36mm6yoEO09eyafi8JRN5HJGQIzMr0qjXQ3t3asc7MFSh8Q==}
 
+  '@twinkleplop/core@0.3.2':
+    resolution: {integrity: sha512-K4sKQFqTSpEjFz4eCmJGQA6ivtZgpBKdZzu3AzKIP5jwstJWHPI5eWtJgfv6vTsxDVHr3WY02gXnwL3+Rzndhg==}
+
   '@twinkleplop/css@0.1.7':
     resolution: {integrity: sha512-eznre7EgC0IBE3/jqAUKXG2S4iWLczOSAxwLnknS+9BQQGuD82u2A2rCok94E+nMpjkeshhbSvnQxDSEo8YpUA==}
 
@@ -1875,8 +1878,8 @@ packages:
   '@twinkleplop/typescript@0.1.7':
     resolution: {integrity: sha512-3lVdFUnOc40QQUJPnmTsiyTf7+RSEoXhDnmMwkUQ5Kzgemkk6eeXQGietPjxro8k+QuTAY/aQuWOtR/nUgfENw==}
 
-  '@twinkleplop/yaml@0.1.7':
-    resolution: {integrity: sha512-GzsP3RuMYAnMx82pFUxICplG5s2GXxGst8dyxM7p1ONGp1f6NsFdc7OChtoIcT3PzXWQN/ctPJdv5rpr7tXs3w==}
+  '@twinkleplop/yaml@0.1.8':
+    resolution: {integrity: sha512-qtqjMBQCU8EhDN2X7Et/ZY4CIoliHfdS/dbTLS8y/Ij6REc6L3qpGb88ykj0JkmrNHi9Daqeintnft0zXPgDTA==}
 
   '@types/aria-query@5.0.4':
     resolution: {integrity: sha512-rfT93uj5s0PRL7EzccGMs3brplhcrghnDoV26NqKhCAS1hVo+WdNsPvE/yb6ilfr5hi2MEk6d5EWJTKdxg8jVw==}
@@ -4762,6 +4765,8 @@ snapshots:
 
   '@twinkleplop/core@0.3.1': {}
 
+  '@twinkleplop/core@0.3.2': {}
+
   '@twinkleplop/css@0.1.7':
     dependencies:
       '@twinkleplop/core': 0.3.1
@@ -4797,9 +4802,9 @@ snapshots:
       '@twinkleplop/core': 0.3.1
       '@twinkleplop/javascript': 0.1.7
 
-  '@twinkleplop/yaml@0.1.7':
+  '@twinkleplop/yaml@0.1.8':
     dependencies:
-      '@twinkleplop/core': 0.3.1
+      '@twinkleplop/core': 0.3.2
 
   '@types/aria-query@5.0.4': {}
 
