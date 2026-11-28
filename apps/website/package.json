@@ -63,7 +63,7 @@
 		"@vitest/coverage-v8": "catalog:",
 		"daisyui": "^5.7.37",
 		"fathom-client": "^3.7.2",
-		"mdsvex": "^0.12.8",
+		"mdsvex": "^1.0.0",
 		"playwright": "catalog:",
 		"rehype-autolink-headings": "^7.1.0",
 		"rehype-external-links": "^3.0.0",
